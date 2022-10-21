@@ -1,0 +1,6 @@
+exhibit_catgory	
+wildlife	
+implements	
+photos	
+description	
+quantity	

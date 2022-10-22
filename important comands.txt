@@ -74,4 +74,57 @@ status
 -- 
 finger_prints
 
- 
+ //basic information
+case_id
+-- first_name
+-- middle_name
+-- last_name
+-- sex
+-- age
+-- phone_number
+-- occuptaion
+-- national_id_number
+-- uwa_suspect_number
+-- country
+-- district_id
+-- sub_county_id
+--parish
+--village
+--ethnicity
+--finger_prints
+
+
+//arrest information
+-- is_suspects_arrested -- 
+-- arrest_agency --
+-- arrest_uwa_unit
+-- arrest_uwa_number
+-- arrest_crb_number
+-- arrest_first_police_station
+-- arrest_current_police_station
+-- arrest_detection_method
+-- arrest_date_time
+-- 
+-- 
+-- 
+arrest_latitude
+arrest_longitude
+
+
+
+
+
+
+// court information
+is_suspect_appear_in_court
+prosecutor
+is_convicted
+case_outcome
+magistrate_name
+court_name
+court_file_number
+is_jailed
+jail_period
+is_fined
+fined_amount
+status

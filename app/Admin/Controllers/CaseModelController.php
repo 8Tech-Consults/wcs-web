@@ -302,7 +302,7 @@ class CaseModelController extends AdminController
                         2 => 'Other status',
                         0 => 'No',
                     ])
-                    ->default(1);
+                    ->default(1); 
             });
         });
 

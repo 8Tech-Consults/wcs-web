@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CaseModel;
+use App\Models\CaseSuspect;
 use App\Models\Enterprise;
 use App\Models\Image;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
+use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Case_;
@@ -41,7 +43,7 @@ class ApiPostsController extends Controller
             return $this->error('Case is required.');
         }
         $case_data = json_decode($r->case);
-        
+
         if ($case_data == null) {
             return $this->error('Fialed to parse Case.');
         }
@@ -50,63 +52,105 @@ class ApiPostsController extends Controller
         if (isset($case_data->online_id)) {
             $case = CaseModel::find(((int)($case_data->online_id)));
         }
-        
-        if($case == null){
+
+        if ($case == null) {
             $case = new CaseModel();
             $case->reported_by = $u->id;
         }
         $case->latitude = $case_data->latitude;
-        $case->longitude = $case_data->longitude; 
-        $case->sub_county_id = $case_data->sub_county_id;  
-        $case->parish = $case_data->parish;  
-        $case->village = $case_data->village;  
-        $case->offence_category_id = $case_data->offence_category_id;  
-        $case->offence_description = $case_data->offence_description;  
-        $case->is_offence_committed_in_pa = $case_data->is_offence_committed_in_pa;  
-        $case->pa_id = $case_data->pa_id;  
-        $case->has_exhibits = $case_data->has_exhibits;  
-        $case->status = $case_data->status;     
- 
+        $case->longitude = $case_data->longitude;
+        $case->sub_county_id = $case_data->sub_county_id;
+        $case->parish = $case_data->parish;
+        $case->village = $case_data->village;
+        $case->offence_description = $case_data->offence_description;
+        $case->is_offence_committed_in_pa = $case_data->is_offence_committed_in_pa;
+        $case->pa_id = $case_data->pa_id;
+        $case->offence_category_id = ((int)($case_data->offence_category_id));
 
-        return $this->success($case, 'Case.');
-
-        if ($r->category == null) {
-            return $this->error('Category is required.');
+        if (!$case->save()) {
+            return $this->error('Failed to update case, please try again.');
         }
 
-        if ($r->details == null) {
-            return $this->error('Description is required.');
-        }
-
-        $c = new CaseModel();
-        $c->administrator_id  = $administrator_id;
-        $c->title  = $r->title;
-        $c->latitude  = $r->latitude;
-        $c->longitude  = $r->longitude;
-        $c->description  = $r->details;
-        $c->district  = 1;
-        $c->status  = 0;
-        $c->sub_county  = 1;
-        $c->case_category_id  = 1;
-        $c->response  = null;
-
-        if ($c->save()) {
-
-            $imgs =  Image::where([
-                'administrator_id' => $administrator_id,
-                'parent_id' => null
-            ])->get();
-
-            foreach ($imgs as $key => $img) {
-                $img->parent_id = $c->id;
-                $img->save();
+        $suspects = [];
+        if (isset($r->suspects)) {
+            $suspects = json_decode($r->suspects);
+            if ($suspects == null) {
+                $suspects = [];
             }
-            return $this->success([], 'Case submitted successfully.');
-        } else {
-            return $this->error('Filed to submit the case.');
         }
 
-        die($u->name);
+        foreach ($suspects as $key => $v) {
+
+            $s = null;
+            if (isset($v->online_id)) {
+                $s = CaseSuspect::find(((int)($v->online_id)));
+            }
+
+            if ($s == null) {
+                $s = new CaseSuspect();
+            }
+
+
+            $s->uwa_suspect_number = $v->uwa_suspect_number;
+            $s->case_id = $case->id;
+            $s->first_name = $v->first_name;
+            $s->middle_name = $v->middle_name;
+            $s->last_name = $v->last_name;
+            $s->phone_number = $v->phone_number;
+            $s->national_id_number = $v->national_id_number;
+            $s->sex = $v->sex;
+            if (strlen($v->age) > 3) {
+                $s->age = Carbon::parse($v->age);
+            }
+            if (strlen($v->arrest_date_time) > 3) {
+                $s->arrest_date_time = Carbon::parse($v->arrest_date_time);
+            }
+
+            $s->occuptaion = $v->occuptaion;
+            $s->country = $v->country;
+            $s->district_id = $v->district_id;
+            $s->sub_county_id = $v->sub_county_id;
+            $s->parish = $v->parish;
+            $s->sub_county_id = $v->sub_county_id;
+            $s->village = $v->village;
+            $s->ethnicity = $v->ethnicity;
+            $s->finger_prints = $v->finger_prints;
+            $s->is_suspects_arrested = $v->is_suspects_arrested;
+ 
+            $s->arrest_district_id = $v->arrest_district_id;
+            $s->arrest_sub_county_id = $v->arrest_sub_county_id;
+            $s->arrest_parish = $v->arrest_parish;
+            $s->arrest_village = $v->arrest_village;
+            $s->arrest_latitude = $v->arrest_latitude;
+            $s->arrest_longitude = $v->arrest_longitude;
+            $s->arrest_first_police_station = $v->arrest_first_police_station;
+            $s->arrest_current_police_station = $v->arrest_current_police_station;
+            $s->arrest_agency = $v->arrest_agency;
+            $s->arrest_uwa_unit = $v->arrest_uwa_unit;
+            $s->arrest_detection_method = $v->arrest_detection_method;
+            $s->arrest_uwa_number = $v->arrest_uwa_number;
+            $s->arrest_crb_number = $v->arrest_crb_number;
+            $s->is_suspect_appear_in_court = $v->is_suspect_appear_in_court;
+            $s->prosecutor = $v->prosecutor;
+            $s->is_convicted = $v->is_convicted;
+            $s->case_outcome = $v->case_outcome;
+            $s->magistrate_name = $v->magistrate_name;
+            $s->court_name = $v->court_name;
+            $s->court_file_number = $v->court_file_number;
+            $s->is_jailed = $v->is_jailed;
+            $s->jail_period = ((int)($v->jail_period));
+            $s->is_fined = $v->is_fined;
+            $s->fined_amount = ((int)($v->fined_amount));
+            $s->status = ((int)($v->status));
+            $s->save();
+        }
+
+
+        return $this->success('DONE', 'Case submitted successfully.');
+        if ($suspects) {
+        } else {
+            return $this->error('Failed to update case, please try again.');
+        }
     }
 
     public function upload_media(Request $request)

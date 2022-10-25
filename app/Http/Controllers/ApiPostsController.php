@@ -146,7 +146,7 @@ class ApiPostsController extends Controller
         }
 
 
-        return $this->success('DONE', 'Case submitted successfully.');
+        return $this->success( $case, 'Case submitted successfully.');
         if ($suspects) {
         } else {
             return $this->error('Failed to update case, please try again.');

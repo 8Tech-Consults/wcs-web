@@ -16,9 +16,19 @@ class CaseModel extends Model
     {
         parent::boot();
         self::creating(function ($m) {
-            if (isset($m->location_picker)) {
-                unset($m->location_picker);
+            
+            $m->district_id = 1;
+            if ($m->sub_county_id != null) {
+                $sub = Location::find($m->sub_county_id);
+                if ($sub != null) {
+                    $m->district_id = $sub->parent;
+                }
             }
+
+            return $m;
+        });
+        self::updating(function ($m) {
+
             $m->district_id = 1;
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);

@@ -22,7 +22,7 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     //posts
     Route::post("post-media-upload", [ApiPostsController::class, 'upload_media']);
-    Route::post("post", [ApiPostsController::class, 'create_post']);
+    Route::post("cases", [ApiPostsController::class, 'create_post']);
 
 }); 
 

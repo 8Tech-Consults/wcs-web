@@ -10,6 +10,7 @@ use App\Models\Utils;
 use App\Traits\ApiResponser;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\Case_;
 
 class ApiPostsController extends Controller
 {
@@ -36,9 +37,38 @@ class ApiPostsController extends Controller
             return $this->error('User not found.');
         }
 
-        if ($r->title == null) {
-            return $this->error('Title is required.');
+        if ($r->case == null) {
+            return $this->error('Case is required.');
         }
+        $case_data = json_decode($r->case);
+        
+        if ($case_data == null) {
+            return $this->error('Fialed to parse Case.');
+        }
+
+        $case = null;
+        if (isset($case_data->online_id)) {
+            $case = CaseModel::find(((int)($case_data->online_id)));
+        }
+        
+        if($case == null){
+            $case = new CaseModel();
+            $case->reported_by = $u->id;
+        }
+        $case->latitude = $case_data->latitude;
+        $case->longitude = $case_data->longitude; 
+        $case->sub_county_id = $case_data->sub_county_id;  
+        $case->parish = $case_data->parish;  
+        $case->village = $case_data->village;  
+        $case->offence_category_id = $case_data->offence_category_id;  
+        $case->offence_description = $case_data->offence_description;  
+        $case->is_offence_committed_in_pa = $case_data->is_offence_committed_in_pa;  
+        $case->pa_id = $case_data->pa_id;  
+        $case->has_exhibits = $case_data->has_exhibits;  
+        $case->status = $case_data->status;     
+ 
+
+        return $this->success($case, 'Case.');
 
         if ($r->category == null) {
             return $this->error('Category is required.');

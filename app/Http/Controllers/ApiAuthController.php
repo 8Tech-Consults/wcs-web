@@ -53,14 +53,16 @@ class ApiAuthController extends Controller
         $phone_number = Utils::prepare_phone_number($r->phone_number);
 
         if (!Utils::phone_number_is_valid($phone_number)) {
-            return $this->error('Invalid phone number.');
+            $phone_number = $r->phone_number;
         }
         if ($r->password == null) {
             return $this->error('Password is required.');
         }
 
         $u = Administrator::where('phone_number_1', $phone_number)
-            ->orWhere('username', $phone_number)->first();
+            ->orWhere('username', $phone_number)
+            ->orWhere('email', $phone_number)
+            ->first();
         if ($u == null) {
             return $this->error('User account not found.');
         }
@@ -75,6 +77,20 @@ class ApiAuthController extends Controller
         ]);
 
          
+        if ($token == null) {
+            $token = auth('api')->attempt([
+                'phone_number_1' => $phone_number,
+                'password' => trim($r->password),
+            ]);
+        }
+ 
+         
+        if ($token == null) {
+            $token = auth('api')->attempt([
+                'email' => $phone_number,
+                'password' => trim($r->password),
+            ]);
+        }
  
 
 

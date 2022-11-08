@@ -84,28 +84,8 @@ use App\Models\Utils;
 @endphp
 <body class="">
     <div class="row">
-        <div class="col-md-6 fill pc-only "
-            style="background-color: red;
-            background-image: url({{ url('assets/img/bg/'.$num.'.png') }});    
-            background-size:     cover;
-            background-repeat:   no-repeat;
-            background-position: center center;
-            ">
-            
-        </div>
 
-        {{-- <div class="col-md-6 fill pc-only " style="padding: 0px; width: 4rem;">
-            <div class="fill pc-only"
-                style="width: 3rem; background-image: url({{ url('assets/img/bg-1.png') }});    
-            background-size:     cover;
-            background-repeat:   no-repeat;
-            background-position: center center;
-            ">
-            </div>
-        </div> --}}
-
-
-        <div class="col-md-6 fill">
+        <div class="col-md-3 bg-info fill">
             <div class="login-box">
                 {{-- <div class="login-logo">
                     <a href="{{ admin_url('/') }}"><b>{{ config('admin.name') }}</b></a>

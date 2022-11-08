@@ -116,7 +116,7 @@ class ApiPostsController extends Controller
             $s->ethnicity = $v->ethnicity;
             $s->finger_prints = $v->finger_prints;
             $s->is_suspects_arrested = $v->is_suspects_arrested;
- 
+
             $s->arrest_district_id = $v->arrest_district_id;
             $s->arrest_sub_county_id = $v->arrest_sub_county_id;
             $s->arrest_parish = $v->arrest_parish;
@@ -146,7 +146,7 @@ class ApiPostsController extends Controller
         }
 
 
-        return $this->success( $case, 'Case submitted successfully.');
+        return $this->success($case, 'Case submitted successfully.');
         if ($suspects) {
         } else {
             return $this->error('Failed to update case, please try again.');
@@ -164,6 +164,7 @@ class ApiPostsController extends Controller
         }
 
         $images = Utils::upload_images_1($_FILES, false);
+        $_images = [];
         foreach ($images as $src) {
             $img = new Image();
             $img->administrator_id =  $administrator_id;
@@ -172,10 +173,12 @@ class ApiPostsController extends Controller
             $img->parent_id =  null;
             $img->size = filesize(Utils::docs_root() . '/storage/images/' . $img->src);
             $img->save();
+
+            $_images[] = $img;
         }
         Utils::process_images_in_backround();
 
-        return $this->success($images, 'File uploaded successfully.');
+        return $this->success($_images, 'File uploaded successfully.');
     }
 
     public function process_pending_images()

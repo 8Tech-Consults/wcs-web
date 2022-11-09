@@ -1,6 +1,5 @@
 <?php
-use App\Models\Utils; 
-
+use App\Models\Utils;
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,13 +7,11 @@ use App\Models\Utils;
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ config('admin.title') }} | {{ trans('admin.login') }}</title>
+    <title>WCS - Admin portal</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    @if (!is_null($favicon = Admin::favicon()))
-        <link rel="shortcut icon" href="{{ $favicon }}">
-    @endif
+    <link rel="shortcut icon" href="{{ url('assets/logo_1.png') }}">
 
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css') }}">
@@ -25,6 +22,7 @@ use App\Models\Utils;
     <!-- iCheck -->
     <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/AdminLTE/plugins/iCheck/square/blue.css') }}">
 
+    <link rel="stylesheet" href="{{ url('assets/bootstrap.css') }}">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -80,35 +78,39 @@ use App\Models\Utils;
 
 
 @php
-    $num = (rand(1,9));
+    $num = rand(1, 9);
 @endphp
-<body class="">
-    <div class="row">
 
-        <div class="col-md-3 bg-info fill">
+<body class="">
+    <div class="row d-flex justify-content-center text-center ">
+
+        <div class="col-md-3   fill ">
             <div class="login-box">
                 {{-- <div class="login-logo">
                     <a href="{{ admin_url('/') }}"><b>{{ config('admin.name') }}</b></a>
                 </div> --}}
 
-               {{--  <img class="img-fluid center mobo-only " width="50%" src="{{ url('assets/logo.png') }}"
+                {{--  <img class="img-fluid center mobo-only " width="50%" src="{{ url('assets/logo.png') }}"
                     alt=""> --}}
 
                 <div class="login-logo">
                     {{-- <h2>Log in to your account</h2> --}}
 
-                    <img class="img-fluid center " width="90%" src="{{ url('assets/logo_1.png') }}" alt="">
+                    <img class="img-fluid center " width="40%" src="{{ url('assets/logo_1.png') }}" alt="">
 
-                    <br>
-                    <hr width="20%" class="bg-primary text-primary">
 
                 </div>
 
                 <!-- /.login-logo -->
-                <div class="login-box-body">
+                <div class="login-box-body pt-5 "
+                    style="
+                background-color: rgb(238, 238, 238);
+                border: 3px solid #277C61;
+                border-radius: 10px;
+                ">
 
                     <form action="{{ admin_url('auth/login') }}" method="post">
-                        <h3 class="text-center text-dark mb-2">Sign in</h3>
+                        <h3 class="text-center text-dark mb-4">Sign in</h3>
                         <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
 
                             @if ($errors->has('username'))
@@ -140,7 +142,7 @@ use App\Models\Utils;
                                 @if (config('admin.auth.remember'))
                                     <div class="checkbox icheck">
 
-                                        <p><a href="javascript:;" style="color: red;;">Forgot
+                                        <p><a href="javascript:;" style="color: #277C61;;">Forgot
                                                 password</a></p>
                                         {{-- <label>
                                             <input type="checkbox" name="remember" value="1" 
@@ -154,7 +156,7 @@ use App\Models\Utils;
                             <div class="col-xs-4">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="btn  btn-block btn-flat"
-                                    style="background-color: red; color: white">{{ trans('admin.login') }}</button>
+                                    style="background-color: #277C61; color: white">{{ trans('admin.login') }}</button>
                             </div>
                             <!-- /.col -->
                         </div>

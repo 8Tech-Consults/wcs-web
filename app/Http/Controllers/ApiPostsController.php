@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Enterprise;
+use App\Models\Exhibit;
 use App\Models\Image;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
@@ -72,12 +73,46 @@ class ApiPostsController extends Controller
         }
 
         $suspects = [];
+        $exhibits = [];
         if (isset($r->suspects)) {
             $suspects = json_decode($r->suspects);
             if ($suspects == null) {
                 $suspects = [];
             }
         }
+        
+        if (isset($r->exhibits)) {
+            $exhibits = json_decode($r->exhibits);
+            if ($exhibits == null) {
+                $exhibits = [];
+            }
+        }
+
+        foreach ($exhibits as $key => $v) {
+ 
+ 
+            $e = null;
+            if (isset($v->online_id)) {
+                $e = Exhibit::find(((int)($v->online_id)));
+            }
+
+            if ($e == null) {
+                $e = new Exhibit();
+            }
+
+
+
+            $e->case_id = $case->id;
+            $e->exhibit_catgory = $v->exhibit_catgory;
+            $e->wildlife = '';
+            $e->implements = '';
+            $e->photos = $v->online_image_ids;
+            $e->description = $v->description;
+            $e->quantity = ((int)($v->quantity));
+
+            $e->save();
+        }
+
 
         foreach ($suspects as $key => $v) {
 
@@ -141,7 +176,7 @@ class ApiPostsController extends Controller
             $s->jail_period = ((int)($v->jail_period));
             $s->is_fined = $v->is_fined;
             $s->fined_amount = ((int)($v->fined_amount));
-            $s->status = ((int)($v->status));
+            $s->status = ((int)($v->status)); 
             $s->save();
         }
 

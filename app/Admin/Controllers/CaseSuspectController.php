@@ -2,13 +2,17 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
 use App\Models\Utils;
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Faker\Factory as Faker;
 
 class CaseSuspectController extends AdminController
 {
@@ -17,7 +21,7 @@ class CaseSuspectController extends AdminController
      *
      * @var string
      */
-    protected $title = 'CaseSuspect';
+    protected $title = 'Suspects';
 
     /**
      * Make a grid builder.
@@ -26,56 +30,223 @@ class CaseSuspectController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new CaseSuspect());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('case_id', __('Case id'));
-        $grid->column('uwa_suspect_number', __('Uwa suspect number'));
-        $grid->column('first_name', __('First name'));
-        $grid->column('middle_name', __('Middle name'));
-        $grid->column('last_name', __('Last name'));
+      /*  foreach (CaseSuspect::all() as $key => $s) {
+            $s->photo = ((rand(1000,10000)%20)+1) .".jpg";
+            $s->save();
+        }   */
+        /*
+
+        $faker = Faker::create();
+        $admins = Administrator::all()->pluck('id');
+        $_admins = [0, 1, 2, 4, 5, 6, 7, 8];
+        $sub_counties =  [];
+        $statuses =  [true, false];
+        $sex =  ['Male', 'Female'];
+        $countries =  Utils::COUNTRIES();
+        $titles =  [
+            'Found with 3 pairs of rhino tails.',
+            'Killing of 6 lions and 2 elephants.',
+            'Killed hippopotamus.',
+            'Found with 20 live pangolins.',
+            'Found with 11 crowned crane birds.',
+        ];
+
+        $parishes =  [
+            'Kinoni', 'Ntusi', 'Lwemiyaga', 'Kyankoko', 'Mugore', 'Lwebisya', 'Lyantonde', 'Kiruhura', 'Sembabule',
+            'Adumi', 'Ajia', 'Arivu', 'Aroi', 'Arua Hill', 'Dadamu', 'Logiri', 'Manibe', 'Offaka'
+        ];
+        $ethnicity =  [
+            'Musoga', 'Mugishu', 'Mukonzo', 'Muganda', 'Munyankole', 'Mucholi', 'Muchiga'
+        ];
+        foreach (Location::get_sub_counties() as $v) {
+            $sub_counties[] = $v->id;
+        }
+
+        $cases = [];
+        foreach (CaseModel::all() as $v) {
+            $cases[] = $v->id;
+        }
+
+        for ($i = 0; $i < 1000; $i++) {
+            shuffle($_admins);
+            shuffle($sub_counties);
+            shuffle($parishes);
+            shuffle($statuses);
+            shuffle($titles);
+            shuffle($cases);
+            shuffle($sex);
+            shuffle($ethnicity);
+            shuffle($countries);
+            $s = new CaseSuspect();
+            $s->case_id = $cases[2];
+            $s->uwa_suspect_number =  "UG-" . $faker->randomNumber(5, false);
+            $s->arrest_uwa_number =  "AR-" . $faker->randomNumber(5, false);
+            $s->first_name =   $faker->firstName(0);
+            $s->last_name =   $faker->lastName(0);
+            $s->middle_name =   '';
+            $s->phone_number =   $faker->e164PhoneNumber;
+            $s->national_id_number =   $faker->numberBetween(100000000000000, 1000000000000000);
+            $s->arrest_crb_number =   $faker->numberBetween(1000000000, 10000000000);
+            $s->court_file_number =   $faker->numberBetween(1000000, 100000000);
+            $s->sex =   $sex[0];
+            $s->age = $faker->date();
+            $s->occuptaion = $faker->jobTitle();
+            $s->country =   $countries[0];
+            $s->sub_county_id =   $sub_counties[0];
+            $s->parish =   $parishes[0];
+            $s->village =   $parishes[2];
+            $s->ethnicity =   $ethnicity[2];
+            $s->finger_prints =  '';
+            $s->is_suspects_arrested =  false;
+            $s->is_suspect_appear_in_court =  false;
+            $s->arrest_date_time = $faker->date();
+            $s->arrest_sub_county_id =   $sub_counties[0];
+            $s->arrest_parish =   $parishes[2];
+            $s->arrest_village =   $parishes[2];
+            $s->prosecutor =   $faker->name();
+            $s->arrest_first_police_station =   $parishes[2] . " Police post";
+            $s->arrest_current_police_station =   $parishes[2] . " Police post";
+            $s->arrest_agency =   $parishes[2] . " Police post";
+            $s->court_name =   $parishes[2] . " Court";
+            $s->arrest_latitude =   '0.615085';
+            $s->arrest_longitude =   '30.391306';
+            $s->arrest_uwa_unit =   '-';
+            $s->arrest_detection_method =   'Prison cell';
+            $s->is_convicted =  false;
+            $s->case_outcome =  "Charged";
+            $s->magistrate_name =   $faker->name();
+            $s->is_jailed =  $statuses[0];
+            shuffle($statuses);
+            $s->jail_period =  $statuses[0];
+            shuffle($statuses);
+            $s->jail_period =  $statuses[0];
+            shuffle($statuses);
+            $s->is_fined =  $statuses[0];
+            shuffle($statuses);
+            $s->fined_amount =  $statuses[0];
+            shuffle($statuses);
+            $s->status =  $statuses[0];
+
+            $s->save();
+        }*/
+ 
+
+
+        $grid = new Grid(new CaseSuspect());
+        $grid->disableBatchActions();
+        $grid->disableCreateButton();
+
+
+        $grid->model()->orderBy('id', 'Desc');
+        $grid->quickSearch('first_name')->placeholder('Search by name..');
+
+        $grid->column('id', __('ID'))->sortable()->hide();
+        $grid->column('created_at', __('Date'))
+            ->display(function ($x) {
+                return Utils::my_date_time($x);
+            })
+            ->sortable();
+
+        $grid->column('photo_url', __('Photo'))
+            ->width(60)
+            ->lightbox(['width' => 60, 'height' => 80]);
+        $grid->column('updated_at', __('Updated'))
+            ->display(function ($x) {
+                return Utils::my_date_time($x);
+            })
+            ->sortable()->hide();
+
+        $grid->column('first_name', __('Name'))
+            ->display(function ($x) {
+                return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
+            })
+            ->sortable();
+
+
+        $grid->column('case_id', __('Case'))
+            ->display(function ($x) {
+                return $this->case->name;
+            })
+            ->sortable();
+        $grid->column('sex', __('Sex'))
+            ->filter([
+                'Male' => 'Male',
+                'Female' => 'Female',
+            ])
+            ->sortable();
+        $grid->column('national_id_number', __('NIN'));
         $grid->column('phone_number', __('Phone number'));
-        $grid->column('national_id_number', __('National id number'));
-        $grid->column('sex', __('Sex'));
-        $grid->column('age', __('Age'));
+        $grid->column('uwa_suspect_number', __('UWA number'));
         $grid->column('occuptaion', __('Occuptaion'));
         $grid->column('country', __('Country'));
-        $grid->column('district_id', __('District id'));
-        $grid->column('sub_county_id', __('Sub county id'));
-        $grid->column('parish', __('Parish'));
-        $grid->column('village', __('Village'));
-        $grid->column('ethnicity', __('Ethnicity'));
-        $grid->column('finger_prints', __('Finger prints'));
-        $grid->column('is_suspects_arrested', __('Is suspects arrested'));
-        $grid->column('arrest_date_time', __('Arrest date time'));
-        $grid->column('arrest_district_id', __('Arrest district id'));
-        $grid->column('arrest_sub_county_id', __('Arrest sub county id'));
-        $grid->column('arrest_parish', __('Arrest parish'));
-        $grid->column('arrest_village', __('Arrest village'));
-        $grid->column('arrest_latitude', __('Arrest latitude'));
-        $grid->column('arrest_longitude', __('Arrest longitude'));
-        $grid->column('arrest_first_police_station', __('Arrest first police station'));
-        $grid->column('arrest_current_police_station', __('Arrest current police station'));
-        $grid->column('arrest_agency', __('Arrest agency'));
-        $grid->column('arrest_uwa_unit', __('Arrest uwa unit'));
-        $grid->column('arrest_detection_method', __('Arrest detection method'));
-        $grid->column('arrest_uwa_number', __('Arrest uwa number'));
-        $grid->column('arrest_crb_number', __('Arrest crb number'));
-        $grid->column('is_suspect_appear_in_court', __('Is suspect appear in court'));
-        $grid->column('prosecutor', __('Prosecutor'));
-        $grid->column('is_convicted', __('Is convicted'));
-        $grid->column('case_outcome', __('Case outcome'));
-        $grid->column('magistrate_name', __('Magistrate name'));
-        $grid->column('court_name', __('Court name'));
-        $grid->column('court_file_number', __('Court file number'));
-        $grid->column('is_jailed', __('Is jailed'));
-        $grid->column('jail_period', __('Jail period'));
-        $grid->column('is_fined', __('Is fined'));
-        $grid->column('fined_amount', __('Fined amount'));
-        $grid->column('status', __('Status'));
+        $grid->column('district_id', __('District'))->display(function () {
+            return $this->district->name;
+        })->sortable();
+        $grid->column('is_suspects_arrested', __('Arrest'))
+            ->sortable()
+            ->using([
+                0 => 'Not arrested',
+                1 => 'Arrested',
+            ], 'Not arrested')->label([
+                null => 'danger',
+                0 => 'danger',
+                1 => 'success',
+            ], 'danger')
+            ->filter([
+                0 => 'Not arrested',
+                1 => 'Arrested',
+            ]);
 
+
+        $grid->column('is_suspect_appear_in_court', __('Court'))
+            ->sortable()
+            ->using([
+                0 => 'Not in Court',
+                1 => 'In Court',
+            ], 'Not in Court')->label([
+                null => 'danger',
+                0 => 'danger',
+                1 => 'success',
+            ], 'danger')
+            ->filter([
+                0 => 'Not in Court',
+                1 => 'In Court',
+            ]);
+
+        $grid->column('is_convicted', __('Convicted'))
+            ->sortable()
+            ->using([
+                0 => 'Not Convicted',
+                1 => 'Convicted',
+            ],)->label([
+                null => 'danger',
+                0 => 'danger',
+                1 => 'success',
+            ], 'danger')
+            ->filter([
+                0 => 'Not Convicted',
+                1 => 'Convicted',
+            ]);
+
+        $grid->column('is_jailed', __('Jailed'))
+            ->sortable()
+            ->using([
+                0 => 'Not Jailed',
+                1 => 'Jailed',
+            ],)->label([
+                null => 'danger',
+                0 => 'danger',
+                1 => 'success',
+            ], 'danger')
+            ->filter([
+                0 => 'Not Jailed',
+                1 => 'Jailed',
+            ]);
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+        });
         return $grid;
     }
 

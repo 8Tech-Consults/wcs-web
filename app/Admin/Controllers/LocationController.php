@@ -1,4 +1,4 @@
-<?php
+ca<?php
 
 namespace App\Admin\Controllers;
 
@@ -74,7 +74,7 @@ class LocationController extends AdminController
         $form->select('parent', __('Sub county'))
             ->default(0)
             ->help('Leave this field empty if you are creating a new district.')
-            ->options(Location::get_sub_districts()->pluck('name_text', 'id'));
+            ->options(Location::get_districts()->pluck('name_text', 'id'));
 
 
         $form->text('details', __('Location description'));

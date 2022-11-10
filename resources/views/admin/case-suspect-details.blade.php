@@ -3,26 +3,65 @@ use App\Models\Utils;
 ?><div class="container bg-white p-1 p-md-5">
     <div class="row">
         <div class="col-md-6">
-            <h2 class="m-0 p-0 text-dark h3 text-uppercase"><b>Suspect {{ '#' . $s->id ?? '-' }} - details</b></h2>
+            <h2 class="m-0 p-0 text-dark h3 text-uppercase"><b>Suspect {{ '#' . $s->id ?? '-' }}</b></h2>
         </div>
     </div>
     <hr class="my-3 my-md-4">
     <div class="row">
         <div class="col-3 col-md-2">
             <div class="border border-1 rounded bg-">
-                <img class="img-fluid" src="{{ url('assets/user.jpeg') ?? '-' }}">
+                <img class="img-fluid" src="{{ $s->photo_url }}">
             </div>
         </div>
         <div class="col-9 col-md-6">
-            <h3 class="text-uppercase h3 p-0 m-0">{{ $s->first_name . ' ' . $s->middle_name . ' ' . $s->last_name }}
-            </h3>
+            <h3 class="text-uppercase h4 p-0 m-0"><b>BIO DATA</b></h3>
             <hr class="my-1 my-md-3">
 
+            @include('components.detail-item', [
+                't' => 'name',
+                's' => $s->first_name . ' ' . $s->middle_name . ' ' . $s->last_name,
+            ])
             @include('components.detail-item', ['t' => 'sex', 's' => $s->sex])
             @include('components.detail-item', [
                 't' => 'Date of birth',
                 's' => Utils::my_date($s->age),
             ])
+            @include('components.detail-item', ['t' => 'Phone number', 's' => $s->phone_number])
+            @include('components.detail-item', [
+                't' => 'National id number',
+                's' => $s->national_id_number,
+            ])
+
+            @include('components.detail-item', [
+                't' => 'Country of origin',
+                's' => $s->country,
+            ])
+
+            @include('components.detail-item', [
+                't' => 'Ethnicity',
+                's' => $s->ethnicity,
+            ])
+
+            @include('components.detail-item', [
+                't' => 'District',
+                's' => $s->district->name,
+            ])
+
+            @include('components.detail-item', [
+                't' => 'Sub county',
+                's' => $s->sub_county->name,
+            ])
+
+            @include('components.detail-item', [
+                't' => 'Parish',
+                's' => $s->parish,
+            ])
+
+            @include('components.detail-item', [
+                't' => 'Village',
+                's' => $s->village,
+            ])
+
             @include('components.detail-item', [
                 't' => 'REPORTed on DATE',
                 's' => Utils::my_date($s->created_at),
@@ -36,7 +75,7 @@ use App\Models\Utils;
         </div>
         <div class="pt-3 pt-md-0 col-md-4">
             <div class=" border border-primary p-3">
-                <h2 class="m-0 p-0 text-dark h3 text-center"><b>Suspect Summary</b></h2>
+                <h3 class="text-uppercase h4 p-0 m-0 text-center"><b>Summary</b></h3>
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
                     <p class="py-1 my-0 text-uppercase"><b>CASE:</b> <a
@@ -53,16 +92,18 @@ use App\Models\Utils;
     </div>
 
     <hr class="mt-4 mb-2 border-primary pb-0 mt-md-5 mb-md-5">
-    <h3 class="text-uppercase h3 p-0 m-0 mb-2 text-center text-uppercase mt-3 mt-md-5"><b>Suspect's bio information</b>
-    </h3>
+    <h3 class="text-uppercase h4 p-0 m-0 text-center"><b>ARREST information</b></h3>
     <hr class="m-0 pt-0">
     <div class="row pt-2">
         <div class="col-md-6 pl-5 pl-md-5">
-            @include('components.detail-item', ['t' => 'Phone number', 's' => $s->phone_number])
             @include('components.detail-item', [
-                't' => 'National ID number',
-                's' => $s->national_id_number,
+                't' => 'Arrest date',
+                's' => Utils::my_date($s->arrest_date_time),
             ])
+{{--             @include('components.detail-item', [
+                't' => 'Arrest district',
+                's' => $s->arrest_district->name,
+            ]) --}}
 
             @include('components.detail-item', ['t' => 'Parish', 's' => $s->parish])
             @include('components.detail-item', ['t' => 'Village', 's' => $s->village])

@@ -17,7 +17,7 @@ class Location extends Model
             0
         )->get();
     }
-    public static function get_sub_districts()
+    public static function get_districts()
     {
         return Location::where(
             'parent',

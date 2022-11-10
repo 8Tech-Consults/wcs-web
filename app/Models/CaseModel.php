@@ -5,11 +5,12 @@ namespace App\Models;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CaseModel extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
 
  
     public static function boot()
@@ -65,8 +66,11 @@ class CaseModel extends Model
     {
         return $this->hasMany(Exhibit::class, 'case_id');
     }
+
     function suspects()
     {
         return $this->hasMany(CaseSuspect::class, 'case_id');
     }
+
+ 
 }

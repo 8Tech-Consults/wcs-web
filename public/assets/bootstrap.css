@@ -10645,3 +10645,7 @@ a.text-dark:hover {
 .dropdown-toggle::after {
     content: none;
 }
+.img-thumbnail{
+    border-width: 0px!important;
+    margin: 0px!important;
+}

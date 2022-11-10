@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Exhibit extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = ['case_id', 'exhibit_catgory', 'wildlife', 'implements', 'photos', 'description', 'quantity'];
     function case_model()

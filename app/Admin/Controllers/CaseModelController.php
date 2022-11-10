@@ -6,12 +6,14 @@ use App\Models\CaseModel;
 use App\Models\Location;
 use App\Models\PA;
 use App\Models\Utils;
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\InfoBox;
+use Faker\Factory as Faker;
 
 class CaseModelController extends AdminController
 {
@@ -27,26 +29,124 @@ class CaseModelController extends AdminController
      *
      * @return Grid
      */
+
+
+
+
     protected function grid()
     {
-        $grid = new Grid(new CaseModel());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('reported_by', __('Reported by'));
-        $grid->column('latitude', __('Latitude'));
-        $grid->column('longitude', __('Longitude'));
-        $grid->column('district_id', __('District id'));
-        $grid->column('sub_county_id', __('Sub county id'));
-        $grid->column('parish', __('Parish'));
-        $grid->column('village', __('Village'));
-        $grid->column('offence_category_id', __('Offence category id'));
-        $grid->column('offence_description', __('Offence description'));
-        $grid->column('is_offence_committed_in_pa', __('Is offence committed in pa'));
-        $grid->column('pa_id', __('Pa id'));
-        $grid->column('has_exhibits', __('Has exhibits'));
-        $grid->column('status', __('Status'));
+        /*
+        $faker = Faker::create();
+        $admins = Administrator::all()->pluck('id');
+        $_admins = [0, 1, 2, 4, 5, 6, 7, 8];
+        $sub_counties =  [];
+        $statuses =  [true, false];
+        $titles =  [
+            'Found with 3 pairs of rhino tails.',
+            'Killing of 6 lions and 2 elephants.',
+            'Killed hippopotamus.',
+            'Found with 20 live pangolins.',
+            'Found with 11 crowned crane birds.',
+        ];
+
+        $parishes =  [
+            'Kinoni', 'Ntusi', 'Lwemiyaga', 'Kyankoko', 'Mugore', 'Lwebisya', 'Lyantonde', 'Kiruhura', 'Sembabule',
+            'Adumi', 'Ajia', 'Arivu', 'Aroi', 'Arua Hill', 'Dadamu', 'Logiri', 'Manibe', 'Offaka'
+        ];
+        foreach (Location::get_sub_counties() as $v) {
+            $sub_counties[] = $v->id;
+        }
+
+        for ($i = 0; $i < 49; $i++) {
+            shuffle($_admins);
+            shuffle($sub_counties);
+            shuffle($parishes);
+            shuffle($statuses);
+            shuffle($titles);
+            $c = new CaseModel();
+            $c->reported_by = $admins[$_admins[2]];
+            $c->latitude = '0.615085';
+            $c->longitude = '30.391306';
+            $c->sub_county_id = $sub_counties[2];
+            $c->parish = $parishes[2];
+            $c->village = $parishes[3];
+            $c->offence_category_id = 1;
+            $c->offence_description = $faker->sentence(100);
+            $c->offence_description .= "<br>" . $faker->sentence(100);
+            $c->offence_description .= "<br>" . $faker->sentence(100);
+            $c->is_offence_committed_in_pa = 0;
+            $c->pa_id = 1;
+            $c->has_exhibits = 1;
+            $c->status = $statuses[0];
+            $c->title = $titles[2];
+            $c->save();
+        }*/
+
+
+
+        $grid = new Grid(new CaseModel());
+        $grid->disableBatchActions();
+        $grid->disableCreateButton();
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+        });
+
+
+        $grid->column('id', __('ID'))->sortable();
+        $grid->column('created_at', __('Created'))
+            ->display(function ($x) {
+                return Utils::my_date_time($x);
+            })
+            ->sortable();
+
+        $grid->column('updated_at', __('Updated'))
+            ->display(function ($x) {
+                return Utils::my_date_time($x);
+            })
+            ->hide()
+            ->sortable();
+
+        $grid->column('reported_by', __('Reported by'))
+            ->display(function () {
+                return $this->reportor->name;
+            });
+        $grid->column('district_id', __('District'))
+            ->display(function () {
+                return $this->district->name;
+            })
+            ->sortable();
+
+        $grid->column('sub_county_id', __('Sub-county'))
+            ->display(function () {
+                return $this->sub_county->name;
+            })
+            ->sortable();
+
+
+        $grid->column('suspects', __('Suspects'))->display(function () {
+            return count($this->suspects);
+        });
+        $grid->column('exhibits', __('Exhibits'))->display(function () {
+            return count($this->suspects);
+        });
+        $grid->column('status', __('Status'))
+            ->sortable()
+            ->using([
+                0 => 'Pending',
+                1 => 'Active',
+                2 => 'Closed',
+            ], 'Not in Court')->label([
+                null => 'warning',
+                0 => 'warning',
+                1 => 'success',
+                2 => 'danger',
+            ], 'danger')
+            ->filter([
+                0 => 'Pending',
+                1 => 'Active',
+                2 => 'Closed',
+            ]);
 
         return $grid;
     }
@@ -302,7 +402,7 @@ class CaseModelController extends AdminController
                         2 => 'Other status',
                         0 => 'No',
                     ])
-                    ->default(1); 
+                    ->default(1);
             });
         });
 

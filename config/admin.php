@@ -207,7 +207,7 @@ return [
     */
     'operation_log' => [
 
-        'enable' => false,
+        'enable' => true,
 
         /*
          * Only logging allowed methods in the list
@@ -411,6 +411,13 @@ return [
         'material-ui' => [
             'enable' => false
         ],
+
+        'grid-lightbox' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+        ],
+
         'quill' => [
             'enable' => true,
             'config' => [

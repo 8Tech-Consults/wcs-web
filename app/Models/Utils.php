@@ -238,6 +238,24 @@ class Utils  extends Model
         return $c->format('d M, Y');
     }
 
+    public static function month($t)
+    {
+        $c = Carbon::parse($t);
+        if ($t == null) {
+            return $t;
+        }
+        return $c->format('M - Y');
+    }
+
+    public static function my_time_ago($t)
+    {
+        $c = Carbon::parse($t);
+        if ($t == null) {
+            return $t;
+        }
+        return $c->diffForHumans(); 
+    }
+
     public static function my_date_time($t)
     {
         $c = Carbon::parse($t);
@@ -247,10 +265,40 @@ class Utils  extends Model
         return $c->format('d M, Y - h:m a');
     }
 
+    public static function tell_suspect_status($s)
+    {
+        if ($s->is_arrested) {
+            return 'Arrested';
+        } else if ($s->is_suspect_appear_in_court) {
+            return 'In court';
+        } else if ($s->is_jailed) {
+            return 'Jailed';
+        } else if ($s->is_convicted) {
+            return 'Convicted';
+        } else {
+            return 'Pending';
+        }
+    }
+
+    public static function tell_suspect_status_color($s)
+    {
+        if ($s->is_arrested) {
+            return 'success';
+        } else if ($s->is_suspect_appear_in_court) {
+            return 'info';
+        } else if ($s->is_jailed) {
+            return 'danger';
+        } else if ($s->is_convicted) {
+            return 'danger';
+        } else {
+            return 'Pending';
+        }
+    }
+
     public static function tell_case_status($status)
     {
         if ($status == 1) {
-            return 'Pending for verification';
+            return 'Pending';
         } else if ($status == 2) {
             return 'Active';
         } else if ($status == 3) {
@@ -263,7 +311,7 @@ class Utils  extends Model
     public static function tell_case_status_color($status)
     {
         if ($status == 1) {
-            return 'secondary';
+            return 'warning';
         } else if ($status == 2) {
             return 'success';
         } else if ($status == 3) {

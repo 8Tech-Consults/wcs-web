@@ -156,7 +156,7 @@ return [
         'disk' => 'admin',
         // Image and file upload path under the disk above.
         'directory' => [
-            'image' => '/',
+            'image' => '/images',
             'file'  => 'files',
         ],
     ],
@@ -413,7 +413,7 @@ return [
         ],
 
         'grid-lightbox' => [
-        
+
             // Set to `false` if you want to disable this extension
             'enable' => true,
         ],
@@ -476,7 +476,7 @@ return [
                 'baidu' => [
                     'api_key' => 'xck5u2lga9n1bZkiaXIHtMufWXQnVhdx',
                 ],
- 
+
                 'tencent' => [
                     'api_key' => 'VVYBZ-HRJCX-NOJ4Z-ZO3PU-ZZA2J-QPBBT',
                 ],

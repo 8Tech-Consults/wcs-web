@@ -140,11 +140,22 @@ class CaseSuspectController extends AdminController
         $grid->disableActions();
 
         $grid->model()
-        ->where( 
-            'is_suspects_arrested',
-            '!=',
-            1
-        )->orderBy('id', 'Desc');
+            ->where(
+                'is_suspects_arrested',
+                '!=',
+                1
+            )
+            ->where(
+                'is_suspect_appear_in_court',
+                '!=',
+                1
+            )
+            ->where(
+                'is_jailed',
+                '!=',
+                1
+            )
+            ->orderBy('id', 'Desc');
 
 
 
@@ -403,7 +414,7 @@ class CaseSuspectController extends AdminController
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
-        }); 
+        });
 
         $form->tab('Bio data', function (Form $form) {
             $form->text('first_name')->rules('required');
@@ -466,6 +477,7 @@ class CaseSuspectController extends AdminController
                     0 => 'No',
                 ])
                 ->when(1, function ($form) {
+                    $form->date('court_date', 'Court date');
                     $form->text('prosecutor', 'Names of the prosecutors');
                     $form->radio('is_convicted', __('Has suspect been convicted?'))
                         ->options([
@@ -488,6 +500,7 @@ class CaseSuspectController extends AdminController
                     0 => 'No',
                 ])
                 ->when(1, function ($form) {
+                    $form->date('jail_date', 'Jail date');
                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
                 });
 
@@ -501,7 +514,11 @@ class CaseSuspectController extends AdminController
                 });
         });
 
-        $form->tab('Case status', function (Form $form) {
+        $form->tab('Suspect progress', function (Form $form) {
+
+
+
+
             $form->select('status', __('Status'))
                 ->options([
                     1 => 'Pending for verification',
@@ -509,6 +526,13 @@ class CaseSuspectController extends AdminController
                     3 => 'Case Closed',
                 ])
                 ->default(1);
+
+            $form->morphMany('comments', 'Click on new to add progress comment', function (Form\NestedForm $form) {
+                $u = Admin::user();
+                $form->hidden('comment_by')->default($u->enterprise_id);	
+
+                $form->text('body', __('Progress comment'))->rules('required');
+            });
         });
 
 

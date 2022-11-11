@@ -15,14 +15,14 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Faker\Factory as Faker;
 
-class ArrestsController extends AdminController
+class JailedSuspectsController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Arrests';
+    protected $title = 'Jailed suspects';
 
     /**
      * Make a grid builder.
@@ -39,7 +39,7 @@ class ArrestsController extends AdminController
 
         $grid->model()
             ->where([
-                'is_suspects_arrested' => 1
+                'is_jailed' => 1
             ])->orderBy('id', 'Desc');
 
 
@@ -69,20 +69,28 @@ class ArrestsController extends AdminController
             })
                 ->ajax($ajax_url);
 
-            $f->between('arrest_date_time', 'Filter by arrest date')->date();
-            $f->like('arrest_uwa_number', 'Filter by UWA Arrest number');
+            $f->equal('is_fined', 'Filter by fine')
+                ->select([
+                    0 => 'Not fined',
+                    1 => 'Fined',
+                ]);
 
+            $f->group('fined_amount', 'Filter by fine amount', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
 
+            $f->group('jail_period', 'Filter by jail period (in Months)', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
 
-            $f->equal('arrest_district_id', 'Filter by arrest district')->select(function ($id) {
-                $a = Location::find($id);
-                if ($a) {
-                    return [$a->id => "#" . $a->id . " - " . $a->name];
-                }
-            })
-                ->ajax($district_ajax_url);
-
-            $f->like('arrest_current_police_station', 'Filter by current police station');
+            $f->between('jail_date', 'Filter by jail date')->date();
+            $f->like('court_name', 'Filter by court');
+            $f->like('prosecutor', 'Filter by prosecutor');
+            $f->like('magistrate_name', 'Filter by magistrate');
         });
 
 
@@ -109,7 +117,6 @@ class ArrestsController extends AdminController
 
 
 
-
         $grid->column('first_name', __('Name'))
             ->display(function ($x) {
                 return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
@@ -120,45 +127,65 @@ class ArrestsController extends AdminController
                 return $this->case->title;
             })
             ->sortable();
-        $grid->column('is_suspects_arrested', __('Arrest status'))
+
+
+        $grid->column('is_fined', __('Fined'))
             ->sortable()
             ->using([
-                0 => 'Not arrested',
-                1 => 'Arrested',
+                0 => 'Not fined',
+                1 => 'Fined',
+            ], 'Not fined')->label([
+                null => 'danger',
+                0 => 'danger',
+                1 => 'success',
+            ], 'danger');
+
+        $grid->column('fined_amount', __('Fine fee'))
+            ->display(function ($x) {
+                $x = (int)($x);
+                if ($x < 1) {
+                    return "-";
+                }
+                return "UGX " . number_format($x);
+            })
+            ->sortable();
+
+        $grid->column('is_jailed', __('Jail status'))
+            ->sortable()
+            ->using([
+                0 => 'Not jailed',
+                1 => 'Jailed',
             ], 'Not arrested')->label([
                 null => 'danger',
                 0 => 'danger',
                 1 => 'success',
             ], 'danger');
 
-        $grid->column('arrest_uwa_number', __('UWA arrest number'))
-            ->sortable();
-
-        $grid->column('arrest_date_time', __('Arrest Date'))
+        $grid->column('jail_date', __('Jail date'))
             ->display(function ($x) {
-                return Utils::my_date_time($x);
+                return Utils::my_date($x);
             })
             ->sortable();
 
-        $grid->column('arrest_district_id', __('District'))
+        $grid->column('jail_period', __('Jail period'))
             ->display(function ($x) {
-                return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
+                $x = (int)($x);
+                if ($x < 1) {
+                    return "-";
+                }
+                return $x . " Months";
             })
             ->sortable();
-        $grid->column('arrest_sub_county_id', __('Sub-county'))
-            ->display(function ($x) {
-                return Utils::get(Location::class, $this->arrest_sub_county_id)->name_text;
-            })
+
+        $grid->column('court_name', __('Court'))
+            ->sortable();
+        $grid->column('prosecutor', __('Prosecutor'))
+            ->sortable();
+        $grid->column('magistrate_name', __('Magistrate'))
             ->sortable();
 
-        $grid->column('arrest_current_police_station', __('Police station'))
-            ->sortable();
-        $grid->column('arrest_detection_method', __('Detection method'))
-            ->sortable();
-
-
-
-
+ 
+ 
         $grid->column('action', __('Actions'))->display(function () {
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">

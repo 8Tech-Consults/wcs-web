@@ -15,14 +15,14 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Faker\Factory as Faker;
 
-class ArrestsController extends AdminController
+class CourtsController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Arrests';
+    protected $title = 'Court cases';
 
     /**
      * Make a grid builder.
@@ -39,7 +39,7 @@ class ArrestsController extends AdminController
 
         $grid->model()
             ->where([
-                'is_suspects_arrested' => 1
+                'is_suspect_appear_in_court' => 1
             ])->orderBy('id', 'Desc');
 
 
@@ -69,20 +69,16 @@ class ArrestsController extends AdminController
             })
                 ->ajax($ajax_url);
 
-            $f->between('arrest_date_time', 'Filter by arrest date')->date();
-            $f->like('arrest_uwa_number', 'Filter by UWA Arrest number');
-
-
-
-            $f->equal('arrest_district_id', 'Filter by arrest district')->select(function ($id) {
-                $a = Location::find($id);
-                if ($a) {
-                    return [$a->id => "#" . $a->id . " - " . $a->name];
-                }
-            })
-                ->ajax($district_ajax_url);
-
-            $f->like('arrest_current_police_station', 'Filter by current police station');
+            $f->between('court_date', 'Filter by arrest date')->date();
+            $f->like('court_name', 'Filter by court name');
+            $f->like('court_file_number', 'Filter by court file number');
+            $f->like('prosecutor', 'Filter by prosecutor');
+            $f->like('magistrate_name', 'Filter by magistrate');
+            $f->equal('is_convicted', 'Filter by conviction')
+                ->select([
+                    0 => 'Not Convicted',
+                    1 => 'Convicted',
+                ]);
         });
 
 
@@ -109,7 +105,6 @@ class ArrestsController extends AdminController
 
 
 
-
         $grid->column('first_name', __('Name'))
             ->display(function ($x) {
                 return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
@@ -120,45 +115,52 @@ class ArrestsController extends AdminController
                 return $this->case->title;
             })
             ->sortable();
-        $grid->column('is_suspects_arrested', __('Arrest status'))
+
+
+        $grid->column('is_suspect_appear_in_court', __('Court status'))
             ->sortable()
             ->using([
-                0 => 'Not arrested',
-                1 => 'Arrested',
+                0 => 'Not in court',
+                1 => 'In court',
             ], 'Not arrested')->label([
                 null => 'danger',
                 0 => 'danger',
                 1 => 'success',
             ], 'danger');
 
-        $grid->column('arrest_uwa_number', __('UWA arrest number'))
-            ->sortable();
-
-        $grid->column('arrest_date_time', __('Arrest Date'))
+        $grid->column('court_date', __('Court date'))
             ->display(function ($x) {
-                return Utils::my_date_time($x);
+                return Utils::my_date($x);
             })
             ->sortable();
 
-        $grid->column('arrest_district_id', __('District'))
-            ->display(function ($x) {
-                return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
-            })
-            ->sortable();
-        $grid->column('arrest_sub_county_id', __('Sub-county'))
-            ->display(function ($x) {
-                return Utils::get(Location::class, $this->arrest_sub_county_id)->name_text;
-            })
+        $grid->column('court_name', __('Court name'))
             ->sortable();
 
-        $grid->column('arrest_current_police_station', __('Police station'))
+        $grid->column('court_file_number', __('Court file number'))
             ->sortable();
-        $grid->column('arrest_detection_method', __('Detection method'))
+
+        $grid->column('prosecutor', __('Prosecutor'))
+            ->sortable();
+
+        $grid->column('magistrate_name', __('Magistrate name'))
             ->sortable();
 
 
 
+        $grid->column('is_convicted', __('Conviction status'))
+            ->sortable()
+            ->using([
+                0 => 'Not Convicted',
+                1 => 'Convicted',
+            ], 'Not arrested')->label([
+                null => 'danger',
+                0 => 'danger',
+                1 => 'success',
+            ], 'danger');
 
+        $grid->column('case_outcome', __('Case outcome'))
+            ->sortable();
         $grid->column('action', __('Actions'))->display(function () {
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">

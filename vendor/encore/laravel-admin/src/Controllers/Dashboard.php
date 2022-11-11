@@ -2,14 +2,145 @@
 
 namespace Encore\Admin\Controllers;
 
-
+use App\Models\CaseModel;
+use App\Models\CaseSuspect;
+use App\Models\CaseSuspectsComment;
 use App\Models\User;
+use App\Models\Utils;
+use Carbon\Carbon;
 use Encore\Admin\Admin;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class Dashboard
 {
+
+    public static function suspects()
+    {
+        $suspects = CaseSuspect::where([])
+            ->orderBy('id', 'Desc')->limit(6)->get();
+
+        return view('dashboard.suspects', [
+            'items' => $suspects
+        ]);
+    }
+
+    public static function cases()
+    {
+        $cases = CaseModel::where([])
+            ->orderBy('id', 'Desc')->limit(9)->get();
+
+        return view('dashboard.cases', [
+            'items' => $cases
+        ]);
+    }
+
+    public static function comments()
+    {
+        $comments = CaseSuspectsComment::where([])
+            ->orderBy('id', 'Desc')->limit(9)->get();
+        return view('dashboard.comments', [
+            'items' => $comments
+        ]);
+    }
+
+    public static function month_ago()
+    {
+
+        $data = [];
+        for ($i = 14; $i >= 0; $i--) {
+            $min = new Carbon();
+            $max = new Carbon();
+            $max->subDays($i);
+            $min->subDays(($i + 1));
+            $count = CaseSuspect::whereBetween('created_at', [$min, $max])->count();
+            $count_arrests = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_suspects_arrested' => 1
+                ])
+                ->count();
+            $data['data'][] = $count;
+            $data['count_arrests'][] = $count_arrests;
+            $data['labels'][] = Utils::my_date($max);
+        }
+
+        return view('dashboard.graph-month-ago', $data);
+    }
+
+    public static function graph_suspects()
+    {
+
+
+
+
+        for ($i = 12; $i >= 0; $i--) {
+            $min = new Carbon();
+            $max = new Carbon();
+            $max->subMonths($i);
+            $min->subMonths(($i + 1));
+            $created_at = CaseSuspect::whereBetween('created_at', [$min, $max])->count();
+
+            $is_suspects_arrested = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_suspects_arrested' => 1
+                ])
+                ->count();
+            $is_suspect_appear_in_court = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_suspect_appear_in_court' => 1
+                ])
+                ->count();
+
+            $is_convicted = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_convicted' => 1
+                ])
+                ->count();
+
+            $is_jailed = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_jailed' => 1
+                ])
+                ->count();
+
+            $is_fined = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_fined' => 1
+                ])
+                ->count();
+
+            $data['created_at'][] = $created_at;
+            $data['is_suspects_arrested'][] = $is_suspects_arrested;
+            $data['is_suspect_appear_in_court'][] = $is_suspect_appear_in_court;
+            $data['is_convicted'][] = $is_convicted;
+            $data['is_jailed'][] = $is_jailed;
+            $data['is_fined'][] = $is_fined;
+            $data['labels'][] = Utils::month($max);
+        }
+
+
+        return view('dashboard.graph-suspects', $data);
+    }
+
+    public static function graph_top_districts()
+    {
+        $comments = CaseSuspectsComment::where([])
+            ->orderBy('id', 'Desc')->limit(9)->get();
+
+        return view('dashboard.graph-top-districts', [
+            'items' => $comments
+        ]);
+    }
+
+    public static function graph_animals()
+    {
+        $comments = CaseSuspectsComment::where([])
+            ->orderBy('id', 'Desc')->limit(9)->get();
+
+        return view('dashboard.graph-animals', [
+            'items' => $comments
+        ]);
+    }
 
     public static function help_videos()
     {
@@ -86,7 +217,7 @@ class Dashboard
     }
 
 
-   
+
 
     public static function income_vs_expenses()
     {

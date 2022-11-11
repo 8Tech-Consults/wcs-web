@@ -90,19 +90,18 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
     }
     public function getAvatarAttribute($avatar)
     {
-        if (url()->isValidUrl($avatar)) {
-            return $avatar;
+        if ($avatar == null || strlen($avatar) < 3) {
+            $default = config('admin.default_avatar') ?: '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
+            return $default;
         }
+        $avatar = str_replace('images/', '', $avatar);
+        $link = 'storage/images/' . $avatar;
 
-        $disk = config('admin.upload.disk');
-
-        if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
-            return Storage::disk(config('admin.upload.disk'))->url($avatar);
+        if (!file_exists(public_path($link))) {
+            //dd($avatar);
+            $link = 'assets/logo.png';
         }
-
-        $default = config('admin.default_avatar') ?: '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
-
-        return admin_asset($default);
+        return url($link);
     }
 
     /**

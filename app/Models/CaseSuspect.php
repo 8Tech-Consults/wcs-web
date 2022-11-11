@@ -85,4 +85,9 @@ class CaseSuspect extends Model
 
         return $this->belongsTo(Location::class, 'arrest_district_id');
     }
+
+    function comments()
+    {
+        return $this->hasMany(CaseSuspectsComment::class, 'suspect_id');
+    }
 }

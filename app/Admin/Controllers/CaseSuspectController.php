@@ -139,6 +139,14 @@ class CaseSuspectController extends AdminController
         $grid->disableCreateButton();
         $grid->disableActions();
 
+        $grid->model()
+        ->where( 
+            'is_suspects_arrested',
+            '!=',
+            1
+        )->orderBy('id', 'Desc');
+
+
 
         $grid->filter(function ($f) {
             // Remove the default id filter

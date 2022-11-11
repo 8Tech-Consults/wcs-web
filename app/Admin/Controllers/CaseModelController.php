@@ -37,6 +37,9 @@ class CaseModelController extends AdminController
     {
 
         $grid = new Grid(new CaseModel());
+
+   
+
         $grid->filter(function ($f) {
             // Remove the default id filter
             $f->disableIdFilter();
@@ -192,10 +195,12 @@ class CaseModelController extends AdminController
     {
         $form = new Form(new CaseModel());
 
+
+
         $form->disableCreatingCheck();
         $form->disableReset();
 
-        $form->tools(function (Form\Tools $tools) { 
+        $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
         });
 

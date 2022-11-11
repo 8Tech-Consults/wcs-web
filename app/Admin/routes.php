@@ -20,4 +20,6 @@ Route::group([
     $router->resource('p-as', PAController::class);
     $router->resource('exhibits', ExhibitController::class);
     $router->resource('case-suspects', CaseSuspectController::class);
+    $router->resource('all-suspects', AllSuspectController::class);
+    $router->resource('arrests', ArrestsController::class); 
 });

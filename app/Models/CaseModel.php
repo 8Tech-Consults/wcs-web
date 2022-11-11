@@ -12,12 +12,15 @@ class CaseModel extends Model
     use HasFactory;
     use SoftDeletes;
 
- 
+
     public static function boot()
     {
         parent::boot();
+        self::deleting(function ($m) {
+            die("Ooops! You cannot delete this item.");
+        });
         self::creating(function ($m) {
-            
+
             $m->district_id = 1;
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);
@@ -71,6 +74,4 @@ class CaseModel extends Model
     {
         return $this->hasMany(CaseSuspect::class, 'case_id');
     }
-
- 
 }

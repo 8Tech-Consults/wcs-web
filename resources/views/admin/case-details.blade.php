@@ -1,9 +1,18 @@
 <?php
 use App\Models\Utils;
 ?><div class="container bg-white p-1 p-md-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h2 class="m-0 p-0 text-dark h3"><b>Case {{ '#' . $c->id }} - details</b></h2>
+    <div class="d-md-flex justify-content-between">
+        <div class="">
+            <h2 class="m-0 p-0 text-dark h3"><b>Case {{ '#' . $c->id }} - details</b>
+            </h2>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <a href="{{ url('cases') }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> BACK
+                TO ALL CASES</a>
+            <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>
+                EDIT</a>
+            <a href="#" onclick="window.print();return false;" class="btn btn-primary btn-sm"><i
+                    class="fa fa-print"></i> PRINT</a>
         </div>
     </div>
     <hr class="my-3 my-md-4">
@@ -29,7 +38,12 @@ use App\Models\Utils;
                 <h2 class="m-0 p-0 text-dark h3 text-center"><b>Case Summary</b></h2>
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
-                    <p class="py-1 my-0"><b>STATUS:</b> {{ Utils::tell_case_status($c->status) }}</p>
+                    <p class="py-1 my-0"><b>STATUS:</b>
+
+                        <span class="badge badge-{{ Utils::tell_case_status_color($c->status) }}">
+                            {{ Utils::tell_case_status($c->status) }}
+                        </span>
+                    </p>
                     <p class="py-1 my-0 text-uppercase"><b>Number of Exhibits:</b> {{ count($c->exhibits) }}</p>
                     <p class="py-1 my-0 text-uppercase"><b>Number of Suspects:</b> {{ count($c->suspects) }}</p>
                 </div>
@@ -134,39 +148,8 @@ quantity
 
     <hr class="my-5">
     <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Suspects</b></h3>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-striped table-hover">
-                <thead class="bg-primary">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Sex</th>
-                        <th scope="col">Date of birth</th>
-                        <th scope="col">Arrested</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($c->suspects as $s)
-                        <tr>
-                            <th width="5%" scope="row">#{{ $s->id }}</th>
-                            <td width="10%"><img class="border img-fluid rounded p-1" class="img-fluid"
-                                    src="{{ url('assets/user.jpeg') }}"></td>
-                            <td>{{ $s->sex }} KGs</td>
-                            <td>{{ $s->age }}</td>
-                            <td>{{ $s->is_suspects_arrested ? 'Arrested' : 'Not Arrested' }}</td>
-                            <td width="20%">
-                                <a class="text-primary" href="{{ admin_url() }}">See full details about this
-                                    suspect</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
 
-        </div>
-    </div>
+    @include('admin/section-suspects', ['items' => $c->suspects])
 
 
     <hr class="my-5">

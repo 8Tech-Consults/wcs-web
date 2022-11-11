@@ -1,7 +1,7 @@
 <?php
 
 namespace Encore\Admin\Auth\Database;
- 
+
 use App\Models\StudentHasClass;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Auth\Authenticatable;
@@ -31,7 +31,6 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         parent::boot();
 
         self::creating(function ($model) {
-     
         });
 
         self::created(function ($model) {
@@ -39,7 +38,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         });
 
         self::updating(function ($model) {
-            
+
 
             return $model;
         });
@@ -81,6 +80,14 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
      *
      * @return string
      */
+    public function getNameAttribute($val)
+    {
+        $n = $this->first_name . " " . $this->middle_name . " " . $this->last_name . " ";
+        if (strlen((trim($n))) < 2) {
+            return $val;
+        }
+        return (trim($n));
+    }
     public function getAvatarAttribute($avatar)
     {
         if (url()->isValidUrl($avatar)) {
@@ -111,7 +118,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'role_id');
     }
- 
+
 
     /**
      * A User has and belongs to many permissions.

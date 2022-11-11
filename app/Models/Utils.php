@@ -17,8 +17,16 @@ use Zebra_Image;
 class Utils  extends Model
 {
 
+    public static function get($class, $id)
+    {
+        $data = $class::find($id);
+        if ($data != null) {
+            return $data;
+        }
+        return new $class();
+    }
     public static function to_date_time($raw)
-    { 
+    {
         return Utils::my_date_time($raw);
     }
 
@@ -224,7 +232,7 @@ class Utils  extends Model
     public static function my_date($t)
     {
         $c = Carbon::parse($t);
-        if($t == null){
+        if ($t == null) {
             return $t;
         }
         return $c->format('d M, Y');
@@ -233,7 +241,7 @@ class Utils  extends Model
     public static function my_date_time($t)
     {
         $c = Carbon::parse($t);
-        if($t == null){
+        if ($t == null) {
             return $t;
         }
         return $c->format('d M, Y - h:m a');
@@ -242,17 +250,36 @@ class Utils  extends Model
     public static function tell_case_status($status)
     {
         if ($status == 1) {
-            return 'Draft';
-        } else if ($status == 1) {
             return 'Pending for verification';
-        } else if ($status == 1) {
+        } else if ($status == 2) {
             return 'Active';
-        } else if ($status == 1) {
+        } else if ($status == 3) {
             return 'Closed';
         } else {
             return 'Draft';
         }
     }
+
+    public static function tell_case_status_color($status)
+    {
+        if ($status == 1) {
+            return 'secondary';
+        } else if ($status == 2) {
+            return 'success';
+        } else if ($status == 3) {
+            return 'danger';
+        } else {
+            return 'secondary';
+        }
+    }
+    public static function get_gps_link($latitude, $longitude)
+    {
+        return '<a target="_blank" href="https://www.google.com/maps/dir/' .
+            $latitude .
+            ",{$longitude}" .
+            '">View location on map</a>';
+    }
+
     public static function phone_number_is_valid($phone_number)
     {
         $phone_number = Utils::prepare_phone_number($phone_number);
@@ -296,8 +323,16 @@ class Utils  extends Model
 
     public static function COUNTRIES()
     {
-        return [
+        $data = [];
+        foreach ([
             null,
+            "Kenya",
+            "Uganda",
+            "Tanzania",
+            "Rwanda",
+            "Congo",
+            "Somalia",
+            "Sudan",
             "Afghanistan",
             "Albania",
             "Algeria",
@@ -346,7 +381,6 @@ class Utils  extends Model
             "Cocos (Keeling Islands)",
             "Colombia",
             "Comoros",
-            "Congo",
             "Cook Islands",
             "Costa Rica",
             "Cote D'Ivoire (Ivory Coast)",
@@ -408,7 +442,7 @@ class Utils  extends Model
             "Japan",
             "Jordan",
             "Kazakhstan",
-            "Kenya",
+
             "Kiribati",
             "Korea (North)",
             "Korea (South)",
@@ -475,7 +509,6 @@ class Utils  extends Model
             "Reunion",
             "Romania",
             "Russian Federation",
-            "Rwanda",
             "Saint Kitts and Nevis",
             "Saint Lucia",
             "Saint Vincent and The Grenadines",
@@ -490,14 +523,13 @@ class Utils  extends Model
             "Slovak Republic",
             "Slovenia",
             "Solomon Islands",
-            "Somalia",
+
             "South Africa",
             "S. Georgia and S. Sandwich Isls.",
             "Spain",
             "Sri Lanka",
             "St. Helena",
             "St. Pierre and Miquelon",
-            "Sudan",
             "Suriname",
             "Svalbard and Jan Mayen Islands",
             "Swaziland",
@@ -506,7 +538,6 @@ class Utils  extends Model
             "Syria",
             "Taiwan",
             "Tajikistan",
-            "Tanzania",
             "Thailand",
             "Togo",
             "Tokelau",
@@ -517,7 +548,6 @@ class Utils  extends Model
             "Turkmenistan",
             "Turks and Caicos Islands",
             "Tuvalu",
-            "Uganda",
             "Ukraine",
             "United Arab Emirates",
             "United Kingdom (Britain / UK)",
@@ -538,6 +568,9 @@ class Utils  extends Model
             "Zaire",
             "Zambia",
             "Zimbabwe"
-        ];
+        ] as $key => $v) {
+            $data[$v] = $v;
+        };
+        return $data;
     }
 }

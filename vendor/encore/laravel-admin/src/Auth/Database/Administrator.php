@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Auth\Database;
 
+use App\Models\CaseModel;
 use App\Models\StudentHasClass;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Auth\Authenticatable;
@@ -91,7 +92,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
     public function getAvatarAttribute($avatar)
     {
         if ($avatar == null || strlen($avatar) < 3) {
-            $default = config('admin.default_avatar') ?: '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
+            $default = url('assets/logo.png');
             return $default;
         }
         $avatar = str_replace('images/', '', $avatar);
@@ -109,6 +110,10 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
      *
      * @return BelongsToMany
      */
+    public function cases()
+    {
+        return $this->hasMany(CaseModel::class, 'reported_by');
+    }
     public function roles(): BelongsToMany
     {
         $pivotTable = config('admin.database.role_users_table');

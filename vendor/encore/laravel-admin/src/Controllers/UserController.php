@@ -3,6 +3,9 @@
 namespace Encore\Admin\Controllers;
 
 use App\Models\Enterprise;
+use App\Models\Location;
+use App\Models\Utils;
+use Dflydev\DotAccessData\Util;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -15,7 +18,7 @@ class UserController extends AdminController
      */
     protected function title()
     {
-        return trans('admin.administrator');
+        return 'Members';
     }
 
     /**
@@ -25,16 +28,77 @@ class UserController extends AdminController
      */
     protected function grid()
     {
-        $userModel = config('admin.database.users_model');
 
+        /* 	
+district_id	
+address	
+middle_name	
+	
+Edit Edit
+
+        
+        */
+        $userModel = config('admin.database.users_model');
         $grid = new Grid(new $userModel());
 
-        $grid->column('id', 'ID')->sortable();
-        $grid->column('username', trans('admin.username'));
-        $grid->column('name', trans('admin.name'));
+        $grid->filter(function ($f) {
+            $f->disableIdFilter();
 
-        $grid->column('roles', trans('admin.roles'))->pluck('name')->label(); 
-        $grid->column('created_at', trans('Created'));
+            $district_ajax_url = url(
+                '/api/ajax?'
+                    . "&search_by_1=name"
+                    . "&search_by_2=id"
+                    . "&query_parent=0"
+                    . "&model=Location"
+            );
+            $f->equal('district_id', 'Filter by district')->select(function ($id) {
+                $a = Location::find($id);
+                if ($a) {
+                    return [$a->id => "#" . $a->id . " - " . $a->name];
+                }
+            })
+                ->ajax($district_ajax_url);
+        });
+
+        $grid->quickSearch('name')->placeholder('Search by name...');
+        $grid->disableBatchActions();
+        $grid->model()->orderBy('id', 'Desc');
+        $grid->column('id', 'ID')
+            ->width(40)
+            ->sortable();
+        $grid->column('avatar', __('Photo'))
+            ->width(70)
+            ->lightbox(['width' => 60, 'height' => 80]);
+        $grid->column('name', 'Name')->sortable();
+        $grid->column('sex', 'Gender')->filter([
+            'Male' => 'Male',
+            'Female' => 'Female',
+        ])->sortable();
+
+        $grid->column('phone_number_1', 'Phone number');
+        $grid->column('phone_number_2', 'Phone number 2');
+        $grid->column('date_of_birth', 'D.O.B')->display(function ($f) {
+            return Utils::my_date($f);
+        });
+
+
+        $grid->column('district_id', 'District')->display(function ($id) {
+            return Utils::get(Location::class, $id)->name_text;
+        })->sortable();
+        $grid->column('sub_county_id', 'Sub county')->display(function ($id) {
+            return Utils::get(Location::class, $id)->name_text;
+        })->sortable();
+
+
+
+        $grid->column('email', 'email address');
+        $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
+        $grid->column('created_at', 'Registered')->display(function ($f) {
+            return Utils::my_date($f);
+        });
+        $grid->column('cases', 'Cases Reported')->display(function () {
+            return count($this->cases);
+        });
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
@@ -91,21 +155,44 @@ class UserController extends AdminController
         $roleModel = config('admin.database.roles_model');
 
         $form = new Form(new $userModel());
+        $form->disableReset();
+
 
         $userTable = config('admin.database.users_table');
         $connection = config('admin.database.connection');
-
         $form->display('id', 'ID');
-        $form->text('username', trans('admin.username'))
+
+
+        $form->text('first_name', 'First name')->rules('required');
+        $form->text('middle_name', 'Middle name');
+        $form->text('last_name', 'Last name')->rules('required');
+        $form->date('date_of_birth', 'Date of birth');
+
+
+        $form->radio('sex', __('Gender'))->options([
+            'Male' => 'Male',
+            'Female' => 'Female',
+        ])->rules('required');
+
+        $form->text('phone_number_1', 'Phone number')->rules('required');
+        $form->text('phone_number_2', 'Phone number 2');
+
+        $form->select('sub_county_id', __('Sub county'))
+            ->rules('int|required')
+            ->help('Where this suspect originally lives')
+            ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+
+        $form->text('address', 'Address line');
+        $form->divider();
+
+        $form->email('email', 'Email address')
             ->creationRules(['required', "unique:{$connection}.{$userTable}"])
-            ->updateRules(['required', "unique:{$connection}.{$userTable},username,{{id}}"]);
+            ->updateRules(['required', "unique:{$connection}.{$userTable},email,{{id}}"]);
 
-        $form->text('name', trans('admin.name'))->rules('required');
-
- 
+        $form->hidden('enterprise_id')->value(1)->default(1);
 
 
-        $form->image('avatar', trans('admin.avatar'));
+        $form->image('avatar', 'Profile photo');
         $form->password('password', trans('admin.password'))->rules('required|confirmed');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {

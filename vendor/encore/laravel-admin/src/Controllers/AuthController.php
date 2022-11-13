@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Controllers;
 
+use App\Models\Location;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
@@ -128,9 +129,32 @@ class AuthController extends Controller
         $class = config('admin.database.users_model');
 
         $form = new Form(new $class());
+        $userTable = config('admin.database.users_table');
+        $connection = config('admin.database.connection');
 
-        $form->display('username', trans('admin.username'));
+        $form->email('email', 'Email address')
+            ->creationRules(['required', "unique:{$connection}.{$userTable}"])
+            ->updateRules(['required', "unique:{$connection}.{$userTable},email,{{id}}"]);
+
         $form->text('name', trans('admin.name'))->rules('required');
+
+        $form->text('first_name', 'First name')->rules('required');
+        $form->text('middle_name', 'Middle name');
+        $form->text('last_name', 'Last name')->rules('required');
+        $form->date('date_of_birth', 'Date of birth');
+ 
+        $form->text('phone_number_1', 'Phone number')->rules('required');
+        $form->text('phone_number_2', 'Phone number 2');
+
+        $form->select('sub_county_id', __('Sub county'))
+            ->rules('int|required')
+            ->help('Where this suspect originally lives')
+            ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+
+        $form->text('address', 'Address line');
+        $form->divider();
+
+
         $form->image('avatar', trans('admin.avatar'));
         $form->password('password', trans('admin.password'))->rules('confirmed|required');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')

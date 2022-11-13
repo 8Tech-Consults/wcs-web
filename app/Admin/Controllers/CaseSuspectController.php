@@ -529,7 +529,7 @@ class CaseSuspectController extends AdminController
 
             $form->morphMany('comments', 'Click on new to add progress comment', function (Form\NestedForm $form) {
                 $u = Admin::user();
-                $form->hidden('comment_by')->default($u->enterprise_id);	
+                $form->hidden('comment_by')->default($u->id);
 
                 $form->text('body', __('Progress comment'))->rules('required');
             });

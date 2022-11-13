@@ -14,7 +14,7 @@ Route::group([
 /*     $router->get('/', function () {
         return "love";
     })->name('home'); */
-    $router->get('/', 'HomeController@index')->name('home');
+    $router->get('/', 'HomeController@index')->name('home'); 
     $router->resource('cases', CaseModelController::class);
     $router->resource('locations', LocationController::class);
     $router->resource('p-as', PAController::class);

@@ -38,7 +38,7 @@ class CaseModelController extends AdminController
 
         $grid = new Grid(new CaseModel());
 
-   
+
 
         $grid->filter(function ($f) {
             // Remove the default id filter
@@ -74,7 +74,6 @@ class CaseModelController extends AdminController
 
 
         $grid->disableBatchActions();
-        $grid->disableCreateButton();
         $grid->disableActions();
         $grid->actions(function ($actions) {
             $actions->disableDelete();
@@ -221,16 +220,18 @@ class CaseModelController extends AdminController
             ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
         $form->text('parish', __('Parish'))->rules('required');
         $form->text('village', __('Village'))->rules('required');
+        $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
 
-
-        $form->select('offence_category_id', __('Offence category'))
-            ->rules('int|required')
-            ->options([
+        /* 
+$form->select('offence_category_id', __('Offence category'))
+        offence_category_id
+            ->rules('int|required')  
+            ->options([  
                 1 => 'Type 1',
                 2 => 'Type 2',
                 3 => 'Type 3',
                 4 => 'Type 4',
-            ]);
+            ]); */
 
 
 
@@ -255,6 +256,7 @@ class CaseModelController extends AdminController
         $form->hidden('has_exhibits', __('Does this case have exhibits?'))
             ->default(1);
 
+        
         $form->select('status', __('Case status'))
             ->rules('int|required')
             ->options([

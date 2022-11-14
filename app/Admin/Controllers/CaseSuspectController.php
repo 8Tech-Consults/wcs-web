@@ -136,7 +136,6 @@ class CaseSuspectController extends AdminController
 
         $grid = new Grid(new CaseSuspect());
         $grid->disableBatchActions();
-        $grid->disableCreateButton();
         $grid->disableActions();
 
         $grid->model()
@@ -416,7 +415,8 @@ class CaseSuspectController extends AdminController
             $tools->disableDelete();
         });
 
-        $form->tab('Bio data', function (Form $form) {
+
+        $form->tab('Suspect Bio data', function (Form $form) {
             $form->text('first_name')->rules('required');
             $form->text('middle_name');
             $form->text('last_name')->rules('required');
@@ -440,6 +440,38 @@ class CaseSuspectController extends AdminController
             $form->text('parish');
             $form->text('village');
             $form->text('ethnicity');
+        });
+
+        $form->tab('Case', function (Form $form) {
+
+            $ajax_url = url(
+                '/api/ajax?'
+                    . "&search_by_1=title"
+                    . "&search_by_2=id"
+                    . "&model=CaseModel"
+            );
+
+            if ($form->isCreating()) {
+                $form->select('case_id', 'Select case')->options(function ($id) {
+                    $a = CaseModel::find($id);
+                    if ($a) {
+                        return [$a->id => "#" . $a->id . " - " . $a->title];
+                    }
+                })
+                    ->rules('required')
+                    ->ajax($ajax_url);
+            } else {
+
+                $form->select('case_id', 'Select case')->options(function ($id) {
+                    $a = CaseModel::find($id);
+                    if ($a) {
+                        return [$a->id => "#" . $a->id . " - " . $a->title];
+                    }
+                })
+                    ->readOnly()
+                    ->rules('required')
+                    ->ajax($ajax_url);
+            }
         });
 
         $form->tab('Arrest information', function (Form $form) {

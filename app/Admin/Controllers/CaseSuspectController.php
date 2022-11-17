@@ -32,6 +32,8 @@ class CaseSuspectController extends AdminController
     protected function grid()
     {
 
+   
+
         /*  foreach (CaseSuspect::all() as $key => $s) {
             $s->photo = ((rand(1000,10000)%20)+1) .".jpg";
             $s->save();

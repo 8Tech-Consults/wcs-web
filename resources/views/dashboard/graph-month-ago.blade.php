@@ -24,7 +24,7 @@ use App\Models\Utils;
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
             <b>Crime rate - {{ count($labels) }} days ago</b>
-        </h3> 
+        </h3>  
         <div>
             <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All

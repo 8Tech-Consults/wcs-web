@@ -24,12 +24,12 @@ use App\Models\Utils;
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
             <b>Crimes Vs Reactions</b>
-        </h3>
+        </h3> 
         <div>
             <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
-        </div>
+        </div> 
     </div>
     <div class="card-body py-2 py-md-3">
 

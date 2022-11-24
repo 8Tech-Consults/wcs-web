@@ -81,9 +81,6 @@ final class State
         $this->suiteTests[] = $test;
     }
 
-    /**
-     * Gets the test case title.
-     */
     public function getTestCaseTitle(): string
     {
         foreach ($this->testCaseTests as $test) {
@@ -101,9 +98,7 @@ final class State
         return 'PASS';
     }
 
-    /**
-     * Gets the test case title color.
-     */
+
     public function getTestCaseTitleColor(): string
     {
         foreach ($this->testCaseTests as $test) {

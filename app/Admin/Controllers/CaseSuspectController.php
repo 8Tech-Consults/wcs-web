@@ -32,7 +32,7 @@ class CaseSuspectController extends AdminController
     protected function grid()
     {
 
-   
+
 
         /*  foreach (CaseSuspect::all() as $key => $s) {
             $s->photo = ((rand(1000,10000)%20)+1) .".jpg";
@@ -139,6 +139,7 @@ class CaseSuspectController extends AdminController
         $grid = new Grid(new CaseSuspect());
         $grid->disableBatchActions();
         $grid->disableActions();
+        
 
         $grid->model()
             ->where(
@@ -156,7 +157,7 @@ class CaseSuspectController extends AdminController
                 '!=',
                 1
             )
-            ->orderBy('id', 'Desc');
+            ->orderBy('created_at', 'Desc');
 
 
 
@@ -174,7 +175,7 @@ class CaseSuspectController extends AdminController
                     . "&model=CaseModel"
             );
 
-            $f->equal('case_id', 'Filter by case')->select(function ($id) {
+            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
                 $a = CaseModel::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->title];
@@ -270,7 +271,7 @@ class CaseSuspectController extends AdminController
             return $this->district->name;
         })->sortable();
 
-        $grid->column('case_id', __('Case'))
+        $grid->column('case_id', __('Offence'))
             ->display(function ($x) {
                 return $this->case->title;
             })
@@ -444,7 +445,7 @@ class CaseSuspectController extends AdminController
             $form->text('ethnicity');
         });
 
-        $form->tab('Case', function (Form $form) {
+        $form->tab('Offence', function (Form $form) {
 
             $ajax_url = url(
                 '/api/ajax?'
@@ -454,7 +455,7 @@ class CaseSuspectController extends AdminController
             );
 
             if ($form->isCreating()) {
-                $form->select('case_id', 'Select case')->options(function ($id) {
+                $form->select('case_id', 'Select Offence')->options(function ($id) {
                     $a = CaseModel::find($id);
                     if ($a) {
                         return [$a->id => "#" . $a->id . " - " . $a->title];

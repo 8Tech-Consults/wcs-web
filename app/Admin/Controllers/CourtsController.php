@@ -61,7 +61,7 @@ class CourtsController extends AdminController
                     . "&model=Location"
             );
 
-            $f->equal('case_id', 'Filter by case')->select(function ($id) {
+            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
                 $a = CaseModel::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->title];
@@ -110,7 +110,7 @@ class CourtsController extends AdminController
                 return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
             })
             ->sortable();
-        $grid->column('case_id', __('Case'))
+        $grid->column('case_id', __('Offence'))
             ->display(function ($x) {
                 return $this->case->title;
             })

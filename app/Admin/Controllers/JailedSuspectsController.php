@@ -61,7 +61,7 @@ class JailedSuspectsController extends AdminController
                     . "&model=Location"
             );
 
-            $f->equal('case_id', 'Filter by case')->select(function ($id) {
+            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
                 $a = CaseModel::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->title];
@@ -122,7 +122,7 @@ class JailedSuspectsController extends AdminController
                 return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
             })
             ->sortable();
-        $grid->column('case_id', __('Case'))
+        $grid->column('case_id', __('Offence'))
             ->display(function ($x) {
                 return $this->case->title;
             })
@@ -184,8 +184,8 @@ class JailedSuspectsController extends AdminController
         $grid->column('magistrate_name', __('Magistrate'))
             ->sortable();
 
- 
- 
+
+
         $grid->column('action', __('Actions'))->display(function () {
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">

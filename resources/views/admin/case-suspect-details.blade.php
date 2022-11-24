@@ -81,12 +81,12 @@ use App\Models\Utils;
                 <h3 class="text-uppercase h4 p-0 m-0 text-center"><b>Summary</b></h3>
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
-                    <p class="py-1 my-0 "><b>CASE DATE:</b>
+                    <p class="py-1 my-0 "><b>OFFENCE DATE:</b>
                         {{ Utils::to_date_time($s->case->created_at) }}</p>
-                    <p class="py-1 my-0 "><b>CASE TITLE:</b> <a
+                    <p class="py-1 my-0 "><b>OFFENCE TITLE:</b> <a
                             href="{{ admin_url('cases/' . $s->case->id) }}">{{ $s->case->title ?? $s->case->id }}</a>
                     </p>
-                    <p class="py-1 my-0"><b>CASE STATUS:</b> <span
+                    <p class="py-1 my-0"><b>OFFENCE STATUS:</b> <span
                             class="badge bg-{{ Utils::tell_case_status_color($s->case->status) }}">
                             {{ Utils::tell_case_status($s->case->status) ?? '-' }} </span></p>
 
@@ -286,39 +286,8 @@ use App\Models\Utils;
         </div>
     @endif
 
-
-
-
-    {{-- <h3 class="text-uppercase h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5">This is a simple case title</h3>
-    <hr class="m-0 pt-0">
-    <div class="row pt-2">
-        <div class="col-md-6 pl-5 pl-md-5">
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-        </div>
-        <div class="col-md-6 border-left pl-2 pl-5">
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-        </div>
-    </div> --}}
-
-    {{-- 	
-created_at	
-updated_at	
-case_id	
-exhibit_catgory	
-wildlife	
-implements	
-photos	
-description	
-quantity	
-    --}}
     <hr class="my-5">
-    <h3 class="text-uppercase h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits</b></h3>
+    <h3 class="text-uppercase h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Exhibits</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover">

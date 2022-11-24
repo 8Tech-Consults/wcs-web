@@ -22,7 +22,7 @@ class CaseModelController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Cases';
+    protected $title = 'Offences';
 
     /**
      * Make a grid builder.
@@ -37,6 +37,7 @@ class CaseModelController extends AdminController
     {
 
         $grid = new Grid(new CaseModel());
+
 
 
 
@@ -64,7 +65,7 @@ class CaseModelController extends AdminController
                 ->ajax($ajax_url);
 
 
-            $f->equal('status', 'Filter case status')->select([
+            $f->equal('status', 'Filter offence status')->select([
                 0 => 'Pending',
                 1 => 'Active',
                 2 => 'Closed',
@@ -79,7 +80,7 @@ class CaseModelController extends AdminController
             $actions->disableDelete();
         });
 
-        $grid->quickSearch('title')->placeholder("Search by case title...");
+        $grid->quickSearch('title')->placeholder("Search by offences title...");
 
 
         $grid->column('id', __('ID'))->sortable();
@@ -210,8 +211,8 @@ class CaseModelController extends AdminController
         }
 
 
-        $form->text('title', __('Case title'))
-            ->help("Describe this case in summary")
+        $form->text('title', __('Offence title'))
+            ->help("Describe this offence in summary")
             ->rules('required');
 
 
@@ -256,8 +257,8 @@ $form->select('offence_category_id', __('Offence category'))
         $form->hidden('has_exhibits', __('Does this case have exhibits?'))
             ->default(1);
 
-        
-        $form->select('status', __('Case status'))
+
+        $form->select('status', __('Offence status'))
             ->rules('int|required')
             ->options([
                 1 => 'Pending for verification',

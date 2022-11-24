@@ -3,12 +3,12 @@ use App\Models\Utils;
 ?><div class="container bg-white p-1 p-md-5">
     <div class="d-md-flex justify-content-between">
         <div class="">
-            <h2 class="m-0 p-0 text-dark h3"><b>Case {{ '#' . $c->id }} - details</b>
+            <h2 class="m-0 p-0 text-dark h3"><b>Offence {{ '#' . $c->id }} - details</b>
             </h2>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="{{ url('cases') }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> BACK
-                TO ALL CASES</a>
+                TO ALL OFFENCES</a>
             <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>
                 EDIT</a>
             <a href="#" onclick="window.print();return false;" class="btn btn-primary btn-sm"><i
@@ -25,7 +25,7 @@ use App\Models\Utils;
         <div class="col-9 col-md-6">
             <h3 class="h3 p-0 m-0">{{ $c->title }}</h3>
             <hr class="my-1 my-md-4">
-            @include('components.detail-item', ['t' => 'CASE ID', 's' => '#' . $c->id])
+            @include('components.detail-item', ['t' => 'OFFENCE ID', 's' => '#' . $c->id])
             @include('components.detail-item', [
                 't' => 'Report date',
                 's' => Utils::my_date_time($c->created_at),
@@ -35,7 +35,7 @@ use App\Models\Utils;
         </div>
         <div class="pt-3 pt-md-0 col-md-4">
             <div class=" border border-primary p-3">
-                <h2 class="m-0 p-0 text-dark h3 text-center"><b>Case Summary</b></h2>
+                <h2 class="m-0 p-0 text-dark h3 text-center"><b>Offence Summary</b></h2>
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
                     <p class="py-1 my-0"><b>STATUS:</b>
@@ -52,7 +52,7 @@ use App\Models\Utils;
     </div>
 
     <hr class="mt-4 mb-2 border-primary pb-0 mt-md-5 mb-md-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center mt-3 mt-md-5"><b>Case location details</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center mt-3 mt-md-5"><b>Offence location details</b></h3>
     <hr class="m-0 pt-0">
     <div class="row pt-2">
         <div class="col-md-6 pl-5 pl-md-5">
@@ -81,36 +81,8 @@ use App\Models\Utils;
     </div>
 
 
-    {{-- <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5">This is a simple case title</h3>
-    <hr class="m-0 pt-0">
-    <div class="row pt-2">
-        <div class="col-md-6 pl-5 pl-md-5">
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-        </div>
-        <div class="col-md-6 border-left pl-2 pl-5">
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-            @include('components.detail-item', ['t' => 'title', 's' => 'Detail'])
-        </div>
-    </div> --}}
-
-    {{-- 	
-created_at	
-updated_at	
-case_id	
-exhibit_catgory	
-wildlife	
-implements	
-photos	
-description	
-quantity	
-    --}}
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Exhibits</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover">
@@ -147,13 +119,13 @@ quantity
 
 
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Suspects</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Suspects</b></h3>
 
     @include('admin/section-suspects', ['items' => $c->suspects])
 
 
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Progress Comments</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Progress Comments</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover">

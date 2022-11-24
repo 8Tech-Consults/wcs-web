@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Controllers\PAController;
 use Illuminate\Routing\Router;
 
 Admin::routes();

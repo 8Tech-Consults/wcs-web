@@ -9,7 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class PaController extends AdminController
+class PAController extends AdminController
 {
     /**
      * Title for current resource.

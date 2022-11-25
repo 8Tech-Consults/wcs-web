@@ -57,7 +57,7 @@ class AllSuspectController extends AdminController
                     . "&model=CaseModel"
             );
 
-            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
+            $f->equal('case_id', 'Filter by Case')->select(function ($id) {
                 $a = CaseModel::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->title];
@@ -153,7 +153,7 @@ class AllSuspectController extends AdminController
             return $this->district->name;
         })->sortable();
 
-        $grid->column('case_id', __('Offence'))
+        $grid->column('case_id', __('Case'))
             ->display(function ($x) {
                 return $this->case->title;
             })

@@ -175,7 +175,7 @@ class CaseSuspectController extends AdminController
                     . "&model=CaseModel"
             );
 
-            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
+            $f->equal('case_id', 'Filter by case')->select(function ($id) {
                 $a = CaseModel::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->title];
@@ -271,7 +271,7 @@ class CaseSuspectController extends AdminController
             return $this->district->name;
         })->sortable();
 
-        $grid->column('case_id', __('Offence'))
+        $grid->column('case_id', __('Case'))
             ->display(function ($x) {
                 return $this->case->title;
             })
@@ -445,7 +445,7 @@ class CaseSuspectController extends AdminController
             $form->text('ethnicity');
         });
 
-        $form->tab('Offence', function (Form $form) {
+        $form->tab('Case', function (Form $form) {
 
             $ajax_url = url(
                 '/api/ajax?'
@@ -455,7 +455,7 @@ class CaseSuspectController extends AdminController
             );
 
             if ($form->isCreating()) {
-                $form->select('case_id', 'Select Offence')->options(function ($id) {
+                $form->select('case_id', 'Select Case')->options(function ($id) {
                     $a = CaseModel::find($id);
                     if ($a) {
                         return [$a->id => "#" . $a->id . " - " . $a->title];

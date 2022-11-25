@@ -65,7 +65,7 @@ class CaseModelController extends AdminController
                 ->ajax($ajax_url);
 
 
-            $f->equal('status', 'Filter offence status')->select([
+            $f->equal('status', 'Filter case status')->select([
                 0 => 'Pending',
                 1 => 'Active',
                 2 => 'Closed',
@@ -80,7 +80,7 @@ class CaseModelController extends AdminController
             $actions->disableDelete();
         });
 
-        $grid->quickSearch('title')->placeholder("Search by offences title...");
+        $grid->quickSearch('title')->placeholder("Search by case title...");
 
 
         $grid->column('id', __('ID'))->sortable();

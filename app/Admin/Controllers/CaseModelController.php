@@ -22,7 +22,7 @@ class CaseModelController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Offences';
+    protected $title = 'Cases';
 
     /**
      * Make a grid builder.

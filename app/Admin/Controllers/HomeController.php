@@ -19,11 +19,21 @@ use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Illuminate\Support\Facades\Auth;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function index(Content $content)
     {
+
+
+        if (Utils::hasPendingCase(Auth::user()) != null) {
+            return redirect(admin_url('case-suspects/create'));
+        }
+
+
+
+
         /*
         $faker = Faker::create();
         foreach (CaseSuspect::all() as $c) {

@@ -79,7 +79,8 @@ class PaController extends AdminController
     {
         $form = new Form(new PA());
 
-        $form->text('name', __('Protected Area Name'));
+        $form->text('name', __('Protected Area Name'))->rules('required');
+        $form->text('short_name', __('Short name'))->rules('required');
 
         $form->select('subcounty', __('Sub county'))
             ->rules('int|required')

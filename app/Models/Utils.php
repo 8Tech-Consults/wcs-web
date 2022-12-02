@@ -17,6 +17,70 @@ use Zebra_Image;
 class Utils  extends Model
 {
 
+    public static function getCaseNumber($case)
+    {
+        /* foreach (PA::all() as $key => $pa) {
+            $pa->short_name = strtoupper(substr($pa->name,0,4));
+            $pa->save(); 
+            # code...
+        } */
+        if ($case == null) {
+            return "-";
+        }
+
+        $case_number = "UWA";
+        $pa_found = false;
+        if ($case->is_offence_committed_in_pa) {
+            $pa = PA::find($case->pa_id);
+            if ($pa != null) {
+                $case_number .= "/{$pa->short_name}";
+                $pa_found = true;
+            }
+        }
+
+        if (!$pa_found) {
+            $dis = Location::find($case->district_id);
+            if ($dis != null) {
+                //$case_number .= "/" . substr($dis->name, 0, 4);
+                $case_number .= "/" . $dis->name;
+                $pa_found = true;
+            }
+        }
+        if (!$pa_found) {
+            $case_number = "/-";
+        }
+        $case_number .= "/" . date('Y');
+        $case_number .= "/" . $case->id;
+        $case_number = strtoupper($case_number);
+
+        return $case_number;
+    }
+    public static function system_boot($u)
+    {
+        $cases = CaseModel::where([
+            'case_number' => null
+        ])->get();
+        foreach ($cases as $key => $case) {
+            $case->case_number = Utils::getCaseNumber($case);
+            $case->save();
+        }
+    }
+    public static function hasPendingCase($u)
+    {
+        $sql = DB::select("SELECT * FROM case_models WHERE reported_by = {$u->id} AND (SELECT count(id) FROM case_suspects WHERE case_id = case_models.id) < 1");
+        if (count($sql) > 0) {
+            $case = CaseModel::find($sql[0]->id);
+            return $case;
+        }
+        return null;
+
+        $case = CaseModel::where([
+            'done_adding_suspects' => null,
+            "reported_by" => $u->id
+        ])->first();
+
+        return $case;
+    }
     public static function get($class, $id)
     {
         $data = $class::find($id);
@@ -253,7 +317,7 @@ class Utils  extends Model
         if ($t == null) {
             return $t;
         }
-        return $c->diffForHumans(); 
+        return $c->diffForHumans();
     }
 
     public static function my_date_time($t)

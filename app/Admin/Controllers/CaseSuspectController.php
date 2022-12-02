@@ -14,6 +14,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 class CaseSuspectController extends AdminController
 {
@@ -32,7 +33,9 @@ class CaseSuspectController extends AdminController
     protected function grid()
     {
 
-
+        if (Utils::hasPendingCase(Auth::user()) != null) {
+            return redirect(admin_url('case-suspects/create'));
+        }
 
         /*  foreach (CaseSuspect::all() as $key => $s) {
             $s->photo = ((rand(1000,10000)%20)+1) .".jpg";
@@ -403,13 +406,26 @@ class CaseSuspectController extends AdminController
      */
     protected function form()
     {
+
+        $pendingCase = Utils::hasPendingCase(Auth::user());
+
+        if ($pendingCase != null) {
+            $suspects_count = count($pendingCase->suspects);
+            admin_warning("Adding suspects to new case {$pendingCase->case_number} - {$pendingCase->title}, with {$suspects_count} suspects.");
+        }
+
         $form = new Form(new CaseSuspect());
+
         $form->disableCreatingCheck();
         $form->disableReset();
+
+
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
         });
+
+
 
 
         $form->tab('Suspect Bio data', function (Form $form) {
@@ -448,12 +464,25 @@ class CaseSuspectController extends AdminController
             );
 
             if ($form->isCreating()) {
+
+                $pendingCase = Utils::hasPendingCase(Auth::user());
+                $case_id = 0;
+                if ($pendingCase != null) {
+                    $case_id = $pendingCase->id;
+                }
                 $form->select('case_id', 'Select Case')->options(function ($id) {
+                    $pendingCase = Utils::hasPendingCase(Auth::user());
+                    if ($pendingCase != null) {
+                        $id = $pendingCase->id;
+                    }
+
                     $a = CaseModel::find($id);
                     if ($a) {
-                        return [$a->id => "#" . $a->id . " - " . $a->title];
+                        return [$a->id => "" . $a->case_number . " - " . $a->title];
                     }
                 })
+                    ->readOnly()
+                    ->default($case_id)
                     ->rules('required')
                     ->ajax($ajax_url);
             } else {
@@ -483,7 +512,7 @@ class CaseSuspectController extends AdminController
                         ->rules('int|required')
                         ->help('Where this suspect was arrested')
                         ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-                        
+
                     $form->text('arrest_parish', 'Arrest parish');
                     $form->text('arrest_village', 'Arrest vaillage');
 

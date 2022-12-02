@@ -24,6 +24,7 @@ class AllSuspectController extends AdminController
      */
     protected $title = 'All Suspects';
 
+
     /**
      * Make a grid builder.
      *

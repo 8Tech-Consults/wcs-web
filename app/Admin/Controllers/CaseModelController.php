@@ -97,6 +97,9 @@ class CaseModelController extends AdminController
             ->hide()
             ->sortable();
 
+        $grid->column('case_number', __('Case number'))
+            ->sortable();
+
         $grid->column('title', __('Title'))
             ->sortable();
 
@@ -143,9 +146,12 @@ class CaseModelController extends AdminController
         $grid->column('actions', __('Actions'))->display(function () {
             $view_link = '<a class="" href="' . url("cases/{$this->id}") . '">
                 <i class="fa fa-eye"></i>View</a>';
-            $edit_link = '<br><br> <a class="" href="' . url("cases/{$this->id}/edit") . '">
+            $edit_link = '<br> <a class="" href="' . url("cases/{$this->id}/edit") . '">
                 <i class="fa fa-edit"></i> Edit</a>';
-            return $view_link . $edit_link;
+
+            $add_link = '<br> <a class="" href="' . url("case-suspects/create?case_id={$this->id}") . '">
+                <i class="fa fa-user"></i> Add suspect</a>';
+            return $view_link . $edit_link . $add_link;
         });
         return $grid;
     }

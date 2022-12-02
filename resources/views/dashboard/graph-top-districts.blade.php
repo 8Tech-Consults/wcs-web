@@ -23,10 +23,10 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Top 10 districts</b>
+            <b>Cases by Conservation Areas</b>
         </h3>
         <div>
-            <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+            <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
         </div>
@@ -52,34 +52,33 @@ use App\Models\Utils;
                 };
 
                 var config = {
-                    type: 'doughnut',
+                    type: 'bar',
                     data: {
                         datasets: [{
-                            data: [
-                                randomScalingFactor(),
-                                randomScalingFactor(),
-                                randomScalingFactor(),
-                                randomScalingFactor(),
-                                randomScalingFactor(),
-                            ],
+                            data: JSON.parse('<?php echo json_encode($count); ?>'),
                             backgroundColor: [
                                 window.chartColors.red,
                                 window.chartColors.orange,
                                 window.chartColors.yellow,
                                 window.chartColors.green,
                                 window.chartColors.blue,
+                                window.chartColors.grey,
+                                'purple',
+                                'black',
+                                'green',
+                                'blue',
+                                'red',
                             ],
-                            label: 'Dataset 1'
+                            label: 'Cases by conservation areas'
                         }],
-                        labels: [
-                            'Kasese',
-                            'Mbale',
-                            'Jinja',
-                            'Kumi',
-                            'Karamoja'
-                        ]
+                        labels: JSON.parse('<?php echo json_encode($labels); ?>')
                     },
                     options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
                         responsive: true,
                         legend: {
                             position: 'top',

@@ -196,7 +196,6 @@ class CaseModelController extends AdminController
         $form = new Form(new CaseModel());
 
 
-
         $form->disableCreatingCheck();
         $form->disableReset();
 

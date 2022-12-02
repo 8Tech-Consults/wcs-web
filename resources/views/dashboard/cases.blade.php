@@ -23,7 +23,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Recent offences</b> 
+            <b>Recent cases</b>
         </h3>
         <div>
             <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
@@ -33,17 +33,23 @@ use App\Models\Utils;
     </div>
     <div class="card-body py-2 py-md-3">
         @foreach ($items as $i)
-            <div class="d-flex align-items-center mb-4 case-item">
-                <div style="border-left: solid red 5px;"
-                    class="flex-grow-1 pl-2 pl-md-3 border-{{ Utils::tell_case_status_color($i->status) }}">
-                    <a href="{{ url("/cases/{$i->id}") }}" class="text-dark text-hover-primary">
+            <a href="{{ url("/cases/{$i->id}") }}" class="text-dark text-hover-primary">
+                <div class="d-flex align-items-center mb-4 case-item">
+                    <div style="border-left: solid red 5px;"
+                        class="flex-grow-1 pl-2 pl-md-3 border-{{ Utils::tell_case_status_color($i->status) }}">
+
                         <b>{{ $i->title }}</b>
-                    </a>
-                    <span class="text-muted fw-bold d-block">{{ Utils::my_time_ago($i->created_at) }}</span>
-                </div> 
-                <b
-                    class="badge bg-{{ Utils::tell_case_status_color($i->status) }} ">{{ Utils::tell_case_status($i->status) }}</b>
-            </div>
+
+                        <span class="text-muted fw-bold d-block">
+                            Case #{{ $i->id }},
+                            {{ count($i->suspects) }} Suspects -
+                            {{ Utils::my_time_ago($i->created_at) }}.
+                        </span>
+                    </div>
+                    <b
+                        class="badge bg-{{ Utils::tell_case_status_color($i->status) }} ">{{ Utils::tell_case_status($i->status) }}</b>
+                </div>
+            </a>
         @endforeach
     </div>
 </div>

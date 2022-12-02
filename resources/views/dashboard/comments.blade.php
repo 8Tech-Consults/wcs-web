@@ -23,13 +23,8 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>What is going on?</b>
-        </h3>
-        <div>
-            <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
-                View All
-            </a>
-        </div>
+            <b>Cases of interest progress</b>
+        </h3> 
     </div>
     <div class="card-body py-2 py-md-3">
         @foreach ($items as $i)

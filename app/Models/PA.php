@@ -18,6 +18,11 @@ class PA extends Model
         });
     }
 
+    public function cases()
+    {
+        return $this->hasMany(CaseModel::class, 'pa_id');
+    }
+
 
     public function getNameTextAttribute()
     {

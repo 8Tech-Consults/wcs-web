@@ -715,7 +715,6 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Admin\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Admin/Controllers/HomeController.php',
         'App\\Admin\\Controllers\\LocationController' => __DIR__ . '/../..' . '/app/Admin/Controllers/LocationController.php',
         'App\\Admin\\Controllers\\MainCourseController' => __DIR__ . '/../..' . '/app/Admin/Controllers/MainCourseController.php',
-        'App\\Admin\\Controllers\\PaController' => __DIR__ . '/../..' . '/app/Admin/Controllers/PaController.php',
         'App\\Admin\\Extensions\\Column\\FloatBar' => __DIR__ . '/../..' . '/app/Admin/Extensions/Column/FloatBar.php',
         'App\\Admin\\Extensions\\Column\\OpenMap' => __DIR__ . '/../..' . '/app/Admin/Extensions/Column/OpenMap.php',
         'App\\Admin\\Extensions\\Column\\UrlWrapper' => __DIR__ . '/../..' . '/app/Admin/Extensions/Column/UrlWrapper.php',

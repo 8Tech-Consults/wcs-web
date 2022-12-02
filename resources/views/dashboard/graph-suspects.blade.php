@@ -24,12 +24,12 @@ use App\Models\Utils;
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
             <b>Crimes Vs Reactions</b>
-        </h3> 
+        </h3>
         <div>
             <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
-        </div> 
+        </div>
     </div>
     <div class="card-body py-2 py-md-3">
 
@@ -62,12 +62,12 @@ use App\Models\Utils;
                     data: {
                         labels: JSON.parse('<?php echo json_encode($labels); ?>'),
                         datasets: [{
-                                label: 'Suspects reported',
+                                label: 'Number of Suspects',
                                 borderColor: window.chartColors.red,
                                 backgroundColor: window.chartColors.red,
                                 data: JSON.parse('<?php echo json_encode($created_at); ?>'),
                             }, {
-                                label: 'Suspects arrested',
+                                label: 'Number of arrests',
                                 borderColor: window.chartColors.blue,
                                 backgroundColor: window.chartColors.blue,
                                 data: JSON.parse('<?php echo json_encode($is_suspects_arrested); ?>'),
@@ -78,17 +78,11 @@ use App\Models\Utils;
                                 data: JSON.parse('<?php echo json_encode($is_suspect_appear_in_court); ?>'),
                             },
                             {
-                                label: 'Suspects convicted',
+                                label: 'Number of convictions',
                                 borderColor: window.chartColors.yellow,
                                 backgroundColor: window.chartColors.yellow,
                                 data: JSON.parse('<?php echo json_encode($is_convicted); ?>'),
                             },
-                            {
-                                label: 'Suspects jailed',
-                                borderColor: window.chartColors.purple,
-                                backgroundColor: window.chartColors.purple,
-                                data: JSON.parse('<?php echo json_encode($is_jailed); ?>'),
-                            }
                         ]
                     },
                     options: {

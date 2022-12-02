@@ -4,19 +4,20 @@ namespace App\Admin\Controllers;
 
 use App\Models\Location;
 use App\Models\PA;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class PAController extends AdminController
+class PaController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'PA';
+    protected $title = 'Protected areas';
 
     /**
      * Make a grid builder.
@@ -27,9 +28,23 @@ class PAController extends AdminController
     {
         $grid = new Grid(new PA());
 
-        $grid->column('id', __('pa #ID'));
-        $grid->column('subcounty', __('Subcounty'));
-        $grid->column('name', __('Name'));
+        $grid->disableBatchActions();
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('name', __('Protected area'));
+
+        $grid->column('Cases', __('Cases'))
+            ->display(function ($x) {
+                return count($this->cases);
+            })
+            ->sortable();
+
+        $grid->column('subcounty', __('Sub-county'))
+            ->display(function ($x) {
+                return Utils::get(Location::class, $this->subcounty)->name_text;
+            })
+            ->sortable();
+
+
         $grid->column('details', __('Details'));
 
         return $grid;
@@ -45,7 +60,9 @@ class PAController extends AdminController
     {
         $show = new Show(PA::findOrFail($id));
 
-        $show->field('id', __('PA #ID'));
+        $show->field('id', __('Id'));
+        $show->field('created_at', __('Created at'));
+        $show->field('updated_at', __('Updated at'));
         $show->field('subcounty', __('Subcounty'));
         $show->field('name', __('Name'));
         $show->field('details', __('Details'));
@@ -62,10 +79,13 @@ class PAController extends AdminController
     {
         $form = new Form(new PA());
 
+        $form->text('name', __('Protected Area Name'));
+
         $form->select('subcounty', __('Sub county'))
             ->rules('int|required')
+            ->help('Where this PA is located')
             ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-        $form->text('name', __('Name'))->rules('required');
+
         $form->textarea('details', __('Details'));
 
         return $form;

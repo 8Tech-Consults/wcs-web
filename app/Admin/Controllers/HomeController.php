@@ -7,6 +7,7 @@ use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
 use App\Models\MenuItem;
+use App\Models\PA;
 use App\Models\Utils;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
@@ -23,10 +24,49 @@ class HomeController extends Controller
 {
     public function index(Content $content)
     {
+        /*
+        $faker = Faker::create();
+        foreach (CaseSuspect::all() as $c) {
+            $c->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
+            $c->save();
+        }
+  
+        $pas = [];
+        $vars = [1, 2, 
+        11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11, 
+        3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 13, 13, 1, 1, 1];
+        foreach (PA::all() as $key => $pa) {
+            shuffle($vars);
+            shuffle($vars);
+            shuffle($vars);
+            $pas[] = $pa->id;
+            if ($vars[3] % 2 == 1) {
+                $pas[] = $pa->id;
+            }
+        }
+
+        foreach (CaseModel::all() as $key => $case) {
+            shuffle($vars);
+            shuffle($vars);
+            shuffle($vars); 
+            shuffle($pas); 
+            shuffle($pas); 
+            shuffle($pas); 
+            if ($vars[3] % 2 == 1) {
+                $case->is_offence_committed_in_pa = true;
+                $case->pa_id = $pas[4];
+            }else{
+                $case->is_offence_committed_in_pa = false;
+                $case->pa_id = null;
+            }
+            $case->save();
+        }
+
+        die("domina");*/
 
 
 
-/*
+        /*
 $arrested = [0, 1];
         foreach (CaseSuspect::all() as $c) {
             shuffle($arrested);
@@ -125,24 +165,26 @@ is_fined
             $row->column(4, function (Column $column) {
                 $column->append(Dashboard::graph_suspects());
             });
-            $row->column(2, function (Column $column) {
+            $row->column(4, function (Column $column) {
                 $column->append(Dashboard::graph_top_districts());
-            });
-            $row->column(2, function (Column $column) {
-                $column->append(Dashboard::graph_animals());
             });
         });
 
 
         $content->row(function (Row $row) {
-            $row->column(6, function (Column $column) {
-                $column->append(Dashboard::suspects());
-            });
             $row->column(3, function (Column $column) {
                 $column->append(Dashboard::cases());
             });
+
+            $row->column(6, function (Column $column) {
+                $column->append(Dashboard::suspects());
+            });
+
             $row->column(3, function (Column $column) {
                 $column->append(Dashboard::comments());
+            });
+            $row->column(2, function (Column $column) {
+                $column->append(Dashboard::graph_animals());
             });
         });
 

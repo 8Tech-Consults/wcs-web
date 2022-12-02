@@ -139,7 +139,7 @@ class CaseSuspectController extends AdminController
         $grid = new Grid(new CaseSuspect());
         $grid->disableBatchActions();
         $grid->disableActions();
-        
+
 
         $grid->model()
             ->where(
@@ -277,28 +277,21 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
-        $grid->column('is_suspects_arrested', __('Arrest'))
+
+        $grid->column('status', __('Interest'))
             ->sortable()
             ->using([
-                0 => 'Not arrested',
-                1 => 'Arrested',
-            ], 'Not arrested')->label([
+                1 => 'Case of interest',
+                0 => 'NOT case of interest',
+            ], 'Not in Court')->dot([
                 null => 'danger',
-                0 => 'danger',
-                1 => 'success',
-            ], 'danger');
-
-
-        $grid->column('is_suspect_appear_in_court', __('Court'))
-            ->sortable()
-            ->using([
-                0 => 'Not in Court',
-                1 => 'In Court',
-            ], 'Not in Court')->label([
-                null => 'danger',
-                0 => 'danger',
-                1 => 'success',
-            ], 'danger');
+                1 => 'danger',
+                0 => 'success',
+            ], 'danger')
+            ->filter([
+                1 => 'Case of interest',
+                0 => 'NOT case of interest',
+            ]);
 
         $grid->column('is_convicted', __('Convicted'))
             ->sortable()
@@ -490,7 +483,7 @@ class CaseSuspectController extends AdminController
                         ->rules('int|required')
                         ->help('Where this suspect was arrested')
                         ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-
+                        
                     $form->text('arrest_parish', 'Arrest parish');
                     $form->text('arrest_village', 'Arrest vaillage');
 
@@ -549,18 +542,22 @@ class CaseSuspectController extends AdminController
                 });
         });
 
-        $form->tab('Suspect progress', function (Form $form) {
 
-
-
-
-            $form->select('status', __('Status'))
+        $form->tab('Case of Interest', function (Form $form) {
+            $form->radio('status', __('Set this suspect as Case of Interest'))
                 ->options([
-                    1 => 'Pending for verification',
-                    2 => 'Active',
-                    3 => 'Case Closed',
+                    1 => 'Yes',
+                    0 => 'No',
                 ])
-                ->default(1);
+                ->default(0);
+        });
+
+
+
+        $form->tab('Suspect progress comments', function (Form $form) {
+
+
+
 
             $form->morphMany('comments', 'Click on new to add progress comment', function (Form\NestedForm $form) {
                 $u = Admin::user();

@@ -1,6 +1,4 @@
-<?php
-
-use App\Admin\Controllers\PAController;
+<?php 
 use Illuminate\Routing\Router;
 
 Admin::routes();
@@ -17,12 +15,12 @@ Route::group([
     })->name('home'); */
     $router->get('/', 'HomeController@index')->name('home'); 
     $router->resource('cases', CaseModelController::class);
-    $router->resource('locations', LocationController::class);
-    $router->resource('p-as', PAController::class);
+    $router->resource('locations', LocationController::class); 
     $router->resource('exhibits', ExhibitController::class);
     $router->resource('case-suspects', CaseSuspectController::class);
     $router->resource('all-suspects', AllSuspectController::class);
     $router->resource('arrests', ArrestsController::class); 
     $router->resource('court-cases', CourtsController::class); 
     $router->resource('jailed-suspects', JailedSuspectsController::class); 
+    $router->resource('p-as', PaController::class);
 });

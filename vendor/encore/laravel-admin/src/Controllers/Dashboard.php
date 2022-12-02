@@ -5,6 +5,7 @@ namespace Encore\Admin\Controllers;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
+use App\Models\PA;
 use App\Models\User;
 use App\Models\Utils;
 use Carbon\Carbon;
@@ -124,11 +125,34 @@ class Dashboard
 
     public static function graph_top_districts()
     {
-        $comments = CaseSuspectsComment::where([])
-            ->orderBy('id', 'Desc')->limit(9)->get();
+
+        $tot = 0;
+        foreach (PA::all() as $key => $pa) {
+            $tot += count($pa->cases);
+        }
+
+
+        $data['labels'] = [];
+        $data['count'] = [];
+
+        foreach (PA::all() as $key => $pa) {
+            $label = substr($pa->name, 0, 10);
+            if (strlen($pa->name) > 15) {
+                $label .= "...";
+            }
+            
+            if ($tot > 0) {
+                $per = (int) ((count($pa->cases) / $tot) * 100);
+                $label .= " ($per%)";
+            }
+            $data['count'][] = count($pa->cases);
+            $data['labels'][] = $label;
+        }
+ 
 
         return view('dashboard.graph-top-districts', [
-            'items' => $comments
+            'labels' => $data['labels'],
+            'count' => $data['count']
         ]);
     }
 

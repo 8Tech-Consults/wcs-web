@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\CaseModel;
+use App\Models\CaseSuspect;
 use App\Models\Location;
 use App\Models\PA;
 use App\Models\Utils;
@@ -14,6 +15,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\InfoBox;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 class CaseModelController extends AdminController
 {
@@ -200,7 +202,7 @@ class CaseModelController extends AdminController
     protected function form()
     {
         $form = new Form(new CaseModel());
- 
+
 
         $form->disableCreatingCheck();
         $form->disableReset();
@@ -215,72 +217,170 @@ class CaseModelController extends AdminController
             $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('int|required');
         }
 
+        $form->tab('Offence', function (Form $form) {
 
-        $form->text('title', __('Offence title'))
-            ->help("Describe this offence in summary")
-            ->rules('required');
-
-
-        $form->select('sub_county_id', __('Sub county'))
-            ->rules('int|required')
-            ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-        $form->text('parish', __('Parish'))->rules('required');
-        $form->text('village', __('Village'))->rules('required');
-        $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
-
-        /* 
-$form->select('offence_category_id', __('Offence category'))
-        offence_category_id
-            ->rules('int|required')  
-            ->options([  
-                1 => 'Type 1',
-                2 => 'Type 2',
-                3 => 'Type 3',
-                4 => 'Type 4',
-            ]); */
+            $form->text('title', __('Offence title'))
+                ->help("Describe this offence in summary")
+                ->rules('required');
 
 
+            $form->select('sub_county_id', __('Sub county'))
+                ->rules('int|required')
+                ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+            $form->text('parish', __('Parish'))->rules('required');
+            $form->text('village', __('Village'))->rules('required');
+            $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
 
-        $form->textarea('offence_description', __('Offence description'))->rules('required');
-
-
-        $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
-            ->rules('int|required')
-            ->options([
-                1 => 'Yes',
-                0 => 'No',
-            ])
-            ->default(0)
-            ->when(1, function (Form $form) {
-
-                $form->select('pa_id', __('Select PA'))
-                    ->rules('int|required')
-                    ->options(PA::all()->pluck('name_text', 'id'));
-            });
-
-
-        $form->hidden('has_exhibits', __('Does this case have exhibits?'))
-            ->default(1);
+            /*
+            $form->select('offence_category_id', __('Offence category'))
+            offence_category_id
+                ->rules('int|required')  
+                ->options([  
+                    1 => 'Type 1',
+                    2 => 'Type 2',
+                    3 => 'Type 3',
+                    4 => 'Type 4',
+                ]); 
+            */
 
 
-        $form->select('status', __('Offence status'))
-            ->rules('int|required')
-            ->options([
-                1 => 'Pending for verification',
-                2 => 'Active',
-                3 => 'Closed',
-            ]);
+
+            $form->textarea('offence_description', __('Offence description'))->rules('required');
 
 
-        if ($form->isCreating()) {
-            $form->select('status', __('Status'))
+            $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
+                ->rules('int|required')
                 ->options([
-                    1 => 'Save as draft',
-                    2 => 'Submit case for approval',
+                    1 => 'Yes',
                     0 => 'No',
                 ])
+                ->default(0)
+                ->when(1, function (Form $form) {
+
+                    $form->select('pa_id', __('Select PA'))
+                        ->rules('int|required')
+                        ->options(PA::all()->pluck('name_text', 'id'));
+                });
+
+
+            $form->hidden('has_exhibits', __('Does this case have exhibits?'))
                 ->default(1);
-        }
+
+
+            $form->select('status', __('Offence status'))
+                ->rules('int|required')
+                ->options([
+                    1 => 'Pending for verification',
+                    2 => 'Active',
+                    3 => 'Closed',
+                ]);
+
+
+            if ($form->isCreating()) {
+                $form->select('status', __('Status'))
+                    ->options([
+                        1 => 'Save as draft',
+                        2 => 'Submit case for approval',
+                        0 => 'No',
+                    ])
+                    ->default(1);
+            }
+        });
+
+        $form->tab('Suspects', function (Form $form) {
+            $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
+
+                $form->divider('Suspect bio data');
+                $form->text('first_name')->rules('required');
+                $form->text('middle_name');
+                $form->text('last_name')->rules('required');
+                $form->text('uwa_suspect_number')->rules('required');
+                $form->radio('sex')->options([
+                    'Male' => 'Male',
+                    'Female' => 'Female',
+                ])->rules('required');
+                $form->date('age', 'Date of birth')->rules('required');
+                $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
+                $form->text('national_id_number');
+                $form->text('occuptaion');
+                $form->select('country')
+                    ->help('Nationality of the suspect')
+                    ->options(Utils::COUNTRIES())->rules('required');
+
+                $form->select('sub_county_id', __('Sub county'))
+                    ->rules('int|required')
+                    ->help('Where this suspect originally lives')
+                    ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+                $form->text('parish');
+                $form->text('village');
+                $form->text('ethnicity');
+
+                $form->divider('Arrest information');
+                $form->radio('is_suspects_arrested', "Is this suspect arreseted?")
+                    ->options([
+                        1 => 'Yes',
+                        0 => 'No',
+                    ])
+                    ->rules('required');
+
+                $form->datetime('arrest_date_time', 'Arrest date and time');
+                $form->select('arrest_sub_county_id', __('Arrest Sub county'))
+                    ->rules('int|required')
+                    ->help('Where this suspect was arrested')
+                    ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+
+                $form->text('arrest_parish', 'Arrest parish');
+                $form->text('arrest_village', 'Arrest vaillage');
+
+                /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
+                $form->text('arrest_first_police_station', 'Arrest police station');
+                $form->text('arrest_current_police_station', 'Current police station');
+                $form->text('arrest_agency', 'Arrest agency');
+                $form->text('arrest_uwa_unit', 'UWA Unit');
+                $form->text('arrest_detection_method', 'Arrest detection method');
+                $form->text('arrest_uwa_number', 'UWA Arest number');
+                $form->text('arrest_crb_number', 'CRB number');
+
+                $form->divider('Court information');
+                $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                    ->options([
+                        1 => 'Yes',
+                        0 => 'No',
+                    ]);
+
+                $form->date('court_date', 'Court date');
+                $form->text('prosecutor', 'Names of the prosecutors');
+                $form->radio('is_convicted', __('Has suspect been convicted?'))
+                    ->options([
+                        1 => 'Yes',
+                        0 => 'No',
+                    ]);
+
+                $form->text('case_outcome', 'Case outcome');
+                $form->text('magistrate_name', 'Magistrate Name');
+                $form->text('court_name', 'Court Name');
+                $form->text('court_file_number', 'Court file number');
+
+                $form->radio('is_jailed', __('Has suspect been jailed?'))
+                    ->options([
+                        1 => 'Yes',
+                        0 => 'No',
+                    ]);
+                $form->date('jail_date', 'Jail date');
+                $form->decimal('jail_period', 'Jail period')->help("(In months)");
+
+                $form->radio('is_fined', __('Has suspect been fined?'))
+                    ->options([
+                        1 => 'Yes',
+                        0 => 'No',
+                    ]);
+                $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+
+
+                
+            });
+        });
+
 
 
 

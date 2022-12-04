@@ -67,7 +67,7 @@ class Utils  extends Model
     }
     public static function hasPendingCase($u)
     {
-        return null;
+         return null;
         $sql = DB::select("SELECT * FROM case_models WHERE reported_by = {$u->id} AND (SELECT count(id) FROM case_suspects WHERE case_id = case_models.id) < 1");
         if (count($sql) > 0) {
             $case = CaseModel::find($sql[0]->id);

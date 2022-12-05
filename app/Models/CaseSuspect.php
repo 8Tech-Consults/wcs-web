@@ -48,7 +48,7 @@ class CaseSuspect extends Model
             }
         }
 
-        $m->is_suspects_arrested = 1;
+        $m->is_suspects_arrested = 0;
         if (
             isset($m->arrest_date_time)
         ) {

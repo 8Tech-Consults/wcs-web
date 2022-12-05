@@ -1,4 +1,4 @@
-ca<?php
+<?php
 
 namespace App\Admin\Controllers;
 
@@ -31,7 +31,7 @@ class LocationController extends AdminController
         $grid->disableFilter();
         $grid->disableActions();
         $grid->quickSearch('name')->placeholder("Search by name...");
-        $grid->column('id', __('ID'))->sortable();
+        $grid->column('id', __('ID'))->hide()->sortable();
         $grid->column('name', __('Name'))->display(function () {
             return $this->name_text;
         })->sortable();
@@ -71,7 +71,7 @@ class LocationController extends AdminController
         $form = new Form(new Location());
 
         $form->text('name', __('Location Name'))->required();
-        $form->select('parent', __('Sub county'))
+        $form->select('parent', __('Parent district'))
             ->default(0)
             ->help('Leave this field empty if you are creating a new district.')
             ->options(Location::get_districts()->pluck('name_text', 'id'));

@@ -23,4 +23,5 @@ Route::group([
     $router->resource('court-cases', CourtsController::class); 
     $router->resource('jailed-suspects', JailedSuspectsController::class); 
     $router->resource('p-as', PaController::class);
+    $router->resource('offences', OffenceController::class);
 });

@@ -64,10 +64,20 @@ class Utils  extends Model
             $case->case_number = Utils::getCaseNumber($case);
             $case->save();
         }
+
+        foreach (CaseSuspect::where([
+            'suspect_number' => null
+        ])->get() as $key => $suspect) {
+            //suspect_number
+            if ($suspect->case != null) {
+                $suspect->is_suspects_arrested = $suspect->case->case_number . "/" . $suspect->id;
+                $suspect->save();
+            }
+        }
     }
     public static function hasPendingCase($u)
     {
-         return null;
+        return null;
         $sql = DB::select("SELECT * FROM case_models WHERE reported_by = {$u->id} AND (SELECT count(id) FROM case_suspects WHERE case_id = case_models.id) < 1");
         if (count($sql) > 0) {
             $case = CaseModel::find($sql[0]->id);

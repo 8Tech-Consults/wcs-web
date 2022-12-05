@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
+use App\Models\Offence;
 use App\Models\PA;
 use App\Models\Utils;
 use Encore\Admin\Auth\Database\Administrator;
@@ -120,10 +121,12 @@ class CaseModelController extends AdminController
 
 
         $grid->column('suspects', __('Suspects'))->display(function () {
-            return count($this->suspects);
+            $link = admin_url('all-suspects', ['case_id' => $this->id]);
+            return '<a data-toggle="tooltip" data-placement="bottom"  title="View suspects" class="text-primary h3" href="' . $link . '" >' . count($this->suspects) . '</a>';
         });
         $grid->column('exhibits', __('Exhibits'))->display(function () {
-            return count($this->suspects);
+            $link = admin_url('exhibits', ['case_id' => $this->id]);
+            return '<a data-toggle="tooltip" data-placement="bottom"  title="View exhibits" class="text-primary h3" href="' . $link . '" >' . count($this->exhibits) . '</a>';
         });
 
         $grid->column('reported_by', __('Reported by'))
@@ -151,12 +154,14 @@ class CaseModelController extends AdminController
 
             $suspetcs_link = '<br><a class="" href="' . url("all-suspects?case_id={$this->id}") . '">
                 <i class="fa fa-users"></i> View case suspetcs</a>';
+            $suspetcs_link = "";
 
             $edit_link = '<br> <a class="" href="' . url("cases/{$this->id}/edit") . '">
                 <i class="fa fa-edit"></i> Edit case info</a>';
 
             $add_link = '<br> <a class="" href="' . url("case-suspects/create?case_id={$this->id}") . '">
                 <i class="fa fa-user-plus"></i> Add case suspect</a>';
+
             return $view_link . $suspetcs_link . $edit_link . $add_link;
         });
         return $grid;
@@ -210,7 +215,10 @@ class CaseModelController extends AdminController
 
         $form->disableCreatingCheck();
         $form->disableReset();
-        $form->disableEditingCheck();
+        //$form->disableEditingCheck();
+
+
+
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
@@ -229,12 +237,35 @@ class CaseModelController extends AdminController
                 ->rules('required');
 
 
-            $form->select('sub_county_id', __('Sub county'))
+            $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
                 ->rules('int|required')
-                ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-            $form->text('parish', __('Parish'))->rules('required');
-            $form->text('village', __('Village'))->rules('required');
-            $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
+                ->options([
+                    1 => 'Yes',
+                    0 => 'No',
+                ])
+                ->default(null)
+                ->when(0, function (Form $form) {
+
+                    $form->select('sub_county_id', __('Sub county'))
+                        ->rules('int|required')
+                        ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+                    $form->text('parish', __('Parish'))->rules('required');
+                    $form->text('village', __('Village'))->rules('required');
+                    $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
+                })->when(1, function (Form $form) {
+
+                    $form->select('pa_id', __('Select PA'))
+                        ->rules('int|required')
+                        ->options(PA::all()->pluck('name_text', 'id'));
+                });
+
+
+ 
+            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                ->rules('required');
+
+
+
 
             /*
             $form->select('offence_category_id', __('Offence category'))
@@ -253,19 +284,6 @@ class CaseModelController extends AdminController
             $form->textarea('offence_description', __('Offence description'))->rules('required');
 
 
-            $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
-                ->rules('int|required')
-                ->options([
-                    1 => 'Yes',
-                    0 => 'No',
-                ])
-                ->default(0)
-                ->when(1, function (Form $form) {
-
-                    $form->select('pa_id', __('Select PA'))
-                        ->rules('int|required')
-                        ->options(PA::all()->pluck('name_text', 'id'));
-                });
 
 
             $form->hidden('has_exhibits', __('Does this case have exhibits?'))
@@ -295,12 +313,9 @@ class CaseModelController extends AdminController
         if ($form->isCreating()) {
             $form->tab('Suspects', function (Form $form) {
                 $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
-
-
                     $subs = Location::get_sub_counties_array();
-
-                    $form->image('photo', 'Suspect photo');
                     $form->divider('Suspect bio data');
+                    $form->image('photo', 'Suspect photo');
                     $form->text('first_name')->rules('required');
                     $form->text('middle_name');
                     $form->text('last_name')->rules('required');
@@ -395,6 +410,38 @@ class CaseModelController extends AdminController
             });
         }
 
+
+
+        $form->tab('Exhibits', function (Form $form) {
+            $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
+
+                /* 
+                
+	
+                exhibit_catgory	
+                wildlife	
+                implements	
+                photos	
+                description	
+                quantity	
+                */
+
+                $form->select('exhibit_catgory', __('Exhibit catgory'))
+                    ->options([
+                        'Implements' => 'Implements',
+                        'Wildlife' => 'Wildlife',
+                    ])
+                    ->rules('required');
+
+                /*                 $form->textarea('wildlife', __('Wildlife'));
+                $form->textarea('implements', __('Implements')); */
+                $form->decimal('quantity', __('Quantity (in KGs)'))
+                    ->rules('required');
+                $form->image('photos', __('Exhibit Photo'));
+                $form->textarea('description', __('Description'))
+                    ->rules('required');
+            });
+        });
 
 
 

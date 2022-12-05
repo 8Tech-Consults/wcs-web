@@ -438,7 +438,7 @@ class Utils  extends Model
     {
         $data = [];
         foreach ([
-            null,
+            '',
             "Kenya",
             "Uganda",
             "Tanzania",

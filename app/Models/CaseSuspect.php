@@ -21,41 +21,62 @@ class CaseSuspect extends Model
             die("Ooops! You cannot delete this item.");
         });
         self::creating(function ($m) {
-            $m->district_id = 1;
-            if ($m->sub_county_id != null) {
-                $sub = Location::find($m->sub_county_id);
-                if ($sub != null) {
-                    $m->district_id = $sub->parent;
-                }
-            }
-
-            if ($m->arrest_sub_county_id != null) {
-                $sub = Location::find($m->arrest_sub_county_id);
-                if ($sub != null) {
-                    $m->arrest_district_id = $sub->parent;
-                }
-            }
-
-            if (!isset($m->is_suspects_arrested)) {
-                $m->is_suspects_arrested = 0;
-            } else if ($m->is_suspects_arrested == null) {
-                $m->is_suspects_arrested = 0;
-            }
-
-            if (!isset($m->is_suspect_appear_in_court)) {
-                $m->is_suspect_appear_in_court = 0;
-            } else if ($m->is_suspect_appear_in_court == null) {
-                $m->is_suspect_appear_in_court = 0;
-            }
-
-            if (!isset($m->is_convicted)) {
-                $m->is_convicted = 0;
-            } else if ($m->is_convicted == null) {
-                $m->is_convicted = 0;
-            }
-
+            $m = CaseSuspect::my_update($m);
             return $m;
         });
+        self::updating(function ($m) {
+            $m = CaseSuspect::my_update($m);
+            return $m;
+        });
+    }
+
+    public static function my_update($m)
+    {
+        $m->district_id = 1;
+
+        if ($m->sub_county_id != null) {
+            $sub = Location::find($m->sub_county_id);
+            if ($sub != null) {
+                $m->district_id = $sub->parent;
+            }
+        }
+
+        if ($m->arrest_sub_county_id != null) {
+            $sub = Location::find($m->arrest_sub_county_id);
+            if ($sub != null) {
+                $m->arrest_district_id = $sub->parent;
+            }
+        }
+
+        $m->is_suspects_arrested = 1;
+        if (
+            isset($m->arrest_date_time)
+        ) {
+            if ($m->arrest_date_time != null) {
+                if (strlen(((string)($m->arrest_date_time))) > 5) {
+                    $m->is_suspects_arrested = 1;
+                }
+            }
+        }
+
+        $m->is_suspect_appear_in_court = 0;
+        if (
+            isset($m->use_same_court_information)
+        ) {
+            if ($m->use_same_court_information != null) {
+                if (strlen(((string)($m->use_same_court_information))) > 5) {
+                    $m->is_suspect_appear_in_court = 1;
+                }
+            }
+        }
+
+
+        if (!isset($m->is_convicted)) {
+            $m->is_convicted = 0;
+        } else if ($m->is_convicted == null) {
+            $m->is_convicted = 0;
+        }
+        return $m;
     }
 
     function getPhotoUrlAttribute()

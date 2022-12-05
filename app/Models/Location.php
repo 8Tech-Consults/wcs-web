@@ -9,6 +9,15 @@ class Location extends Model
 {
     use HasFactory;
 
+    public static function get_sub_counties_array()
+    {
+        $subs = [];
+        foreach (Location::get_sub_counties() as $key => $value) {
+            $subs[$key] = ((string)($value->name_text));
+        }
+        return $subs;
+    }
+
     public static function get_sub_counties()
     {
         return Location::where(

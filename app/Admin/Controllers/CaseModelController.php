@@ -39,7 +39,7 @@ class CaseModelController extends AdminController
     {
 
         $grid = new Grid(new CaseModel());
-
+        $grid->model()->orderBy('id', 'Desc');
 
 
 
@@ -147,13 +147,17 @@ class CaseModelController extends AdminController
 
         $grid->column('actions', __('Actions'))->display(function () {
             $view_link = '<a class="" href="' . url("cases/{$this->id}") . '">
-                <i class="fa fa-eye"></i>View</a>';
+                <i class="fa fa-eye"></i> View case details</a>';
+
+            $suspetcs_link = '<br><a class="" href="' . url("all-suspects?case_id={$this->id}") . '">
+                <i class="fa fa-users"></i> View case suspetcs</a>';
+
             $edit_link = '<br> <a class="" href="' . url("cases/{$this->id}/edit") . '">
-                <i class="fa fa-edit"></i> Edit</a>';
+                <i class="fa fa-edit"></i> Edit case info</a>';
 
             $add_link = '<br> <a class="" href="' . url("case-suspects/create?case_id={$this->id}") . '">
-                <i class="fa fa-user"></i> Add suspect</a>';
-            return $view_link . $edit_link . $add_link;
+                <i class="fa fa-user-plus"></i> Add case suspect</a>';
+            return $view_link . $suspetcs_link . $edit_link . $add_link;
         });
         return $grid;
     }
@@ -206,6 +210,7 @@ class CaseModelController extends AdminController
 
         $form->disableCreatingCheck();
         $form->disableReset();
+        $form->disableEditingCheck();
 
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
@@ -287,99 +292,108 @@ class CaseModelController extends AdminController
             }
         });
 
-        $form->tab('Suspects', function (Form $form) {
-            $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
-
-                $form->divider('Suspect bio data');
-                $form->text('first_name')->rules('required');
-                $form->text('middle_name');
-                $form->text('last_name')->rules('required');
-                $form->text('uwa_suspect_number')->rules('required');
-                $form->radio('sex')->options([
-                    'Male' => 'Male',
-                    'Female' => 'Female',
-                ])->rules('required');
-                $form->date('age', 'Date of birth')->rules('required');
-                $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
-                $form->text('national_id_number');
-                $form->text('occuptaion');
-                $form->select('country')
-                    ->help('Nationality of the suspect')
-                    ->options(Utils::COUNTRIES())->rules('required');
-
-                $form->select('sub_county_id', __('Sub county'))
-                    ->rules('int|required')
-                    ->help('Where this suspect originally lives')
-                    ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-                $form->text('parish');
-                $form->text('village');
-                $form->text('ethnicity');
-
-                $form->divider('Arrest information');
-                $form->radio('is_suspects_arrested', "Is this suspect arreseted?")
-                    ->options([
-                        1 => 'Yes',
-                        0 => 'No',
-                    ])
-                    ->rules('required');
-
-                $form->datetime('arrest_date_time', 'Arrest date and time');
-                $form->select('arrest_sub_county_id', __('Arrest Sub county'))
-                    ->rules('int|required')
-                    ->help('Where this suspect was arrested')
-                    ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
-
-                $form->text('arrest_parish', 'Arrest parish');
-                $form->text('arrest_village', 'Arrest vaillage');
-
-                /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
-                $form->text('arrest_first_police_station', 'Arrest police station');
-                $form->text('arrest_current_police_station', 'Current police station');
-                $form->text('arrest_agency', 'Arrest agency');
-                $form->text('arrest_uwa_unit', 'UWA Unit');
-                $form->text('arrest_detection_method', 'Arrest detection method');
-                $form->text('arrest_uwa_number', 'UWA Arest number');
-                $form->text('arrest_crb_number', 'CRB number');
-
-                $form->divider('Court information');
-                $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
-                    ->options([
-                        1 => 'Yes',
-                        0 => 'No',
-                    ]);
-
-                $form->date('court_date', 'Court date');
-                $form->text('prosecutor', 'Names of the prosecutors');
-                $form->radio('is_convicted', __('Has suspect been convicted?'))
-                    ->options([
-                        1 => 'Yes',
-                        0 => 'No',
-                    ]);
-
-                $form->text('case_outcome', 'Case outcome');
-                $form->text('magistrate_name', 'Magistrate Name');
-                $form->text('court_name', 'Court Name');
-                $form->text('court_file_number', 'Court file number');
-
-                $form->radio('is_jailed', __('Has suspect been jailed?'))
-                    ->options([
-                        1 => 'Yes',
-                        0 => 'No',
-                    ]);
-                $form->date('jail_date', 'Jail date');
-                $form->decimal('jail_period', 'Jail period')->help("(In months)");
-
-                $form->radio('is_fined', __('Has suspect been fined?'))
-                    ->options([
-                        1 => 'Yes',
-                        0 => 'No',
-                    ]);
-                $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+        if ($form->isCreating()) {
+            $form->tab('Suspects', function (Form $form) {
+                $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
 
 
-                
+                    $subs = Location::get_sub_counties_array();
+
+                    $form->image('photo', 'Suspect photo');
+                    $form->divider('Suspect bio data');
+                    $form->text('first_name')->rules('required');
+                    $form->text('middle_name');
+                    $form->text('last_name')->rules('required');
+                    $form->text('uwa_suspect_number')->rules('required');
+                    $form->radio('sex')->options([
+                        'Male' => 'Male',
+                        'Female' => 'Female',
+                    ])->rules('required');
+                    $form->date('age', 'Date of birth')->rules('required');
+                    $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
+                    $form->text('national_id_number');
+                    $form->text('occuptaion');
+
+
+                    $form->select('country')
+                        ->help('Nationality of the suspect')
+                        ->options(Utils::COUNTRIES())->rules('required');
+
+
+                    $form->select('sub_county_id', __('Sub county'))
+                        ->rules('int|required')
+                        ->help('Where this suspect originally lives')
+                        ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+                    $form->text('parish');
+                    $form->text('village');
+                    $form->text('ethnicity');
+
+                    $form->divider('Arrest information');
+                    $form->radio('use_same_arrest_information', "Do you want to use this arrest information for rest of suspects?")
+                        ->options([
+                            1 => 'Yes (Use this arrest information for all asuspects)',
+                            0 => 'No (Don\'t Use this arrest information for all asuspects)',
+                        ])
+                        ->rules('required');
+
+
+                    $form->datetime('arrest_date_time', 'Arrest date and time');
+                    $form->select('arrest_sub_county_id', __('Arrest Sub county'))
+                        ->help('Where this suspect was arrested')
+                        ->options($subs);
+
+                    $form->text('arrest_parish', 'Arrest parish');
+                    $form->text('arrest_village', 'Arrest vaillage');
+
+                    /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
+                    $form->text('arrest_first_police_station', 'Arrest police station');
+                    $form->text('arrest_current_police_station', 'Current police station');
+                    $form->text('arrest_agency', 'Arrest agency');
+                    $form->text('arrest_uwa_unit', 'UWA Unit');
+                    $form->text('arrest_detection_method', 'Arrest detection method');
+                    $form->text('arrest_uwa_number', 'UWA Arest number');
+                    $form->text('arrest_crb_number', 'CRB number');
+
+                    $form->divider('Court information');
+
+
+                    $form->radio('use_same_court_information', "Do you want to use this court information for rest of suspects?")
+                        ->options([
+                            1 => 'Yes (Use this court information for all asuspects)',
+                            0 => 'No (Don\'t Use this court information for all asuspects)',
+                        ])
+                        ->rules('required');
+
+                    $form->date('court_date', 'Court date');
+                    $form->text('prosecutor', 'Names of the prosecutors');
+                    $form->radio('is_convicted', __('Has suspect been convicted?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ]);
+
+                    $form->text('case_outcome', 'Case outcome');
+                    $form->text('magistrate_name', 'Magistrate Name');
+                    $form->text('court_name', 'Court Name');
+                    $form->text('court_file_number', 'Court file number');
+
+                    $form->radio('is_jailed', __('Has suspect been jailed?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ]);
+                    $form->date('jail_date', 'Jail date');
+                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
+
+                    $form->radio('is_fined', __('Has suspect been fined?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ]);
+                    $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                });
             });
-        });
+        }
 
 
 

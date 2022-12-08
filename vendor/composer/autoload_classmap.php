@@ -60,6 +60,7 @@ return array(
     'App\\Http\\Middleware\\TrustHosts' => $baseDir . '/app/Http/Middleware/TrustHosts.php',
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Models\\CaseHasOffence' => $baseDir . '/app/Models/CaseHasOffence.php',
     'App\\Models\\CaseModel' => $baseDir . '/app/Models/CaseModel.php',
     'App\\Models\\CaseSuspect' => $baseDir . '/app/Models/CaseSuspect.php',
     'App\\Models\\CaseSuspectsComment' => $baseDir . '/app/Models/CaseSuspectsComment.php',

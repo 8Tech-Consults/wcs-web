@@ -6,6 +6,7 @@ php artisan make:migration create_case_suspects_comments_table
 php artisan make:migration create_pas_table
 php artisan make:migration create_offences_table
 php artisan make:migration create_case_has_offences_table
+php artisan make:migration create_conservation_areas_table
 
 
 php artisan make:model CaseCuspectsComment
@@ -16,6 +17,7 @@ php artisan make:model PA
 php artisan make:model Offence
 php artisan make:model Location
 php artisan make:model CaseHasOffence
+php artisan make:model ConservationArea
 php artisan admin:make CaseModelController --model=App\\Models\\CaseModel
 php artisan admin:make LocationController --model=App\\Models\\Location
 php artisan admin:make PaController --model=App\\Models\\PA
@@ -24,6 +26,7 @@ php artisan admin:make CaseSuspectController --model=App\\Models\\CaseSuspect
 php artisan admin:make CaseCuspectsCommentController --model=App\\Models\\CaseCuspectsComment
 php artisan admin:make OffenceController --model=App\\Models\\Offence
 php artisan admin:make OffenceController --model=App\\Models\\CaseHasOffence
+php artisan admin:make ConservationAreaController --model=App\\Models\\ConservationArea
 
 		
 -- 	

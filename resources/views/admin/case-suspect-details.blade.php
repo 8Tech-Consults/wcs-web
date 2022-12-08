@@ -71,7 +71,7 @@ use App\Models\Utils;
             ])
             @include('components.detail-item', [
                 't' => 'UWA SUSPECT',
-                's' => $s->uwa_suspect_number,
+                's' => $s->uwa_suspect_number, 
             ])
 
             @include('components.detail-item', ['t' => 'occuptaion', 's' => $s->occuptaion])

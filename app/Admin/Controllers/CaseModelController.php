@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
@@ -230,12 +231,17 @@ class CaseModelController extends AdminController
             $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('int|required');
         }
 
-        $form->tab('Offence', function (Form $form) {
+        $form->tab('Case information', function (Form $form) {
 
-            $form->text('title', __('Offence title'))
-                ->help("Describe this offence in summary")
+
+            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                ->help("Select offences involded in this case")
                 ->rules('required');
+            $form->text('detection_method', 'Detection method')->rules('required');
 
+            $form->text('title', __('Case description'))
+                ->help("Describe this case in summary")
+                ->rules('required');
 
             $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
                 ->rules('int|required')
@@ -246,23 +252,27 @@ class CaseModelController extends AdminController
                 ->default(null)
                 ->when(0, function (Form $form) {
 
+                    $form->select('conservation_area_id', __('Nearest conservation area'))
+                        ->rules('int|required')
+                        ->options(ConservationArea::all()->pluck('name', 'id'));
+
+
                     $form->select('sub_county_id', __('Sub county'))
                         ->rules('int|required')
                         ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+
                     $form->text('parish', __('Parish'))->rules('required');
                     $form->text('village', __('Village'))->rules('required');
                     $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
                 })->when(1, function (Form $form) {
-
                     $form->select('pa_id', __('Select PA'))
                         ->rules('int|required')
                         ->options(PA::all()->pluck('name_text', 'id'));
                 });
 
 
- 
-            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-                ->rules('required');
+
+
 
 
 
@@ -281,25 +291,15 @@ class CaseModelController extends AdminController
 
 
 
-            $form->textarea('offence_description', __('Offence description'))->rules('required');
-
-
 
 
             $form->hidden('has_exhibits', __('Does this case have exhibits?'))
                 ->default(1);
 
 
-            $form->select('status', __('Offence status'))
-                ->rules('int|required')
-                ->options([
-                    1 => 'Pending for verification',
-                    2 => 'Active',
-                    3 => 'Closed',
-                ]);
 
 
-            if ($form->isCreating()) {
+            /*  if ($form->isCreating()) {
                 $form->select('status', __('Status'))
                     ->options([
                         1 => 'Save as draft',
@@ -307,7 +307,7 @@ class CaseModelController extends AdminController
                         0 => 'No',
                     ])
                     ->default(1);
-            }
+            } */
         });
 
         if ($form->isCreating()) {
@@ -319,7 +319,6 @@ class CaseModelController extends AdminController
                     $form->text('first_name')->rules('required');
                     $form->text('middle_name');
                     $form->text('last_name')->rules('required');
-                    $form->text('uwa_suspect_number')->rules('required');
                     $form->radio('sex')->options([
                         'Male' => 'Male',
                         'Female' => 'Female',
@@ -363,9 +362,19 @@ class CaseModelController extends AdminController
                     /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
                     $form->text('arrest_first_police_station', 'Arrest police station');
                     $form->text('arrest_current_police_station', 'Current police station');
-                    $form->text('arrest_agency', 'Arrest agency');
+                    $form->select('arrest_agency', 'Arresting agency')->options([
+                        'UWA' => 'UWA',
+                        'UPDF' => 'UPDF',
+                        'UPF' => 'UPF',
+                        'ESO' => 'ESO',
+                        'ISO' => 'ISO',
+                        'URA' => 'URA',
+                        'DCIC' => 'DCIC',
+                        'INTERPOL' => 'INTERPOL',
+                        'UCAA' => 'UCAA',
+                    ]);
+
                     $form->text('arrest_uwa_unit', 'UWA Unit');
-                    $form->text('arrest_detection_method', 'Arrest detection method');
                     $form->text('arrest_uwa_number', 'UWA Arest number');
                     $form->text('arrest_crb_number', 'CRB number');
 
@@ -432,8 +441,8 @@ class CaseModelController extends AdminController
                         'Wildlife' => 'Wildlife',
                     ])
                     ->rules('required');
-
-                /*                 $form->textarea('wildlife', __('Wildlife'));
+                $form->text('species', __('Species'));
+                /* $form->textarea('wildlife', __('Wildlife'));
                 $form->textarea('implements', __('Implements')); */
                 $form->decimal('quantity', __('Quantity (in KGs)'))
                     ->rules('required');
@@ -443,6 +452,18 @@ class CaseModelController extends AdminController
             });
         });
 
+
+        if ($form->isEditing()) {
+            $form->tab('Case status', function (Form $form) {
+                $form->select('status', __('Case status'))
+                    ->rules('int|required')
+                    ->options([
+                        1 => 'Pending',
+                        2 => 'Active',
+                        3 => 'Closed',
+                    ]);
+            });
+        }
 
 
 

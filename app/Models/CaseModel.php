@@ -28,6 +28,7 @@ class CaseModel extends Model
                     $m->district_id = $sub->parent;
                 }
             }
+            $m->offence_description = $m->title;
 
             return $m;
         });

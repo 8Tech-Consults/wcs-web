@@ -1,191 +1,287 @@
-<?php
-use App\Models\Utils;
-?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
 <head>
+    <base href="{{ url('/') }}">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WCS - Admin portal</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>WCS - Offenders database</title>
 
-    <link rel="shortcut icon" href="{{ url('assets/logo_1.png') }}">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="WCS - Offenders database">
+    <meta name="keywords" content="WCS - Offenders database">
+    <meta name="author" content="8Technologies">
 
-    <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/AdminLTE/bootstrap/css/bootstrap.min.css') }}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/font-awesome/css/font-awesome.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css') }}">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="{{ admin_asset('vendor/laravel-admin/AdminLTE/plugins/iCheck/square/blue.css') }}">
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{{ url('assets/bootstrap.css') }}">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-  <script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+    <!-- Favicon and Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url('') }}/assets/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url('') }}/assets/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url('') }}/assets/logo.png">
+    <link rel="manifest" href="{{ url('') }}/assets/public/favicon/site.webmanifest">
+    <link rel="mask-icon" href="{{ url('') }}/assets/logo.png" color="#6366f1">
+    <link rel="shortcut icon" href="{{ url('') }}/assets/logo.png">
+    <meta name="msapplication-TileColor" content="#080032">
+    <meta name="msapplication-config" content="{{ url('') }}/assets/public/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Vendor Styles -->
+    <link rel="stylesheet" media="screen"
+        href="{{ url('') }}/assets/public/vendor/boxicons/css/boxicons.min.css" />
+
+    <!-- Main Theme Styles + Bootstrap -->
+    <link rel="stylesheet" media="screen" href="{{ url('') }}/assets/public/css/theme.min.css">
+
+    <!-- Page loading styles -->
     <style>
-        html,
-        body {
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            -webkit-transition: all .4s .2s ease-in-out;
+            transition: all .4s .2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
         }
 
-        .fill {
-            min-height: 100%;
-            height: 100%;
-            display: flex;
-            height: 100vh;
-            flex-direction: column;
-            justify-content: center;
+        .dark-mode .page-loading {
+            background-color: #0b0f19;
         }
 
-        .center {
+        .page-loading.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity .2s ease-in-out;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+
+        .page-loading.active>.page-loading-inner {
+            opacity: 1;
+        }
+
+        .page-loading-inner>span {
             display: block;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #9397ad;
         }
 
-        .description {
-            padding-left: 5%;
-            padding-right: 5%;
-            padding-top: 1%;
-            color: white;
-            font-family: "Source Sans Pro", sans-serif;
-            font-weight: 100;
-            font-size: 18px;
+        .dark-mode .page-loading-inner>span {
+            color: #fff;
+            opacity: .6;
         }
 
-        .mobo-only {
-            display: none;
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: .75rem;
+            vertical-align: text-bottom;
+            border: .15em solid #b4b7c9;
+            border-right-color: transparent;
+            border-radius: 50%;
+            -webkit-animation: spinner .75s linear infinite;
+            animation: spinner .75s linear infinite;
         }
 
-        @media only screen and (max-width: 768px) {
-            .mobo-only {
-                display: block;
+        .dark-mode .page-spinner {
+            border-color: rgba(255, 255, 255, .4);
+            border-right-color: transparent;
+        }
+
+        @-webkit-keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
             }
+        }
 
-            .pc-only {
-                display: none;
+        @keyframes spinner {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
             }
+        }
+
+        .my-btn-primary {
+            background-color: #277F4F;
+            box-shadow: #2e8d5989 0px 2px 5px;
+        }
+
+        .btn-link {
+            color: #277F4F;
+        }
+
+        .my-btn-primary:hover {
+            color: #13502f;
+        }
+
+        .btn-link:hover {
+            color: #13502f;
+        }
+
+        .text-primary {
+            color: #13502f !important;
         }
     </style>
+
+    <!-- Theme mode -->
+    <script>
+        let mode = window.localStorage.getItem('mode'),
+            root = document.getElementsByTagName('html')[0];
+        if (mode !== null && mode === 'dark') {
+            root.classList.add('dark-mode');
+        } else {
+            root.classList.remove('dark-mode');
+        }
+    </script>
+
+    <!-- Page loading scripts -->
+    <script>
+        (function() {
+            window.onload = function() {
+                const preloader = document.querySelector('.page-loading');
+                preloader.classList.remove('active');
+                setTimeout(function() {
+                    preloader.remove();
+                }, 1000);
+            };
+        })();
+    </script>
+
+
 </head>
 
 
-@php
-    $num = rand(1, 9);
-@endphp
+<!-- Body -->
 
-<body class="">
-    <div class="row d-flex justify-content-center text-center ">
-
-        <div class="col-md-3   fill ">
-            <div class="login-box">
-                {{-- <div class="login-logo">
-                    <a href="{{ admin_url('/') }}"><b>{{ config('admin.name') }}</b></a>
-                </div> --}}
-
-                {{--  <img class="img-fluid center mobo-only " width="50%" src="{{ url('assets/logo.png') }}"
-                    alt=""> --}}
-
-                <div class="login-logo">
-                    {{-- <h2>Log in to your account</h2> --}}
-
-                    <img class="img-fluid center " width="40%" src="{{ url('assets/logo_1.png') }}" alt="">
+<body>
 
 
-                </div>
-
-                <!-- /.login-logo -->
-                <div class="login-box-body pt-5 "
-                    style="
-                background-color: rgb(238, 238, 238);
-                border: 3px solid #277C61;
-                border-radius: 10px;
-                ">
-
-                    <form action="{{ admin_url('auth/login') }}" method="post">
-                        <h3 class="text-center text-dark mb-4">Sign in</h3>
-                        <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
-
-                            @if ($errors->has('username'))
-                                @foreach ($errors->get('username') as $message)
-                                    <label class="control-label" for="inputError"><i
-                                            class="fa fa-times-circle-o"></i>{{ $message }}</label><br>
-                                @endforeach
-                            @endif
-
-                            <input type="text" class="form-control" placeholder="{{ trans('admin.username') }}"
-                                name="username" value="{{ old('username') }}">
-                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                        </div>
-                        <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
-
-                            @if ($errors->has('password'))
-                                @foreach ($errors->get('password') as $message)
-                                    <label class="control-label" for="inputError"><i
-                                            class="fa fa-times-circle-o"></i>{{ $message }}</label><br>
-                                @endforeach
-                            @endif
-
-                            <input type="password" class="form-control" placeholder="{{ trans('admin.password') }}"
-                                name="password">
-                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-8">
-                                @if (config('admin.auth.remember'))
-                                    <div class="checkbox icheck">
-
-                                        <p><a href="javascript:;" style="color: #277C61;;">Forgot
-                                                password</a></p>
-                                        {{-- <label>
-                                            <input type="checkbox" name="remember" value="1" 
-                                                {{ !old('username') || old('remember') ? 'checked' : '' }}>
-                                            {{ trans('admin.remember_me') }}
-                                        </label> --}}
-                                    </div>
-                                @endif
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-xs-4">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <button type="submit" class="btn  btn-block btn-flat"
-                                    style="background-color: #277C61; color: white">{{ trans('admin.login') }}</button>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                    </form>
-
-                </div>
-                <!-- /.login-box-body -->
-            </div>
+    <!-- Page loading spinner -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="page-spinner"></div><span>Loading...</span>
         </div>
     </div>
 
-    {{--  --}}
-    <!-- /.login-box -->
+    <main class="page-wrapper">
 
-    <!-- jQuery 2.1.4 -->
-    <script src="{{ admin_asset('vendor/laravel-admin/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
-    <!-- Bootstrap 3.3.5 -->
-    <script src="{{ admin_asset('vendor/laravel-admin/AdminLTE/bootstrap/js/bootstrap.min.js') }}"></script>
-    <!-- iCheck -->
-    <script src="{{ admin_asset('vendor/laravel-admin/AdminLTE/plugins/iCheck/icheck.min.js') }}"></script>
-    <script>
-        $(function() {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
-        });
-    </script>
+
+
+        <!-- Page content -->
+        <section class="position-relative h-100 pt-0 pb-0">
+
+            <!-- Sign in form -->
+            <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
+                <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 400px;">
+
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="100%">
+                    </center>
+
+
+                    <h1 class="text-center text-xl-start mt-5 text-primary">Login</h1>
+
+                    <form class="needs-validation mb-2" action="{{ admin_url('auth/login') }}" method="post">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                        <div class="position-relative mb-4">
+                            <label for="email" class="form-label fs-base">Username</label>
+                            <input type="text" id="email" class="form-control form-control-lg"
+                                placeholder="{{ trans('admin.username') }}" name="username"
+                                value="{{ old('username') }}" required>
+
+
+                            @if ($errors->has('username'))
+                                @foreach ($errors->get('username') as $message)
+                                    <div class="invalid-feedback position-absolute start-0 top-100 d-block mb-2">
+                                        {{ $message }}
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label fs-base">Password</label>
+                            <div class="password-toggle">
+                                <input type="password" id="password" name="password"
+                                    class="form-control form-control-lg" required>
+                                <label class="password-toggle-btn" aria-label="Show/hide password">
+                                    <input class="password-toggle-check" type="checkbox">
+                                    <span class="password-toggle-indicator"></span>
+                                </label>
+
+                                @if ($errors->has('password'))
+                                    @foreach ($errors->get('password') as $message)
+                                        <div class="invalid-feedback position-absolute start-0 top-100 d-block mb-2">
+                                            {{ $message }}
+                                        </div>
+                                    @endforeach
+                                @endif
+
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn  btn-lg my-btn-primary  w-100">Sign in</button>
+                    </form>
+                    <a href="javascript:;" class="btn btn-link btn-lg w-100">Forgot your password?</a>
+
+
+                </div>
+                <div class="w-100 align-self-end">
+                    <p class="nav d-block fs-xs text-center text-xl-start pb-2 mb-0">
+                        &copy; All rights reserved. Made by
+                        <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" rel="noopener">8Technologies</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Background -->
+            <div class="position-absolute top-0 end-0 w-50 h-100 bg-position-center bg-repeat-0 bg-size-cover d-none d-xl-block"
+                style="background-image: url({{ url('assets/bg/' . rand(1, 16) . '-min.jpg') }});
+                border: 15px solid white;
+                border-radius:40px;
+                background-color: #13502f;
+                ">
+            </div>
+        </section>
+    </main>
+
+
+    <!-- Back to top button -->
+    <a href="#top" class="btn-scroll-top" data-scroll>
+        <span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span>
+        <i class="btn-scroll-top-icon bx bx-chevron-up"></i>
+    </a>
+
+
+    <!-- Vendor Scripts -->
+    <script src="{{ url('') }}/assets/public/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url('') }}/assets/public/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+
+    <!-- Main Theme Script -->
+    <script src="{{ url('') }}/assets/public/js/theme.min.js"></script>
 </body>
+
+<!-- Mirrored from silicon.createx.studio/account-signin.html by HTTrack Website Copier/3.x [XR&CO'2017], Sat, 20 Aug 2022 07:02:01 GMT -->
 
 </html>

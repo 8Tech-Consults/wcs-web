@@ -85,8 +85,7 @@ class CaseSuspectController extends AdminController
             shuffle($ethnicity);
             shuffle($countries);
             $s = new CaseSuspect();
-            $s->case_id = $cases[2];
-            $s->uwa_suspect_number =  "UG-" . $faker->randomNumber(5, false);
+            $s->case_id = $cases[2]; 
             $s->arrest_uwa_number =  "AR-" . $faker->randomNumber(5, false);
             $s->first_name =   $faker->firstName(0);
             $s->last_name =   $faker->lastName(0);
@@ -381,7 +380,7 @@ class CaseSuspectController extends AdminController
         $show->field('arrest_longitude', __('Arrest longitude'));
         $show->field('arrest_first_police_station', __('Arrest first police station'));
         $show->field('arrest_current_police_station', __('Arrest current police station'));
-        $show->field('arrest_agency', __('Arrest agency'));
+        $show->field('arrest_agency', __('Arresting agency'));
         $show->field('arrest_uwa_unit', __('Arrest uwa unit'));
         $show->field('arrest_detection_method', __('Arrest detection method'));
         $show->field('arrest_uwa_number', __('Arrest uwa number'));
@@ -490,7 +489,6 @@ class CaseSuspectController extends AdminController
             $form->text('first_name')->rules('required');
             $form->text('middle_name');
             $form->text('last_name')->rules('required');
-            $form->text('uwa_suspect_number')->rules('required');
             $form->radio('sex')->options([
                 'Male' => 'Male',
                 'Female' => 'Female',
@@ -533,9 +531,18 @@ class CaseSuspectController extends AdminController
                     $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required');
                     $form->text('arrest_first_police_station', 'Arrest police station');
                     $form->text('arrest_current_police_station', 'Current police station');
-                    $form->text('arrest_agency', 'Arrest agency');
+                    $form->select('arrest_agency', 'Arresting agency')->options([
+                        'UWA' => 'UWA',
+                        'UPDF' => 'UPDF',
+                        'UPF' => 'UPF',
+                        'ESO' => 'ESO',
+                        'ISO' => 'ISO',
+                        'URA' => 'URA',
+                        'DCIC' => 'DCIC',
+                        'INTERPOL' => 'INTERPOL',
+                        'UCAA' => 'UCAA',
+                    ]);
                     $form->text('arrest_uwa_unit', 'UWA Unit');
-                    $form->text('arrest_detection_method', 'Arrest detection method');
                     $form->text('arrest_uwa_number', 'UWA Arest number');
                     $form->text('arrest_crb_number', 'CRB number');
                 });

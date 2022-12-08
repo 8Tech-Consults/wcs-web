@@ -250,7 +250,7 @@
                 <div class="w-100 align-self-end">
                     <p class="nav d-block fs-xs text-center text-xl-start pb-2 mb-0">
                         &copy; 2022 All rights reserved. Developed by
-                        <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" rel="noopener">8Tech
+                        <a class="nav-link d-inline-block p-0 text-primary" href="https://8technologies.net/" target="_blank" rel="noopener">8Tech
                             Consults</a>
                     </p>
                 </div>

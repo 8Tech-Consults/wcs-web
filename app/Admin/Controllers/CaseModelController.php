@@ -439,7 +439,7 @@ class CaseModelController extends AdminController
                 photos	
                 description	
                 quantity	
-                */
+                */ 
 
                 $form->select('exhibit_catgory', __('Exhibit catgory'))
                     ->options([

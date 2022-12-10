@@ -264,8 +264,6 @@ class CaseModelController extends AdminController
                     $form->text('parish', __('Parish'))->rules('required');
                     $form->text('village', __('Village'))->rules('required');
                     $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
-               
-               
                 })->when(1, function (Form $form) {
                     $form->select('pa_id', __('Select PA'))
                         ->rules('int|required')
@@ -298,7 +296,7 @@ class CaseModelController extends AdminController
             $form->hidden('has_exhibits', __('Does this case have exhibits?'))
                 ->default(1);
 
-                $form->text('detection_method', 'Detection method')->rules('required');
+            $form->text('detection_method', 'Detection method')->rules('required');
 
 
             /*  if ($form->isCreating()) {
@@ -313,7 +311,7 @@ class CaseModelController extends AdminController
         });
 
         if ($form->isCreating()) {
-            $form->tab('Course details', function (Form $form) {
+            $form->tab('Case details', function (Form $form) {
                 $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
                     $subs = Location::get_sub_counties_array();
                     $form->divider('Suspect bio data');

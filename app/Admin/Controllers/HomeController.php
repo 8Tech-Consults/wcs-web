@@ -165,7 +165,7 @@ is_fined
         dd(count(CaseSuspectsComment::all())); */
 
         $content
-            ->title('WCS - Dashboard')
+            ->title('Wildlife Offenders Database - Dashboard')
             ->description('Hello ' . Auth::user()->name . "!");
 
         $content->row(function (Row $row) {

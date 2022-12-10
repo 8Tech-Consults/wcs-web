@@ -195,11 +195,11 @@
             <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
                 <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 400px;">
 
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="100%">
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
                     </center>
 
 
-                    <h1 class="text-center text-xl-start mt-5 text-primary">Login</h1>
+                    <h1 class="text-center text-xl-start mt-5 text-primary h3">Login</h1>
 
                     <form class="needs-validation mb-2" action="{{ admin_url('auth/login') }}" method="post">
 

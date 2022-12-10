@@ -374,7 +374,13 @@ class CaseModelController extends AdminController
                         'UCAA' => 'UCAA',
                     ]);
 
-                    $form->text('arrest_uwa_unit', 'UWA Unit');
+                    $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+                        'Canine Unit' => 'The Canine Unit', 
+                        'WCU' => 'WCU', 
+                        'NRCN' => 'NRCN', 
+                        'LEU' => 'LEU', 
+                    ]);
+ 
                     $form->text('arrest_uwa_number', 'UWA Arest number');
                     $form->text('arrest_crb_number', 'CRB number');
 

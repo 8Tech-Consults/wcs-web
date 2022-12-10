@@ -375,12 +375,12 @@ class CaseModelController extends AdminController
                     ]);
 
                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
-                        'Canine Unit' => 'The Canine Unit', 
-                        'WCU' => 'WCU', 
-                        'NRCN' => 'NRCN', 
-                        'LEU' => 'LEU', 
+                        'Canine Unit' => 'The Canine Unit',
+                        'WCU' => 'WCU',
+                        'NRCN' => 'NRCN',
+                        'LEU' => 'LEU',
                     ]);
- 
+
                     $form->text('arrest_uwa_number', 'UWA Arest number');
                     $form->text('arrest_crb_number', 'CRB number');
 
@@ -445,8 +445,10 @@ class CaseModelController extends AdminController
                     ->options([
                         'Implements' => 'Implements',
                         'Wildlife' => 'Wildlife',
+                        'Implement & Wildlife' => 'Both Implement & Wildlife',
                     ])
                     ->rules('required');
+                $form->text('implement', __('Implements'));
                 $form->text('species', __('Species'));
                 /* $form->textarea('wildlife', __('Wildlife'));
                 $form->textarea('implements', __('Implements')); */

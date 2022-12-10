@@ -249,8 +249,9 @@
                 </div>
                 <div class="w-100 align-self-end">
                     <p class="nav d-block fs-xs text-center text-xl-start pb-2 mb-0">
-                         All rights reserved. &copy; 2022 
-                        <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" target="_blank" rel="noopener">WCS</a>
+                        All rights reserved. &copy; 2022
+                        <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" target="_blank"
+                            rel="noopener">WCS</a>
                     </p>
                 </div>
             </div>
@@ -282,6 +283,7 @@
     <script src="{{ url('') }}/assets/public/js/theme.min.js"></script>
 </body>
 
-<!-- Mirrored from silicon.createx.studio/account-signin.html by HTTrack Website Copier/3.x [XR&CO'2017], Sat, 20 Aug 2022 07:02:01 GMT -->
-
 </html>
+
+<input type="radio" name="suspects[new_1][is_suspect_appear_in_court]" value="1"
+    class="minimal suspects is_suspect_appear_in_court" style="position: absolute; visibility: hidden;">

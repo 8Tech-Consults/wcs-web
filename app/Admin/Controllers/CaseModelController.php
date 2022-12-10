@@ -221,6 +221,7 @@ class CaseModelController extends AdminController
 
 
 
+
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
         });
@@ -313,7 +314,18 @@ class CaseModelController extends AdminController
         if ($form->isCreating()) {
             $form->tab('Case details', function (Form $form) {
                 $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
+
+
+                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
                     $subs = Location::get_sub_counties_array();
+
                     $form->divider('Suspect bio data');
                     $form->image('photo', 'Suspect photo');
                     $form->text('first_name')->rules('required');
@@ -439,7 +451,7 @@ class CaseModelController extends AdminController
                 photos	
                 description	
                 quantity	
-                */ 
+                */
 
                 $form->select('exhibit_catgory', __('Exhibit catgory'))
                     ->options([

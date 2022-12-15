@@ -193,7 +193,7 @@
 
             <!-- Sign in form -->
             <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
-                <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 400px;">
+                <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 350px;">
 
                     <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
                     </center>
@@ -257,7 +257,7 @@
             </div>
 
             <!-- Background -->
-            <div class="position-absolute top-0 end-0 w-50 h-100 bg-position-center bg-repeat-0 bg-size-cover d-none d-xl-block"
+            <div class="position-absolute top-0 end-0 w-50 h-100 bg-position-center bg-repeat-0 bg-size-cover d-none d-md-block"
                 style="background-image: url({{ url('assets/bg/' . rand(1, 16) . '-min.jpg') }});
                 border: 15px solid white;
                 border-radius:40px;

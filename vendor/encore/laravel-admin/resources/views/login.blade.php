@@ -195,7 +195,7 @@
             <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
                 <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 350px;">
 
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="70%">
                     </center>
 
 
@@ -246,12 +246,18 @@
                     <a href="javascript:;" class="btn btn-link btn-lg w-100">Forgot your password?</a>
 
 
+ 
+                    <p class="text-center mt-4 mb-0"><b>Partners</b></p>
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
+                    </center>
+
                 </div>
+
                 <div class="w-100 align-self-end">
                     <p class="nav d-block fs-xs text-center text-xl-start pb-2 mb-0">
                         All rights reserved. &copy; 2022
                         <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" target="_blank"
-                            rel="noopener">WCS</a>
+                            rel="noopener">UWA</a>
                     </p>
                 </div>
             </div>

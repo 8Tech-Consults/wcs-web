@@ -8,6 +8,7 @@ use App\Models\CaseSuspect;
 use App\Models\Enterprise;
 use App\Models\Exhibit;
 use App\Models\Image;
+use App\Models\Offence;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -29,6 +30,12 @@ class ApiPostsController extends Controller
     public function index(Request $r)
     {
         $data =  CaseModel::where([])->with('images')->get();
+        return $this->success($data, 'Case submitted successfully.');
+    }
+
+    public function offences(Request $r)
+    {
+        $data =  Offence::where([])->get();
         return $this->success($data, 'Case submitted successfully.');
     }
     public function create_post(Request $r)

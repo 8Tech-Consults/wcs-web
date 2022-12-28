@@ -29,6 +29,7 @@ Route::group(['middleware' => 'api'], function ($router) {
 Route::get("cases", [ApiPostsController::class, 'index']);
 Route::get("offences", [ApiPostsController::class, 'offences']);
 Route::get("protected-areas", [ApiPostsController::class, 'protected_areas']);
+Route::get("conservation-areas", [ApiPostsController::class, 'conservation_areas']);
 Route::get('process-pending-images', [ApiPostsController::class, 'process_pending_images']);
 
 

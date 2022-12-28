@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Enterprise;
 use App\Models\Exhibit;
 use App\Models\Image;
@@ -38,6 +39,12 @@ class ApiPostsController extends Controller
     {
         $data =  PA::where([])->get();
         return $this->success($data, 'Protected areas.');
+    }
+
+    public function conservation_areas(Request $r)
+    {
+        $data =  ConservationArea::where([])->get();
+        return $this->success($data, 'conservation_areas.');
     }
 
     public function offences(Request $r)

@@ -9,6 +9,7 @@ use App\Models\Enterprise;
 use App\Models\Exhibit;
 use App\Models\Image;
 use App\Models\Offence;
+use App\Models\PA;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -33,10 +34,16 @@ class ApiPostsController extends Controller
         return $this->success($data, 'Case submitted successfully.');
     }
 
+    public function protected_areas(Request $r)
+    {
+        $data =  PA::where([])->get();
+        return $this->success($data, 'Protected areas.');
+    }
+
     public function offences(Request $r)
     {
         $data =  Offence::where([])->get();
-        return $this->success($data, 'Case submitted successfully.');
+        return $this->success($data, 'Offences');
     }
     public function create_post(Request $r)
     {

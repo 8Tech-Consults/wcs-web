@@ -20,7 +20,10 @@ class CaseSuspect extends Model
         self::deleting(function ($m) { 
             die("Ooops! You cannot delete this item.");
         });
+
         self::creating(function ($m) {
+            $case = CaseModel::find($m->case_id); 
+            $m->suspect_number = $case->get_suspect_number();
             $m = CaseSuspect::my_update($m);
             $m->uwa_suspect_number = $m->suspect_number;
             return $m;

@@ -19,9 +19,15 @@ class CaseModel extends Model
         self::deleting(function ($m) {
             die("Ooops! You cannot delete this item.");
         });
+        self::created(function ($m) {
+            $m->case_number = Utils::getCaseNumber($m);
+            $m->save();
+        });
         self::creating(function ($m) {
 
             $m->district_id = 1;
+            $m->has_exhibits = 0;
+
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);
                 if ($sub != null) {
@@ -44,6 +50,13 @@ class CaseModel extends Model
 
             return $m;
         });
+    }
+
+    function get_suspect_number()
+    {
+        $suspects_length = count($this->suspects);
+        $suspects_length++;
+        return "{$this->case_number}/{$suspects_length}";
     }
 
     function pa()

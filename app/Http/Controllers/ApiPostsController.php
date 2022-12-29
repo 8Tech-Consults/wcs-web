@@ -80,6 +80,7 @@ class ApiPostsController extends Controller
             $case->reported_by = $u->id;
         }
         $case->latitude = $case_data->latitude;
+        $case->title = $case_data->title;
         $case->longitude = $case_data->longitude;
         $case->sub_county_id = $case_data->sub_county_id;
         $case->parish = $case_data->parish;
@@ -92,7 +93,8 @@ class ApiPostsController extends Controller
         if (!$case->save()) {
             return $this->error('Failed to update case, please try again.');
         }
-
+ 
+        
         $suspects = [];
         $exhibits = [];
         if (isset($r->suspects)) {

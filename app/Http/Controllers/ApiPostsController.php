@@ -115,7 +115,7 @@ class ApiPostsController extends Controller
                     $offence = new CaseHasOffence();
                     $offence->case_model_id = $case->id;
                     $offence->offence_id = ((int)($offence_id));
-                    $offence->save();
+                    $offence->save(); 
                 }
             }
         }
@@ -142,7 +142,7 @@ class ApiPostsController extends Controller
  
             $e = null;
             if (isset($v->online_id)) {
-                //$e = Exhibit::find(((int)($v->online_id)));
+                $e = Exhibit::find(((int)($v->online_id)));
             }
 
             if ($e == null) {
@@ -190,6 +190,7 @@ class ApiPostsController extends Controller
                 $s->arrest_date_time = Carbon::parse($v->arrest_date_time);
             }
 
+
             $s->occuptaion = $v->occuptaion;
             $s->country = $v->country;
             $s->district_id = $v->district_id;
@@ -219,22 +220,19 @@ class ApiPostsController extends Controller
             $s->is_convicted = $v->is_convicted;
             $s->case_outcome = $v->case_outcome;
             $s->magistrate_name = $v->magistrate_name;
-            $s->court_name = $v->court_name;
-            $s->court_file_number = $v->court_file_number;
-            $s->is_jailed = $v->is_jailed;
+            $s->court_name = isset($v->court_name) ? $v->court_name : "";
+            $s->court_file_number = isset($v->court_file_number) ? $v->court_file_number : "";
+            $s->is_jailed = isset($v->is_jailed) ? $v->is_jailed : ""; 
             $s->jail_period = ((int)($v->jail_period));
             $s->is_fined = $v->is_fined;
             $s->fined_amount = ((int)($v->fined_amount));
             $s->status = ((int)($v->status)); 
-            $s->save();
+            $s->save(); 
         }
 
 
         return $this->success($case, 'Case submitted successfully.');
-        if ($suspects) {
-        } else {
-            return $this->error('Failed to update case, please try again.');
-        }
+        
     }
 
     public function upload_media(Request $request)

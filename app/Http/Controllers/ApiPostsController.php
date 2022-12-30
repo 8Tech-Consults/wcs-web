@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaseHasOffence;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
@@ -17,6 +18,7 @@ use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ApiPostsController extends Controller
 {
@@ -72,13 +74,16 @@ class ApiPostsController extends Controller
 
         $case = null;
         if (isset($case_data->online_id)) {
-            $case = CaseModel::find(((int)($case_data->online_id)));
-        }
+            //$case = CaseModel::find(((int)($case_data->online_id)));
+        } 
 
         if ($case == null) {
             $case = new CaseModel();
             $case->reported_by = $u->id;
         }
+
+
+
         $case->latitude = $case_data->latitude;
         $case->title = $case_data->title;
         $case->longitude = $case_data->longitude;
@@ -88,12 +93,33 @@ class ApiPostsController extends Controller
         $case->offence_description = $case_data->offence_description;
         $case->is_offence_committed_in_pa = $case_data->is_offence_committed_in_pa;
         $case->pa_id = $case_data->pa_id;
+        $case->ca_id = $case_data->ca_id;
+        $case->detection_method = $case_data->detection_method;
         $case->offence_category_id = ((int)($case_data->offence_category_id));
 
+ 
         if (!$case->save()) {
             return $this->error('Failed to update case, please try again.');
         }
  
+        $offence_ids = [];
+        try{
+            $offence_ids = json_decode($case_data->offence_ids);
+        } catch (\Throwable $th) {
+            $offence_ids = [];
+        }
+
+        if($offence_ids != null){
+            if(is_array($offence_ids)){
+                foreach ($offence_ids as $offence_id) {
+                    $offence = new CaseHasOffence();
+                    $offence->case_model_id = $case->id;
+                    $offence->offence_id = ((int)($offence_id));
+                    $offence->save();
+                }
+            }
+        }
+
         
         $suspects = [];
         $exhibits = [];
@@ -116,7 +142,7 @@ class ApiPostsController extends Controller
  
             $e = null;
             if (isset($v->online_id)) {
-                $e = Exhibit::find(((int)($v->online_id)));
+                //$e = Exhibit::find(((int)($v->online_id)));
             }
 
             if ($e == null) {
@@ -141,7 +167,7 @@ class ApiPostsController extends Controller
 
             $s = null;
             if (isset($v->online_id)) {
-                $s = CaseSuspect::find(((int)($v->online_id)));
+                //$s = CaseSuspect::find(((int)($v->online_id)));
             }
 
             if ($s == null) {

@@ -11,7 +11,7 @@ class CaseHasOffence extends Model
     protected $fillable = [
         'case_id',
         'offence_id',
-    ];
+    ]; 
 
     use HasFactory;
 }

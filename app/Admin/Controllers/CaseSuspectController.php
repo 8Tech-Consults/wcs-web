@@ -526,7 +526,7 @@ class CaseSuspectController extends AdminController
                         ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
 
                     $form->text('arrest_parish', 'Arrest parish');
-                    $form->text('arrest_village', 'Arrest vaillage');
+                    $form->text('arrest_village', 'Arrest village');
 
                     $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required');
                     $form->text('arrest_first_police_station', 'Arrest police station');
@@ -543,7 +543,7 @@ class CaseSuspectController extends AdminController
                         'UCAA' => 'UCAA',
                     ]);
                     $form->text('arrest_uwa_unit', 'UWA Unit');
-                    $form->text('arrest_uwa_number', 'UWA Arest number');
+                    $form->text('arrest_uwa_number', 'UWA Arrest number');
                     $form->text('arrest_crb_number', 'CRB number');
                 });
         });

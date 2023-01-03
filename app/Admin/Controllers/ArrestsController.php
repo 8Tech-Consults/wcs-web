@@ -153,9 +153,7 @@ class ArrestsController extends AdminController
 
         $grid->column('arrest_current_police_station', __('Police station'))
             ->sortable();
-        $grid->column('arrest_detection_method', __('Detection method'))
-            ->sortable();
-
+ 
 
 
 

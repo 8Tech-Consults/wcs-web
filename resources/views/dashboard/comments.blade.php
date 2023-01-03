@@ -25,7 +25,12 @@ use App\Models\Utils;
         <h3>
             <b>Cases of interest progress</b>
         </h3> 
-    </div>
+        <div>
+            <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+                View All
+            </a>
+        </div>
+    </div> 
     <div class="card-body py-2 py-md-3">
         @foreach ($items as $i)
             <div class="d-flex align-items-center mb-4 case-item">

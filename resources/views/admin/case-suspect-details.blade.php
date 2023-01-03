@@ -171,11 +171,7 @@ use App\Models\Utils;
                     's' => $s->arrest_current_police_station,
                 ])
 
-                @include('components.detail-item', [
-                    't' => 'Detection method',
-                    's' => $s->arrest_detection_method,
-                ])
-
+      
                 @include('components.detail-item', [
                     't' => 'Arrest time',
                     's' => Utils::to_date_time($s->arrest_date_time),

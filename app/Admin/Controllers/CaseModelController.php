@@ -297,7 +297,7 @@ class CaseModelController extends AdminController
             $form->hidden('has_exhibits', __('Does this case have exhibits?'))
                 ->default(1);
 
-            $form->text('detection_method', 'Detection method')->rules('required');
+            $form->text('detection_method', 'Detection method');
 
 
             /*  if ($form->isCreating()) {
@@ -316,14 +316,7 @@ class CaseModelController extends AdminController
                 $form->morphMany('suspects', 'Click on new to add suspect', function (Form\NestedForm $form) {
 
 
-                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
-                        ->options([
-                            1 => 'Yes',
-                            0 => 'No',
-                        ])
-                        ->when(1, function ($form) {
-                            $form->date('created_at', 'Court date');
-                        });
+
                     $subs = Location::get_sub_counties_array();
 
                     $form->divider('Suspect bio data');
@@ -369,7 +362,7 @@ class CaseModelController extends AdminController
                         ->options($subs);
 
                     $form->text('arrest_parish', 'Arrest parish');
-                    $form->text('arrest_village', 'Arrest vaillage');
+                    $form->text('arrest_village', 'Arrest village');
 
                     /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
                     $form->text('arrest_first_police_station', 'Arrest police station');
@@ -393,7 +386,7 @@ class CaseModelController extends AdminController
                         'LEU' => 'LEU',
                     ]);
 
-                    $form->text('arrest_uwa_number', 'UWA Arest number');
+                    $form->text('arrest_uwa_number', 'UWA Arrest number');
                     $form->text('arrest_crb_number', 'CRB number');
 
                     $form->divider('Court information');
@@ -405,6 +398,15 @@ class CaseModelController extends AdminController
                             0 => 'No (Don\'t Use this court information for all asuspects)',
                         ])
                         ->rules('required');
+
+                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
 
                     $form->date('court_date', 'Court date');
                     $form->text('prosecutor', 'Names of the prosecutors');
@@ -478,9 +480,13 @@ class CaseModelController extends AdminController
                 $form->select('status', __('Case status'))
                     ->rules('int|required')
                     ->options([
-                        1 => 'Pending',
-                        2 => 'Active',
-                        3 => 'Closed',
+                        1 => 'Charged',
+                        2 => 'Remand',
+                        3 => 'Bail',
+                        4 => 'Perusal',
+                        5 => 'Further investigation',
+                        6 => 'Dismissed',
+                        7 => 'Convicted',
                     ]);
             });
         }

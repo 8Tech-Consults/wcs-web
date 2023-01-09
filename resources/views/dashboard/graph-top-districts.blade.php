@@ -23,7 +23,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Cases by Conservation Areas</b>
+            <b>Crime rate per CA</b> 
         </h3>
         <div>
             <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
@@ -69,7 +69,7 @@ use App\Models\Utils;
                                 'blue',
                                 'red',
                             ],
-                            label: 'Cases by conservation areas'
+                            label: 'Crime rate per CA'
                         }],
                         labels: JSON.parse('<?php echo json_encode($labels); ?>')
                     },

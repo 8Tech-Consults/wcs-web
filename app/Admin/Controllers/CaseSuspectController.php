@@ -373,8 +373,8 @@ class CaseSuspectController extends AdminController
         $show->field('is_suspects_arrested', __('Is suspects arrested'));
         $show->field('arrest_date_time', __('Arrest date time'));
         $show->field('arrest_district_id', __('Arrest district id'));
-        $show->field('arrest_sub_county_id', __('Arrest sub county id'));
-        $show->field('arrest_parish', __('Arrest parish'));
+        $show->field('arrest_sub_county_id', __('Sub county of Arrest'));
+        $show->field('arrest_parish', __('Parish of Arrest'));
         $show->field('arrest_village', __('Arrest village'));
         $show->field('arrest_latitude', __('Arrest latitude'));
         $show->field('arrest_longitude', __('Arrest longitude'));
@@ -520,16 +520,16 @@ class CaseSuspectController extends AdminController
                 ->rules('required')
                 ->when(1, function ($form) {
                     $form->datetime('arrest_date_time', 'Arrest date and time');
-                    $form->select('arrest_sub_county_id', __('Arrest Sub county'))
+                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                         ->rules('int|required')
                         ->help('Where this suspect was arrested')
                         ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
 
-                    $form->text('arrest_parish', 'Arrest parish');
+                    $form->text('arrest_parish', 'Parish of Arrest');
                     $form->text('arrest_village', 'Arrest village');
 
                     $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required');
-                    $form->text('arrest_first_police_station', 'Arrest police station');
+                    $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Arresting agency')->options([
                         'UWA' => 'UWA',
@@ -563,7 +563,17 @@ class CaseSuspectController extends AdminController
                             0 => 'No',
                         ]);
 
-                    $form->text('case_outcome', 'Case outcome');
+                    $form->select('case_outcome', 'Specific case status')->options([
+                        'Charged' => 'Charged',
+                        'Remand' => 'Remand',
+                        'Bail' => 'Bail',
+                        'Perusal' => 'Perusal',
+                        'Further investigation' => 'Further investigation',
+                        'Dismissed' => 'Dismissed',
+                        'Convicted' => 'Convicted',
+                        'UWA' => 'UWA',
+                    ]);
+
                     $form->text('magistrate_name', 'Magistrate Name');
                     $form->text('court_name', 'Court Name');
                     $form->text('court_file_number', 'Court file number');

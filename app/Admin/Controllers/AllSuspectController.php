@@ -65,6 +65,7 @@ class AllSuspectController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
+                
             $f->like('uwa_suspect_number', 'Filter by UWA Suspect number');
 
             $f->equal('country', 'Filter country of origin')->select(

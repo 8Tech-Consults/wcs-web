@@ -122,11 +122,11 @@ class CaseModelController extends AdminController
 
 
         $grid->column('suspects', __('Suspects'))->display(function () {
-            $link = admin_url('all-suspects', ['case_id' => $this->id]);
+            $link = admin_url('case-suspects', ['case_id' => $this->id]);
             return '<a data-toggle="tooltip" data-placement="bottom"  title="View suspects" class="text-primary h3" href="' . $link . '" >' . count($this->suspects) . '</a>';
         });
         $grid->column('exhibits', __('Exhibits'))->display(function () {
-            $link = admin_url('exhibits', ['case_id' => $this->id]);
+            $link = admin_url('exhibits');
             return '<a data-toggle="tooltip" data-placement="bottom"  title="View exhibits" class="text-primary h3" href="' . $link . '" >' . count($this->exhibits) . '</a>';
         });
 
@@ -153,7 +153,7 @@ class CaseModelController extends AdminController
             $view_link = '<a class="" href="' . url("cases/{$this->id}") . '">
                 <i class="fa fa-eye"></i> View case details</a>';
 
-            $suspetcs_link = '<br><a class="" href="' . url("all-suspects?case_id={$this->id}") . '">
+            $suspetcs_link = '<br><a class="" href="' . url("case-suspects?case_id={$this->id}") . '">
                 <i class="fa fa-users"></i> View case suspetcs</a>';
             $suspetcs_link = "";
 
@@ -357,15 +357,15 @@ class CaseModelController extends AdminController
 
 
                     $form->datetime('arrest_date_time', 'Arrest date and time');
-                    $form->select('arrest_sub_county_id', __('Arrest Sub county'))
+                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                         ->help('Where this suspect was arrested')
                         ->options($subs);
 
-                    $form->text('arrest_parish', 'Arrest parish');
-                    $form->text('arrest_village', 'Arrest village');
+                    $form->text('arrest_parish', 'Parish of Arrest');
+                    $form->text('arrest_village', 'Village of Arrest');
 
                     /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
-                    $form->text('arrest_first_police_station', 'Arrest police station');
+                    $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Arresting agency')->options([
                         'UWA' => 'UWA',
@@ -410,16 +410,28 @@ class CaseModelController extends AdminController
 
                     $form->date('court_date', 'Court date');
                     $form->text('prosecutor', 'Names of the prosecutors');
+
+                    $form->text('magistrate_name', 'Magistrate Name');
+                    $form->text('court_name', 'Court Name');
+                    $form->text('court_file_number', 'Court file number');
+
                     $form->radio('is_convicted', __('Has suspect been convicted?'))
                         ->options([
                             1 => 'Yes',
                             0 => 'No',
                         ]);
 
-                    $form->text('case_outcome', 'Case outcome');
-                    $form->text('magistrate_name', 'Magistrate Name');
-                    $form->text('court_name', 'Court Name');
-                    $form->text('court_file_number', 'Court file number');
+
+                    $form->select('case_outcome', 'Specific case status')->options([
+                        'Charged' => 'Charged',
+                        'Remand' => 'Remand',
+                        'Bail' => 'Bail',
+                        'Perusal' => 'Perusal',
+                        'Further investigation' => 'Further investigation',
+                        'Dismissed' => 'Dismissed',
+                        'Convicted' => 'Convicted',
+                        'UWA' => 'UWA',
+                    ]);
 
                     $form->radio('is_jailed', __('Has suspect been jailed?'))
                         ->options([

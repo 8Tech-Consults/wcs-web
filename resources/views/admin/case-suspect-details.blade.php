@@ -134,7 +134,7 @@ use App\Models\Utils;
                     's' => Utils::get('App\Models\Location', $s->arrest_sub_county_id)->name_text,
                 ])
                 @include('components.detail-item', [
-                    't' => 'Arrest parish',
+                    't' => 'Parish of Arrest',
                     's' => $s->arrest_parish,
                 ])
                 @include('components.detail-item', [

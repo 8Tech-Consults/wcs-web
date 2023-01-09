@@ -17,12 +17,12 @@ class CaseSuspect extends Model
     public static function boot()
     {
         parent::boot();
-        self::deleting(function ($m) { 
+        self::deleting(function ($m) {
             die("Ooops! You cannot delete this item.");
         });
 
         self::creating(function ($m) {
-            $case = CaseModel::find($m->case_id); 
+            $case = CaseModel::find($m->case_id);
             $m->suspect_number = $case->get_suspect_number();
             $m = CaseSuspect::my_update($m);
             $m->uwa_suspect_number = $m->suspect_number;
@@ -38,7 +38,7 @@ class CaseSuspect extends Model
     public static function my_update($m)
     {
         $m->district_id = 1;
-        
+
         if ($m->sub_county_id != null) {
             $sub = Location::find($m->sub_county_id);
             if ($sub != null) {

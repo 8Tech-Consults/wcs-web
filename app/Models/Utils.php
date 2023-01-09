@@ -62,13 +62,13 @@ class Utils  extends Model
         $faker = Faker::create();
         foreach (CaseModel::all() as $key => $v) {
             $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
-            $v->updated_at = $v->created_at;
+            $v->updated_at = $faker->dateTimeBetween('-13 month', '+1 month');
             $v->save();
         }
 
         foreach (CaseSuspect::all() as $key => $v) {
             $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
-            $v->updated_at = $v->created_at;
+            $v->updated_at = $faker->dateTimeBetween('-13 month', '+1 month');
             $v->save();
         }  
 

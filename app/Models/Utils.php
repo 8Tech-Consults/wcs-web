@@ -58,7 +58,7 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
-        /*
+       
         $faker = Faker::create();
         foreach (CaseModel::all() as $key => $v) {
             $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
@@ -70,7 +70,7 @@ class Utils  extends Model
             $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
             $v->updated_at = $v->created_at;
             $v->save();
-        } */
+        }  
 
         $cases = CaseModel::where([
             'case_number' => null

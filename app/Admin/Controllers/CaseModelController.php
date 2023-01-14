@@ -384,6 +384,7 @@ class CaseModelController extends AdminController
                         ])
                         ->rules('required');
 
+                    $subs = Location::get_sub_counties_array();
                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                         ->help('Where this suspect was arrested')
                         ->options($subs);

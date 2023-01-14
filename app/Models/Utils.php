@@ -386,15 +386,15 @@ class Utils  extends Model
     }
 
     public static function tell_case_status($status)
-    {
+    { 
         if ($status == 1) {
-            return 'Pending';
+            return 'On-going';
         } else if ($status == 2) {
-            return 'Active';
-        } else if ($status == 3) {
             return 'Closed';
+        } else if ($status == 3) {
+            return 'Re-opened';
         } else {
-            return 'Draft';
+            return 'Closed';
         }
     }
 
@@ -405,9 +405,9 @@ class Utils  extends Model
         } else if ($status == 2) {
             return 'success';
         } else if ($status == 3) {
-            return 'danger';
+            return 'warning';
         } else {
-            return 'secondary';
+            return 'warning';
         }
     }
     public static function get_gps_link($latitude, $longitude)

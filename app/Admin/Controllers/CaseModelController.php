@@ -492,13 +492,9 @@ class CaseModelController extends AdminController
                 $form->select('status', __('Case status'))
                     ->rules('int|required')
                     ->options([
-                        1 => 'Charged',
-                        2 => 'Remand',
-                        3 => 'Bail',
-                        4 => 'Perusal',
-                        5 => 'Further investigation',
-                        6 => 'Dismissed',
-                        7 => 'Convicted',
+                        1 => 'On-going investigation',
+                        2 => 'Closed',
+                        3 => 'Re-opened',
                     ]);
             });
         }

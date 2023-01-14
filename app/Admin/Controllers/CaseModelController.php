@@ -474,7 +474,7 @@ class CaseModelController extends AdminController
                         'UWA' => 'UWA',
                     ]);
 
-             
+
 
 
                     $form->radio('is_jailed', __('Has suspect been jailed?'))
@@ -500,33 +500,23 @@ class CaseModelController extends AdminController
         $form->tab('Exhibits', function (Form $form) {
             $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
 
-                /* 
-                
-	
-                exhibit_catgory	
-                wildlife	
-                implements	
-                photos	
-                description	
-                quantity	
-                */
-
-                $form->select('exhibit_catgory', __('Exhibit catgory'))
+                $form->select('exhibit_catgory', __('Exhibit category'))
                     ->options([
-                        'Implements' => 'Implements',
                         'Wildlife' => 'Wildlife',
+                        'Implements' => 'Implements',
                         'Implement & Wildlife' => 'Both Implement & Wildlife',
                     ])
                     ->rules('required');
-                $form->text('implement', __('Implements'));
                 $form->text('species', __('Species'));
-                /* $form->textarea('wildlife', __('Wildlife'));
-                $form->textarea('implements', __('Implements')); */
                 $form->decimal('quantity', __('Quantity (in KGs)'))
                     ->rules('required');
-                $form->image('photos', __('Exhibit Photo'));
                 $form->textarea('description', __('Description'))
                     ->rules('required');
+                $form->text('implement', __('Implements'));
+                /* $form->textarea('wildlife', __('Wildlife'));
+                $form->textarea('implements', __('Implements')); */
+
+                $form->image('photos', __('Exhibit Photo'));
             });
         });
 

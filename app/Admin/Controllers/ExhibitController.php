@@ -30,7 +30,7 @@ class ExhibitController extends AdminController
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
         $grid->column('case_id', __('Case id'));
-        $grid->column('exhibit_catgory', __('Exhibit catgory'));
+        $grid->column('exhibit_catgory', __('Exhibit category'));
         $grid->column('wildlife', __('Wildlife'));
         $grid->column('implements', __('Implements'));
         $grid->column('photos', __('Photos'));
@@ -54,7 +54,7 @@ class ExhibitController extends AdminController
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
         $show->field('case_id', __('Case id'));
-        $show->field('exhibit_catgory', __('Exhibit catgory'));
+        $show->field('exhibit_catgory', __('Exhibit category'));
         $show->field('wildlife', __('Wildlife'));
         $show->field('implements', __('Implements'));
         $show->field('photos', __('Photos'));
@@ -74,7 +74,7 @@ class ExhibitController extends AdminController
         $form = new Form(new Exhibit());
 
         $form->number('case_id', __('Case id'));
-        $form->text('exhibit_catgory', __('Exhibit catgory'));
+        $form->text('exhibit_catgory', __('Exhibit category'));
         $form->textarea('wildlife', __('Wildlife'));
         $form->textarea('implements', __('Implements'));
         $form->textarea('photos', __('Photos'));

@@ -287,7 +287,7 @@ use App\Models\Utils;
                         <th scope="col">ID</th>
                         <th scope="col">Photo</th>
                         <th scope="col">Quantity</th>
-                        <th scope="col">Catgory</th>
+                        <th scope="col">Category</th>
                         <th scope="col">Description</th>
                         <th scope="col">Action</th>
                     </tr>

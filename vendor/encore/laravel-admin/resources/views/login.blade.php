@@ -6,11 +6,11 @@
 <head>
     <base href="{{ url('/') }}">
     <meta charset="utf-8">
-    <title>WCS - Offenders database</title>
+    <title>UWA - Wildlife offenders database</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="WCS - Offenders database">
-    <meta name="keywords" content="WCS - Offenders database">
+    <meta name="description" content="UWA - Wildlife offenders database">
+    <meta name="keywords" content="UWA - Wildlife offenders database">
     <meta name="author" content="8Technologies">
 
     <!-- Viewport -->

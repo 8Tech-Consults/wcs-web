@@ -297,8 +297,20 @@ class CaseModelController extends AdminController
             $form->hidden('has_exhibits', __('Does this case have exhibits?'))
                 ->default(1);
 
-            $form->text('detection_method', 'Detection method');
-
+            $form->select('detection_method', __('Detection method'))
+                ->options([
+                    'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
+                    'Contacted by security agencies' => 'Contacted by security agencies',
+                    'House visit based on intelligence' => 'House visit based on intelligence',
+                    'Intelligence led patrol' => 'Intelligence led patrol',
+                    'Observed during non-duty activities' => 'Observed during non-duty activities',
+                    'Routine patrol by rangers' => 'Routine patrol by rangers',
+                    'Routine security check' => 'Routine security check',
+                    'Investigation' => 'Investigation',
+                    'Risk profiling' => 'Risk profiling',
+                    'Random selection' => 'Random selection'
+                ])
+                ->rules('required');
 
             /*  if ($form->isCreating()) {
                 $form->select('status', __('Status'))

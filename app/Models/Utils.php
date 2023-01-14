@@ -58,7 +58,7 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
-       /*
+        /*
         $faker = Faker::create();
         foreach (CaseModel::all() as $key => $v) {
             $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
@@ -386,7 +386,7 @@ class Utils  extends Model
     }
 
     public static function tell_case_status($status)
-    { 
+    {
         if ($status == 1) {
             return 'On-going';
         } else if ($status == 2) {
@@ -405,9 +405,9 @@ class Utils  extends Model
         } else if ($status == 2) {
             return 'success';
         } else if ($status == 3) {
-            return 'warning';
+            return 'danger';
         } else {
-            return 'warning';
+            return 'danger';
         }
     }
     public static function get_gps_link($latitude, $longitude)

@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
+use App\Models\PA;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
 use Encore\Admin\Auth\Database\Administrator;
@@ -217,7 +218,7 @@ class CaseSuspectController extends AdminController
                 1 => 'In court',
             ]);
 
-  
+
             $f->equal('is_jailed', 'Filter by jail status')->select([
                 0 => 'Not jailed',
                 1 => 'Jailed',
@@ -293,7 +294,7 @@ class CaseSuspectController extends AdminController
                 0 => 'NOT case of interest',
             ]);
 
- 
+
 
         $grid->column('is_jailed', __('Jailed'))
             ->sortable()
@@ -372,7 +373,7 @@ class CaseSuspectController extends AdminController
         $show->field('arrest_uwa_number', __('Arrest uwa number'));
         $show->field('arrest_crb_number', __('Arrest crb number'));
         $show->field('is_suspect_appear_in_court', __('Is suspect appear in court'));
-        $show->field('prosecutor', __('Prosecutor')); 
+        $show->field('prosecutor', __('Prosecutor'));
         $show->field('case_outcome', __('Case outcome'));
         $show->field('magistrate_name', __('Magistrate name'));
         $show->field('court_name', __('Court name'));
@@ -505,20 +506,28 @@ class CaseSuspectController extends AdminController
                 ->rules('required')
                 ->when(1, function ($form) {
                     $form->datetime('arrest_date_time', 'Arrest date and time');
-                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                        ->rules('int|required')
-                        ->help('Where this suspect was arrested')
-                        ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
 
-                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                        ->help('Where this suspect was arrested')
-                        ->options($subs);
+                    $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->when('Yes', function ($form) {
+                            $form->select('pa_id', __('Select PA'))
+                                ->options(PA::all()->pluck('name_text', 'id'));
+                        })
+                        ->when('No', function ($form) {
+                            $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+                                ->rules('int|required')
+                                ->help('Where this suspect was arrested')
+                                ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
 
-                    $form->select('pa_id', __('Select PA'))
-                        ->options(PA::all()->pluck('name_text', 'id'));
 
-                    $form->text('arrest_parish', 'Parish of Arrest');
-                    $form->text('arrest_village', 'Arrest village');
+                            $form->text('arrest_parish', 'Parish of Arrest');
+                            $form->text('arrest_village', 'Arrest village');
+                        })
+                        ->rules('required');
+
 
                     $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required');
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
@@ -534,7 +543,7 @@ class CaseSuspectController extends AdminController
                         'INTERPOL' => 'INTERPOL',
                         'UCAA' => 'UCAA',
                     ]);
-                    $form->text('arrest_uwa_unit', 'UWA Unit'); 
+                    $form->text('arrest_uwa_unit', 'UWA Unit');
                     $form->text('arrest_crb_number', 'CRB number');
                 });
         });
@@ -548,7 +557,7 @@ class CaseSuspectController extends AdminController
                 ->when(1, function ($form) {
                     $form->date('court_date', 'Court date');
                     $form->text('prosecutor', 'Names of the prosecutors');
-          
+
 
                     $form->select('case_outcome', 'Specific case status')->options([
                         'Charged' => 'Charged',

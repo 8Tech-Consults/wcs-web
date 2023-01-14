@@ -359,6 +359,13 @@ class CaseModelController extends AdminController
                     $form->text('village');
                     $form->text('ethnicity');
 
+                    $form->radio('is_suspects_arrested', "Is this suspect arreseted?")
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->rules('required');
+
                     $form->divider('Arrest information');
                     $form->radio('use_same_arrest_information', "Do you want to use this arrest information for rest of suspects?")
                         ->options([
@@ -369,9 +376,20 @@ class CaseModelController extends AdminController
 
 
                     $form->datetime('arrest_date_time', 'Arrest date and time');
+
+                    $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->rules('required');
+
                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                         ->help('Where this suspect was arrested')
                         ->options($subs);
+
+                    $form->select('pa_id', __('Select PA'))
+                        ->options(PA::all()->pluck('name_text', 'id'));
 
                     $form->text('arrest_parish', 'Parish of Arrest');
                     $form->text('arrest_village', 'Village of Arrest');

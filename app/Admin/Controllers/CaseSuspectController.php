@@ -525,6 +525,13 @@ class CaseSuspectController extends AdminController
                         ->help('Where this suspect was arrested')
                         ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
 
+                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+                        ->help('Where this suspect was arrested')
+                        ->options($subs);
+
+                    $form->select('pa_id', __('Select PA'))
+                        ->options(PA::all()->pluck('name_text', 'id'));
+
                     $form->text('arrest_parish', 'Parish of Arrest');
                     $form->text('arrest_village', 'Arrest village');
 

@@ -416,18 +416,14 @@ class CaseModelController extends AdminController
                         'LEU' => 'LEU',
                     ]);
 
-                    $form->text('arrest_uwa_number', 'UWA Arrest number');
                     $form->text('arrest_crb_number', 'CRB number');
+                    $form->select('management_action', 'Action taken by management')->options([
+                        'Fined' => 'Fined',
+                        'Cautioned' => 'Cautioned',
+                        'Police bond' => 'Police bond',
+                        'Skipped bond' => 'Skipped bond'
+                    ]);
 
-                    $form->divider('Court information');
-
-
-                    $form->radio('use_same_court_information', "Do you want to use this court information for rest of suspects?")
-                        ->options([
-                            1 => 'Yes (Use this court information for all asuspects)',
-                            0 => 'No (Don\'t Use this court information for all asuspects)',
-                        ])
-                        ->rules('required');
 
                     $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                         ->options([
@@ -438,19 +434,34 @@ class CaseModelController extends AdminController
                             $form->date('created_at', 'Court date');
                         });
 
+                    $form->divider('Court information');
+
+                    $form->radio('use_same_court_information', "Do you want to use this court information for rest of suspects?")
+                        ->options([
+                            1 => 'Yes (Use this court information for all asuspects)',
+                            0 => 'No (Don\'t Use this court information for all asuspects)',
+                        ])
+                        ->rules('required');
+
+
+                    $form->text('case_number', 'Court case number');
                     $form->date('court_date', 'Court date');
+                    $form->text('court_name', 'Court Name');
+
+
                     $form->text('prosecutor', 'Names of the prosecutors');
 
                     $form->text('magistrate_name', 'Magistrate Name');
-                    $form->text('court_name', 'Court Name');
+
                     $form->text('court_file_number', 'Court file number');
 
-                    $form->radio('is_convicted', __('Has suspect been convicted?'))
+                    $form->select('status', __('Case status'))
+                        ->rules('int|required')
                         ->options([
-                            1 => 'Yes',
-                            0 => 'No',
+                            1 => 'On-going investigation',
+                            2 => 'Closed',
+                            3 => 'Re-opened',
                         ]);
-
 
                     $form->select('case_outcome', 'Specific case status')->options([
                         'Charged' => 'Charged',
@@ -462,6 +473,9 @@ class CaseModelController extends AdminController
                         'Convicted' => 'Convicted',
                         'UWA' => 'UWA',
                     ]);
+
+             
+
 
                     $form->radio('is_jailed', __('Has suspect been jailed?'))
                         ->options([
@@ -515,20 +529,6 @@ class CaseModelController extends AdminController
                     ->rules('required');
             });
         });
-
-
-        if ($form->isEditing()) {
-            $form->tab('Case status', function (Form $form) {
-                $form->select('status', __('Case status'))
-                    ->rules('int|required')
-                    ->options([
-                        1 => 'On-going investigation',
-                        2 => 'Closed',
-                        3 => 'Re-opened',
-                    ]);
-            });
-        }
-
 
 
 

@@ -76,13 +76,7 @@ use App\Models\Utils;
                                 borderColor: window.chartColors.green,
                                 backgroundColor: window.chartColors.green,
                                 data: JSON.parse('<?php echo json_encode($is_suspect_appear_in_court); ?>'),
-                            },
-                            {
-                                label: 'Number of convictions',
-                                borderColor: window.chartColors.yellow,
-                                backgroundColor: window.chartColors.yellow,
-                                data: JSON.parse('<?php echo json_encode($is_convicted); ?>'),
-                            },
+                            }, 
                         ]
                     },
                     options: {

@@ -363,8 +363,6 @@ class Utils  extends Model
             return 'In court';
         } else if ($s->is_jailed) {
             return 'Jailed';
-        } else if ($s->is_convicted) {
-            return 'Convicted';
         } else {
             return 'Pending';
         }
@@ -377,8 +375,6 @@ class Utils  extends Model
         } else if ($s->is_suspect_appear_in_court) {
             return 'info';
         } else if ($s->is_jailed) {
-            return 'danger';
-        } else if ($s->is_convicted) {
             return 'danger';
         } else {
             return 'Pending';

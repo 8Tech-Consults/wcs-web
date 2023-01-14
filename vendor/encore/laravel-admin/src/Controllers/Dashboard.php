@@ -92,11 +92,7 @@ class Dashboard
                 ])
                 ->count();
 
-            $is_convicted = CaseSuspect::whereBetween('created_at', [$min, $max])
-                ->where([
-                    'is_convicted' => 1
-                ])
-                ->count();
+ 
 
             $is_jailed = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
@@ -112,8 +108,7 @@ class Dashboard
 
             $data['created_at'][] = $created_at;
             $data['is_suspects_arrested'][] = $is_suspects_arrested;
-            $data['is_suspect_appear_in_court'][] = $is_suspect_appear_in_court;
-            $data['is_convicted'][] = $is_convicted;
+            $data['is_suspect_appear_in_court'][] = $is_suspect_appear_in_court; 
             $data['is_jailed'][] = $is_jailed;
             $data['is_fined'][] = $is_fined;
             $data['labels'][] = Utils::month($max);

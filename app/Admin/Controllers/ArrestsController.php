@@ -70,9 +70,7 @@ class ArrestsController extends AdminController
                 ->ajax($ajax_url);
 
             $f->between('arrest_date_time', 'Filter by arrest date')->date();
-            $f->like('arrest_uwa_number', 'Filter by UWA Arrest number');
-
-
+     
 
             $f->equal('arrest_district_id', 'Filter by arrest district')->select(function ($id) {
                 $a = Location::find($id);
@@ -131,9 +129,7 @@ class ArrestsController extends AdminController
                 1 => 'success',
             ], 'danger');
 
-        $grid->column('arrest_uwa_number', __('UWA arrest number'))
-            ->sortable();
-
+       
         $grid->column('arrest_date_time', __('Arrest Date'))
             ->display(function ($x) {
                 return Utils::my_date_time($x);

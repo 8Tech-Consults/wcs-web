@@ -26,11 +26,13 @@ class CaseSuspect extends Model
             $m->suspect_number = $case->get_suspect_number();
             $m = CaseSuspect::my_update($m);
             $m->uwa_suspect_number = $m->suspect_number;
+            $m->arrest_uwa_number = $m->suspect_number;
             return $m;
         });
         self::updating(function ($m) {
             $m = CaseSuspect::my_update($m);
             $m->uwa_suspect_number = $m->suspect_number;
+            $m->arrest_uwa_number = $m->suspect_number;
             return $m;
         });
     }
@@ -76,11 +78,7 @@ class CaseSuspect extends Model
         }
 
 
-        if (!isset($m->is_convicted)) {
-            $m->is_convicted = 0;
-        } else if ($m->is_convicted == null) {
-            $m->is_convicted = 0;
-        }
+  
         return $m;
     }
 

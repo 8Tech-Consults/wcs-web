@@ -98,12 +98,7 @@ class AllSuspectController extends AdminController
                 0 => 'Not in court',
                 1 => 'In court',
             ]);
-
-            $f->equal('is_convicted', 'Filter by conviction status')->select([
-                0 => 'Not Convicted',
-                1 => 'Convicted',
-            ]);
-
+ 
             $f->equal('is_jailed', 'Filter by jail status')->select([
                 0 => 'Not jailed',
                 1 => 'Jailed',
@@ -184,16 +179,7 @@ class AllSuspectController extends AdminController
                 1 => 'success',
             ], 'danger');
 
-        $grid->column('is_convicted', __('Convicted'))
-            ->sortable()
-            ->using([
-                0 => 'Not Convicted',
-                1 => 'Convicted',
-            ],)->label([
-                null => 'danger',
-                0 => 'danger',
-                1 => 'success',
-            ], 'danger');
+ 
 
         $grid->column('is_jailed', __('Jailed'))
             ->sortable()

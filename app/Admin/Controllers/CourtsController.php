@@ -74,11 +74,7 @@ class CourtsController extends AdminController
             $f->like('court_file_number', 'Filter by court file number');
             $f->like('prosecutor', 'Filter by prosecutor');
             $f->like('magistrate_name', 'Filter by magistrate');
-            $f->equal('is_convicted', 'Filter by conviction')
-                ->select([
-                    0 => 'Not Convicted',
-                    1 => 'Convicted',
-                ]);
+        
         });
 
 
@@ -147,17 +143,7 @@ class CourtsController extends AdminController
             ->sortable();
 
 
-
-        $grid->column('is_convicted', __('Conviction status'))
-            ->sortable()
-            ->using([
-                0 => 'Not Convicted',
-                1 => 'Convicted',
-            ], 'Not arrested')->label([
-                null => 'danger',
-                0 => 'danger',
-                1 => 'success',
-            ], 'danger');
+ 
 
         $grid->column('case_outcome', __('Case outcome'))
             ->sortable();

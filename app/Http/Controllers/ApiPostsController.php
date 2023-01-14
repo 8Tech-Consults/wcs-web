@@ -216,8 +216,7 @@ class ApiPostsController extends Controller
             $s->arrest_uwa_number = $v->arrest_uwa_number;
             $s->arrest_crb_number = $v->arrest_crb_number;
             $s->is_suspect_appear_in_court = $v->is_suspect_appear_in_court;
-            $s->prosecutor = $v->prosecutor;
-            $s->is_convicted = $v->is_convicted;
+            $s->prosecutor = $v->prosecutor; 
             $s->case_outcome = $v->case_outcome;
             $s->magistrate_name = $v->magistrate_name;
             $s->court_name = isset($v->court_name) ? $v->court_name : "";

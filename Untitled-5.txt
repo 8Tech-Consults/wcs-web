@@ -37,8 +37,7 @@ SECTION #5
 
 ---------------------------------------
 1. is_suspect_appear_in_court
-2. prosecutor
-3. is_convicted
+2. prosecutor 
 4. case_outcome
 5. magistrate_name
 

@@ -42,8 +42,7 @@ is_suspect_appear_in_court
 court_name	
 court_file_number	
 court_date	
-prosecutor	
-is_convicted	
+prosecutor	 
 magistrate_name	
 case_outcome	
 

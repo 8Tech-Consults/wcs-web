@@ -117,8 +117,7 @@ class CaseSuspectController extends AdminController
             $s->arrest_latitude =   '0.615085';
             $s->arrest_longitude =   '30.391306';
             $s->arrest_uwa_unit =   '-';
-            $s->arrest_detection_method =   'Prison cell';
-            $s->is_convicted =  false;
+            $s->arrest_detection_method =   'Prison cell'; 
             $s->case_outcome =  "Charged";
             $s->magistrate_name =   $faker->name();
             $s->is_jailed =  $statuses[0];
@@ -218,11 +217,7 @@ class CaseSuspectController extends AdminController
                 1 => 'In court',
             ]);
 
-            $f->equal('is_convicted', 'Filter by conviction status')->select([
-                0 => 'Not Convicted',
-                1 => 'Convicted',
-            ]);
-
+  
             $f->equal('is_jailed', 'Filter by jail status')->select([
                 0 => 'Not jailed',
                 1 => 'Jailed',
@@ -298,16 +293,7 @@ class CaseSuspectController extends AdminController
                 0 => 'NOT case of interest',
             ]);
 
-        $grid->column('is_convicted', __('Convicted'))
-            ->sortable()
-            ->using([
-                0 => 'Not Convicted',
-                1 => 'Convicted',
-            ],)->label([
-                null => 'danger',
-                0 => 'danger',
-                1 => 'success',
-            ], 'danger');
+ 
 
         $grid->column('is_jailed', __('Jailed'))
             ->sortable()
@@ -386,8 +372,7 @@ class CaseSuspectController extends AdminController
         $show->field('arrest_uwa_number', __('Arrest uwa number'));
         $show->field('arrest_crb_number', __('Arrest crb number'));
         $show->field('is_suspect_appear_in_court', __('Is suspect appear in court'));
-        $show->field('prosecutor', __('Prosecutor'));
-        $show->field('is_convicted', __('Is convicted'));
+        $show->field('prosecutor', __('Prosecutor')); 
         $show->field('case_outcome', __('Case outcome'));
         $show->field('magistrate_name', __('Magistrate name'));
         $show->field('court_name', __('Court name'));
@@ -549,8 +534,7 @@ class CaseSuspectController extends AdminController
                         'INTERPOL' => 'INTERPOL',
                         'UCAA' => 'UCAA',
                     ]);
-                    $form->text('arrest_uwa_unit', 'UWA Unit');
-                    $form->text('arrest_uwa_number', 'UWA Arrest number');
+                    $form->text('arrest_uwa_unit', 'UWA Unit'); 
                     $form->text('arrest_crb_number', 'CRB number');
                 });
         });
@@ -564,11 +548,7 @@ class CaseSuspectController extends AdminController
                 ->when(1, function ($form) {
                     $form->date('court_date', 'Court date');
                     $form->text('prosecutor', 'Names of the prosecutors');
-                    $form->radio('is_convicted', __('Has suspect been convicted?'))
-                        ->options([
-                            1 => 'Yes',
-                            0 => 'No',
-                        ]);
+          
 
                     $form->select('case_outcome', 'Specific case status')->options([
                         'Charged' => 'Charged',

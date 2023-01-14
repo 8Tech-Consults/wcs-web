@@ -83,8 +83,7 @@ $arrested = [0, 1];
             $c->is_suspects_arrested = $arrested[1];
             shuffle($arrested);
             $c->is_suspect_appear_in_court = $arrested[1];
-            shuffle($arrested);
-            $c->is_convicted = $arrested[1];
+            shuffle($arrested); 
             shuffle($arrested);
             $c->is_jailed = $arrested[1];
             shuffle($arrested);
@@ -99,8 +98,7 @@ $arrested = [0, 1];
             $c->is_suspects_arrested = $arrested[1];
             shuffle($arrested);
             $c->is_suspect_appear_in_court = $arrested[1];
-            shuffle($arrested);
-            $c->is_convicted = $arrested[1];
+            shuffle($arrested); 
             shuffle($arrested);
             $c->is_jailed = $arrested[1];
             shuffle($arrested);
@@ -113,8 +111,7 @@ $arrested = [0, 1];
 
 created_at	
 is_suspects_arrested 
-is_suspect_appear_in_court	
-is_convicted	
+is_suspect_appear_in_court	 
 is_jailed	
 is_fined	
  

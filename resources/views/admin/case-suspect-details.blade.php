@@ -227,12 +227,7 @@ use App\Models\Utils;
                     's' => $s->case_outcome,
                 ])
 
-                @include('components.detail-item', [
-                    't' => 'Is convicted?',
-                    's' => $s->is_convicted ? 'Yes' : 'No',
-                ])
-
-
+ 
 
             </div>
         </div>

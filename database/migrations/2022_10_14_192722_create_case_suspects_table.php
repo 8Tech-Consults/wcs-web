@@ -49,8 +49,7 @@ class CreateCaseSuspectsTable extends Migration
             $table->string('arrest_uwa_number', 225)->nullable();
             $table->string('arrest_crb_number', 225)->nullable();
             $table->boolean('is_suspect_appear_in_court')->nullable();
-            $table->string('prosecutor', 225)->nullable();
-            $table->boolean('is_convicted')->nullable();
+            $table->string('prosecutor', 225)->nullable(); 
             $table->text('case_outcome')->nullable();
             $table->text('magistrate_name')->nullable();
             $table->text('court_name')->nullable();

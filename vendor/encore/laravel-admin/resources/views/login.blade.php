@@ -246,7 +246,7 @@
                     <a href="javascript:;" class="btn btn-link btn-lg w-100">Forgot your password?</a>
 
 
- 
+
                     <p class="text-center mt-4 mb-0"><b>Partners</b></p>
                     <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
                     </center>

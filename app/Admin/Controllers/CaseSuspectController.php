@@ -543,8 +543,30 @@ class CaseSuspectController extends AdminController
                         'INTERPOL' => 'INTERPOL',
                         'UCAA' => 'UCAA',
                     ]);
+                    $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+                        'Canine Unit' => 'The Canine Unit',
+                        'WCU' => 'WCU',
+                        'NRCN' => 'NRCN',
+                        'LEU' => 'LEU',
+                    ]);
+
+                    $form->select('management_action', 'Action taken by management')->options([
+                        'Fined' => 'Fined',
+                        'Cautioned' => 'Cautioned',
+                        'Police bond' => 'Police bond',
+                        'Skipped bond' => 'Skipped bond'
+                    ]);
+
+                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
+
                     $form->text('arrest_uwa_unit', 'UWA Unit');
-                    $form->text('arrest_crb_number', 'CRB number');
                 });
         });
 
@@ -555,8 +577,20 @@ class CaseSuspectController extends AdminController
                     0 => 'No',
                 ])
                 ->when(1, function ($form) {
+                    $form->text('court_file_number', 'Court file number');
                     $form->date('court_date', 'Court date');
+                    $form->text('court_name', 'Court Name');
+
                     $form->text('prosecutor', 'Names of the prosecutors');
+                    $form->text('magistrate_name', 'Magistrate Name');
+
+                    $form->select('status', __('Case status'))
+                        ->rules('int|required')
+                        ->options([
+                            1 => 'On-going investigation',
+                            2 => 'Closed',
+                            3 => 'Re-opened',
+                        ]);
 
 
                     $form->select('case_outcome', 'Specific case status')->options([
@@ -569,37 +603,40 @@ class CaseSuspectController extends AdminController
                         'Convicted' => 'Convicted',
                         'UWA' => 'UWA',
                     ]);
+                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
 
-                    $form->text('magistrate_name', 'Magistrate Name');
-                    $form->text('court_name', 'Court Name');
-                    $form->text('court_file_number', 'Court file number');
+                    $form->radio('is_jailed', __('Has suspect been jailed?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('jail_date', 'Jail date');
+                            $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                        });
+
+                    $form->radio('is_fined', __('Has suspect been fined?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                        });
                 });
         });
 
-        $form->tab('Jail information', function (Form $form) {
-
-            $form->radio('is_jailed', __('Has suspect been jailed?'))
-                ->options([
-                    1 => 'Yes',
-                    0 => 'No',
-                ])
-                ->when(1, function ($form) {
-                    $form->date('jail_date', 'Jail date');
-                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
-                });
-
-            $form->radio('is_fined', __('Has suspect been fined?'))
-                ->options([
-                    1 => 'Yes',
-                    0 => 'No',
-                ])
-                ->when(1, function ($form) {
-                    $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
-                });
-        });
 
 
-        $form->tab('Case of Interest', function (Form $form) {
+
+/*         $form->tab('Case of Interest', function (Form $form) {
             $form->radio('status', __('Set this suspect as Case of Interest'))
                 ->options([
                     1 => 'Yes',
@@ -607,14 +644,10 @@ class CaseSuspectController extends AdminController
                 ])
                 ->default(0);
         });
+ */
 
 
-
-        $form->tab('Suspect progress comments', function (Form $form) {
-
-
-
-
+/*         $form->tab('Suspect progress comments', function (Form $form) { 
             $form->morphMany('comments', 'Click on new to add progress comment', function (Form\NestedForm $form) {
                 $u = Admin::user();
                 $form->hidden('comment_by')->default($u->id);
@@ -623,7 +656,7 @@ class CaseSuspectController extends AdminController
             });
         });
 
-
+ */
 
 
 

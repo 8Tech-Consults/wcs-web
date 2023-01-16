@@ -384,18 +384,23 @@ class CaseModelController extends AdminController
                         ])
                         ->rules('required');
 
+
+                    $form->select('pa_id', __('Select PA'))
+                        ->options(PA::all()->pluck('name_text', 'id'));
+
+
+
+                    $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map (GPS)')->height(500);
+
                     $subs = Location::get_sub_counties_array();
                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                         ->help('Where this suspect was arrested')
                         ->options($subs);
 
-                    $form->select('pa_id', __('Select PA'))
-                        ->options(PA::all()->pluck('name_text', 'id'));
 
                     $form->text('arrest_parish', 'Parish of Arrest');
                     $form->text('arrest_village', 'Village of Arrest');
 
-                    /* $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required'); */
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Arresting agency')->options([
@@ -445,7 +450,7 @@ class CaseModelController extends AdminController
                         ->rules('required');
 
 
-                    $form->text('case_number', 'Court case number');
+                    $form->text('court_file_number', 'Court file number');
                     $form->date('court_date', 'Court date');
                     $form->text('court_name', 'Court Name');
 
@@ -454,7 +459,6 @@ class CaseModelController extends AdminController
 
                     $form->text('magistrate_name', 'Magistrate Name');
 
-                    $form->text('court_file_number', 'Court file number');
 
                     $form->select('status', __('Case status'))
                         ->rules('int|required')
@@ -476,6 +480,14 @@ class CaseModelController extends AdminController
                     ]);
 
 
+                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
 
 
                     $form->radio('is_jailed', __('Has suspect been jailed?'))
@@ -511,9 +523,10 @@ class CaseModelController extends AdminController
                 $form->text('species', __('Species'));
                 $form->decimal('quantity', __('Quantity (in KGs)'))
                     ->rules('required');
+
+                $form->text('implement', __('Implements'));
                 $form->textarea('description', __('Description'))
                     ->rules('required');
-                $form->text('implement', __('Implements'));
                 /* $form->textarea('wildlife', __('Wildlife'));
                 $form->textarea('implements', __('Implements')); */
 

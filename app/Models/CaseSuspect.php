@@ -27,6 +27,7 @@ class CaseSuspect extends Model
             $m = CaseSuspect::my_update($m);
             $m->uwa_suspect_number = $m->suspect_number;
             $m->arrest_uwa_number = $m->suspect_number;
+ 
             return $m;
         });
         self::updating(function ($m) {
@@ -78,7 +79,7 @@ class CaseSuspect extends Model
         }
 
 
-  
+
         return $m;
     }
 

@@ -63,6 +63,10 @@ class CaseModel extends Model
     {
         return $this->belongsTo(PA::class, 'pa_id');
     }
+    function ca()
+    {
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
+    }
 
     function reportor()
     {
@@ -93,4 +97,29 @@ class CaseModel extends Model
     {
         return $this->hasMany(CaseSuspect::class, 'case_id');
     }
+
+    public function getCaTextAttribute()
+    {
+        if ($this->ca == null) {
+            return "";
+        }
+        return $this->ca->name;
+    }
+    public function getPaTextAttribute()
+    {
+        if ($this->pa == null) {
+            return "";
+        }
+        return $this->pa->name;
+    }
+
+    public function getDistrictTextAttribute()
+    {
+        if ($this->district == null) {
+            return "";
+        }
+        return  $this->district->name;
+    }
+
+    protected $appends = ['ca_text', 'pa_text', 'district_text'];
 }

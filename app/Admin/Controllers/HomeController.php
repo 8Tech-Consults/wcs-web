@@ -32,8 +32,6 @@ class HomeController extends Controller
         }
 
 
-
-
         /*
         $faker = Faker::create();
         foreach (CaseSuspect::all() as $c) {

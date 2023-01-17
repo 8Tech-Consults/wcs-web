@@ -255,7 +255,7 @@
 
                 <div class="w-100 align-self-end">
                     <p class="nav d-block fs-xs text-center text-xl-start pb-2 mb-0">
-                        All rights reserved. &copy; 2022
+                        All rights reserved. &copy; 2023
                         <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" target="_blank"
                             rel="noopener">UWA</a>
                     </p>

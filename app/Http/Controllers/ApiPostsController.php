@@ -30,11 +30,10 @@ class ApiPostsController extends Controller
         $this->middleware('auth:api');
     }
 
-
     public function index(Request $r)
     {
-        $data =  CaseModel::where([])->with('images')->get();
-        return $this->success($data, 'Case submitted successfully.');
+        $data =  CaseModel::where([])->with('suspects')->limit(1)->get();
+        return $this->success($data, 'Success.');
     }
 
     public function protected_areas(Request $r)
@@ -75,7 +74,7 @@ class ApiPostsController extends Controller
         $case = null;
         if (isset($case_data->online_id)) {
             //$case = CaseModel::find(((int)($case_data->online_id)));
-        } 
+        }
 
         if ($case == null) {
             $case = new CaseModel();
@@ -97,30 +96,30 @@ class ApiPostsController extends Controller
         $case->detection_method = $case_data->detection_method;
         $case->offence_category_id = ((int)($case_data->offence_category_id));
 
- 
+
         if (!$case->save()) {
             return $this->error('Failed to update case, please try again.');
         }
- 
+
         $offence_ids = [];
-        try{
+        try {
             $offence_ids = json_decode($case_data->offence_ids);
         } catch (\Throwable $th) {
             $offence_ids = [];
         }
 
-        if($offence_ids != null){
-            if(is_array($offence_ids)){
+        if ($offence_ids != null) {
+            if (is_array($offence_ids)) {
                 foreach ($offence_ids as $offence_id) {
                     $offence = new CaseHasOffence();
                     $offence->case_model_id = $case->id;
                     $offence->offence_id = ((int)($offence_id));
-                    $offence->save(); 
+                    $offence->save();
                 }
             }
         }
 
-        
+
         $suspects = [];
         $exhibits = [];
         if (isset($r->suspects)) {
@@ -129,7 +128,7 @@ class ApiPostsController extends Controller
                 $suspects = [];
             }
         }
-        
+
         if (isset($r->exhibits)) {
             $exhibits = json_decode($r->exhibits);
             if ($exhibits == null) {
@@ -138,8 +137,8 @@ class ApiPostsController extends Controller
         }
 
         foreach ($exhibits as $key => $v) {
- 
- 
+
+
             $e = null;
             if (isset($v->online_id)) {
                 $e = Exhibit::find(((int)($v->online_id)));
@@ -216,22 +215,21 @@ class ApiPostsController extends Controller
             $s->arrest_uwa_number = $v->arrest_uwa_number;
             $s->arrest_crb_number = $v->arrest_crb_number;
             $s->is_suspect_appear_in_court = $v->is_suspect_appear_in_court;
-            $s->prosecutor = $v->prosecutor; 
+            $s->prosecutor = $v->prosecutor;
             $s->case_outcome = $v->case_outcome;
             $s->magistrate_name = $v->magistrate_name;
             $s->court_name = isset($v->court_name) ? $v->court_name : "";
             $s->court_file_number = isset($v->court_file_number) ? $v->court_file_number : "";
-            $s->is_jailed = isset($v->is_jailed) ? $v->is_jailed : ""; 
+            $s->is_jailed = isset($v->is_jailed) ? $v->is_jailed : "";
             $s->jail_period = ((int)($v->jail_period));
             $s->is_fined = $v->is_fined;
             $s->fined_amount = ((int)($v->fined_amount));
-            $s->status = ((int)($v->status)); 
-            $s->save(); 
+            $s->status = ((int)($v->status));
+            $s->save();
         }
 
 
         return $this->success($case, 'Case submitted successfully.');
-        
     }
 
     public function upload_media(Request $request)

@@ -520,7 +520,7 @@ class CaseModelController extends AdminController
                         'Implement & Wildlife' => 'Both Implement & Wildlife',
                     ])
                     ->rules('required');
-                $form->text('species', __('Species'));
+                $form->text('wildlife', __('Species')); 
                 $form->decimal('quantity', __('Quantity (in KGs)'))
                     ->rules('required');
 

@@ -121,5 +121,29 @@ class CaseModel extends Model
         return  $this->district->name;
     }
 
-    protected $appends = ['ca_text', 'pa_text', 'district_text'];
+    public function  getPhotoAttribute()
+    {
+
+        if ($this->exhibits != null) {
+            if (!empty($this->exhibits)) {
+                return $this->exhibits[0]->photos;
+            }
+        }
+
+
+
+        if ($this->suspects != null) {
+            if (!empty($this->suspects)) {
+                if ($this->suspects[0]->photo != null) {
+                    if (strlen($this->suspects[0]->photo) > 2) {
+                        return $this->suspects[0]->photo;
+                    }
+                }
+            }
+        }
+
+        return "logo.png";
+    }
+
+    protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo'];
 }

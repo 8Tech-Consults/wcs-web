@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
+use App\Models\ConservationArea;
+use App\Models\Exhibit;
 use App\Models\MenuItem;
 use App\Models\PA;
 use App\Models\Utils;
@@ -27,9 +29,105 @@ class HomeController extends Controller
     {
 
 
+        $c = CaseModel::find(1);
+        dd($c->photo)
+        ;
+        /* 
+   
+
+
         if (Utils::hasPendingCase(Auth::user()) != null) {
             return redirect(admin_url('case-suspects/create'));
         }
+
+        
+        $faker = Faker::create();
+
+        $cas = [];
+        foreach (ConservationArea::all() as $key => $c) {
+            $cas[] = $c->id;
+        }
+        $pas = [];
+        foreach (PA::all() as $key => $c) {
+            $pas[] = $c->id;
+        }
+        $dms  = [
+            'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
+            'Contacted by security agencies' => 'Contacted by security agencies',
+            'House visit based on intelligence' => 'House visit based on intelligence',
+            'Intelligence led patrol' => 'Intelligence led patrol',
+            'Observed during non-duty activities' => 'Observed during non-duty activities',
+            'Routine patrol by rangers' => 'Routine patrol by rangers',
+            'Routine security check' => 'Routine security check',
+            'Investigation' => 'Investigation',
+            'Risk profiling' => 'Risk profiling',
+            'Random selection' => 'Random selection'
+        ];
+
+        $outs = [
+            'Charged' => 'Charged',
+            'Remand' => 'Remand',
+            'Bail' => 'Bail',
+            'Perusal' => 'Perusal',
+            'Further investigation' => 'Further investigation',
+            'Dismissed' => 'Dismissed',
+            'Convicted' => 'Convicted',
+            'UWA' => 'UWA',
+        ];
+        $mas = [
+            'Fined' => 'Fined',
+            'Cautioned' => 'Cautioned',
+            'Police bond' => 'Police bond',
+            'Skipped bond' => 'Skipped bond'
+        ];
+
+        $cat = [
+            'Wildlife' => 'Wildlife',
+            'Implements' => 'Implements',
+            'Implement & Wildlife' => 'Both Implement & Wildlife',
+        ];
+        $spe = [
+            'Lion',
+            'Timber',
+            'Giraffe',
+            'Chimpanzee',
+            'Leopard',
+            'Black Rhino',
+            'Gorilla',
+        ];
+        $implements = [
+            'Panga',
+            'Knife',
+            'Gun',
+            'Poison',
+            'Trap',
+        ];
+
+        foreach (Exhibit::all() as $key => $c) {
+
+            $c->description = 'Some description about this exhibit....';
+            $c->quantity = rand(4,20);
+            $c->save(); 
+        }
+
+        dd("done");
+
+
+  
+	
+photos	
+	
+	
+deleted_at	
+implement
+ 	
+ 	
+ 	
+	
+	
+	
+
+        */
 
 
         /*

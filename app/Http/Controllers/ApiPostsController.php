@@ -32,7 +32,6 @@ class ApiPostsController extends Controller
  
     public function index(Request $r)
     {
-        return $this->success('SIMPLE LOVE', 'Success.');
         $data =  CaseModel::where([])->with('suspects')->limit(1)->get();
         return $this->success($data, 'Success.');
     }

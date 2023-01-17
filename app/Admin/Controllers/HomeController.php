@@ -29,9 +29,7 @@ class HomeController extends Controller
     {
 
 
-        $c = CaseModel::find(1);
-        dd($c->photo)
-        ;
+    
         /* 
    
 

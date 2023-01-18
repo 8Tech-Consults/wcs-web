@@ -29,8 +29,9 @@ class HomeController extends Controller
     {
 
 
+        
     
-        /* 
+
    
 
 
@@ -101,28 +102,35 @@ class HomeController extends Controller
             'Trap',
         ];
 
-        foreach (Exhibit::all() as $key => $c) {
-
+        Exhibit::where([])->delete();
+        for ($x = 0;$x < 150;$x++) {
+            $c =  new Exhibit();
+            $c->case_id = rand(1,50);
+            $c->photos = 'ex-'.rand(1,17).'jpg';
             $c->description = 'Some description about this exhibit....';
+            
+            shuffle( $cat);
+            shuffle( $spe);
+            shuffle( $implements);
+            $c->exhibit_catgory =  $cat[1];
+            $c->wildlife =  $spe[1];
+            $c->implements =  $implements[1];
+            $c->implement =  $implements[1];
             $c->quantity = rand(4,20);
             $c->save(); 
         }
 
         dd("done");
 
-
-  
-	
-photos	
-	
-	
-deleted_at	
-implement
+ 
  	
- 	
- 	
+ 	        /* 	
 	
 	
+	
+ 	 
+	
+Edit Ed
 	
 
         */

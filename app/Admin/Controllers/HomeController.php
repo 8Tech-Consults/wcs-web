@@ -29,13 +29,14 @@ class HomeController extends Controller
     {
 
 
-        foreach (Exhibit::all() as $c) {
+        
+/*         foreach (Exhibit::all() as $c) {
             $c->photos = 'ex-' . rand(1, 17) . '.jpg';
             $c->description = 'Some description about this exhibit....';
-            $c->implement =   $c->implements;
+            $c->implement =   $c->implements; 
             $c->save();
         }
-
+ */
 
 
 

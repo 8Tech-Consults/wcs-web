@@ -31,7 +31,7 @@ class HomeController extends Controller
 
         
     
-
+      /*
    
 
 
@@ -124,7 +124,7 @@ class HomeController extends Controller
 
  
  	
- 	        /* 	
+ 	   	
 	
 	
 	

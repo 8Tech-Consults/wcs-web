@@ -25,6 +25,7 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post("post-media-upload", [ApiPostsController::class, 'upload_media']);
     Route::post("cases", [ApiPostsController::class, 'create_post']);
     Route::post("update-profile", [ApiPostsController::class, 'update_profile']);
+    Route::post("password-change", [ApiPostsController::class, 'password_change']);
 
 });
 

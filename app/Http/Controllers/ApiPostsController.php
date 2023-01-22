@@ -72,6 +72,47 @@ class ApiPostsController extends Controller
 
 
 
+    public function password_change(Request $r)
+    {
+
+        $u = auth('api')->user();
+
+        if ($u == null) {
+            return $this->error('Failed to authenticate, please try again.');
+        }
+        $_u = Administrator::find($u->id);
+        if ($u == null) {
+            return $this->error('Account not found., please try again.');
+        }
+
+        if ($r->current_password == null) {
+            return $this->error('Current password is required.');
+        }
+        if ($r->password == null) {
+            return $this->error('New password is required.');
+        }
+
+        $current_password = $r->current_password;
+        if (!password_verify($current_password, $_u->password)) {
+            return $this->error('You entered wrong current password.');
+        }
+
+
+
+        $_u->password = password_hash($r->password, PASSWORD_DEFAULT);
+
+        try {
+            $_u->save();
+        } catch (\Throwable $th) {
+            return $this->error('Something went wrong.' . $th);
+        }
+
+
+        return $this->success($_u, $message = "Password updated details", 200);
+    }
+
+
+
 
 
     public function index(Request $r)

@@ -124,6 +124,19 @@ class CaseSuspect extends Model
         }
         return $d->name_text;
     }
+    function getArrestDistrictTextAttribute()
+    {
+        $d = Location::find($this->arrest_district_id);
+        if ($d == null) {
+            return '-';
+        }
+        return $d->name;
+    }
 
-    protected $appends = ['photo_url', 'name', 'arrest_sub_county_text'];
+    protected $appends = [
+        'photo_url',
+        'name',
+        'arrest_sub_county_text',
+        'arrest_district_text',
+    ];
 }

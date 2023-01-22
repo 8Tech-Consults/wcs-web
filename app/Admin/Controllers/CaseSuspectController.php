@@ -86,7 +86,7 @@ class CaseSuspectController extends AdminController
             shuffle($ethnicity);
             shuffle($countries);
             $s = new CaseSuspect();
-            $s->case_id = $cases[2]; 
+            $s->case_id = $cases[2];
             $s->arrest_uwa_number =  "AR-" . $faker->randomNumber(5, false);
             $s->first_name =   $faker->firstName(0);
             $s->last_name =   $faker->lastName(0);
@@ -118,7 +118,7 @@ class CaseSuspectController extends AdminController
             $s->arrest_latitude =   '0.615085';
             $s->arrest_longitude =   '30.391306';
             $s->arrest_uwa_unit =   '-';
-            $s->arrest_detection_method =   'Prison cell'; 
+            $s->arrest_detection_method =   'Prison cell';
             $s->case_outcome =  "Charged";
             $s->magistrate_name =   $faker->name();
             $s->is_jailed =  $statuses[0];
@@ -557,14 +557,6 @@ class CaseSuspectController extends AdminController
                         'Skipped bond' => 'Skipped bond'
                     ]);
 
-                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
-                        ->options([
-                            1 => 'Yes',
-                            0 => 'No',
-                        ])
-                        ->when(1, function ($form) {
-                            $form->date('created_at', 'Court date');
-                        });
 
                     $form->text('arrest_uwa_unit', 'UWA Unit');
                 });
@@ -647,7 +639,7 @@ class CaseSuspectController extends AdminController
  */
 
 
-/*         $form->tab('Suspect progress comments', function (Form $form) { 
+/*         $form->tab('Suspect progress comments', function (Form $form) {
             $form->morphMany('comments', 'Click on new to add progress comment', function (Form\NestedForm $form) {
                 $u = Admin::user();
                 $form->hidden('comment_by')->default($u->id);

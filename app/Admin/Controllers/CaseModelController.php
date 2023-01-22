@@ -281,13 +281,13 @@ class CaseModelController extends AdminController
             /*
             $form->select('offence_category_id', __('Offence category'))
             offence_category_id
-                ->rules('int|required')  
-                ->options([  
+                ->rules('int|required')
+                ->options([
                     1 => 'Type 1',
                     2 => 'Type 2',
                     3 => 'Type 3',
                     4 => 'Type 4',
-                ]); 
+                ]);
             */
 
 
@@ -508,8 +508,6 @@ class CaseModelController extends AdminController
             });
         }
 
-
-
         $form->tab('Exhibits', function (Form $form) {
             $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
 
@@ -520,7 +518,7 @@ class CaseModelController extends AdminController
                         'Implement & Wildlife' => 'Both Implement & Wildlife',
                     ])
                     ->rules('required');
-                $form->text('wildlife', __('Species')); 
+                $form->text('wildlife', __('Species'));
                 $form->decimal('quantity', __('Quantity (in KGs)'))
                     ->rules('required');
 

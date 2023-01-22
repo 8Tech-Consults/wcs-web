@@ -490,7 +490,7 @@ class CaseModelController extends AdminController
                         });
 
 
-                    $form->radio('is_jailed', __('Has suspect been jailed?'))
+                    $form->radio('is_jailed', __('Was suspect jailed?'))
                         ->options([
                             1 => 'Yes',
                             0 => 'No',
@@ -498,7 +498,7 @@ class CaseModelController extends AdminController
                     $form->date('jail_date', 'Jail date');
                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
 
-                    $form->radio('is_fined', __('Has suspect been fined?'))
+                    $form->radio('is_fined', __('Was suspect fined?'))
                         ->options([
                             1 => 'Yes',
                             0 => 'No',

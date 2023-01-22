@@ -29,10 +29,52 @@ class ApiPostsController extends Controller
     {
         $this->middleware('auth:api');
     }
- 
+
+    public function update_profile(Request $r)
+    {
+
+        $u = auth('api')->user();
+
+        if($u == null){
+            return $this->error('Failed to authenticate, please try again.');
+        }
+        $_u = Administrator::find($u->id);
+        if($u == null){
+            return $this->error('Account not found., please try again.');
+        }
+
+        if($r->first_name == null){
+            return $this->error('You  must provide your first name.');
+        }
+        if($r->last_name == null){
+            return $this->error('You  must provide your last name.');
+        }
+
+        $_u->first_name = $r->first_name;
+        $_u->last_name = $r->last_name;
+        $_u->middle_name = $r->middle_name;
+        $_u->sub_county_id = $r->sub_county_id;
+        $_u->phone_number_1 = $r->phone_number_1;
+        $_u->phone_number_2 = $r->phone_number_2;
+        $_u->address = $r->address;
+
+        try {
+            $_u->save();
+        } catch (\Throwable $th) {
+            return $this->error('Something went wrong.'.$th);
+        }
+
+
+        return $this->success($_u, $message = "Profile updated details", 200);
+    }
+
+
+
+
+
     public function index(Request $r)
     {
-        $data =  CaseModel::where([])->with('suspects')->limit(5)->get(); 
+        $data =  CaseModel::where([])->with('suspects')->limit(5)->get();
         return $this->success($data, 'Success.');
     }
 

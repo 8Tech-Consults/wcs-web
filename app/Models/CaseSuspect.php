@@ -56,7 +56,7 @@ class CaseSuspect extends Model
             }
         }
 
-        $m->is_suspects_arrested = 0;
+
         if (
             isset($m->arrest_date_time)
         ) {
@@ -67,7 +67,7 @@ class CaseSuspect extends Model
             }
         }
 
-        $m->is_suspect_appear_in_court = 0;
+
         if (
             isset($m->use_same_court_information)
         ) {

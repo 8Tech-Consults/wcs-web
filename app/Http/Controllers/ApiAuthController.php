@@ -76,22 +76,22 @@ class ApiAuthController extends Controller
             'password' => trim($r->password),
         ]);
 
-         
+
         if ($token == null) {
             $token = auth('api')->attempt([
                 'phone_number_1' => $phone_number,
                 'password' => trim($r->password),
             ]);
         }
- 
-         
+
+
         if ($token == null) {
             $token = auth('api')->attempt([
                 'email' => $phone_number,
                 'password' => trim($r->password),
             ]);
         }
- 
+
 
 
         if ($token == null) {

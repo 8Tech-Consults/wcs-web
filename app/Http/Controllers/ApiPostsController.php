@@ -35,25 +35,27 @@ class ApiPostsController extends Controller
 
         $u = auth('api')->user();
 
-        if($u == null){
+        if ($u == null) {
             return $this->error('Failed to authenticate, please try again.');
         }
         $_u = Administrator::find($u->id);
-        if($u == null){
+        if ($u == null) {
             return $this->error('Account not found., please try again.');
         }
 
-        if($r->first_name == null){
+        if ($r->first_name == null) {
             return $this->error('You  must provide your first name.');
         }
-        if($r->last_name == null){
+        if ($r->last_name == null) {
             return $this->error('You  must provide your last name.');
         }
 
         $_u->first_name = $r->first_name;
         $_u->last_name = $r->last_name;
         $_u->middle_name = $r->middle_name;
-        $_u->sub_county_id = $r->sub_county_id;
+        if ($r->sub_county_id != null) {
+            $_u->sub_county_id = $r->sub_county_id;
+        }
         $_u->phone_number_1 = $r->phone_number_1;
         $_u->phone_number_2 = $r->phone_number_2;
         $_u->address = $r->address;
@@ -61,7 +63,7 @@ class ApiPostsController extends Controller
         try {
             $_u->save();
         } catch (\Throwable $th) {
-            return $this->error('Something went wrong.'.$th);
+            return $this->error('Something went wrong.' . $th);
         }
 
 

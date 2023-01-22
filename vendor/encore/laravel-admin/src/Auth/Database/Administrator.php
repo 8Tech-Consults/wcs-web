@@ -32,6 +32,8 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         parent::boot();
 
         self::creating(function ($model) {
+            $model->name = "{$model->name} {$model->middle_name} {$model->last_name}";
+            return $model;
         });
 
         self::created(function ($model) {
@@ -40,7 +42,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
 
         self::updating(function ($model) {
 
-
+            $model->name = "{$model->name} {$model->middle_name} {$model->last_name}";
             return $model;
         });
 
@@ -58,7 +60,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
     }
 
 
-    /** 
+    /**
      * Create a new Eloquent model instance.
      *
      * @param array $attributes

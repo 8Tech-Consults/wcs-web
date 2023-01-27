@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Controllers;
 
+use App\Models\CaseComment;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
@@ -38,7 +39,7 @@ class Dashboard
 
     public static function comments()
     {
-        $comments = CaseSuspectsComment::where([])
+        $comments = CaseComment::where([])
             ->orderBy('id', 'Desc')->limit(9)->get();
         return view('dashboard.comments', [
             'items' => $comments
@@ -92,7 +93,7 @@ class Dashboard
                 ])
                 ->count();
 
- 
+
 
             $is_jailed = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
@@ -108,7 +109,7 @@ class Dashboard
 
             $data['created_at'][] = $created_at;
             $data['is_suspects_arrested'][] = $is_suspects_arrested;
-            $data['is_suspect_appear_in_court'][] = $is_suspect_appear_in_court; 
+            $data['is_suspect_appear_in_court'][] = $is_suspect_appear_in_court;
             $data['is_jailed'][] = $is_jailed;
             $data['is_fined'][] = $is_fined;
             $data['labels'][] = Utils::month($max);
@@ -135,7 +136,7 @@ class Dashboard
             if (strlen($pa->name) > 15) {
                 $label .= "...";
             }
-            
+
             if ($tot > 0) {
                 $per = (int) ((count($pa->cases) / $tot) * 100);
                 $label .= " ($per%)";
@@ -143,7 +144,7 @@ class Dashboard
             $data['count'][] = count($pa->cases);
             $data['labels'][] = $label;
         }
- 
+
 
         return view('dashboard.graph-top-districts', [
             'labels' => $data['labels'],

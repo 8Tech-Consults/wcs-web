@@ -29,11 +29,11 @@ class HomeController extends Controller
     {
 
 
-        
+
 /*         foreach (Exhibit::all() as $c) {
             $c->photos = 'ex-' . rand(1, 17) . '.jpg';
             $c->description = 'Some description about this exhibit....';
-            $c->implement =   $c->implements; 
+            $c->implement =   $c->implements;
             $c->save();
         }
  */
@@ -41,14 +41,14 @@ class HomeController extends Controller
 
 
         /*
-   
+
 
 
         if (Utils::hasPendingCase(Auth::user()) != null) {
             return redirect(admin_url('case-suspects/create'));
         }
 
-        
+
         $faker = Faker::create();
 
         $cas = [];
@@ -117,7 +117,7 @@ class HomeController extends Controller
             $c->case_id = rand(1,50);
             $c->photos = 'ex-'.rand(1,17).'jpg';
             $c->description = 'Some description about this exhibit....';
-            
+
             shuffle( $cat);
             shuffle( $spe);
             shuffle( $implements);
@@ -126,21 +126,21 @@ class HomeController extends Controller
             $c->implements =  $implements[1];
             $c->implement =  $implements[1];
             $c->quantity = rand(4,20);
-            $c->save(); 
+            $c->save();
         }
 
         dd("done");
 
- 
- 	
- 	   	
-	
-	
-	
- 	 
-	
+
+
+
+
+
+
+
+
 Edit Ed
-	
+
 
         */
 
@@ -151,10 +151,10 @@ Edit Ed
             $c->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
             $c->save();
         }
-  
+
         $pas = [];
-        $vars = [1, 2, 
-        11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11, 
+        $vars = [1, 2,
+        11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,
         3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 13, 13, 1, 1, 1];
         foreach (PA::all() as $key => $pa) {
             shuffle($vars);
@@ -169,10 +169,10 @@ Edit Ed
         foreach (CaseModel::all() as $key => $case) {
             shuffle($vars);
             shuffle($vars);
-            shuffle($vars); 
-            shuffle($pas); 
-            shuffle($pas); 
-            shuffle($pas); 
+            shuffle($vars);
+            shuffle($pas);
+            shuffle($pas);
+            shuffle($pas);
             if ($vars[3] % 2 == 1) {
                 $case->is_offence_committed_in_pa = true;
                 $case->pa_id = $pas[4];
@@ -194,7 +194,7 @@ $arrested = [0, 1];
             $c->is_suspects_arrested = $arrested[1];
             shuffle($arrested);
             $c->is_suspect_appear_in_court = $arrested[1];
-            shuffle($arrested); 
+            shuffle($arrested);
             shuffle($arrested);
             $c->is_jailed = $arrested[1];
             shuffle($arrested);
@@ -209,7 +209,7 @@ $arrested = [0, 1];
             $c->is_suspects_arrested = $arrested[1];
             shuffle($arrested);
             $c->is_suspect_appear_in_court = $arrested[1];
-            shuffle($arrested); 
+            shuffle($arrested);
             shuffle($arrested);
             $c->is_jailed = $arrested[1];
             shuffle($arrested);
@@ -217,15 +217,15 @@ $arrested = [0, 1];
             $c->save();
         }
 
-        
 
 
-created_at	
-is_suspects_arrested 
-is_suspect_appear_in_court	 
-is_jailed	
-is_fined	
- 
+
+created_at
+is_suspects_arrested
+is_suspect_appear_in_court
+is_jailed
+is_fined
+
 
 
                 $arrested = [0, 1];
@@ -234,7 +234,7 @@ is_fined
             $c->is_suspects_arrested = $arrested[1];
             $c->save();
         }
-        
+
         $faker = Faker::create();
         foreach (CaseSuspect::all() as $c) {
             $c->created_at = $faker->dateTimeBetween('-1 year');
@@ -243,7 +243,7 @@ is_fined
             $c->arrest_date_time = $c->created_at;
             echo $c->arrest_date_time . "<hr>";
             $c->save();
-        } 
+        }
 
         $admins = [];
         foreach (Administrator::all() as $a) {
@@ -301,9 +301,9 @@ is_fined
             $row->column(3, function (Column $column) {
                 $column->append(Dashboard::comments());
             });
-            $row->column(2, function (Column $column) {
+            /* $row->column(2, function (Column $column) {
                 $column->append(Dashboard::graph_animals());
-            });
+            }); */
         });
 
 

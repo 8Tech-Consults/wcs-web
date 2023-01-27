@@ -24,25 +24,25 @@ use App\Models\Utils;
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
             <b>Cases of interest progress</b>
-        </h3> 
+        </h3>
         <div>
-            <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+            <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
         </div>
-    </div> 
+    </div>
     <div class="card-body py-2 py-md-3">
         @foreach ($items as $i)
             <div class="d-flex align-items-center mb-4 case-item">
                 <div style="border-left: solid #277C61 5px;" class="flex-grow-1 pl-2 pl-md-3 ">
-                    <a href="{{ url("/case-suspects/{$i->suspect_id}") }}" class="text-dark text-hover-primary">
+                    <a href="{{ url("/cases/{$i->case_id}") }}" class="text-dark text-hover-primary">
                         <b>{{ Str::of($i->body)->limit(40) }}</b>
                     </a>
                     <span class="text-muted fw-bold d-block">{{ Utils::my_time_ago($i->created_at) }}
                         - <b>{{ $i->reporter->name }}</b>
                     </span>
                 </div>
-                <a href="{{ url("/case-suspects/{$i->suspect_id}") }}" class="badge "
+                <a href="{{ url("/cases/{$i->case_id}") }}" class="badge "
                     style="background-color: #277C61;"> <i class="fa fa-chevron-right"></i> </a>
             </div>
         @endforeach

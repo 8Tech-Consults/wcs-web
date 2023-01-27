@@ -244,6 +244,15 @@ class CaseModelController extends AdminController
                 ->help("Describe this case in summary")
                 ->rules('required');
 
+
+            $form->select('offense_category', __('Offence category'))
+                ->options([
+                    'Category 1' => 'Category 1',
+                    'Category 2' => 'Category 2',
+                    'Category 3' => 'Category 3',
+                ])
+                ->rules('required');
+
             $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
                 ->rules('int|required')
                 ->options([
@@ -390,8 +399,6 @@ class CaseModelController extends AdminController
 
 
 
-                    $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map (GPS)')->height(500);
-
                     $subs = Location::get_sub_counties_array();
                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                         ->help('Where this suspect was arrested')
@@ -400,6 +407,8 @@ class CaseModelController extends AdminController
 
                     $form->text('arrest_parish', 'Parish of Arrest');
                     $form->text('arrest_village', 'Village of Arrest');
+
+                    $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map (GPS)')->height(500);
 
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
@@ -476,18 +485,7 @@ class CaseModelController extends AdminController
                         'Further investigation' => 'Further investigation',
                         'Dismissed' => 'Dismissed',
                         'Convicted' => 'Convicted',
-                        'UWA' => 'UWA',
                     ]);
-
-
-                    $form->radio('community_service', __('Was suspected issued a community service?'))
-                        ->options([
-                            'Yes' => 'Yes',
-                            'No' => 'No',
-                        ])
-                        ->when(1, function ($form) {
-                            $form->date('created_at', 'Court date');
-                        });
 
 
                     $form->radio('is_jailed', __('Was suspect jailed?'))
@@ -504,9 +502,21 @@ class CaseModelController extends AdminController
                             0 => 'No',
                         ]);
                     $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+
+                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
                 });
             });
         }
+
+
+
 
         $form->tab('Exhibits', function (Form $form) {
             $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
@@ -529,6 +539,16 @@ class CaseModelController extends AdminController
                 $form->textarea('implements', __('Implements')); */
 
                 $form->image('photos', __('Exhibit Photo'));
+            });
+        });
+
+
+        $form->tab('Case progress comments', function (Form $form) {
+            $form->morphMany('comments', 'Click on new to add a case progress comment', function (Form\NestedForm $form) {
+                $u = Admin::user();
+                $form->hidden('comment_by')->default($u->id);
+
+                $form->text('body', __('Progress comment'))->rules('required');
             });
         });
 

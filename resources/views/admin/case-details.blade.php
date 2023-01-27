@@ -125,32 +125,23 @@ use App\Models\Utils;
 
 
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Progress Comments</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Progress Comments</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover">
                 <thead class="bg-primary">
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Sex</th>
-                        <th scope="col">Date of birth</th>
-                        <th scope="col">Arrested</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Comment by</th>
+                        <th scope="col">Comment by</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($c->suspects as $s)
+                    @foreach ($c->comments as $s)
                         <tr>
-                            <th width="5%" scope="row">#{{ $s->id }}</th>
-                            <td width="10%"><img class="border img-fluid rounded p-1" class="img-fluid"
-                                    src="{{ url('assets/user.jpeg') }}"></td>
-                            <td>{{ $s->sex }} KGs</td>
-                            <td>{{ $s->age }}</td>
-                            <td>{{ $s->is_suspects_arrested ? 'Arrested' : 'Not Arrested' }}</td>
-                            <td width="20%">
-                                <a class="text-primary" href="{{ admin_url() }}">See full details about this
-                                    suspect</a>
+                            <th width="20%" scope="row">#{{ Utils::my_date_time($s->created_at) }}</th>
+                            <td>{{ $s->body }}</td>
+                            <td>{{ $s->reporter->name }}</td>
                             </td>
                         </tr>
                     @endforeach

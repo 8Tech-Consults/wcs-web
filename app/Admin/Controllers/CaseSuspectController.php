@@ -593,16 +593,8 @@ class CaseSuspectController extends AdminController
                         'Further investigation' => 'Further investigation',
                         'Dismissed' => 'Dismissed',
                         'Convicted' => 'Convicted',
-                        'UWA' => 'UWA',
                     ]);
-                    $form->radio('community_service', __('Was suspected issued a community service?'))
-                        ->options([
-                            'Yes' => 'Yes',
-                            'No' => 'No',
-                        ])
-                        ->when(1, function ($form) {
-                            $form->date('created_at', 'Court date');
-                        });
+
 
                     $form->radio('is_jailed', __('Was suspect jailed?'))
                         ->options([
@@ -622,13 +614,22 @@ class CaseSuspectController extends AdminController
                         ->when(1, function ($form) {
                             $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
                         });
+
+                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->when(1, function ($form) {
+                            $form->date('created_at', 'Court date');
+                        });
                 });
         });
 
 
 
 
-/*         $form->tab('Case of Interest', function (Form $form) {
+        /*         $form->tab('Case of Interest', function (Form $form) {
             $form->radio('status', __('Set this suspect as Case of Interest'))
                 ->options([
                     1 => 'Yes',
@@ -639,7 +640,7 @@ class CaseSuspectController extends AdminController
  */
 
 
-/*         $form->tab('Suspect progress comments', function (Form $form) {
+        /*         $form->tab('Suspect progress comments', function (Form $form) {
             $form->morphMany('comments', 'Click on new to add progress comment', function (Form\NestedForm $form) {
                 $u = Admin::user();
                 $form->hidden('comment_by')->default($u->id);

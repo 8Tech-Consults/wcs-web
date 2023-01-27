@@ -88,6 +88,11 @@ class CaseModel extends Model
         return $this->hasMany(Exhibit::class, 'case_id');
     }
 
+    function comments()
+    {
+        return $this->hasMany(CaseComment::class, 'case_id');
+    }
+
     function offences()
     {
         return $this->belongsToMany(Offence::class, 'case_has_offences');

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Location extends Model
 {
@@ -13,19 +14,22 @@ class Location extends Model
     {
         $subs = [];
         foreach (Location::get_sub_counties() as $key => $value) {
-            $subs[$key] = ((string)($value->name_text));
+
+            $subs[$value->id] = ((string)($value->name)) .", " . ((string)($value->district_name));
         }
         return $subs;
     }
 
+    public function district()
+    {
+        return $this->belongsTo(Location::class, 'parent');
+    }
     public static function get_sub_counties()
     {
-        return Location::where(
-            'parent',
-            '>',
-            0
-        )->get();
+        $sql = "SELECT locations.id as id, locations.name as name, districts.name as district_name FROM  locations, districts WHERE  locations.parent = districts.id AND locations.parent > 0";
+        return DB::select($sql);
     }
+
     public static function get_districts()
     {
         return Location::where(
@@ -46,6 +50,14 @@ class Location extends Model
 
     public function getNameTextAttribute()
     {
+
+
+        return "$this->name - $this->district_name";
+        if ($this->district == null) {
+            return $this->name;
+        }
+        return $this->name . ", " . $this->district;
+
         if (((int)($this->parent)) > 0) {
             $mother = Location::find($this->parent);
 

@@ -16,6 +16,9 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'flush' => [
+        \Barryvdh\Debugbar\LaravelDebugbar::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -181,7 +184,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        Barryvdh\Debugbar\ServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -251,6 +254,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
 
     ],
 

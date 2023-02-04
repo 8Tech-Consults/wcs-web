@@ -490,7 +490,7 @@ class CaseSuspectController extends AdminController
             $form->select('sub_county_id', __('Sub county'))
                 ->rules('int|required')
                 ->help('Where this suspect originally lives')
-                ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+                ->options(Location::get_sub_counties_array() );
             $form->text('parish');
             $form->text('village');
             $form->text('ethnicity');
@@ -520,7 +520,7 @@ class CaseSuspectController extends AdminController
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                                 ->rules('int|required')
                                 ->help('Where this suspect was arrested')
-                                ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+                                ->options(Location::get_sub_counties_array());
 
 
                             $form->text('arrest_parish', 'Parish of Arrest');
@@ -558,7 +558,6 @@ class CaseSuspectController extends AdminController
                     ]);
 
 
-                    $form->text('arrest_uwa_unit', 'UWA Unit');
                 });
         });
 

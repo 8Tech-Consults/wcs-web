@@ -142,14 +142,14 @@ class AuthController extends Controller
         $form->text('middle_name', 'Middle name');
         $form->text('last_name', 'Last name')->rules('required');
         $form->date('date_of_birth', 'Date of birth');
- 
+
         $form->text('phone_number_1', 'Phone number')->rules('required');
         $form->text('phone_number_2', 'Phone number 2');
 
         $form->select('sub_county_id', __('Sub county'))
             ->rules('int|required')
             ->help('Where this suspect originally lives')
-            ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+            ->options(Location::get_sub_counties_array());
 
         $form->text('address', 'Address line');
         $form->divider();

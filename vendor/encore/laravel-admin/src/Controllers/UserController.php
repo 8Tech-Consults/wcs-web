@@ -29,14 +29,14 @@ class UserController extends AdminController
     protected function grid()
     {
 
-        /* 	
-district_id	
-address	
-middle_name	
-	
+        /*
+district_id
+address
+middle_name
+
 Edit Edit
 
-        
+
         */
         $userModel = config('admin.database.users_model');
         $grid = new Grid(new $userModel());
@@ -180,7 +180,7 @@ Edit Edit
         $form->select('sub_county_id', __('Sub county'))
             ->rules('int|required')
             ->help('Where this suspect originally lives')
-            ->options(Location::get_sub_counties()->pluck('name_text', 'id'));
+            ->options(Location::get_sub_counties_array());
 
         $form->text('address', 'Address line');
         $form->divider();

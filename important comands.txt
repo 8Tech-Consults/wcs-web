@@ -15,6 +15,7 @@ php artisan make:model CaseSuspect
 php artisan make:model Exhibit
 php artisan make:model CaseModel
 php artisan make:model CaseComment
+php artisan make:model District
 php artisan make:model PA
 php artisan make:model Offence
 php artisan make:model Location

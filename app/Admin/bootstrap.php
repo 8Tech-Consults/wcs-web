@@ -23,6 +23,7 @@ use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
 use App\Models\Utils;
 use Illuminate\Support\Facades\Auth;
+Admin::js('/js/CaseModelController.js'); 
 
 Encore\Admin\Form::forget(['map', 'editor']);
 

@@ -3,12 +3,28 @@
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiEnterprisesController;
 use App\Http\Controllers\ApiPostsController;
+use App\Models\TempData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
 Route::POST("users/register", [ApiAuthController::class, "register"]);
 Route::POST("users/login", [ApiAuthController::class, "login"]);
+Route::POST("temp-data", function (Request $r) {
+    if (
+        $r->user_id == null ||
+        $r->type == null
+    ) {
+        return 0;
+    }
+
+    $d = new TempData();
+    $d->administrator_id = ((int)($r->user_id));
+    $d->type = $r->type;
+    $d->data = json_encode($_POST);
+    $d->save();
+    return 1;
+});
 
 Route::group(['middleware' => 'api'], function ($router) {
     Route::get("users/me", [ApiAuthController::class, 'me']);
@@ -23,7 +39,6 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post("cases", [ApiPostsController::class, 'create_post']);
     Route::post("update-profile", [ApiPostsController::class, 'update_profile']);
     Route::post("password-change", [ApiPostsController::class, 'password_change']);
-
 });
 
 Route::get("cases", [ApiPostsController::class, 'index']);

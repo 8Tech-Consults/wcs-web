@@ -780,6 +780,7 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Models\\CaseSuspect' => __DIR__ . '/../..' . '/app/Models/CaseSuspect.php',
         'App\\Models\\CaseSuspectsComment' => __DIR__ . '/../..' . '/app/Models/CaseSuspectsComment.php',
         'App\\Models\\ConservationArea' => __DIR__ . '/../..' . '/app/Models/ConservationArea.php',
+        'App\\Models\\District' => __DIR__ . '/../..' . '/app/Models/District.php',
         'App\\Models\\Exhibit' => __DIR__ . '/../..' . '/app/Models/Exhibit.php',
         'App\\Models\\Image' => __DIR__ . '/../..' . '/app/Models/Image.php',
         'App\\Models\\Location' => __DIR__ . '/../..' . '/app/Models/Location.php',

@@ -67,6 +67,7 @@ return array(
     'App\\Models\\CaseSuspect' => $baseDir . '/app/Models/CaseSuspect.php',
     'App\\Models\\CaseSuspectsComment' => $baseDir . '/app/Models/CaseSuspectsComment.php',
     'App\\Models\\ConservationArea' => $baseDir . '/app/Models/ConservationArea.php',
+    'App\\Models\\District' => $baseDir . '/app/Models/District.php',
     'App\\Models\\Exhibit' => $baseDir . '/app/Models/Exhibit.php',
     'App\\Models\\Image' => $baseDir . '/app/Models/Image.php',
     'App\\Models\\Location' => $baseDir . '/app/Models/Location.php',

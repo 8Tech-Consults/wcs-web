@@ -309,6 +309,7 @@ class CaseModelController extends AdminController
         if ($form->isCreating()) {
             $form->tab('Case details', function (Form $form) {
 
+       
 
                 $form->radio('want_to_add_suspect', "Do you want to add suspect to this case?")
                     ->options([
@@ -317,10 +318,25 @@ class CaseModelController extends AdminController
                     ])->default(1)
                     ->rules('required')
                     ->when(1, function ($form) {
-                        Admin::js('/js/CaseModelController.js');
+
+                        $form->html('
+                        <div class=" "  >
+                            <div class="row">
+                                <div class="col-12" id="suspects_list">
+                                    <div class="row">
+                                        <h2>SUSPECTS</h2>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        ');
+ 
+                 $form->divider();
+ 
+ 
 
                         $form->divider('Suspects\'s Bio Data');
-
 
                         $form->text('first_name')->rules('required')->default('Muhindo');
                         $form->text('middle_name')->default('Mutheke');
@@ -472,15 +488,8 @@ class CaseModelController extends AdminController
                             });
 
 
-                        $form->html('<button class="btn btn-primary d-block w-100 mt-3 mb-2" style="font-weight: 800; font-size: 25px;" id="add_anothe_suspect" >ADD ANOTHER SUSPECT</button>');
+                        $form->html('<button class="btn btn-primary d-block w-100 mt-3 mb-2" style="font-weight: 800; font-size: 25px;" id="add_anothe_suspect" >ADD SUSPECT</button>');
                     });
-
-
-                /*
-                $form->divider();
-                $form->html('<div class="container" id="suspects_added" >
-                    <h2>SUSPECTS</h2>
-                </div>'); */
             });
         }
 

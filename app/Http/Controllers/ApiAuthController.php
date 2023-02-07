@@ -69,7 +69,7 @@ class ApiAuthController extends Controller
 
         //auth('api')->factory()->setTTL(Carbon::now()->addMonth(12)->timestamp);
 
-        Config::set('jwt.ttl', 60*24*30*365);
+        Config::set('jwt.ttl', 60 * 24 * 30 * 365);
 
         $token = auth('api')->attempt([
             'username' => $phone_number,
@@ -148,8 +148,7 @@ class ApiAuthController extends Controller
         if ($new_user == null) {
             return $this->error('Account created successfully but failed to log you in.');
         }
-        Config::set('jwt.ttl', 60*24*30*365);
-
+        Config::set('jwt.ttl', 60 * 24 * 30 * 365);
         $token = auth('api')->attempt([
             'username' => $phone_number,
             'password' => trim($r->password),

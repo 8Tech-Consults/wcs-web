@@ -147,7 +147,7 @@ class AuthController extends Controller
         $form->text('phone_number_2', 'Phone number 2');
 
         $form->select('sub_county_id', __('Sub county'))
-            ->rules('int|required')
+            ->rules('required')
             ->help('Where this suspect originally lives')
             ->options(Location::get_sub_counties_array());
 

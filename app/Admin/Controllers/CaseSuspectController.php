@@ -488,7 +488,7 @@ class CaseSuspectController extends AdminController
                 ->options(Utils::COUNTRIES())->rules('required');
 
             $form->select('sub_county_id', __('Sub county'))
-                ->rules('int|required')
+                ->rules('required')
                 ->help('Where this suspect originally lives')
                 ->options(Location::get_sub_counties_array() );
             $form->text('parish');
@@ -498,7 +498,7 @@ class CaseSuspectController extends AdminController
 
 
         $form->tab('Arrest information', function (Form $form) {
-            $form->radio('is_suspects_arrested', "Is this suspect arreseted?")
+            $form->radio('is_suspects_arrested', "Is this suspect arrested?")
                 ->options([
                     1 => 'Yes',
                     0 => 'No',
@@ -518,7 +518,7 @@ class CaseSuspectController extends AdminController
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                                ->rules('int|required')
+                                ->rules('required')
                                 ->help('Where this suspect was arrested')
                                 ->options(Location::get_sub_counties_array());
 
@@ -576,7 +576,7 @@ class CaseSuspectController extends AdminController
                     $form->text('magistrate_name', 'Magistrate Name');
 
                     $form->select('status', __('Case status'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->options([
                             1 => 'On-going investigation',
                             2 => 'Closed',

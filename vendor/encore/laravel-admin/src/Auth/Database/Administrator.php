@@ -33,6 +33,11 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
 
         self::creating(function ($model) {
             $model->name = "{$model->name} {$model->middle_name} {$model->last_name}";
+
+            if($model->username == null){
+                $model->username = $model->email;
+            }
+
             return $model;
         });
 

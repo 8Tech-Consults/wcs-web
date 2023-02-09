@@ -23,7 +23,10 @@ class CaseSuspect extends Model
 
         self::creating(function ($m) {
             $case = CaseModel::find($m->case_id);
-            $m->suspect_number = $case->get_suspect_number();
+
+            if ($case != null) {
+                $m->suspect_number = $case->get_suspect_number();
+            }
             $m = CaseSuspect::my_update($m);
             $m->uwa_suspect_number = $m->suspect_number;
             $m->arrest_uwa_number = $m->suspect_number;

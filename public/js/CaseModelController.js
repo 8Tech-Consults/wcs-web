@@ -3,30 +3,30 @@ $(document).ready(function () {
         $("#add_anothe_suspect").click(function (e) {
             e.preventDefault();
 
-            var first_name = $("#first_name");
-            var middle_name = $("#middle_name");
-            var last_name = $("#last_name");
-            var age = $("#age");
-            var sex = $('input[name="sex"]:checked');
+            var first_name = $("#temp_first_name");
+            var middle_name = $("#temp_middle_name");
+            var last_name = $("#temp_last_name");
+            var age = $("#temp_age");
+            var sex = $('input[name="temp_sex"]:checked');
             var reported_by = $('input[name="reported_by"]');
 
-            var phone_number = $("#phone_number");
-            var national_id_number = $("#national_id_number");
-            var occuptaion = $("#occuptaion");
-            var parish = $("#parish");
-            var village = $("#village");
-            var national_id_number = $("#national_id_number");
-            var arrest_parish = $("#arrest_parish");
-            var arrest_village = $("#arrest_village");
-            var arrest_first_police_station = $("#arrest_first_police_station");
+            var phone_number = $("#temp_phone_number");
+            var national_id_number = $("#temp_national_id_number");
+            var occuptaion = $("#temp_occuptaion");
+            var parish = $("#temp_parish");
+            var village = $("#temp_village");
+            var national_id_number = $("#temp_national_id_number");
+            var arrest_parish = $("#temp_arrest_parish");
+            var arrest_village = $("#temp_arrest_village");
+            var arrest_first_police_station = $("#temp_arrest_first_police_station");
             var arrest_current_police_station = $(
-                "#arrest_current_police_station"
+                "#temp_arrest_current_police_station"
             );
-            var court_file_number = $("#court_file_number");
-            var court_date = $("#court_date");
-            var court_name = $("#court_name");
-            var prosecutor = $("#prosecutor");
-            var magistrate_name = $("#magistrate_name");
+            var court_file_number = $("#temp_court_file_number");
+            var court_date = $("#temp_court_date");
+            var court_name = $("#temp_court_name");
+            var prosecutor = $("#temp_prosecutor");
+            var magistrate_name = $("#temp_magistrate_name");
 
             if (!isRequired(first_name, "Suspect's first name")) {
                 return;
@@ -35,9 +35,7 @@ $(document).ready(function () {
                 return;
             }
 
-            if (!isRequired(sex, "Suspect's sex")) {
-                return;
-            }
+          
             if (!isRequired(age, "Suspect's D.O.B")) {
                 return;
             }
@@ -61,8 +59,7 @@ $(document).ready(function () {
                     'arrest_parish' : arrest_parish.val(),
                     'parish' : parish.val(),
                     'national_id_number' : national_id_number.val(),
-                    'occuptaion' : occuptaion.val(),
-                    'reported_by' : reported_by.val(),
+                    'occuptaion' : occuptaion.val(), 
                     'phone_number' : phone_number.val(),
                     'sex' : sex.val(),
                     'age' : age.val(),
@@ -74,8 +71,12 @@ $(document).ready(function () {
                 }, 
                 success: function (r) { 
                     console.log(r);
+                }, 
+                always: function (r) { 
+                    console.log(r); 
                 }
             });
+            
          
 
             $("#suspects_list").append(
@@ -134,7 +135,7 @@ $(document).ready(function () {
             middle_name.val("");
             national_id_number.val("");
             
-            $("#first_name").focus();
+            $("#temp_first_name").focus();
             
  
         });

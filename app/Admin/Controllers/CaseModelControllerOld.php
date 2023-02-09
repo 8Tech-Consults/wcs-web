@@ -229,7 +229,7 @@ class CaseModelController extends AdminController
 
 
         if ($form->isCreating()) {
-            $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('int|required');
+            $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
         }
 
         $form->tab('Offence', function (Form $form) {
@@ -254,7 +254,7 @@ class CaseModelController extends AdminController
                 ->rules('required');
 
             $form->radio('is_offence_committed_in_pa', __('Is offence committed within a PA?'))
-                ->rules('int|required')
+                ->rules('required')
                 ->options([
                     1 => 'Yes',
                     0 => 'No',
@@ -263,12 +263,12 @@ class CaseModelController extends AdminController
                 ->when(0, function (Form $form) {
 
                     $form->select('conservation_area_id', __('Nearest conservation area'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->options(ConservationArea::all()->pluck('name', 'id'));
 
 
                     $form->select('sub_county_id', __('Sub county'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->options(Location::get_sub_counties_array());
 
                     $form->text('parish', __('Parish'))->rules('required');
@@ -276,7 +276,7 @@ class CaseModelController extends AdminController
                     $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
                 })->when(1, function (Form $form) {
                     $form->select('pa_id', __('Select PA'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->options(PA::all()->pluck('name_text', 'id'));
                 });
 
@@ -349,11 +349,11 @@ class CaseModelController extends AdminController
 
 
                     $form->select('sub_county_id', __('Sub county'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->help('Where this suspect originally lives')
                         ->options(Location::get_sub_counties_array());
                     $form->select('sub_county_id', __('Sub county'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->help('Where this suspect originally lives')
                         ->options(Location::get_sub_counties_array());
 
@@ -453,7 +453,7 @@ class CaseModelController extends AdminController
 
 
                     $form->select('status', __('Case status'))
-                        ->rules('int|required')
+                        ->rules('required')
                         ->options([
                             1 => 'On-going investigation',
                             2 => 'Closed',

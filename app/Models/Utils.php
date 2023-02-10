@@ -77,7 +77,7 @@ class Utils  extends Model
         ])->get();
         foreach ($cases as $key => $sus) {
             if($sus->case!=null){
-                $sus->reported_by = $sus->case->id;
+                $sus->reported_by = $sus->case->reported_by;
                 $sus->save();
             }  
         }

@@ -390,9 +390,10 @@ class CaseModelController extends AdminController
 
                     $form->text('arrest_parish', 'Parish of Arrest');
                     $form->text('arrest_village', 'Village of Arrest');
-
-                    $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map (GPS)')->height(500);
-
+                    $form->text('arrest_latitude', 'Arrest GPS - latitude');
+                    $form->text('arrest_longitude', 'Arrest GPS - longitude');
+               
+           
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Arresting agency')->options([

@@ -33,12 +33,12 @@ class CaseSuspectController extends AdminController
      */
     protected function grid()
     {
-        $statuses = [1,2,3];
+        $statuses = [1, 2, 3];
 
         if (Utils::hasPendingCase(Auth::user()) != null) {
-           // return redirect(admin_url('case-suspects/create'));
+            // return redirect(admin_url('case-suspects/create'));
         }
-      
+
 
         /* $statuses_2 =  [true, false];
        foreach (CaseSuspect::all() as $key => $s) {
@@ -53,8 +53,8 @@ class CaseSuspectController extends AdminController
           
             //$s->photo = ((rand(1000,10000)%20)+1) .".jpg";
             $s->save();
-        }   */ 
- 
+        }   */
+
         /*
 
         $faker = Faker::create();
@@ -157,7 +157,7 @@ class CaseSuspectController extends AdminController
         $grid->disableCreateButton();
 
 
-        $grid->model() 
+        $grid->model()
             ->orderBy('created_at', 'Desc');
 
 
@@ -488,7 +488,7 @@ class CaseSuspectController extends AdminController
             $form->select('sub_county_id', __('Sub county'))
                 ->rules('int|required')
                 ->help('Where this suspect originally lives')
-                ->options(Location::get_sub_counties_array() );
+                ->options(Location::get_sub_counties_array());
             $form->text('parish');
             $form->text('village');
             $form->text('ethnicity');
@@ -526,8 +526,10 @@ class CaseSuspectController extends AdminController
                         })
                         ->rules('required');
 
+ 
+                    $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
+                    $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
 
-                    $form->latlong('arrest_latitude', 'arrest_longitude', 'Arrest location on map')->height(500)->rules('required');
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Arresting agency')->options([
@@ -554,8 +556,6 @@ class CaseSuspectController extends AdminController
                         'Police bond' => 'Police bond',
                         'Skipped bond' => 'Skipped bond'
                     ]);
-
-
                 });
         });
 

@@ -33,15 +33,28 @@ class CaseSuspectController extends AdminController
      */
     protected function grid()
     {
+        $statuses = [1,2,3];
 
         if (Utils::hasPendingCase(Auth::user()) != null) {
-            return redirect(admin_url('case-suspects/create'));
+           // return redirect(admin_url('case-suspects/create'));
         }
+      
 
-        /*  foreach (CaseSuspect::all() as $key => $s) {
-            $s->photo = ((rand(1000,10000)%20)+1) .".jpg";
+        /* $statuses_2 =  [true, false];
+       foreach (CaseSuspect::all() as $key => $s) {
+            shuffle($statuses); 
+            shuffle($statuses_2); 
+            $s->is_suspects_arrested =           $statuses_2[0];
+            shuffle($statuses_2); 
+            $s->is_jailed =           $statuses_2[0];
+          
+            shuffle($statuses_2); 
+            $s->is_suspect_appear_in_court =           $statuses_2[0];
+          
+            //$s->photo = ((rand(1000,10000)%20)+1) .".jpg";
             $s->save();
-        }   */
+        }   */ 
+ 
         /*
 
         $faker = Faker::create();
@@ -144,22 +157,7 @@ class CaseSuspectController extends AdminController
         $grid->disableCreateButton();
 
 
-        $grid->model()
-            ->where(
-                'is_suspects_arrested',
-                '!=',
-                1
-            )
-            ->where(
-                'is_suspect_appear_in_court',
-                '!=',
-                1
-            )
-            ->where(
-                'is_jailed',
-                '!=',
-                1
-            )
+        $grid->model() 
             ->orderBy('created_at', 'Desc');
 
 
@@ -488,7 +486,7 @@ class CaseSuspectController extends AdminController
                 ->options(Utils::COUNTRIES())->rules('required');
 
             $form->select('sub_county_id', __('Sub county'))
-                ->rules('required')
+                ->rules('int|required')
                 ->help('Where this suspect originally lives')
                 ->options(Location::get_sub_counties_array() );
             $form->text('parish');
@@ -518,7 +516,7 @@ class CaseSuspectController extends AdminController
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                                ->rules('required')
+                                ->rules('int|required')
                                 ->help('Where this suspect was arrested')
                                 ->options(Location::get_sub_counties_array());
 

@@ -80,6 +80,17 @@ class Utils  extends Model
                 $sus->reported_by = $sus->case->reported_by;
                 $sus->save();
             }  
+        
+        
+        }
+        $cases = Exhibit::where([
+            'reported_by' => null
+        ])->get();
+        foreach ($cases as $key => $sus) {
+            if($sus->case_model!=null){
+                $sus->reported_by = $sus->case_model->reported_by;
+                $sus->save();
+            }  
         }
 
         $cases = CaseModel::where([

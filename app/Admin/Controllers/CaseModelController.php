@@ -48,11 +48,14 @@ class CaseModelController extends AdminController
         $grid->model()->orderBy('id', 'Desc');
 
         $u = Auth::user();
-        $grid->model()->where([
-            'ca_id' => $u->ca_id
-        ])->orWhere([
-            'reported_by' => $u->id
-        ]);
+
+        if ($u->isRole('ca-agent')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ])->orWhere([
+                'reported_by' => $u->id
+            ]);
+        }
 
         //if($u->isRole('admin'))
 

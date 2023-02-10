@@ -14,6 +14,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 class CourtsController extends AdminController
 {
@@ -42,6 +43,12 @@ class CourtsController extends AdminController
                 'is_suspect_appear_in_court' => 1
             ])->orderBy('id', 'Desc');
 
+        $u = Auth::user();
+        if ($u->isRole('ca-agent')) {
+            $grid->model()->where([
+                'reported_by' => $u->id
+            ]);
+        }
 
         $grid->filter(function ($f) {
             // Remove the default id filter
@@ -74,7 +81,6 @@ class CourtsController extends AdminController
             $f->like('court_file_number', 'Filter by court file number');
             $f->like('prosecutor', 'Filter by prosecutor');
             $f->like('magistrate_name', 'Filter by magistrate');
-        
         });
 
 
@@ -143,7 +149,7 @@ class CourtsController extends AdminController
             ->sortable();
 
 
- 
+
 
         $grid->column('case_outcome', __('Case outcome'))
             ->sortable();

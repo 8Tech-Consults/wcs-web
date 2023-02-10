@@ -73,6 +73,7 @@ return array(
     'App\\Models\\Location' => $baseDir . '/app/Models/Location.php',
     'App\\Models\\Offence' => $baseDir . '/app/Models/Offence.php',
     'App\\Models\\PA' => $baseDir . '/app/Models/PA.php',
+    'App\\Models\\TempData' => $baseDir . '/app/Models/TempData.php',
     'App\\Models\\Utils' => $baseDir . '/app/Models/Utils.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',

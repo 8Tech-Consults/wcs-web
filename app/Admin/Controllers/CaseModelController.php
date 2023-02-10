@@ -152,8 +152,8 @@ class CaseModelController extends AdminController
 
         $grid->column('ca_id', __('CA'))
             ->display(function () {
-                if($this->ca == null){
-                    return  "-"; 
+                if ($this->ca == null) {
+                    return  "-";
                 }
                 return $this->ca->name;
             })
@@ -360,7 +360,7 @@ class CaseModelController extends AdminController
                     1 => 'Yes',
                     0 => 'No',
                 ])
-                ->default(null)
+                ->default(null) 
                 ->when(0, function (Form $form) {
 
                     $form->select('conservation_area_id', __('Nearest conservation area'))
@@ -382,6 +382,8 @@ class CaseModelController extends AdminController
                 });
 
 
+            $form->text('latitude', 'Offence GPS - latitude');
+            $form->text('longitude', 'Offence GPS - longitude');
 
 
 
@@ -406,7 +408,7 @@ class CaseModelController extends AdminController
         });
 
 
-        if ($form->isCreating() || $form->isEditing()) {
+        if ($form->isCreating()) {
             $form->tab('Case details', function (Form $form) {
 
 

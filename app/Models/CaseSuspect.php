@@ -90,6 +90,11 @@ class CaseSuspect extends Model
     {
         return url('public/storage/images/' . $this->photo);
     }
+    function offences()
+    {
+        return $this->hasMany(SuspectHasOffence::class, 'suspect_id');
+    }
+
     function case()
     {
         return $this->belongsTo(CaseModel::class, 'case_id');

@@ -786,6 +786,7 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Models\\Location' => __DIR__ . '/../..' . '/app/Models/Location.php',
         'App\\Models\\Offence' => __DIR__ . '/../..' . '/app/Models/Offence.php',
         'App\\Models\\PA' => __DIR__ . '/../..' . '/app/Models/PA.php',
+        'App\\Models\\TempData' => __DIR__ . '/../..' . '/app/Models/TempData.php',
         'App\\Models\\Utils' => __DIR__ . '/../..' . '/app/Models/Utils.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',

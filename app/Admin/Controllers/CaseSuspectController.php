@@ -35,12 +35,12 @@ class CaseSuspectController extends AdminController
     {
         $statuses = [1, 2, 3];
 
-
+        
 
         if (Utils::hasPendingCase(Auth::user()) != null) {
             // return redirect(admin_url('case-suspects/create'));
         }
-
+ 
 
         /* $statuses_2 =  [true, false];
        foreach (CaseSuspect::all() as $key => $s) {
@@ -155,23 +155,23 @@ class CaseSuspectController extends AdminController
 
         $grid = new Grid(new CaseSuspect());
 
-
+ 
         $u = Auth::user();
         if ($u->isRole('ca-agent')) {
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
         }
-
+      
         $grid->export(function ($export) {
 
             $export->filename('Cases.csv');
 
-            $export->except(['photo_url', 'action']);
+            $export->except(['photo_url','action']);
 
             // $export->only(['column3', 'column4' ...]);
 
-            /*  $export->originalValue(['suspects_count', 'exhibit_count']);
+           /*  $export->originalValue(['suspects_count', 'exhibit_count']);
             $export->column('status', function ($value, $original) {
 
                 if ($value == 0) {
@@ -560,7 +560,7 @@ class CaseSuspectController extends AdminController
                         })
                         ->rules('required');
 
-
+ 
                     $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
                     $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
 

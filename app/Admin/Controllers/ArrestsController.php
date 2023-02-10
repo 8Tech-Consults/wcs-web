@@ -14,6 +14,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 class ArrestsController extends AdminController
 {
@@ -36,11 +37,18 @@ class ArrestsController extends AdminController
         $grid->disableBatchActions();
         $grid->disableCreateButton();
         $grid->disableActions();
-
+ 
         $grid->model()
             ->where([
                 'is_suspects_arrested' => 1
-            ])->orderBy('id', 'Desc');
+            ])->orderBy('id', 'Desc'); 
+
+            $u = Auth::user();
+            if ($u->isRole('ca-agent')) {
+                $grid->model()->where([
+                    'reported_by' => $u->id
+                ]);
+            }
 
 
         $grid->filter(function ($f) {

@@ -53,6 +53,10 @@ class CaseModelController extends AdminController
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
+        } else if ($u->isRole('ca-team')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
         }
 
         //if($u->isRole('admin'))

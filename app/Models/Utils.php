@@ -72,6 +72,16 @@ class Utils  extends Model
             $v->save();
         } */
 
+        $cases = CaseSuspect::where([
+            'reported_by' => null
+        ])->get();
+        foreach ($cases as $key => $sus) {
+            if($sus->case!=null){
+                $sus->reported_by = $sus->case->id;
+                $sus->save();
+            }  
+        }
+
         $cases = CaseModel::where([
             'case_number' => null
         ])->get();

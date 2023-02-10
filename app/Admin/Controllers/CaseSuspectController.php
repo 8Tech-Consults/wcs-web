@@ -155,6 +155,14 @@ class CaseSuspectController extends AdminController
 
         $grid = new Grid(new CaseSuspect());
 
+ 
+        $u = Auth::user(); 
+        if ($u->isRole('ca-agent')) {
+          
+        }
+        $grid->model()->where([
+            'reported_by' => $u->id
+        ]);
         $grid->export(function ($export) {
 
             $export->filename('Cases.csv');

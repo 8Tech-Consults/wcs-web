@@ -43,8 +43,18 @@ class CaseModelController extends AdminController
     {
 
         $grid = new Grid(new CaseModel());
+
+
         $grid->model()->orderBy('id', 'Desc');
 
+        $u = Auth::user();
+        $grid->model()->where([
+            'ca_id' => $u->ca_id
+        ])->orWhere([
+            'reported_by' => $u->id
+        ]);
+
+        //if($u->isRole('admin'))
 
 
         $grid->export(function ($export) {

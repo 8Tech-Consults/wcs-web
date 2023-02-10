@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Controllers;
 
+use App\Models\ConservationArea;
 use App\Models\Enterprise;
 use App\Models\Location;
 use App\Models\PA;
@@ -82,7 +83,7 @@ Edit Edit
             return Utils::my_date($f);
         });
 
-/* 
+        /* 
         $grid->column('district_id', 'District')->display(function ($id) {
             return Utils::get(Location::class, $id)->name_text;
         })->sortable();
@@ -180,8 +181,13 @@ Edit Edit
 
         $form->select('sub_county_id', __('Duty station'))
             ->rules('required')
-            ->help('Protected area where  user is assigned') 
+            ->help('Protected area where  user is assigned')
             ->options(PA::all()->pluck('name_text', 'id'));
+
+
+        $form->select('ca_id', __('Conservation area assigned to'))
+            ->rules('required')
+            ->options(ConservationArea::all()->pluck('name', 'id'));
 
         $form->text('address', 'UWA staff number');
         $form->divider();

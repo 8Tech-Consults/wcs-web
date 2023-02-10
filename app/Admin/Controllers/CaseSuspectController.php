@@ -26,7 +26,7 @@ class CaseSuspectController extends AdminController
      */
     protected $title = 'Suspects';
 
-    /**
+    /** 
      * Make a grid builder.
      *
      * @return Grid
@@ -35,10 +35,12 @@ class CaseSuspectController extends AdminController
     {
         $statuses = [1, 2, 3];
 
+        
+
         if (Utils::hasPendingCase(Auth::user()) != null) {
             // return redirect(admin_url('case-suspects/create'));
         }
-
+ 
 
         /* $statuses_2 =  [true, false];
        foreach (CaseSuspect::all() as $key => $s) {
@@ -152,6 +154,30 @@ class CaseSuspectController extends AdminController
 
 
         $grid = new Grid(new CaseSuspect());
+
+        $grid->export(function ($export) {
+
+            $export->filename('Cases.csv');
+
+            $export->except(['photo_url','action']);
+
+            // $export->only(['column3', 'column4' ...]);
+
+           /*  $export->originalValue(['suspects_count', 'exhibit_count']);
+            $export->column('status', function ($value, $original) {
+
+                if ($value == 0) {
+                    return 'Pending';
+                } else if ($value == 1) {
+                    return 'Active';
+                } {
+                }
+                return 'Closed';
+            }); */
+        });
+
+
+
         $grid->disableBatchActions();
         $grid->disableActions();
         $grid->disableCreateButton();

@@ -4,6 +4,7 @@ namespace Encore\Admin\Controllers;
 
 use App\Models\Enterprise;
 use App\Models\Location;
+use App\Models\PA;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
 use Encore\Admin\Form;
@@ -81,14 +82,14 @@ Edit Edit
             return Utils::my_date($f);
         });
 
-
+/* 
         $grid->column('district_id', 'District')->display(function ($id) {
             return Utils::get(Location::class, $id)->name_text;
         })->sortable();
         $grid->column('sub_county_id', 'Sub county')->display(function ($id) {
             return Utils::get(Location::class, $id)->name_text;
         })->sortable();
-
+ */
 
 
         $grid->column('email', 'email address');
@@ -177,12 +178,12 @@ Edit Edit
         $form->text('phone_number_1', 'Phone number')->rules('required');
         $form->text('phone_number_2', 'Phone number 2');
 
-        $form->select('sub_county_id', __('Sub county'))
+        $form->select('sub_county_id', __('Duty station'))
             ->rules('required')
-            ->help('Where this suspect originally lives')
-            ->options(Location::get_sub_counties_array());
+            ->help('Protected area where  user is assigned') 
+            ->options(PA::all()->pluck('name_text', 'id'));
 
-        $form->text('address', 'Address line');
+        $form->text('address', 'UWA staff number');
         $form->divider();
 
         $form->email('email', 'Email address')

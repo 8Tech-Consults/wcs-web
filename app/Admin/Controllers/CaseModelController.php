@@ -150,6 +150,14 @@ class CaseModelController extends AdminController
             ->sortable();
 
 
+        $grid->column('ca_id', __('CA'))
+            ->display(function () {
+                if($this->ca == null){
+                    return  "-"; 
+                }
+                return $this->ca->name;
+            })
+            ->sortable();
         $grid->column('district_id', __('District'))
             ->display(function () {
                 return $this->district->name;

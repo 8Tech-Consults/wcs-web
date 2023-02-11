@@ -37,6 +37,8 @@ class CaseSuspectController extends AdminController
         $statuses = [1, 2, 3];
 
 
+
+
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
@@ -168,6 +170,27 @@ class CaseSuspectController extends AdminController
         $grid = new Grid(new CaseSuspect());
 
 
+        $grid->export(function ($export) {
+
+            $export->filename('Cases.csv');
+
+            $export->except(['actions']);
+
+            // $export->only(['column3', 'column4' ...]);
+
+            $export->originalValue(['suspects_count', 'exhibit_count']);
+            $export->column('status', function ($value, $original) {
+
+                if ($value == 0) {
+                    return 'Pending';
+                } else if ($value == 1) {
+                    return 'Active';
+                } {
+                }
+                return 'Closed';
+            });
+        });
+
 
 
         $grid->export(function ($export) {
@@ -175,10 +198,23 @@ class CaseSuspectController extends AdminController
             $export->filename('Cases.csv');
 
             $export->except(['photo_url', 'action']);
+            // $export->originalValue(['is_jailed']);
+
+            $export->column('is_jailed', function ($value, $original) {
+                if ($original) {
+                    return 'Jailed';
+                } else {
+                    return 'Not jailed';
+                }
+            });
+
+            $export->column('national_id_number', function ($value, $original) {
+                return 'CM' . $original;
+            });
 
             // $export->only(['column3', 'column4' ...]);
 
-            /*  $export->originalValue(['suspects_count', 'exhibit_count']);
+            /*  
             $export->column('status', function ($value, $original) {
 
                 if ($value == 0) {
@@ -315,36 +351,7 @@ class CaseSuspectController extends AdminController
             ->display(function ($x) {
                 return $this->case->title;
             })
-            ->sortable();
-
-
-        $grid->column('status', __('Interest'))
-            ->sortable()
-            ->using([
-                1 => 'Case of interest',
-                0 => 'NOT case of interest',
-            ], 'Not in Court')->dot([
-                null => 'danger',
-                1 => 'danger',
-                0 => 'success',
-            ], 'danger')
-            ->filter([
-                1 => 'Case of interest',
-                0 => 'NOT case of interest',
-            ]);
-
-
-
-        $grid->column('is_jailed', __('Jailed'))
-            ->sortable()
-            ->using([
-                0 => 'Not Jailed',
-                1 => 'Jailed',
-            ],)->label([
-                null => 'danger',
-                0 => 'danger',
-                1 => 'success',
-            ], 'danger');
+            ->sortable(); 
 
         $grid->column('action', __('Actions'))->display(function () {
 
@@ -354,6 +361,124 @@ class CaseSuspectController extends AdminController
             <i class="fa fa-edit"></i> Edit</a>';
             return $view_link . $edit_link;
         });
+
+
+        $grid->column('ethnicity')->hide()->sortable();
+        $grid->column('parish')->hide()->sortable();
+        $grid->column('village')->hide()->sortable();
+        $grid->column('is_suspects_arrested', 'Is arrested')
+            ->using([
+                1 => 'Arrested',
+                0 => 'Not arrested',
+            ])
+            ->sortable();
+        $grid->column('arrest_date_time', 'Arrest date')
+            ->hide()
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+        $grid->column('arrest_district_id', __('District'))
+            ->display(function ($x) {
+                return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
+            })
+            ->hide()
+            ->sortable();
+
+        $grid->column('arrest_sub_county_id', __('Sub-county'))
+            ->display(function ($x) {
+                return Utils::get(Location::class, $this->arrest_sub_county_id)->name;
+            })
+            ->hide()
+            ->sortable();
+
+        $grid->column('arrest_parish')->hide()->sortable();
+        $grid->column('arrest_village')->hide()->sortable();
+        $grid->column('arrest_latitude', 'Arrest GPS latitude')->hide()->sortable();
+        $grid->column('arrest_longitude', 'Arrest GPS longitude')->hide()->sortable();
+        $grid->column('arrest_first_police_station', 'First police station')->hide()->sortable();
+        $grid->column('arrest_current_police_station', 'Current police station')->hide()->sortable();
+        $grid->column('arrest_agency', 'Arrest agency')->hide()->sortable();
+        $grid->column('arrest_uwa_unit')->hide()->sortable();
+        $grid->column('arrest_crb_number')->hide()->sortable();
+
+
+        $grid->column('is_suspect_appear_in_court', __('In court'))
+            ->display(function ($x) {
+                if ($x) {
+                    return 'In court';
+                } else {
+                    return 'Not in court';
+                }
+            })
+            ->hide()
+            ->sortable();
+            $grid->column('court_date', 'Court date')
+            ->hide()
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+
+        $grid->column('prosecutor')->hide()->sortable();
+
+        $grid->column('is_convicted', __('Is convicted'))
+            ->display(function ($x) {
+                if ($x) {
+                    return 'Convicted';
+                } else {
+                    return 'Not convicted';
+                }
+            })
+            ->hide()
+            ->sortable();
+
+        $grid->column('case_outcome', 'Court outcome')->hide()->sortable();
+        $grid->column('magistrate_name')->hide()->sortable();
+        $grid->column('court_name')->hide()->sortable();
+        $grid->column('court_file_number')->hide()->sortable();
+
+
+        $grid->column('is_jailed', __('Jailed'))
+
+            ->display(function ($is_jailed) {
+                if ($is_jailed) {
+                    return 'Jailed';
+                } else {
+                    return 'Not jailed';
+                }
+            })
+            ->dot([
+                null => 'danger',
+                1 => 'danger',
+                0 => 'success',
+            ], 'danger')
+            ->filter([
+                1 => 'Jailed',
+                0 => 'Not Jailed',
+            ]);
+
+            $grid->column('jail_date', 'Arrest date')
+            ->hide()
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+
+        $grid->column('jail_period')->hide()->sortable();
+        $grid->column('is_fined', 'Is fined')
+            ->using([
+                1 => 'Fined',
+                0 => 'Not fined',
+            ])
+            ->sortable();
+        $grid->column('fined_amount')->hide()->sortable();
+        $grid->column('management_action')->hide()->sortable();
+        $grid->column('community_service')->hide()->sortable();
+
+        $grid->column('reported_by', __('Reported by'))
+        ->display(function () {
+          
+            return $this->case->reportor->name;
+        })->hide()
+        ->sortable();  
         $grid->actions(function ($actions) {
             $actions->disableDelete();
         });

@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Exhibit;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -26,10 +27,20 @@ class ExhibitController extends AdminController
     {
         $grid = new Grid(new Exhibit());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('case_id', __('Case id'));
+        $grid->disableCreateButton();
+        $grid->disableActions();
+        $grid->disableBatchActions();
+        $grid->column('id', __('ID'))->sortable()->hide();
+        $grid->column('created_at', __('Date'))->hide()
+            ->display(function ($x) {
+                return Utils::my_date_time($x);
+            })
+            ->sortable();
+        $grid->column('case_id', __('Case'))
+            ->display(function ($x) {
+                return $this->case_model->title;
+            })
+            ->sortable();
         $grid->column('exhibit_catgory', __('Exhibit category'));
         $grid->column('wildlife', __('Wildlife'));
         $grid->column('implements', __('Implements'));

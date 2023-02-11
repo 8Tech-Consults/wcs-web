@@ -40,6 +40,7 @@ class CaseModel extends Model
                 }
             }
             $m->offence_description = $m->title;
+            $m->case_step = 1;
 
             return $m;
         });
@@ -143,6 +144,11 @@ class CaseModel extends Model
     }
     function ca()
     {
+        $ca =  ConservationArea::find($this->ca_id);
+        if($ca == null){
+            $this->ca_id = 1;
+            $this->save();
+        } 
         return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
 
@@ -181,12 +187,14 @@ class CaseModel extends Model
         return $this->hasMany(CaseSuspect::class, 'case_id');
     }
 
-    public function getSuspectsCountAttribute(){
-        return CaseSuspect::where('case_id',$this->id)->count();
+    public function getSuspectsCountAttribute()
+    {
+        return CaseSuspect::where('case_id', $this->id)->count();
     }
-    
-    public function getExhibitCountAttribute(){
-        return Exhibit::where('case_id',$this->id)->count();
+
+    public function getExhibitCountAttribute()
+    {
+        return Exhibit::where('case_id', $this->id)->count();
     }
 
 
@@ -241,5 +249,5 @@ class CaseModel extends Model
         return "logo.png";
     }
 
-    protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo','suspects_count','exhibit_count'];
+    protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo', 'suspects_count', 'exhibit_count'];
 }

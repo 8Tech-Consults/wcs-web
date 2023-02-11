@@ -1,0 +1,27 @@
+.content-header small,.breadcrumb{
+    display: none!important;
+}
+.box-header {
+    display: none!important;
+}
+.box {
+    border: none!important;
+}
+*{
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif,system-ui, -apple-system, BlinkMacSystemFont;
+}
+.my-steppers div{
+    border-bottom: 5px solid rgb(186, 186, 186);
+    line-height: 1.5rem;
+    padding: 0;
+    margin-top: 1rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: gray;
+    text-align: center;
+}
+.my-steppers .active-step{
+    border-bottom: 6px solid var(--primary);
+    color: black;
+}

@@ -1,5 +1,7 @@
 $(document).ready(function () {
     $(document).on("ready pjax:success", function () {
+ 
+        return;
         $("#add_anothe_suspect").click(function (e) {
             e.preventDefault();
 

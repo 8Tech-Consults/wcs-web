@@ -18,9 +18,17 @@ class CaseSuspect extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            die("Ooops! You cannot delete this item.");
         });
 
+        self::creating(function ($m) {
+            $m->case->case_step = 1;
+            if ($m->add_more_suspects == 'No') {
+                if ($m->case != null) {
+                    $m->case->case_step = 2;
+                    $m->case->save();
+                }
+            }
+        });
         self::creating(function ($m) {
             $case = CaseModel::find($m->case_id);
 
@@ -92,6 +100,7 @@ class CaseSuspect extends Model
     }
     function offences()
     {
+        return $this->belongsToMany(Offence::class, 'suspect_has_offences');
         return $this->hasMany(SuspectHasOffence::class, 'suspect_id');
     }
 

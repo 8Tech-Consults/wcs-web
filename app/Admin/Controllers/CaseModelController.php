@@ -42,8 +42,23 @@ class CaseModelController extends AdminController
     protected function grid()
     {
 
-        $grid = new Grid(new CaseModel());
+ 
+        $pendingCase = Utils::hasPendingCase(Auth::user());
+        if ($pendingCase != null) {
+            if ($pendingCase->case_step == 1) {
+                return redirect(admin_url('new-case-suspects/create'));
+            } else if ($pendingCase->case_step == 2) {
+                return redirect(admin_url('new-case-suspects/create'));
+            } else if ($pendingCase->case_step == 3) {
+                return redirect(admin_url('new-case-suspects/create'));
+                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
+            }  
+            //dd($pendingCase); 
+        }
 
+
+        $grid = new Grid(new CaseModel());
+        $grid->disableCreateButton();
 
         $grid->model()->orderBy('id', 'Desc');
 
@@ -263,7 +278,7 @@ class CaseModelController extends AdminController
     {
 
 
-
+        
         /* 
         
         */
@@ -360,10 +375,10 @@ class CaseModelController extends AdminController
                     1 => 'Yes',
                     0 => 'No',
                 ])
-                ->default(null) 
+                ->default(null)
                 ->when(0, function (Form $form) {
 
-                    $form->select('conservation_area_id', __('Nearest conservation area'))
+                    $form->select('ca_id', __('Nearest conservation area'))
                         ->rules('required')
                         ->options(ConservationArea::all()->pluck('name', 'id'));
 

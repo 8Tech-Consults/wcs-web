@@ -76,21 +76,19 @@ class Utils  extends Model
             'reported_by' => null
         ])->get();
         foreach ($cases as $key => $sus) {
-            if($sus->case!=null){
+            if ($sus->case != null) {
                 $sus->reported_by = $sus->case->reported_by;
                 $sus->save();
-            }  
-        
-        
+            }
         }
         $cases = Exhibit::where([
             'reported_by' => null
         ])->get();
         foreach ($cases as $key => $sus) {
-            if($sus->case_model!=null){
+            if ($sus->case_model != null) {
                 $sus->reported_by = $sus->case_model->reported_by;
                 $sus->save();
-            }  
+            }
         }
 
         $cases = CaseModel::where([
@@ -113,7 +111,26 @@ class Utils  extends Model
     }
     public static function hasPendingCase($u)
     {
-        return null;
+        $case =  CaseModel::where([
+            'case_submitted' => 0,
+            "reported_by" => $u->id
+        ])
+            ->orderBy('id', 'Desc')
+            ->first();
+        if ($case == null) {
+            return null;
+        }
+
+        if ($case->exhibits != null) {
+            if (count($case->exhibits) > 0) {
+                if ($case->case_step < 3) {
+                    $case->case_step = 3;
+                    $case->save();
+                }
+            }
+        }
+        return $case;
+
         $sql = DB::select("SELECT * FROM case_models WHERE reported_by = {$u->id} AND (SELECT count(id) FROM case_suspects WHERE case_id = case_models.id) < 1");
         if (count($sql) > 0) {
             $case = CaseModel::find($sql[0]->id);

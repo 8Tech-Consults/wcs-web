@@ -25,4 +25,11 @@ Route::group([
     $router->resource('p-as', PaController::class);
     $router->resource('offences', OffenceController::class);
     $router->resource('conservation-areas', ConservationAreaController::class);
+
+    $router->resource('new-case', NewCaseModelController::class);
+    $router->resource('new-case-suspects', NewCaseSuspectController::class);
+    $router->resource('new-exhibits-case-models', NewExhibitsCaseModelController::class); 
+    $router->resource('new-confirm-case-models', NewConfirmCaseModelController::class); 
+
+    $router->get('forms/settings', 'FormController@settings');  
 });

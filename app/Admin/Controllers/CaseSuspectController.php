@@ -37,6 +37,17 @@ class CaseSuspectController extends AdminController
         $statuses = [1, 2, 3];
 
 
+        $pendingCase = Utils::hasPendingCase(Auth::user());
+        if ($pendingCase != null) {
+            if ($pendingCase->case_step == 1) {
+                return redirect(admin_url('new-case-suspects/create'));
+            } else if ($pendingCase->case_step == 2) {
+                die("step 2");
+            } else if ($pendingCase->case_step == 3) {
+            } else {
+            }
+            //dd($pendingCase);
+        }
 
         if (Utils::hasPendingCase(Auth::user()) != null) {
             // return redirect(admin_url('case-suspects/create'));

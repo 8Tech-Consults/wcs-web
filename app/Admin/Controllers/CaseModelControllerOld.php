@@ -262,7 +262,7 @@ class CaseModelController extends AdminController
                 ->default(null)
                 ->when(0, function (Form $form) {
 
-                    $form->select('conservation_area_id', __('Nearest conservation area'))
+                    $form->select('ca_id', __('Nearest conservation area'))
                         ->rules('required')
                         ->options(ConservationArea::all()->pluck('name', 'id'));
 

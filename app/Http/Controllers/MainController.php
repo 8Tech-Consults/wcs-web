@@ -113,6 +113,7 @@ class MainController extends Controller
         }
 
         if ($success) {
+            $message = "We have sent a secret code to your email address {$u->email}. Check your email  inbox or spam and use that code to reset your password.";
             return redirect(url('password-forget-code'));
         }
 

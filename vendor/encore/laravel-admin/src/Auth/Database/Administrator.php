@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -165,4 +166,33 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
     {
         return [];
     }
+
+    
+    public function sendPasswordResetCode()
+    {        
+
+        $email = $this->email;
+
+        if ($email == null || strlen($email) < 3) {
+            $email = $this->username;
+        }
+
+        $this->code = rand(10000,99999);
+        $this->save();
+ 
+        try { 
+          
+            Mail::send('email_view', ['u' => $this], function ($m) use ($email) {
+                $m->to($email, $this->name)
+                    ->subject('UWA Offenders database - Password reset');
+                $m->from('info@8technologies.store', 'UWA Offenders database');
+            });
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+    }
+
+
+
 }

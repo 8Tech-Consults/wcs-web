@@ -176,7 +176,7 @@ class NewConfirmCaseModelController extends AdminController
         $form->html(view('case-exhibits-confirm', ['case' => $pendingCase]));
         $form->divider("confirm & submit");
 
-        $form->radio('case_submitted', 'Are you sure the information you have entered is corrected are ready to be submitted into the system?')
+        $form->radio('case_submitted', 'Are you sure you want to submit?')
             ->options([1 => 'Yes'])
             ->rules('required')
             ->required();

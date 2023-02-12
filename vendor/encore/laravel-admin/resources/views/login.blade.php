@@ -239,11 +239,11 @@
                                 @endif
 
                             </div>
-                        </div>
+                        </div> 
 
                         <button type="submit" class="btn  btn-lg my-btn-primary  w-100">Sign in</button>
                     </form>
-                    <a href="javascript:;" class="btn btn-link btn-lg w-100">Forgot your password?</a>
+                    <a href="{{ url('password-forget-email') }}" class="btn btn-link btn-lg w-100">Forgot your password?</a>
 
 
 

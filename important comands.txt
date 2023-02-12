@@ -37,6 +37,7 @@ php artisan admin:make ConservationAreaController --model=App\\Models\\Conservat
 php artisan admin:make NewCaseModelController --model=App\Models\CaseModel
 php artisan admin:make NewCaseSuspectController --model=App\Models\CaseSuspect
 php artisan admin:make NewExhibitsCaseModelController --model=App\Models\CaseModel
+php artisan admin:action CaseModel\\CaseModelActionAddSuspect --grid-row --name="Add suspect"
 
 
 --

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
@@ -11,6 +12,7 @@ use App\Models\PA;
 use App\Models\TempData;
 use App\Models\Utils;
 use Carbon\Carbon;
+use Encore\Admin\Actions\RowAction;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -20,6 +22,24 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\InfoBox;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
+
+
+class AddSuspectAction extends RowAction
+{
+    public $name = 'Add suspect';
+
+
+
+    public function handle(Model $model)
+    {
+        return $this->response()->success('Success!')->redirect('/admin/users');
+        // Here the model's `replicate` method is called to copy the data, then call the `save` method to save it.
+        $model->replicate()->save();
+
+        // return a success message with the content "copy success" and refresh the page
+        return $this->response()->success('copy success.')->refresh();
+    }
+}
 
 class CaseModelController extends AdminController
 {
@@ -39,10 +59,9 @@ class CaseModelController extends AdminController
 
 
 
+
     protected function grid()
     {
-
- 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
@@ -52,7 +71,7 @@ class CaseModelController extends AdminController
             } else if ($pendingCase->case_step == 3) {
                 return redirect(admin_url('new-case-suspects/create'));
                 return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
-            }  
+            }
             //dd($pendingCase); 
         }
 
@@ -65,6 +84,7 @@ class CaseModelController extends AdminController
         $u = Auth::user();
 
         if ($u->isRole('ca-agent')) {
+
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
@@ -136,10 +156,14 @@ class CaseModelController extends AdminController
 
 
         $grid->disableBatchActions();
-        $grid->disableActions();
+        //$grid->disableActions();
+
         $grid->actions(function ($actions) {
             $actions->disableDelete();
+            $actions->add(new CaseModelActionAddSuspect);
         });
+
+
 
         $grid->quickSearch('title')->placeholder("Search by case title...");
 
@@ -174,12 +198,14 @@ class CaseModelController extends AdminController
             })
             ->sortable();
         $grid->column('district_id', __('District'))
+            ->hide()
             ->display(function () {
                 return $this->district->name;
             })
             ->sortable();
 
         $grid->column('sub_county_id', __('Sub-county'))
+            ->hide()
             ->display(function () {
                 return $this->sub_county->name;
             })
@@ -214,7 +240,7 @@ class CaseModelController extends AdminController
             ], 'danger');
 
 
-        $grid->column('actions', __('Actions'))->display(function () {
+        /*  $grid->column('actions', __('Actions'))->display(function () {
             $view_link = '<a class="" href="' . url("cases/{$this->id}") . '">
                 <i class="fa fa-eye"></i> View case details</a>';
 
@@ -229,7 +255,7 @@ class CaseModelController extends AdminController
                 <i class="fa fa-user-plus"></i> Add case suspect</a>';
 
             return $view_link . $suspetcs_link . $edit_link . $add_link;
-        });
+        }); */
         return $grid;
     }
 
@@ -278,7 +304,7 @@ class CaseModelController extends AdminController
     {
 
 
-        
+
         /* 
         
         */
@@ -351,9 +377,9 @@ class CaseModelController extends AdminController
         $form->tab('Offence', function (Form $form) {
 
 
-            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+            /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
                 ->help("Select offences involded in this case")
-                ->rules('required');
+                ->rules('required'); */
 
 
             $form->text('title', __('Offence description'))
@@ -643,6 +669,16 @@ class CaseModelController extends AdminController
                 $form->text('body', __('Progress comment'))->rules('required');
             });
         });
+
+
+        /*        $form->tab('Case progress AddSuspectAction', function (Form $form) {
+            $form->morphMany('AddSuspectAction', 'Click on new to add a case progress comment', function (Form\NestedForm $form) {
+                $u = Admin::user();
+                $form->hidden('comment_by')->default($u->id);
+
+                $form->text('body', __('Progress comment'))->rules('required');
+            });
+        }); */
 
 
 

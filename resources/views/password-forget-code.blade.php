@@ -122,7 +122,7 @@ use App\Models\Utils;
                 <div class="login-logo">
                     {{-- <h2>Log in to your account</h2> --}}
 
-                    <img class="img-fluid center " width="90%" src="{{ url('assets/logo.png') }}" alt="">
+                    <a href="{{ url('') }}" title="Home"><img class="img-fluid center " width="90%" src="{{ url('assets/logo.png') }}" alt=""></a>
 
                     <br>
                     <hr width="20%" class="bg-primary text-primary">

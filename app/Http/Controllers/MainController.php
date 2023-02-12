@@ -19,6 +19,20 @@ class MainController extends Controller
         return view('password-forget-email');
     }
 
+    public function two_f_auth()
+    {
+        session_start();
+        $email = "";
+        if (isset($_SESSION['reset_email'])) {
+            if ($_SESSION['reset_email'] != null) {
+                if (strlen($_SESSION['reset_email']) > 3) {
+                    $email = $_SESSION['reset_email'];
+                }
+            }
+        }
+        return view('2f-code', ['email' => $email]);
+    }
+
     public function password_forget_code()
     {
         session_start();
@@ -98,7 +112,7 @@ class MainController extends Controller
 
         session_start();
         $_SESSION['reset_email'] = $r->username;
- 
+
 
 
         $success = false;
@@ -114,7 +128,7 @@ class MainController extends Controller
 
         if ($success) {
             $message = "We have sent a secret code to your email address {$u->email}. Check your email  inbox or spam and use that code to reset your password.";
-            $_SESSION['reset_message'] = $message; 
+            $_SESSION['reset_message'] = $message;
             return redirect(url('password-forget-code'));
         }
 

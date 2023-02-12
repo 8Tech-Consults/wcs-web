@@ -35,7 +35,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         self::creating(function ($model) {
             $model->name = "{$model->name} {$model->middle_name} {$model->last_name}";
 
-            if($model->username == null){
+            if ($model->username == null) {
                 $model->username = $model->email;
             }
 
@@ -167,9 +167,10 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         return [];
     }
 
-    
-    public function sendPasswordResetCode()
-    {        
+
+    public function send2FCode()
+    {
+
 
         $email = $this->email;
 
@@ -177,11 +178,34 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
             $email = $this->username;
         }
 
-        $this->code = rand(10000,99999);
+        $this->code = rand(10000000, 99999999);
         $this->save();
  
-        try { 
-          
+        try {
+            Mail::send('email_2f_view', ['u' => $this], function ($m) use ($email) {
+                $m->to($email, $this->name)
+                    ->subject('UWA Offenders database - 2 factor authentication');
+                $m->from('info@8technologies.cloud', 'UWA Offenders database');
+            }); 
+        } catch (\Throwable $th) {
+            $msg = 'failed';
+            throw $th;
+        } 
+    }
+
+    public function sendPasswordResetCode()
+    {
+        $email = $this->email;
+
+        if ($email == null || strlen($email) < 3) {
+            $email = $this->username;
+        }
+
+        $this->code = rand(10000, 99999);
+        $this->save();
+
+        try {
+
             Mail::send('email_view', ['u' => $this], function ($m) use ($email) {
                 $m->to($email, $this->name)
                     ->subject('UWA Offenders database - Password reset');
@@ -190,9 +214,5 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         } catch (\Throwable $th) {
             throw $th;
         }
-
     }
-
-
-
 }

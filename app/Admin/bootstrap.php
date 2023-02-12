@@ -23,12 +23,36 @@ use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
 use App\Models\Utils;
 use Illuminate\Support\Facades\Auth;
-Admin::js('/js/CaseModelController.js'); 
+
+Admin::js('/js/CaseModelController.js');
 
 Encore\Admin\Form::forget(['map', 'editor']);
 
 
 $u = Auth::user();
+if ($u != null) {
+
+    if (isset($_GET['resend_2f_code'])) {
+
+        $u->send2FCode();
+        header('Location: ' . url('2fauth'));
+    }
+    if (isset($_GET['log_me_out'])) {
+        $u->code == null;
+        $u->authenticated = 0;
+        $u->save();
+        Auth::logout();
+        header('Location: ' . url('/'));
+    }
+
+    if (!$u->authenticated) {
+        if ($u->code == null) {
+            $u->send2FCode();
+        }
+        header('Location: ' . url('2fauth'));
+        die();
+    }
+}
 Utils::system_boot($u);
 
 

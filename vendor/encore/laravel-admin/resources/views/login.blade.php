@@ -1,3 +1,19 @@
+<?php
+
+$hasResetMessage = false;
+$resetMessage = '';
+
+if (isset($_SESSION['reset_message'])) {
+    if (strlen($_SESSION['reset_message']) > 3) {
+        $resetMessage = $_SESSION['reset_message'];
+        $hasResetMessage = true;
+        unset($_SESSION['reset_message']);
+    }
+}
+
+use App\Models\Utils;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -203,6 +219,10 @@
 
                     <form class="needs-validation mb-2" action="{{ admin_url('auth/login') }}" method="post">
 
+                        @if ($hasResetMessage)
+                            <div class="alert alert-success">{{ $resetMessage }}</div>
+                        @endif
+
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                         <div class="position-relative mb-4">
@@ -239,11 +259,12 @@
                                 @endif
 
                             </div>
-                        </div> 
+                        </div>
 
                         <button type="submit" class="btn  btn-lg my-btn-primary  w-100">Sign in</button>
                     </form>
-                    <a href="{{ url('password-forget-email') }}" class="btn btn-link btn-lg w-100">Forgot your password?</a>
+                    <a href="{{ url('password-forget-email') }}" class="btn btn-link btn-lg w-100">Forgot your
+                        password?</a>
 
 
 

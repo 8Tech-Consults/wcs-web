@@ -351,7 +351,7 @@ class CaseSuspectController extends AdminController
             ->display(function ($x) {
                 return $this->case->title;
             })
-            ->sortable(); 
+            ->sortable();
 
         $grid->column('action', __('Actions'))->display(function () {
 
@@ -412,7 +412,7 @@ class CaseSuspectController extends AdminController
             })
             ->hide()
             ->sortable();
-            $grid->column('court_date', 'Court date')
+        $grid->column('court_date', 'Court date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
@@ -456,7 +456,7 @@ class CaseSuspectController extends AdminController
                 0 => 'Not Jailed',
             ]);
 
-            $grid->column('jail_date', 'Arrest date')
+        $grid->column('jail_date', 'Arrest date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
@@ -474,11 +474,11 @@ class CaseSuspectController extends AdminController
         $grid->column('community_service')->hide()->sortable();
 
         $grid->column('reported_by', __('Reported by'))
-        ->display(function () {
-          
-            return $this->case->reportor->name;
-        })->hide()
-        ->sortable();  
+            ->display(function () {
+
+                return $this->case->reportor->name;
+            })->hide()
+            ->sortable();
         $grid->actions(function ($actions) {
             $actions->disableDelete();
         });
@@ -663,12 +663,18 @@ class CaseSuspectController extends AdminController
 
         $form->divider('Offences');
 
-        $form->morphMany('offences', 'Click on new to add offence', function (Form\NestedForm $form) {
+
+        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+            ->help("Select offences involded in this case")
+            ->rules('required');
+
+
+        /*    $form->morphMany('offences', 'Click on new to add offence', function (Form\NestedForm $form) {
             $offences = Offence::all()->pluck('name', 'id');
             $form->select('offence_id', 'Select offence')->rules('required')->options($offences);
             $form->text('vadict', __('Vadict'));
         });
-
+ */
         $form->divider('Arrest information');
         $form->radio('is_suspects_arrested', "Is this suspect arrested?")
             ->options([

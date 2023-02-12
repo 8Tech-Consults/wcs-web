@@ -11,6 +11,7 @@ class SuspectHasOffence extends Model
         'case_id',
         'offence_id',
         'suspect_id', 
+        'vadict', 
     ];  
     use HasFactory;
 }

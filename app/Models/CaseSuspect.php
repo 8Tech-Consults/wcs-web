@@ -104,6 +104,23 @@ class CaseSuspect extends Model
         return $this->hasMany(SuspectHasOffence::class, 'suspect_id');
     }
 
+
+    function vaditcs()
+    {
+        return $this->hasMany(SuspectHasOffence::class, 'case_suspect_id');
+    }
+
+    function ca()
+    {
+        $ca =  ConservationArea::find($this->ca_id);
+        if($ca == null){
+            $this->ca_id = 1;
+            $this->save();
+        } 
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
+    }
+
+
     function case()
     {
         return $this->belongsTo(CaseModel::class, 'case_id');

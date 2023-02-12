@@ -113,6 +113,8 @@ class CourtsController extends AdminController
         $grid->disableCreateButton();
         $grid->disableActions();
 
+
+
         $grid->model()
             ->where([
                 'is_suspect_appear_in_court' => 1
@@ -122,6 +124,14 @@ class CourtsController extends AdminController
         if ($u->isRole('ca-agent')) {
             $grid->model()->where([
                 'reported_by' => $u->id
+            ]);
+        } else if ($u->isRole('ca-team')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        } else if (!$u->isRole('admin')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
             ]);
         }
 
@@ -162,6 +172,14 @@ class CourtsController extends AdminController
         $grid->model()->orderBy('id', 'Desc');
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
+        $grid->column('ca_id', __('CA'))
+            ->display(function () {
+                if ($this->ca == null) {
+                    return  "-";
+                }
+                return $this->ca->name;
+            })
+            ->sortable();
 
 
         $grid->model()->orderBy('id', 'Desc');
@@ -263,10 +281,10 @@ class CourtsController extends AdminController
                 } else {
                     return 'Not in court';
                 }
-            }) 
+            })
             ->sortable();
         $grid->column('court_date', 'Court date')
-    
+
             ->display(function ($d) {
                 return Utils::my_date($d);
             });

@@ -54,17 +54,26 @@ class ArrestsController extends AdminController
         if (Utils::hasPendingCase(Auth::user()) != null) {
             // return redirect(admin_url('case-suspects/create'));
         }
-
-
-
-
-
+ 
         $grid = new Grid(new CaseSuspect());
-
+        $u = Auth::user();
+        if ($u->isRole('ca-agent')) {
+            $grid->model()->where([
+                'reported_by' => $u->id
+            ]);
+        } else if ($u->isRole('ca-team')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        } else if (!$u->isRole('admin')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        } 
 
         $grid->export(function ($export) {
 
-            $export->filename('Cases.csv');
+            $export->filename('Suspects.csv');
 
             $export->except(['actions']);
 

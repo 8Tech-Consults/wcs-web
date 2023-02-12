@@ -36,134 +36,21 @@ class CaseSuspectController extends AdminController
     {
         $statuses = [1, 2, 3];
 
-
-
+        $seg = "";
+        $segments = request()->segments();
+        if (in_array('case-suspects', $segments)) {
+            $seg = "suspects";
+        } else {
+        }
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 2) {
-                die("step 2");
-            } else if ($pendingCase->case_step == 3) {
-            } else {
+                return redirect(admin_url("new-case-suspects/{$pendingCase->id}/edit"));
             }
+            return redirect(admin_url("new-case-suspects/{$pendingCase->id}/edit"));
             //dd($pendingCase);
         }
-
-        if (Utils::hasPendingCase(Auth::user()) != null) {
-            // return redirect(admin_url('case-suspects/create'));
-        }
-
-
-        /* $statuses_2 =  [true, false];
-       foreach (CaseSuspect::all() as $key => $s) {
-            shuffle($statuses); 
-            shuffle($statuses_2); 
-            $s->is_suspects_arrested =           $statuses_2[0];
-            shuffle($statuses_2); 
-            $s->is_jailed =           $statuses_2[0];
-          
-            shuffle($statuses_2); 
-            $s->is_suspect_appear_in_court =           $statuses_2[0];
-          
-            //$s->photo = ((rand(1000,10000)%20)+1) .".jpg";
-            $s->save();
-        }   */
-
-        /*
-
-        $faker = Faker::create();
-        $admins = Administrator::all()->pluck('id');
-        $_admins = [0, 1, 2, 4, 5, 6, 7, 8];
-        $sub_counties =  [];
-        $statuses =  [true, false];
-        $sex =  ['Male', 'Female'];
-        $countries =  Utils::COUNTRIES();
-        $titles =  [
-            'Found with 3 pairs of rhino tails.',
-            'Killing of 6 lions and 2 elephants.',
-            'Killed hippopotamus.',
-            'Found with 20 live pangolins.',
-            'Found with 11 crowned crane birds.',
-        ];
-
-        $parishes =  [
-            'Kinoni', 'Ntusi', 'Lwemiyaga', 'Kyankoko', 'Mugore', 'Lwebisya', 'Lyantonde', 'Kiruhura', 'Sembabule',
-            'Adumi', 'Ajia', 'Arivu', 'Aroi', 'Arua Hill', 'Dadamu', 'Logiri', 'Manibe', 'Offaka'
-        ];
-        $ethnicity =  [
-            'Musoga', 'Mugishu', 'Mukonzo', 'Muganda', 'Munyankole', 'Mucholi', 'Muchiga'
-        ];
-        foreach (Location::get_sub_counties() as $v) {
-            $sub_counties[] = $v->id;
-        }
-
-        $cases = [];
-        foreach (CaseModel::all() as $v) {
-            $cases[] = $v->id;
-        }
-
-        for ($i = 0; $i < 1000; $i++) {
-            shuffle($_admins);
-            shuffle($sub_counties);
-            shuffle($parishes);
-            shuffle($statuses);
-            shuffle($titles);
-            shuffle($cases);
-            shuffle($sex);
-            shuffle($ethnicity);
-            shuffle($countries);
-            $s = new CaseSuspect();
-            $s->case_id = $cases[2];
-            $s->arrest_uwa_number =  "AR-" . $faker->randomNumber(5, false);
-            $s->first_name =   $faker->firstName(0);
-            $s->last_name =   $faker->lastName(0);
-            $s->middle_name =   '';
-            $s->phone_number =   $faker->e164PhoneNumber;
-            $s->national_id_number =   $faker->numberBetween(100000000000000, 1000000000000000);
-            $s->arrest_crb_number =   $faker->numberBetween(1000000000, 10000000000);
-            $s->court_file_number =   $faker->numberBetween(1000000, 100000000);
-            $s->sex =   $sex[0];
-            $s->age = $faker->date();
-            $s->occuptaion = $faker->jobTitle();
-            $s->country =   $countries[0];
-            $s->sub_county_id =   $sub_counties[0];
-            $s->parish =   $parishes[0];
-            $s->village =   $parishes[2];
-            $s->ethnicity =   $ethnicity[2];
-            $s->finger_prints =  '';
-            $s->is_suspects_arrested =  false;
-            $s->is_suspect_appear_in_court =  false;
-            $s->arrest_date_time = $faker->date();
-            $s->arrest_sub_county_id =   $sub_counties[0];
-            $s->arrest_parish =   $parishes[2];
-            $s->arrest_village =   $parishes[2];
-            $s->prosecutor =   $faker->name();
-            $s->arrest_first_police_station =   $parishes[2] . " Police post";
-            $s->arrest_current_police_station =   $parishes[2] . " Police post";
-            $s->arrest_agency =   $parishes[2] . " Police post";
-            $s->court_name =   $parishes[2] . " Court";
-            $s->arrest_latitude =   '0.615085';
-            $s->arrest_longitude =   '30.391306';
-            $s->arrest_uwa_unit =   '-';
-            $s->arrest_detection_method =   'Prison cell';
-            $s->case_outcome =  "Charged";
-            $s->magistrate_name =   $faker->name();
-            $s->is_jailed =  $statuses[0];
-            shuffle($statuses);
-            $s->jail_period =  $statuses[0];
-            shuffle($statuses);
-            $s->jail_period =  $statuses[0];
-            shuffle($statuses);
-            $s->is_fined =  $statuses[0];
-            shuffle($statuses);
-            $s->fined_amount =  $statuses[0];
-            shuffle($statuses);
-            $s->status =  $statuses[0];
-
-            $s->save();
-        }*/
 
 
 
@@ -171,12 +58,15 @@ class CaseSuspectController extends AdminController
 
 
         $u = Auth::user();
-
         if ($u->isRole('ca-agent')) {
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
         } else if ($u->isRole('ca-team')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        } else if (!$u->isRole('admin')) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ]);
@@ -261,6 +151,8 @@ class CaseSuspectController extends AdminController
                 ->ajax($ajax_url);
             $f->like('uwa_suspect_number', 'Filter by UWA Suspect number');
 
+
+
             $f->equal('country', 'Filter country of origin')->select(
                 Utils::COUNTRIES()
             );
@@ -311,8 +203,6 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
-        $grid->column('suspect_number', __('Suspect number'))
-            ->sortable();
 
         $grid->column('photo_url', __('Photo'))
             ->width(60)
@@ -322,6 +212,10 @@ class CaseSuspectController extends AdminController
                 return Utils::my_date_time($x);
             })
             ->sortable()->hide();
+        $grid->column('suspect_number', __('Suspect number'))
+            ->sortable();
+
+
 
         $grid->column('first_name', __('Name'))
             ->display(function ($x) {
@@ -330,16 +224,27 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
 
+
         $grid->column('sex', __('Sex'))
+            ->hide()
             ->filter([
                 'Male' => 'Male',
                 'Female' => 'Female',
             ])
             ->sortable();
-        $grid->column('national_id_number', __('NIN'));
-        $grid->column('phone_number', __('Phone number'));
+        $grid->column('national_id_number', __('NIN'))->hide();
+        $grid->column('phone_number', __('Phone number'))->hide();
         $grid->column('uwa_suspect_number', __('UWA suspect number'))->sortable();
-        $grid->column('occuptaion', __('Occuptaion'));
+
+        $grid->column('ca_id', __('CA'))
+            ->display(function () {
+                if ($this->ca == null) {
+                    return  "-";
+                }
+                return $this->ca->name;
+            })
+            ->sortable();
+        $grid->column('occuptaion', __('Occuptaion'))->hide();
         $grid->column('country', __('Country'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             return $this->district->name;
@@ -350,17 +255,6 @@ class CaseSuspectController extends AdminController
                 return $this->case->title;
             })
             ->sortable();
-
-        $grid->column('action', __('Actions'))->display(function () {
-
-            $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
-            <i class="fa fa-eye"></i>View</a>';
-            $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '">
-            <i class="fa fa-edit"></i> Edit</a>';
-            return $view_link . $edit_link;
-        });
-
-
         $grid->column('ethnicity')->hide()->sortable();
         $grid->column('parish')->hide()->sortable();
         $grid->column('village')->hide()->sortable();
@@ -466,6 +360,7 @@ class CaseSuspectController extends AdminController
                 1 => 'Fined',
                 0 => 'Not fined',
             ])
+            ->hide()
             ->sortable();
         $grid->column('fined_amount')->hide()->sortable();
         $grid->column('management_action')->hide()->sortable();
@@ -480,6 +375,17 @@ class CaseSuspectController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableDelete();
         });
+
+
+        $grid->column('action', __('Actions'))->display(function () {
+
+            $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
+            <i class="fa fa-eye"></i>View</a>';
+            $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '">
+            <i class="fa fa-edit"></i> Edit</a>';
+            return $view_link . $edit_link;
+        });
+
         return $grid;
     }
 
@@ -659,13 +565,13 @@ class CaseSuspectController extends AdminController
         $form->text('village');
         $form->text('ethnicity');
 
-        $form->divider('Offences');
 
-
-        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-            ->help("Select offences involded in this case")
-            ->rules('required');
-
+        if ($form->isCreating()) {
+            $form->divider('Offences');
+            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                ->help("Select offences involded in this case")
+                ->rules('required');
+        }
 
         /*    $form->morphMany('offences', 'Click on new to add offence', function (Form\NestedForm $form) {
             $offences = Offence::all()->pluck('name', 'id');
@@ -761,6 +667,13 @@ class CaseSuspectController extends AdminController
                     ]);
 
 
+
+                $form->morphMany('vaditcs', 'Click on new to add offence with vadict', function (Form\NestedForm $form) {
+                    $offences = Offence::all()->pluck('name', 'id');
+                    $form->select('offence_id', 'Select offence')->rules('required')->options($offences);
+                    $form->text('vadict', __('Vadict'));
+                });
+
                 $form->select('case_outcome', 'Specific case status')->options([
                     'Charged' => 'Charged',
                     'Remand' => 'Remand',
@@ -814,3 +727,113 @@ class CaseSuspectController extends AdminController
         return $form;
     }
 }
+
+
+     /* $statuses_2 =  [true, false];
+       foreach (CaseSuspect::all() as $key => $s) {
+            shuffle($statuses); 
+            shuffle($statuses_2); 
+            $s->is_suspects_arrested =           $statuses_2[0];
+            shuffle($statuses_2); 
+            $s->is_jailed =           $statuses_2[0];
+          
+            shuffle($statuses_2); 
+            $s->is_suspect_appear_in_court =           $statuses_2[0];
+          
+            //$s->photo = ((rand(1000,10000)%20)+1) .".jpg";
+            $s->save();
+        }   */
+
+        /*
+
+        $faker = Faker::create();
+        $admins = Administrator::all()->pluck('id');
+        $_admins = [0, 1, 2, 4, 5, 6, 7, 8];
+        $sub_counties =  [];
+        $statuses =  [true, false];
+        $sex =  ['Male', 'Female'];
+        $countries =  Utils::COUNTRIES();
+        $titles =  [
+            'Found with 3 pairs of rhino tails.',
+            'Killing of 6 lions and 2 elephants.',
+            'Killed hippopotamus.',
+            'Found with 20 live pangolins.',
+            'Found with 11 crowned crane birds.',
+        ];
+
+        $parishes =  [
+            'Kinoni', 'Ntusi', 'Lwemiyaga', 'Kyankoko', 'Mugore', 'Lwebisya', 'Lyantonde', 'Kiruhura', 'Sembabule',
+            'Adumi', 'Ajia', 'Arivu', 'Aroi', 'Arua Hill', 'Dadamu', 'Logiri', 'Manibe', 'Offaka'
+        ];
+        $ethnicity =  [
+            'Musoga', 'Mugishu', 'Mukonzo', 'Muganda', 'Munyankole', 'Mucholi', 'Muchiga'
+        ];
+        foreach (Location::get_sub_counties() as $v) {
+            $sub_counties[] = $v->id;
+        }
+
+        $cases = [];
+        foreach (CaseModel::all() as $v) {
+            $cases[] = $v->id;
+        }
+
+        for ($i = 0; $i < 1000; $i++) {
+            shuffle($_admins);
+            shuffle($sub_counties);
+            shuffle($parishes);
+            shuffle($statuses);
+            shuffle($titles);
+            shuffle($cases);
+            shuffle($sex);
+            shuffle($ethnicity);
+            shuffle($countries);
+            $s = new CaseSuspect();
+            $s->case_id = $cases[2];
+            $s->arrest_uwa_number =  "AR-" . $faker->randomNumber(5, false);
+            $s->first_name =   $faker->firstName(0);
+            $s->last_name =   $faker->lastName(0);
+            $s->middle_name =   '';
+            $s->phone_number =   $faker->e164PhoneNumber;
+            $s->national_id_number =   $faker->numberBetween(100000000000000, 1000000000000000);
+            $s->arrest_crb_number =   $faker->numberBetween(1000000000, 10000000000);
+            $s->court_file_number =   $faker->numberBetween(1000000, 100000000);
+            $s->sex =   $sex[0];
+            $s->age = $faker->date();
+            $s->occuptaion = $faker->jobTitle();
+            $s->country =   $countries[0];
+            $s->sub_county_id =   $sub_counties[0];
+            $s->parish =   $parishes[0];
+            $s->village =   $parishes[2];
+            $s->ethnicity =   $ethnicity[2];
+            $s->finger_prints =  '';
+            $s->is_suspects_arrested =  false;
+            $s->is_suspect_appear_in_court =  false;
+            $s->arrest_date_time = $faker->date();
+            $s->arrest_sub_county_id =   $sub_counties[0];
+            $s->arrest_parish =   $parishes[2];
+            $s->arrest_village =   $parishes[2];
+            $s->prosecutor =   $faker->name();
+            $s->arrest_first_police_station =   $parishes[2] . " Police post";
+            $s->arrest_current_police_station =   $parishes[2] . " Police post";
+            $s->arrest_agency =   $parishes[2] . " Police post";
+            $s->court_name =   $parishes[2] . " Court";
+            $s->arrest_latitude =   '0.615085';
+            $s->arrest_longitude =   '30.391306';
+            $s->arrest_uwa_unit =   '-';
+            $s->arrest_detection_method =   'Prison cell';
+            $s->case_outcome =  "Charged";
+            $s->magistrate_name =   $faker->name();
+            $s->is_jailed =  $statuses[0];
+            shuffle($statuses);
+            $s->jail_period =  $statuses[0];
+            shuffle($statuses);
+            $s->jail_period =  $statuses[0];
+            shuffle($statuses);
+            $s->is_fined =  $statuses[0];
+            shuffle($statuses);
+            $s->fined_amount =  $statuses[0];
+            shuffle($statuses);
+            $s->status =  $statuses[0];
+
+            $s->save();
+        }*/

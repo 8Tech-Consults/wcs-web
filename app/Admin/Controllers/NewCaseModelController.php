@@ -124,7 +124,7 @@ class NewCaseModelController extends AdminController
      */
     protected function form()
     {
-
+        Admin::disablePjax(); 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {

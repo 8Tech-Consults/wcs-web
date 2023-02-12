@@ -170,32 +170,32 @@ class CaseSuspectController extends AdminController
         $grid = new Grid(new CaseSuspect());
 
 
-        $grid->export(function ($export) {
+        $u = Auth::user();
 
-            $export->filename('Cases.csv');
+        if ($u->isRole('ca-agent')) {
+            $grid->model()->where([
+                'reported_by' => $u->id
+            ]);
+        } else if ($u->isRole('ca-team')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        }
+
+
+        $grid->model()
+            ->orderBy('created_at', 'Desc');
+
+
+
+        $grid->export(function ($export) {
 
             $export->except(['actions']);
 
             // $export->only(['column3', 'column4' ...]);
 
-            $export->originalValue(['suspects_count', 'exhibit_count']);
-            $export->column('status', function ($value, $original) {
 
-                if ($value == 0) {
-                    return 'Pending';
-                } else if ($value == 1) {
-                    return 'Active';
-                } {
-                }
-                return 'Closed';
-            });
-        });
-
-
-
-        $grid->export(function ($export) {
-
-            $export->filename('Cases.csv');
+            $export->filename('Suspects.csv');
 
             $export->except(['photo_url', 'action']);
             // $export->originalValue(['is_jailed']);
@@ -234,8 +234,7 @@ class CaseSuspectController extends AdminController
         $grid->disableCreateButton();
 
 
-        $grid->model()
-            ->orderBy('created_at', 'Desc');
+
 
 
 
@@ -303,7 +302,6 @@ class CaseSuspectController extends AdminController
 
 
 
-        $grid->model()->orderBy('id', 'Desc');
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
         $grid->column('id', __('ID'))->sortable()->hide();

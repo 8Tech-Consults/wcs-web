@@ -94,6 +94,7 @@ Edit Edit
 
 
         $grid->column('email', 'email address');
+        $grid->column('username', 'username');
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
         $grid->column('created_at', 'Registered')->display(function ($f) {
             return Utils::my_date($f);

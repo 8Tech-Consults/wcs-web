@@ -237,16 +237,14 @@ class CaseModel extends Model
 
         if ($this->suspects != null) {
             if (!empty($this->suspects)) {
-                if(isset($this->suspects[0])){
-                    if ($this->suspects[0]->photo != null) {
-                        if (isset($this->suspects[0])) {
-                            if (strlen($this->suspects[0]->photo) > 2) {
-                                return $this->suspects[0]->photo;
-                            }
+                if(isset($this->suspects[0]))
+                if ($this->suspects[0]->photo != null) {
+                    if (isset($this->suspects[0])) {
+                        if (strlen($this->suspects[0]->photo) > 2) {
+                            return $this->suspects[0]->photo;
                         }
                     }
                 }
-                
             }
         }
 

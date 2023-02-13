@@ -68,9 +68,9 @@ Edit Edit
         $grid->column('id', 'ID')
             ->width(40)
             ->sortable();
-       /*  $grid->column('avatar', __('Photo'))
+        $grid->column('avatar', __('Photo'))
             ->width(70)
-            ->lightbox(['width' => 60, 'height' => 80]); */
+            ->lightbox(['width' => 60, 'height' => 80]);
         $grid->column('name', 'Name')->sortable();
         $grid->column('sex', 'Gender')->filter([
             'Male' => 'Male',
@@ -98,7 +98,7 @@ Edit Edit
         $grid->column('created_at', 'Registered')->display(function ($f) {
             return Utils::my_date($f);
         });
-       
+
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {

@@ -224,8 +224,7 @@ class CaseModel extends Model
     public function  getPhotoAttribute()
     {
 
-        return "logo.png";
- 
+        
         if ($this->exhibits != null) {
             if (!empty($this->exhibits)) {
                 if (isset($this->exhibits[0])) {

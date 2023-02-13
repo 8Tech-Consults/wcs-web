@@ -340,7 +340,7 @@ class CaseModelController extends AdminController
                     $form->date('age', 'Date of birth')->rules('required');
                     $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
                     $form->text('national_id_number');
-                    $form->text('occuptaion');
+                    $form->text('Occupataion');
 
 
                     $form->select('country')

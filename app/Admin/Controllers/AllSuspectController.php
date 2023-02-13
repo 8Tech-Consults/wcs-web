@@ -144,7 +144,7 @@ class AllSuspectController extends AdminController
         $grid->column('national_id_number', __('NIN'));
         $grid->column('phone_number', __('Phone number'));
         $grid->column('uwa_suspect_number', __('UWA suspect number'))->sortable();
-        $grid->column('occuptaion', __('Occuptaion'));
+        $grid->column('occuptaion', __('Occupataion'));
         $grid->column('country', __('Country'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             return $this->district->name;

@@ -248,7 +248,7 @@ class CaseSuspectController extends AdminController
                 return $this->ca->name;
             })
             ->sortable();
-        $grid->column('occuptaion', __('Occuptaion'))->hide();
+        $grid->column('occuptaion', __('Occupataion'))->hide();
         $grid->column('country', __('Country'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             return $this->district->name;
@@ -421,7 +421,7 @@ class CaseSuspectController extends AdminController
         $show->field('national_id_number', __('National id number'));
         $show->field('sex', __('Sex'));
         $show->field('age', __('Age'));
-        $show->field('occuptaion', __('Occuptaion'));
+        $show->field('occuptaion', __('Occupataion'));
         $show->field('country', __('Country'));
         $show->field('district_id', __('District id'));
         $show->field('sub_county_id', __('Sub county id'));
@@ -637,24 +637,36 @@ class CaseSuspectController extends AdminController
                     'NRCN' => 'NRCN',
                     'LEU' => 'LEU',
                 ]);
+            });
 
+
+
+        $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+            ->options([
+                1 => 'Yes',
+                0 => 'No',
+            ])
+            ->when(0, function ($form) {
                 $form->select('management_action', 'Action taken by management')->options([
                     'Fined' => 'Fined',
                     'Cautioned' => 'Cautioned',
                     'Police bond' => 'Police bond',
                     'Skipped bond' => 'Skipped bond'
                 ]);
-            });
 
-
-
-        $form->divider('Court information');
-        $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
-            ->options([
-                1 => 'Yes',
-                0 => 'No',
-            ])
+                $form->select('case_outcome', 'Case status')->options([
+                    'Charged' => 'Charged',
+                    'Remand' => 'Remand',
+                    'Bail' => 'Bail',
+                    'Perusal' => 'Perusal',
+                    'Further investigation' => 'Further investigation',
+                    'Dismissed' => 'Dismissed',
+                    'Convicted' => 'Convicted',
+                ]);
+            })
             ->when(1, function ($form) {
+
+                $form->divider('Court information');
                 $form->text('court_file_number', 'Court file number');
                 $form->date('court_date', 'Court date');
                 $form->text('court_name', 'Court Name');
@@ -678,16 +690,7 @@ class CaseSuspectController extends AdminController
                     $form->text('vadict', __('Vadict'));
                 });
 
-                $form->select('case_outcome', 'Specific case status')->options([
-                    'Charged' => 'Charged',
-                    'Remand' => 'Remand',
-                    'Bail' => 'Bail',
-                    'Perusal' => 'Perusal',
-                    'Further investigation' => 'Further investigation',
-                    'Dismissed' => 'Dismissed',
-                    'Convicted' => 'Convicted',
-                ]);
-
+       
 
                 $form->radio('is_jailed', __('Was suspect jailed?'))
                     ->options([

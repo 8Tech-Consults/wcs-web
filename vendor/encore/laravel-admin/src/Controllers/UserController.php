@@ -98,9 +98,7 @@ Edit Edit
         $grid->column('created_at', 'Registered')->display(function ($f) {
             return Utils::my_date($f);
         });
-        $grid->column('cases', 'Cases Reported')->display(function () {
-            return count($this->cases);
-        });
+       
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {

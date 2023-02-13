@@ -32,13 +32,16 @@ class Logout
      */
     public function __construct($guard, $user)
     {
-        $user->code = null;
-        $u = Administrator::find($user->id);
-        if ($u != null) {
-            $u->code = null;
-            $u->authenticated = 0;
-            $u->save();
+
+        if ($user != null) {
+            $u = Administrator::find($user->id);
+            if ($u != null) {
+                $u->code = null;
+                $u->authenticated = 0;
+                $u->save();
+            }
         }
+
         $this->user = $user;
         $this->guard = $guard;
     }

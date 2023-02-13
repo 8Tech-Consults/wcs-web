@@ -33,6 +33,7 @@ class NewCaseModelController extends AdminController
     {
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
+            return redirect(admin_url('new-case-suspects/create')); 
             if ($pendingCase->case_step == 1) {
                 return redirect(admin_url('new-case-suspects/create'));
             } else if ($pendingCase->case_step == 2) {

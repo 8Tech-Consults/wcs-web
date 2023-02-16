@@ -30,7 +30,7 @@ Encore\Admin\Form::forget(['map', 'editor']);
 
 
 $u = Auth::user();
-/* if ($u != null) {
+if ($u != null) {
 
     if (isset($_GET['resend_2f_code'])) {
 
@@ -52,7 +52,7 @@ $u = Auth::user();
         header('Location: ' . url('2fauth'));
         die();
     }
-} */
+}
 Utils::system_boot($u);
 
 

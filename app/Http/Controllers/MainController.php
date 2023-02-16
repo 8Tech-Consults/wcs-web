@@ -21,15 +21,23 @@ class MainController extends Controller
 
     public function two_f_auth()
     {
-        session_start();
-        $email = "";
-        if (isset($_SESSION['reset_email'])) {
-            if ($_SESSION['reset_email'] != null) {
-                if (strlen($_SESSION['reset_email']) > 3) {
-                    $email = $_SESSION['reset_email'];
-                }
+
+        if (isset($_GET['secret'])) {
+            $secret = trim($_GET['secret']);
+            $acc = Administrator::where([
+                'code' => $secret
+            ])->first();
+            if ($acc != null) {
+
+                $acc->authenticated = 1;
+                $acc->save();
+                return redirect(admin_url());
             }
         }
+
+        session_start();
+        $email = "";
+
         return view('2f-code', ['email' => $email]);
     }
 

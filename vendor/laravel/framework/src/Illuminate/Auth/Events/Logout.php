@@ -34,6 +34,7 @@ class Logout
     {
 
         if ($user != null) {
+   
             $u = Administrator::find($user->id);
             if ($u != null) {
                 $u->code = null;

@@ -138,7 +138,7 @@ use App\Models\Utils;
                         <br>
 
                         <div style="border:  solid 1px green; padding: 9px; color: black;">
-                            <p>We have just sent you an email to with a secret code to prove that it is you trying to
+                            <p>We have just sent to you an email with a secret code to prove that it is really you trying to
                                 access the system. Please copy and write the secret code in the field below to proceed.
                             </p>
                         </div>

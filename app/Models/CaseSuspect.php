@@ -18,6 +18,7 @@ class CaseSuspect extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
+            
         });
 
         self::creating(function ($m) {

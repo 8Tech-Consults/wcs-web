@@ -31,9 +31,19 @@ class NewCaseModelController extends AdminController
      */
     protected function grid()
     {
+
+        if (isset($_GET['remove_case'])) {
+            $id = ((int)($_GET['remove_case']));
+            $case = CaseModel::find($id);
+            if ($case != null) {
+                $case->delete();
+                return redirect(admin_url('cases'));
+            }
+        }
+
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
-            return redirect(admin_url('new-case-suspects/create')); 
+            return redirect(admin_url('new-case-suspects/create'));
             if ($pendingCase->case_step == 1) {
                 return redirect(admin_url('new-case-suspects/create'));
             } else if ($pendingCase->case_step == 2) {
@@ -42,11 +52,12 @@ class NewCaseModelController extends AdminController
                 return redirect(admin_url('new-case-suspects/create'));
                 return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
             } else {
+
                 return redirect(admin_url("cases"));
             }
             //dd($pendingCase); 
         }
-        return redirect(admin_url("cases"));
+        return redirect(admin_url("new-case/create"));
 
         $grid = new Grid(new CaseModel());
 
@@ -87,6 +98,16 @@ class NewCaseModelController extends AdminController
      */
     protected function detail($id)
     {
+        $pendingCase = Utils::hasPendingCase(Auth::user());
+        if ($pendingCase != null) {
+            if ($pendingCase->case_step == 1) {
+                return redirect(admin_url('new-case-suspects/create'));
+            } else if ($pendingCase->case_step == 2) {
+            } else if ($pendingCase->case_step == 3) {
+            } else {
+            }
+        }
+
         $show = new Show(CaseModel::findOrFail($id));
 
         $show->field('id', __('Id'));
@@ -125,22 +146,38 @@ class NewCaseModelController extends AdminController
      */
     protected function form()
     {
-        Admin::disablePjax(); 
 
-        $pendingCase = Utils::hasPendingCase(Auth::user());
-        if ($pendingCase != null) {
-            if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 2) {
-            } else if ($pendingCase->case_step == 3) {
-            } else {
+
+        if (isset($_GET['refresh_page'])) {
+            $r = (int)($_GET['refresh_page']);
+            if ($r == 1) {
+                return redirect(admin_url("new-case/create"));
             }
-            //dd($pendingCase);
+        }
+
+        $form = new Form(new CaseModel());
+
+        $form->saved(function (Form $form) {
+            $pendingCase = Utils::hasPendingCase(Auth::user());
+            if ($pendingCase != null) {
+                if ($pendingCase->case_step == 1) {
+                    return redirect(admin_url('new-case-suspects/create'));
+                }
+            }
+        });
+
+        if ($form->isCreating()) {
+            $pendingCase = Utils::hasPendingCase(Auth::user());
+            if ($pendingCase != null) {
+                if ($pendingCase->case_step == 1) {
+                    return redirect(admin_url('new-case-suspects/create'));
+                }
+            }
         }
 
 
-        $form = new Form(new CaseModel());
         Admin::css(url('/css/new-case.css'));
+        $pendingCase = Utils::hasPendingCase(Auth::user());
 
         $form->disableCreatingCheck();
         $form->disableReset();
@@ -162,6 +199,9 @@ class NewCaseModelController extends AdminController
 
         $form->text('title', __('Case title'))
             ->help("Describe this case in summary")
+            ->rules('required');
+        $form->textarea('offence_description', __('Case description'))
+            ->help("Describe this case in details")
             ->rules('required');
 
         $form->text('officer_in_charge', 'Officer in charge')->rules('required');
@@ -228,7 +268,6 @@ class NewCaseModelController extends AdminController
                 'Random selection' => 'Random selection'
             ])
             ->rules('required');
-
 
         $form->date('case_date', 'Created')
             ->required()

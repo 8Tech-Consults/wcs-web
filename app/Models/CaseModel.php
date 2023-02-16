@@ -17,7 +17,12 @@ class CaseModel extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            die("Ooops! You cannot delete this item.");
+            CaseSuspect::where([
+                'case_id' => $m->id
+            ])->delete();
+            CaseComment::where([
+                'case_id' => $m->id
+            ])->delete();
         });
         self::created(function ($m) {
             $m->case_number = Utils::getCaseNumber($m);
@@ -145,10 +150,10 @@ class CaseModel extends Model
     function ca()
     {
         $ca =  ConservationArea::find($this->ca_id);
-        if($ca == null){
+        if ($ca == null) {
             $this->ca_id = 1;
             $this->save();
-        } 
+        }
         return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
 
@@ -224,7 +229,7 @@ class CaseModel extends Model
     public function  getPhotoAttribute()
     {
 
-        
+
         if ($this->exhibits != null) {
             if (!empty($this->exhibits)) {
                 if (isset($this->exhibits[0])) {

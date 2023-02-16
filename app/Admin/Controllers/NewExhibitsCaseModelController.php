@@ -162,16 +162,16 @@ class NewExhibitsCaseModelController extends AdminController
                 ])
                 ->rules('required');
             $form->text('wildlife', __('Species'));
-            $form->decimal('quantity', __('Quantity (in KGs)'))
-                ->rules('required');
-
+            $form->decimal('quantity', __('Quantity (in KGs)'));
             $form->text('implement', __('Implements'));
+            $form->decimal('number_of_pieces', __('Number of pieces'));
             $form->textarea('description', __('Description'))
                 ->rules('required');
             /* $form->textarea('wildlife', __('Wildlife'));
             $form->textarea('implements', __('Implements')); */
 
-            $form->image('photos', __('Exhibit Photo'));
+            $form->file('photos', __('Exhibit file/photo')); 
+            $form->file('attachment', __('Attachments'));
         });
         return $form;
     }

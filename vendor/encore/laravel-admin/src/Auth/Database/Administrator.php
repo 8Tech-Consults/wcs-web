@@ -186,7 +186,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
             Mail::send('email_2f_view', ['u' => $this], function ($m) use ($email) {
                 $m->to($email, $this->name)
                     ->subject('UWA Offenders database - 2 factor authentication');
-                $m->from('info@8technologies.store', 'UWA Offenders database');
+                $m->from('info@8technologies.cloud', 'UWA Offenders database');
             });
         } catch (\Throwable $th) {
             $msg = 'failed';

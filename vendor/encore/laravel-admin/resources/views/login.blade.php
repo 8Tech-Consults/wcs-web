@@ -1,4 +1,6 @@
 <?php
+use App\Models\Utils;
+session_start();
 
 $hasResetMessage = false;
 $resetMessage = '';
@@ -10,8 +12,6 @@ if (isset($_SESSION['reset_message'])) {
         unset($_SESSION['reset_message']);
     }
 }
-
-use App\Models\Utils;
 
 ?>
 <!DOCTYPE html>

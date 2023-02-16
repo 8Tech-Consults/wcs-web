@@ -29,11 +29,11 @@ class HomeController extends Controller
     {
 
 
-        $faker = Faker::create();
+       /*  $faker = Faker::create();
         foreach (CaseSuspect::all() as $c) {
             $c->created_at = $faker->dateTimeBetween('-12 month', '+2 month');
             $c->save();
-        }
+        } */
 
 
         /*         foreach (Exhibit::all() as $c) {

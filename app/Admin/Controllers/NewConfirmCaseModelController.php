@@ -145,7 +145,7 @@ class NewConfirmCaseModelController extends AdminController
             die("Active case not found.");
         }
 
-        if (count($pendingCase->suspects()) < 0) {
+        if (count($pendingCase->suspects) < 0) {
            // return redirect(admin_url('new-case-suspects/create'));  
         }
 
@@ -159,14 +159,14 @@ class NewConfirmCaseModelController extends AdminController
         $form->disableEditingCheck();
         $form->disableViewCheck();
 
-        $form->html(view('steps', ['active' => 4]));
+        $form->html(view('steps', ['active' => 4,'case' => $pendingCase]));
 
 
 
 
         $form->divider('CASE INFORMATION');
         $form->html(view('case-confirm', ['case' => $pendingCase]));
-        $sus = count($pendingCase->suspects());
+        $sus = count($pendingCase->suspects);
         $form->divider("SUSPECTS ($sus) ");
         $form->html(view('case-suspects-confirm', ['case' => $pendingCase]));
 

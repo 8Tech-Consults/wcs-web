@@ -7,7 +7,7 @@ if (!isset($active)) {
 $suspects_count = 0;
 $exhibits_count = 0;
 if (isset($case) && $case != null) {
-    $suspects_count = count($case->suspects);
+    $suspects_count = count($case->suspects());
     $exhibits_count = count($case->exhibits);
 }
 

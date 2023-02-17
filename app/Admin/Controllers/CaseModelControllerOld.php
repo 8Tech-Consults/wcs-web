@@ -123,7 +123,7 @@ class CaseModelController extends AdminController
 
         $grid->column('suspects', __('Suspects'))->display(function () {
             $link = admin_url('case-suspects', ['case_id' => $this->id]);
-            return '<a data-toggle="tooltip" data-placement="bottom"  title="View suspects" class="text-primary h3" href="' . $link . '" >' . count($this->suspects) . '</a>';
+            return '<a data-toggle="tooltip" data-placement="bottom"  title="View suspects" class="text-primary h3" href="' . $link . '" >' . count($this->suspects()) . '</a>';
         });
         $grid->column('exhibits', __('Exhibits'))->display(function () {
             $link = admin_url('exhibits');

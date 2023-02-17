@@ -145,7 +145,7 @@ class NewConfirmCaseModelController extends AdminController
             die("Active case not found.");
         }
 
-        if (count($pendingCase->suspects) < 0) {
+        if (count($pendingCase->suspects()) < 0) {
            // return redirect(admin_url('new-case-suspects/create'));  
         }
 

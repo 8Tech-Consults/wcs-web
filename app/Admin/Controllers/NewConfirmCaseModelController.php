@@ -166,7 +166,7 @@ class NewConfirmCaseModelController extends AdminController
 
         $form->divider('CASE INFORMATION');
         $form->html(view('case-confirm', ['case' => $pendingCase]));
-        $sus = count($pendingCase->suspects);
+        $sus = count($pendingCase->suspects());
         $form->divider("SUSPECTS ($sus) ");
         $form->html(view('case-suspects-confirm', ['case' => $pendingCase]));
 

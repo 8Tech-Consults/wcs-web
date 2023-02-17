@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use Mockery\Matcher\Subset;
 use Faker\Factory as Faker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 Route::match(['get', 'post'], '/print', [PrintController2::class, 'index']);
@@ -21,6 +22,16 @@ Route::post('/password-forget-email', [MainController::class, 'password_forget_e
 Route::get('/password-forget-code', [MainController::class, 'password_forget_code'])->name("password-forget-code");
 Route::get('/2fauth', [MainController::class, 'two_f_auth'])->name("two_f_auth");
 Route::POST("do-change-password", [MainController::class, "doChangePassword"]);
+Route::get('/logout', function () {
+  return redirect(admin_url('auth/logout?log_me_out=1'));
+  header('Location: ' . admin_url('auth/logout')); 
+  Auth::logout();
+  return redirect('/login'); 
+});
+Route::get('/login', function () {
+  die("login");
+})->name("login");
+
 Route::get('/register', function () {
   die("register");
 })->name("register");
@@ -35,5 +46,5 @@ Route::post('/2f-auth-code', function (Request $t) {
   }
   $acc->authenticated = 1;
   $acc->save();
-  return redirect(admin_url()); 
+  return redirect(admin_url());
 });

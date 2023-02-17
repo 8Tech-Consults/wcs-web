@@ -188,7 +188,7 @@ use App\Models\Utils;
                             <br>
                             <div>
                                 <p>Did not received the code? <b><a style="color: green;" href="{{ admin_url() }}?resend_2f_code=1">Resend code</a></b></p>
-                                <p>Want to use another account? <b><a  style="color: red;" href="{{ admin_url() }}?log_me_out=1">Logout</a></b></p>
+                                <p>Want to use another account? <b><a  style="color: red;" href="{{ url('logout') }}">Logout</a></b></p>
                             </div>
                             <!-- /.col -->
                         </div>

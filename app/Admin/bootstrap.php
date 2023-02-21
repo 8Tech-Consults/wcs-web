@@ -23,13 +23,13 @@ use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
 use App\Models\Utils;
 use Illuminate\Support\Facades\Auth;
- 
 
+ 
 Encore\Admin\Form::forget(['map', 'editor']);
 
 
 $u = Auth::user();
-/* if ($u != null) {
+if ($u != null) {
 
     if (isset($_GET['log_me_out'])) {
 
@@ -49,7 +49,7 @@ $u = Auth::user();
             die();
         }
     }
-} */
+}
 Utils::system_boot($u);
 
 

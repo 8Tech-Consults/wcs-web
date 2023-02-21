@@ -500,7 +500,7 @@ class CaseModelController extends AdminController
                 $form->text('wildlife', __('Species'));
                 $form->decimal('quantity', __('Quantity (in KGs)'));
                 $form->text('implement', __('Implements'));
-                $form->decimal('number_of_pieces', __('Number of pieces'));
+                $form->decimal('number_of_pieces', __('Number of pieces/equipment'));
                 $form->textarea('description', __('Description'))
                     ->rules('required');
                 /* $form->textarea('wildlife', __('Wildlife'));

@@ -14,7 +14,9 @@ class PA extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            die("You can't delete this item.");
+            if ($m->id == 1) {
+                die("Ooops! You cannot delete this item.");
+            }
         });
     }
 
@@ -23,17 +25,19 @@ class PA extends Model
         return $this->hasMany(CaseModel::class, 'pa_id');
     }
 
+    public function ca()
+    {
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
+    }
+
 
     public function getNameTextAttribute()
     {
-        if (((int)($this->subcounty)) > 0) {
-            $mother = Location::find($this->subcounty);
-
-            if ($mother != null) {
-                return  $this->name . ' - ' . $mother->name_text;
-            }
+        $ca_name = "";
+        if ($this->ca != null) {
+            $ca_name = $this->ca->name . " - ";
         }
-        return $this->name;
+        return $ca_name . $this->name;
     }
 
 

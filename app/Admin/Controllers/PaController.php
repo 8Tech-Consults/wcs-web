@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\PA;
 use App\Models\Utils;
@@ -31,7 +32,11 @@ class PaController extends AdminController
         $grid->disableBatchActions();
         $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Protected area'));
+        $grid->column('ca_id', __('C.A'))->display(function(){
+            return $this->ca->name;
+        })->sortable();
 
+        
         $grid->column('Cases', __('Cases'))
             ->display(function ($x) {
                 return count($this->cases);
@@ -82,6 +87,12 @@ class PaController extends AdminController
         $form->text('name', __('Protected Area Name'))->rules('required');
         $form->text('short_name', __('Short name'))->rules('required');
 
+        $form->select('ca_id', __('Nearest conservation area'))
+        ->rules('required')
+        ->options(ConservationArea::all()->pluck('name', 'id'));
+
+
+ 
         $form->select('subcounty', __('Sub county'))
             ->rules('required')
             ->help('Where this PA is located')

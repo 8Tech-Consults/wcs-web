@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Auth;
 
 class ExhibitController extends AdminController
 {
@@ -26,6 +27,22 @@ class ExhibitController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Exhibit());
+
+        $u = Auth::user();
+        if ($u->isRole('ca-agent')) {
+            $grid->model()->where([
+                'reported_by' => $u->id
+            ]);
+            $grid->disableExport();
+        } else if ($u->isRole('ca-team')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        } else if (!$u->isRole('admin')) {
+            $grid->model()->where([
+                'ca_id' => $u->ca_id
+            ]);
+        }  
 
         $grid->disableCreateButton();
         $grid->disableActions();

@@ -20,7 +20,7 @@ class UserController extends AdminController
      */
     protected function title()
     {
-        return 'Members';
+        return 'Users';
     }
 
     /**
@@ -78,7 +78,25 @@ Edit Edit
         ])->sortable();
 
         $grid->column('phone_number_1', 'Phone number');
-        $grid->column('phone_number_2', 'Phone number 2');
+
+        $grid->column('ca_id', __('CA'))
+        ->display(function () {
+            if ($this->ca == null) {
+                return  "-";
+            }
+            return $this->ca->name;
+        })
+        ->sortable();
+        $grid->column('pa_id', __('Duty station'))
+        ->display(function () {
+            if ($this->pa == null) {
+                return  "-";
+            }
+            return $this->pa->name;
+        })
+        ->sortable();
+        
+        $grid->column('phone_number_2', 'Phone number 2')->hide();
         $grid->column('date_of_birth', 'D.O.B')->display(function ($f) {
             return Utils::my_date($f);
         });
@@ -178,15 +196,12 @@ Edit Edit
         $form->text('phone_number_1', 'Phone number')->rules('required');
         $form->text('phone_number_2', 'Phone number 2');
 
-        $form->select('sub_county_id', __('Duty station'))
+        $form->select('pa_id', __('Duty station'))
             ->rules('required')
             ->help('Protected area where  user is assigned')
             ->options(PA::all()->pluck('name_text', 'id'));
 
-
-        $form->select('ca_id', __('Conservation area assigned to'))
-            ->rules('required')
-            ->options(ConservationArea::all()->pluck('name', 'id'));
+ 
 
         $form->text('address', 'UWA staff number');
         $form->divider();

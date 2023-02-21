@@ -3,6 +3,8 @@
 namespace Encore\Admin\Auth\Database;
 
 use App\Models\CaseModel;
+use App\Models\ConservationArea;
+use App\Models\PA;
 use App\Models\StudentHasClass;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Auth\Authenticatable;
@@ -39,6 +41,17 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
                 $model->username = $model->email;
             }
 
+            if ($model->pa_id == null) {
+                $model->pa_id = 1;
+            }
+
+            $ca = PA::find($model->pa_id);
+            if ($ca != null) {
+                $model->ca_id = $ca->ca_id;
+            } else {
+                $model->ca_id = 1;
+            }
+
             return $model;
         });
 
@@ -47,8 +60,22 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         });
 
         self::updating(function ($model) {
-            $model->username = $model->email; 
+            $model->username = $model->email;
             $model->name = "{$model->name} {$model->middle_name} {$model->last_name}";
+
+            
+
+            if ($model->pa_id == null) {
+                $model->pa_id = 1;
+            }
+
+            $ca = PA::find($model->pa_id);
+            if ($ca != null) {
+                $model->ca_id = $ca->ca_id;
+            } else {
+                $model->ca_id = 1;
+            } 
+
             return $model;
         });
 
@@ -181,7 +208,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
 
         $this->code = rand(10000000, 99999999);
         $this->save();
- 
+
         try {
             Mail::send('email_2f_view', ['u' => $this], function ($m) use ($email) {
                 $m->to($email, $this->name)
@@ -191,7 +218,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         } catch (\Throwable $th) {
             $msg = 'failed';
             throw $th;
-        } 
+        }
     }
 
     public function sendPasswordResetCode()
@@ -216,4 +243,20 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
             throw $th;
         }
     }
+
+
+    
+    function pa()
+    {
+        return $this->belongsTo(PA::class, 'pa_id');
+    }
+    function ca()
+    {
+        $ca =  ConservationArea::find($this->ca_id);
+        if ($ca == null) {
+            $this->ca_id = 1;
+            $this->save();
+        } 
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
+    } 
 }

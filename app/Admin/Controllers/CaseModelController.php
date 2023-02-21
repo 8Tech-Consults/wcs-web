@@ -88,6 +88,7 @@ class CaseModelController extends AdminController
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
+            $grid->disableExport();
         } else if ($u->isRole('ca-team')) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id

@@ -204,15 +204,19 @@ class NewCaseModelController extends AdminController
             ->help("Describe this case in details")
             ->rules('required');
 
+                    $form->date('case_date', 'Date when opened')
+            ->required()
+            ->rules('required');
+
         $form->text('officer_in_charge', 'Officer in charge')->rules('required');
 
-        $form->select('offense_category', __('Case category'))
+    /*     $form->select('offense_category', __('Case category'))
             ->options([
                 'Category 1' => 'Category 1',
                 'Category 2' => 'Category 2',
                 'Category 3' => 'Category 3',
             ])
-            ->rules('required');
+            ->rules('required'); */
 
         $form->radio('is_offence_committed_in_pa', __('Did the case took place in a PA?'))
             ->rules('required')
@@ -269,10 +273,7 @@ class NewCaseModelController extends AdminController
             ])
             ->rules('required');
 
-        $form->date('case_date', 'Created')
-            ->required()
-            ->rules('required')
-            ->help('Date when this case took place');
+
 
 
         return $form;

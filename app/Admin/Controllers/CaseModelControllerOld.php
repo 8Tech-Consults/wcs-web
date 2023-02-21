@@ -309,8 +309,7 @@ class CaseModelController extends AdminController
             $form->tab('Case details', function (Form $form) {
 
 
-
-                Admin::js('/js/CaseModelController.js');
+ 
                 $form->text('suspect_first_name')->rules('required');
 
                 $form->html('<button class="btn btn-primary" id="add_anothe_suspect" >ADD  ANOTHER SUSPECT</button>');

@@ -12,6 +12,7 @@ use App\Models\Exhibit;
 use App\Models\Image;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\SuspectHasOffence;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -186,24 +187,6 @@ class ApiPostsController extends Controller
             return $this->error('Failed to update case, please try again.');
         }
 
-        $offence_ids = [];
-        try {
-            $offence_ids = json_decode($case_data->offence_ids);
-        } catch (\Throwable $th) {
-            $offence_ids = [];
-        }
-
-        if ($offence_ids != null) {
-            if (is_array($offence_ids)) {
-                foreach ($offence_ids as $offence_id) {
-                    $offence = new CaseHasOffence();
-                    $offence->case_model_id = $case->id;
-                    $offence->offence_id = ((int)($offence_id));
-                    $offence->save();
-                }
-            }
-        }
-
 
         $suspects = [];
         $exhibits = [];
@@ -333,6 +316,25 @@ class ApiPostsController extends Controller
             $s->suspect_court_outcome = $v->suspect_court_outcome;
 
             $s->save();
+
+
+            $offence_ids = [];
+            try {
+                $offence_ids = json_decode($v->offence_ids);
+            } catch (\Throwable $th) {
+                $offence_ids = [];
+            }
+
+            if ($offence_ids != null) {
+                if (is_array($offence_ids)) {
+                    foreach ($offence_ids as $offence_id) {
+                        $offence = new SuspectHasOffence();
+                        $offence->case_suspect_id = $s->id;
+                        $offence->offence_id = ((int)($offence_id));
+                        $offence->save();
+                    }
+                }
+            }
         }
 
 

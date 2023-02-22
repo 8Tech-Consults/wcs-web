@@ -118,7 +118,7 @@ class ApiPostsController extends Controller
 
     public function index(Request $r)
     {
-        $data =  CaseModel::where([])->with('suspects')->limit(25)->get();
+        $data =  CaseModel::where([])->with('suspects')->orderBy('id','Desc') ->limit(100)->get();
         return $this->success($data, 'Success.');
     }
 
@@ -169,6 +169,7 @@ class ApiPostsController extends Controller
 
 
 
+        $case->case_submitted = 1;
         $case->latitude = $case_data->latitude;
         $case->title = $case_data->title;
         $case->longitude = $case_data->longitude;
@@ -294,7 +295,7 @@ class ApiPostsController extends Controller
             $s->fined_amount = ((int)($v->fined_amount));
             $s->status = ((int)($v->status));
 
-            $s->jail_date = $v->jail_date; 
+            $s->jail_date = $v->jail_date;
             $s->arrest_in_pa = $v->arrest_in_pa;
             $s->pa_id = $v->pa_id;
             $s->community_service = $v->community_service;

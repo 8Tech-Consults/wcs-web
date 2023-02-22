@@ -295,22 +295,11 @@ class ApiPostsController extends Controller
             $s->status = ((int)($v->status));
 
             $s->court_date = $v->court_date;
-            $s->jail_date = $v->jail_date;
-            $s->use_same_arrest_information = $v->use_same_arrest_information;
-            $s->use_same_court_information = $v->use_same_court_information;
-            $s->suspect_number = $v->suspect_number;
+            $s->jail_date = $v->jail_date; 
             $s->arrest_in_pa = $v->arrest_in_pa;
             $s->pa_id = $v->pa_id;
-            $s->management_action = $v->management_action;
             $s->community_service = $v->community_service;
-            $s->reported_by = $v->reported_by;
-            $s->add_more_suspects = $v->add_more_suspects;
-            $s->ca_id = $v->ca_id;
-            $s->not_arrested_remarks = $v->not_arrested_remarks;
             $s->police_sd_number = $v->police_sd_number;
-            $s->police_action = $v->police_action;
-            $s->police_action_date = $v->police_action_date;
-            $s->police_action_remarks = $v->police_action_remarks;
             $s->court_file_status = $v->court_file_status;
             $s->court_status = $v->court_status;
             $s->suspect_court_outcome = $v->suspect_court_outcome;

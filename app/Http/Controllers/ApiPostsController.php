@@ -294,7 +294,6 @@ class ApiPostsController extends Controller
             $s->fined_amount = ((int)($v->fined_amount));
             $s->status = ((int)($v->status));
 
-            $s->court_date = $v->court_date;
             $s->jail_date = $v->jail_date; 
             $s->arrest_in_pa = $v->arrest_in_pa;
             $s->pa_id = $v->pa_id;

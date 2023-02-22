@@ -696,8 +696,7 @@ class CaseSuspectController extends AdminController
 
                         $form->text('prosecutor', 'Lead prosecutor');
                         $form->text('magistrate_name', 'Magistrate Name');
-
-
+ 
                         $form->radio('court_status', __('Court case status'))
                             ->options([
                                 'On-going investigation' => 'On-going investigation',
@@ -728,7 +727,7 @@ class CaseSuspectController extends AdminController
                                                 0 => 'No',
                                             ])
                                             ->when(1, function ($form) {
-                                                $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                                                $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                             });
 
                                         $form->radio('community_service', __('Was suspected issued a community service?'))
@@ -746,7 +745,7 @@ class CaseSuspectController extends AdminController
                                                 'No' => 'No',
                                             ])
                                             ->when('Yes', function ($form) {
-                                                $form->date('suspect_appealed_date', 'Suspect appeal Date');
+                                                $form->date('suspect_appealed_date', 'Suspect appeal date');
                                                 $form->text('suspect_appealed_court_name', 'Court of appeal');
                                                 $form->text('suspect_appealed_court_file', 'Appeal court file number');
                                             });

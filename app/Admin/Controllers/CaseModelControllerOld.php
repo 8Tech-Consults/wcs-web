@@ -453,7 +453,7 @@ class CaseModelController extends AdminController
 
 
                     $form->select('status', __('Case status'))
-                        ->rules('required')
+                        ->rules('required') 
                         ->options([
                             1 => 'On-going investigation',
                             2 => 'Closed',
@@ -468,9 +468,7 @@ class CaseModelController extends AdminController
                         'Further investigation' => 'Further investigation',
                         'Dismissed' => 'Dismissed',
                         'Convicted' => 'Convicted',
-                    ]);
-
-
+                    ]); 
                     $form->radio('is_jailed', __('Was suspect jailed?'))
                         ->options([
                             1 => 'Yes',

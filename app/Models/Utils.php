@@ -509,8 +509,7 @@ class Utils  extends Model
         $data = [];
         foreach ([
             '',
-            "Kenya",
-            "Uganda",
+            "Kenya", 
             "Tanzania",
             "Rwanda",
             "Congo",

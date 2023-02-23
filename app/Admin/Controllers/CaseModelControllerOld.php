@@ -309,7 +309,7 @@ class CaseModelController extends AdminController
             $form->tab('Case details', function (Form $form) {
 
 
- 
+
                 $form->text('suspect_first_name')->rules('required');
 
                 $form->html('<button class="btn btn-primary" id="add_anothe_suspect" >ADD  ANOTHER SUSPECT</button>');
@@ -342,19 +342,46 @@ class CaseModelController extends AdminController
                     $form->text('Occupataion');
 
 
-                    $form->select('country')
-                        ->help('Nationality of the suspect')
-                        ->options(Utils::COUNTRIES())->rules('required');
+
+                    $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+                    ->options([
+                        'Ugandan' => 'Yes',
+                        'Not Ugandan' => 'No',
+                    ])
+                    ->when('Ugandan', function ($form) {
+                        $form->select('country')
+                            ->help('Nationality of the suspect')
+                            ->options([
+                                'Uganda' => 'Uganda'
+                            ])
+                            ->default('Uganda')
+                            ->readonly()
+                            ->rules('required');
+            
+                        $form->select('sub_county_id', __('Sub county'))
+                            ->rules('required')
+                            ->help('Where this suspect originally lives')
+                            ->options(Location::get_sub_counties_array());
+                        $form->select('sub_county_id', __('Sub county'))
+                            ->rules('required')
+                            ->help('Where this suspect originally lives')
+                            ->options(Location::get_sub_counties_array());
+                            $form->text('ethnicity');
+                    })->when('Not Ugandan', function ($form) {
+                        $form->select('country')
+                            ->help('Nationality of the suspect')
+                            ->options(Utils::COUNTRIES())->rules('required');
+                    })->rules('required'); 
+                 
+                    $form->divider('Offences');
+            
+                    $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                        ->help("Select offences involded in this case")
+                        ->rules('required');
+            
+            
 
 
-                    $form->select('sub_county_id', __('Sub county'))
-                        ->rules('required')
-                        ->help('Where this suspect originally lives')
-                        ->options(Location::get_sub_counties_array());
-                    $form->select('sub_county_id', __('Sub county'))
-                        ->rules('required')
-                        ->help('Where this suspect originally lives')
-                        ->options(Location::get_sub_counties_array());
 
 
                     $form->divider('Arrest information');
@@ -391,8 +418,8 @@ class CaseModelController extends AdminController
                     $form->text('arrest_village', 'Village of Arrest');
                     $form->text('arrest_latitude', 'Arrest GPS - latitude');
                     $form->text('arrest_longitude', 'Arrest GPS - longitude');
-               
-           
+
+
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Arresting agency')->options([
@@ -453,7 +480,7 @@ class CaseModelController extends AdminController
 
 
                     $form->select('status', __('Case status'))
-                        ->rules('required') 
+                        ->rules('required')
                         ->options([
                             1 => 'On-going investigation',
                             2 => 'Closed',
@@ -468,7 +495,7 @@ class CaseModelController extends AdminController
                         'Further investigation' => 'Further investigation',
                         'Dismissed' => 'Dismissed',
                         'Convicted' => 'Convicted',
-                    ]); 
+                    ]);
                     $form->radio('is_jailed', __('Was suspect jailed?'))
                         ->options([
                             1 => 'Yes',

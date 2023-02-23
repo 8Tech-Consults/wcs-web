@@ -570,17 +570,37 @@ class CaseSuspectController extends AdminController
         $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
         $form->text('national_id_number');
         $form->text('occuptaion');
-        $form->select('country')
-            ->help('Nationality of the suspect')
-            ->options(Utils::COUNTRIES())->rules('required');
+ 
 
-        $form->select('sub_county_id', __('Sub county'))
-            ->rules('int|required')
-            ->help('Where this suspect originally lives')
-            ->options(Location::get_sub_counties_array());
-        $form->text('parish');
-        $form->text('village');
-        $form->text('ethnicity');
+        $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+        ->options([
+            'Ugandan' => 'Yes',
+            'Not Ugandan' => 'No',
+        ])
+        ->when('Ugandan', function ($form) {
+            $form->select('country')
+                ->help('Nationality of the suspect')
+                ->options([
+                    'Uganda' => 'Uganda'
+                ])
+                ->default('Uganda')
+                ->readonly()
+                ->rules('required');
+
+            $form->select('sub_county_id', __('Sub county'))
+                ->rules('required')
+                ->help('Where this suspect originally lives')
+                ->options(Location::get_sub_counties_array());
+            $form->select('sub_county_id', __('Sub county'))
+                ->rules('required')
+                ->help('Where this suspect originally lives')
+                ->options(Location::get_sub_counties_array());
+                $form->text('ethnicity');
+        })->when('Not Ugandan', function ($form) {
+            $form->select('country')
+                ->help('Nationality of the suspect')
+                ->options(Utils::COUNTRIES())->rules('required');
+        })->rules('required');  
         $form->divider('Offences');
 
         $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))

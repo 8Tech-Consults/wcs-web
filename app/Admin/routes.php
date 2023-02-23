@@ -16,6 +16,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home'); 
     $router->resource('cases', CaseModelController::class);
     $router->resource('secretaries', SecretariesController::class);
+    
     $router->resource('locations', LocationController::class); 
     $router->resource('exhibits', ExhibitController::class);
     $router->resource('case-suspects', CaseSuspectController::class);

@@ -34,7 +34,12 @@ class ExhibitController extends AdminController
                 'reported_by' => $u->id
             ]);
             $grid->disableExport();
-        } else if ($u->isRole('ca-team')) {
+        } else if (
+            $u->isRole('ca-team') ||
+            $u->isRole('ca-manager') ||
+            $u->isRole('hq-team-leaders')  
+        
+        ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ]);

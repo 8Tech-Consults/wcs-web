@@ -62,8 +62,12 @@ class CaseSuspectController extends AdminController
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
-            $grid->disableExport(); 
-        } else if ($u->isRole('ca-team')) {
+            $grid->disableExport();
+        } else if (
+            $u->isRole('ca-team') ||
+            $u->isRole('ca-manager') ||
+            $u->isRole('hq-team-leaders')  
+        ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ])->orWhere([
@@ -386,8 +390,17 @@ class CaseSuspectController extends AdminController
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
             <i class="fa fa-eye"></i>View</a>';
-            $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '">
+            $edit_link = "";
+            if (
+                !Auth::user()->isRole('ca-agent') ||
+                !Auth::user()->isRole('ca-manager') ||
+                !Auth::user()->isRole('hq-team-leaders') ||
+                !Auth::user()->isRole('ca-team')
+            
+            ) {
+                $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '"> 
             <i class="fa fa-edit"></i> Edit</a>';
+            }
             return $view_link . $edit_link;
         });
 
@@ -541,7 +554,7 @@ class CaseSuspectController extends AdminController
         $form->divider('Suspect Bio data');
 
 
- 
+
         $form->image('photo', 'Suspect photo');
 
 
@@ -696,7 +709,7 @@ class CaseSuspectController extends AdminController
 
                         $form->text('prosecutor', 'Lead prosecutor');
                         $form->text('magistrate_name', 'Magistrate Name');
- 
+
                         $form->radio('court_status', __('Court case status'))
                             ->options([
                                 'On-going investigation' => 'On-going investigation',

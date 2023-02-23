@@ -9,8 +9,18 @@ use App\Models\Utils;
         <div class="mt-3 mt-md-0">
             <a href="{{ url('cases') }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> BACK
                 TO ALL OFFENCES</a>
-            <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>
-                EDIT</a>
+
+            @if (
+            
+            !Auth::user()->isRole('ca-agent') || 
+            !Auth::user()->isRole('ca-manager') ||
+            !Auth::user()->isRole('hq-team-leaders') ||
+            !Auth::user()->isRole('ca-team') 
+            
+            )
+                <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>
+                    EDIT</a>
+            @endif
             <a href="#" onclick="window.print();return false;" class="btn btn-primary btn-sm"><i
                     class="fa fa-print"></i> PRINT</a>
         </div>

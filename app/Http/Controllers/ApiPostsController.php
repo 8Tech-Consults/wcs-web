@@ -192,12 +192,14 @@ class ApiPostsController extends Controller
         $suspects = [];
         $exhibits = [];
         if (isset($r->suspects)) {
-            $suspects = json_decode($r->suspects);
+         
+            $suspects = json_decode($r->suspects); 
+            
             if ($suspects == null) {
+                
                 $suspects = [];
             }
-        }
-
+        } 
         if (isset($r->exhibits)) {
             $exhibits = json_decode($r->exhibits);
             if ($exhibits == null) {
@@ -216,9 +218,7 @@ class ApiPostsController extends Controller
             if ($e == null) {
                 $e = new Exhibit();
             }
-
-
-
+ 
             $e->case_id = $case->id;
             $e->exhibit_catgory = $v->exhibit_catgory;
             $e->wildlife = '';
@@ -245,6 +245,7 @@ class ApiPostsController extends Controller
 
             $s->uwa_suspect_number = $v->uwa_suspect_number;
             $s->case_id = $case->id;
+       
             $s->first_name = $v->first_name;
             $s->middle_name = $v->middle_name;
             $s->last_name = $v->last_name;

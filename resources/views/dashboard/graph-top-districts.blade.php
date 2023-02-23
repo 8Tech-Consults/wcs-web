@@ -23,7 +23,12 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Crime rate per CA</b> 
+            @if (Auth::user()->isRole('ca-agent') || Auth::user()->isRole('ca-manager') || Auth::user()->isRole('ca-team'))
+                <b>Crime rate per PA</b>
+            @else
+                <b>Crime rate per CA</b>
+            @endif
+
         </h3>
         <div>
             <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">

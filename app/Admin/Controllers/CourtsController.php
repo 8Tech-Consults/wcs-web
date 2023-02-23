@@ -125,7 +125,11 @@ class CourtsController extends AdminController
             $grid->model()->where([
                 'reported_by' => $u->id
             ]);
-        } else if ($u->isRole('ca-team')) {
+        } else if (
+            $u->isRole('ca-team') ||
+            $u->isRole('ca-manager') ||
+            $u->isRole('hq-team-leaders')  
+        ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ])->orWhere([
@@ -360,12 +364,20 @@ class CourtsController extends AdminController
         $grid->column('action', __('Actions'))->display(function () {
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
-              <i class="fa fa-eye"></i>View</a>';
-            $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '">
-              <i class="fa fa-edit"></i> Edit</a>';
+            <i class="fa fa-eye"></i>View</a>';
+            $edit_link = "";
+            if (
+                !Auth::user()->isRole('ca-agent') ||
+                !Auth::user()->isRole('ca-manager') ||
+                !Auth::user()->isRole('hq-team-leaders') ||
+                !Auth::user()->isRole('ca-team') 
+            
+            ) {
+                $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '"> 
+            <i class="fa fa-edit"></i> Edit</a>';
+            }
             return $view_link . $edit_link;
-        });
-
+        }); 
         return $grid;
     }
 

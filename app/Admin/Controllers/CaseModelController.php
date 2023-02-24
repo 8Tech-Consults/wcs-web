@@ -396,7 +396,7 @@ class CaseModelController extends AdminController
 
         if (
             ((!$form->isCreating()) &&
-                (!Auth::user()->isRole('ca-agent'))) ||
+                (!Auth::user()->isRole('ca-agent'))) &&
             ((!$form->isCreating()) &&
                 (!Auth::user()->isRole('ca-team')))
         ) {

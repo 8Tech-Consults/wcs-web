@@ -90,12 +90,12 @@ class CaseModelController extends AdminController
             ]);
             $grid->disableExport();
         } else if (
-            
+
             $u->isRole('ca-team') ||
             $u->isRole('ca-manager') ||
-            $u->isRole('hq-team-leaders') 
-        
-        ) { 
+            $u->isRole('hq-team-leaders')
+
+        ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ])->orWhere([
@@ -395,58 +395,61 @@ class CaseModelController extends AdminController
 
 
 
-        if ($form->isCreating()) {
-        }
-        $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
+        if (
+            (!$form->isCreating()) &&
+            (!Auth::user()->isRole('ca-agent'))
+        ) {
 
-        $form->tab('Offence', function (Form $form) {
+            $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
+
+            $form->tab('Offence', function (Form $form) {
 
 
-            /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
                 ->help("Select offences involded in this case")
                 ->rules('required'); */
 
-            $form->disableCreatingCheck();
-            $form->disableReset();
-            $form->disableEditingCheck();
-            $form->disableViewCheck();
+                $form->disableCreatingCheck();
+                $form->disableReset();
+                $form->disableEditingCheck();
+                $form->disableViewCheck();
 
 
 
 
-            /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
                     ->help("Select offences involded in this case")
                     ->rules('required');
          */
 
-            $form->text('title', __('Case title'))
-                ->help("Describe this case in summary")
-                ->rules('required');
-            $form->textarea('offence_description', __('Case description'))
-                ->help("Describe this case in details")
-                ->rules('required');
+                $form->text('title', __('Case title'))
+                    ->help("Describe this case in summary")
+                    ->rules('required');
+                $form->textarea('offence_description', __('Case description'))
+                    ->help("Describe this case in details")
+                    ->rules('required');
 
-            $form->text('officer_in_charge', 'Officer in charge')->rules('required');
+                $form->text('officer_in_charge', 'Officer in charge')->rules('required');
 
-            $form->select('offense_category', __('Case category'))
-                ->options([
-                    'Category 1' => 'Category 1',
-                    'Category 2' => 'Category 2',
-                    'Category 3' => 'Category 3',
-                ])
-                ->rules('required');
+                $form->select('offense_category', __('Case category'))
+                    ->options([
+                        'Category 1' => 'Category 1',
+                        'Category 2' => 'Category 2',
+                        'Category 3' => 'Category 3',
+                    ])
+                    ->rules('required');
 
-            $form->radio('is_offence_committed_in_pa', __('Did the case took place in a PA?'))
-                ->rules('required')
-                ->options([
-                    1 => 'Yes',
-                    0 => 'No',
-                ])
-                ->default(null)
-                ->when(0, function (Form $form) {
+                $form->radio('is_offence_committed_in_pa', __('Did the case took place in a PA?'))
+                    ->rules('required')
+                    ->options([
+                        1 => 'Yes',
+                        0 => 'No',
+                    ])
+                    ->default(null)
+                    ->when(0, function (Form $form) {
 
 
-                    /* 
+                        /* 
         
                         $form->select('sub_county_id', __('Sub county'))
                             ->rules('required')
@@ -455,73 +458,67 @@ class CaseModelController extends AdminController
                         $form->text('parish', __('Parish'))->rules('required');
                         $form->text('village', __('Village'))->rules('required');
                         $form->hidden('offence_category_id', __('Village'))->default(1)->value(1); */
-                })->when(1, function (Form $form) {
-                    $form->select('pa_id', __('Select PA'))
-                        ->rules('required')
-                        ->options(PA::all()->pluck('name_text', 'id'));
-                });
+                    })->when(1, function (Form $form) {
+                        $form->select('pa_id', __('Select PA'))
+                            ->rules('required')
+                            ->options(PA::all()->pluck('name_text', 'id'));
+                    });
 
 
-            $form->select('ca_id', __('Nearest conservation area'))
-                ->rules('required')
-                ->options(ConservationArea::all()->pluck('name', 'id'));
+                $form->select('ca_id', __('Nearest conservation area'))
+                    ->rules('required')
+                    ->options(ConservationArea::all()->pluck('name', 'id'));
 
 
-            $form->text('latitude', 'Case scene GPS - latitude');
-            $form->text('longitude', 'Case scene GPS - longitude');
-
-
-
-
-            $form->hidden('has_exhibits', __('Does this case have exhibits?'))
-                ->default(1);
-
-            $form->select('detection_method', __('Detection method'))
-                ->options([
-                    'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
-                    'Contacted by security agencies' => 'Contacted by security agencies',
-                    'House visit based on intelligence' => 'House visit based on intelligence',
-                    'Intelligence led patrol' => 'Intelligence led patrol',
-                    'Observed during non-duty activities' => 'Observed during non-duty activities',
-                    'Routine patrol by rangers' => 'Routine patrol by rangers',
-                    'Routine security check' => 'Routine security check',
-                    'Investigation' => 'Investigation',
-                    'Risk profiling' => 'Risk profiling',
-                    'Random selection' => 'Random selection'
-                ])
-                ->rules('required');
-        });
+                $form->text('latitude', 'Case scene GPS - latitude');
+                $form->text('longitude', 'Case scene GPS - longitude');
 
 
 
 
+                $form->hidden('has_exhibits', __('Does this case have exhibits?'))
+                    ->default(1);
 
-
-
-        $form->tab('Exhibits', function (Form $form) {
-
-            $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
-
-                $form->select('exhibit_catgory', __('Exhibit category'))
+                $form->select('detection_method', __('Detection method'))
                     ->options([
-                        'Wildlife' => 'Wildlife',
-                        'Implements' => 'Implements',
-                        'Implement & Wildlife' => 'Both Implement & Wildlife',
+                        'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
+                        'Contacted by security agencies' => 'Contacted by security agencies',
+                        'House visit based on intelligence' => 'House visit based on intelligence',
+                        'Intelligence led patrol' => 'Intelligence led patrol',
+                        'Observed during non-duty activities' => 'Observed during non-duty activities',
+                        'Routine patrol by rangers' => 'Routine patrol by rangers',
+                        'Routine security check' => 'Routine security check',
+                        'Investigation' => 'Investigation',
+                        'Risk profiling' => 'Risk profiling',
+                        'Random selection' => 'Random selection'
                     ])
                     ->rules('required');
-                $form->text('wildlife', __('Species'));
-                $form->decimal('quantity', __('Quantity (in KGs)'));
-                $form->text('implement', __('Implements'));
-                $form->decimal('number_of_pieces', __('Number of pieces/equipment'));
-                $form->textarea('description', __('Description'))
-                    ->rules('required');
-                /* $form->textarea('wildlife', __('Wildlife'));
+            });
+            $form->tab('Exhibits', function (Form $form) {
+
+                $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
+
+                    $form->select('exhibit_catgory', __('Exhibit category'))
+                        ->options([
+                            'Wildlife' => 'Wildlife',
+                            'Implements' => 'Implements',
+                            'Implement & Wildlife' => 'Both Implement & Wildlife',
+                        ])
+                        ->rules('required');
+                    $form->text('wildlife', __('Species'));
+                    $form->decimal('quantity', __('Quantity (in KGs)'));
+                    $form->text('implement', __('Implements'));
+                    $form->decimal('number_of_pieces', __('Number of pieces/equipment'));
+                    $form->textarea('description', __('Description'))
+                        ->rules('required');
+                    /* $form->textarea('wildlife', __('Wildlife'));
                 $form->textarea('implements', __('Implements')); */
 
-                $form->file('photos', __('Exhibit file/photo'));
-                $form->file('attachment', __('Attachments'));
+                    $form->file('photos', __('Exhibit file/photo'));
+                    $form->file('attachment', __('Attachments'));
+                });
             });
-        });
+        }
 
 
         $form->tab('Case progress comments', function (Form $form) {

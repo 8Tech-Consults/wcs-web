@@ -218,7 +218,7 @@ class NewCaseModelController extends AdminController
             ])
             ->rules('required'); */
 
-        $form->radio('is_offence_committed_in_pa', __('Did the case took place in a PA?'))
+        $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
             ->rules('required')
             ->options([
                 1 => 'Yes',

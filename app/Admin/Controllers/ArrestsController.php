@@ -347,9 +347,17 @@ class ArrestsController extends AdminController
                 return $this->case->reportor->name;
             })->hide()
             ->sortable();
+
+
+
         $grid->actions(function ($actions) {
-            $actions->disableDelete();
-        });
+            if (
+                (!Auth::user()->isRole('admin'))
+            ) {
+                $actions->disableEdit();
+                $actions->disableDelete();
+            }
+        }); 
 
         $grid->column('action', __('Actions'))->display(function () {
 

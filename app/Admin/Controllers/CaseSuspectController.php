@@ -66,7 +66,7 @@ class CaseSuspectController extends AdminController
         } else if (
             $u->isRole('ca-team') ||
             $u->isRole('ca-manager') ||
-            $u->isRole('hq-team-leaders')  
+            $u->isRole('hq-team-leaders')
         ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
@@ -80,6 +80,9 @@ class CaseSuspectController extends AdminController
                 'reported_by' => $u->id
             ]);
         }
+
+
+
 
 
         $grid->model()
@@ -382,7 +385,12 @@ class CaseSuspectController extends AdminController
             })->hide()
             ->sortable();
         $grid->actions(function ($actions) {
-            $actions->disableDelete();
+            if (
+                (!Auth::user()->isRole('admin'))
+            ) {
+                $actions->disableEdit();
+                $actions->disableDelete();
+            }
         });
 
 
@@ -396,7 +404,7 @@ class CaseSuspectController extends AdminController
                 !Auth::user()->isRole('ca-manager') ||
                 !Auth::user()->isRole('hq-team-leaders') ||
                 !Auth::user()->isRole('ca-team')
-            
+
             ) {
                 $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '"> 
             <i class="fa fa-edit"></i> Edit</a>';
@@ -570,37 +578,37 @@ class CaseSuspectController extends AdminController
         $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
         $form->text('national_id_number');
         $form->text('occuptaion');
- 
+
 
         $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
-        ->options([
-            'Ugandan' => 'Yes',
-            'Not Ugandan' => 'No',
-        ])
-        ->when('Ugandan', function ($form) {
-            $form->select('country')
-                ->help('Nationality of the suspect')
-                ->options([
-                    'Uganda' => 'Uganda'
-                ])
-                ->default('Uganda')
-                ->readonly()
-                ->rules('required');
+            ->options([
+                'Ugandan' => 'Yes',
+                'Not Ugandan' => 'No',
+            ])
+            ->when('Ugandan', function ($form) {
+                $form->select('country')
+                    ->help('Nationality of the suspect')
+                    ->options([
+                        'Uganda' => 'Uganda'
+                    ])
+                    ->default('Uganda')
+                    ->readonly()
+                    ->rules('required');
 
-            $form->select('sub_county_id', __('Sub county'))
-                ->rules('required')
-                ->help('Where this suspect originally lives')
-                ->options(Location::get_sub_counties_array());
-            $form->select('sub_county_id', __('Sub county'))
-                ->rules('required')
-                ->help('Where this suspect originally lives')
-                ->options(Location::get_sub_counties_array());
+                $form->select('sub_county_id', __('Sub county'))
+                    ->rules('required')
+                    ->help('Where this suspect originally lives')
+                    ->options(Location::get_sub_counties_array());
+                $form->select('sub_county_id', __('Sub county'))
+                    ->rules('required')
+                    ->help('Where this suspect originally lives')
+                    ->options(Location::get_sub_counties_array());
                 $form->text('ethnicity');
-        })->when('Not Ugandan', function ($form) {
-            $form->select('country')
-                ->help('Nationality of the suspect')
-                ->options(Utils::COUNTRIES())->rules('required');
-        })->rules('required');  
+            })->when('Not Ugandan', function ($form) {
+                $form->select('country')
+                    ->help('Nationality of the suspect')
+                    ->options(Utils::COUNTRIES())->rules('required');
+            })->rules('required');
         $form->divider('Offences');
 
         $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))

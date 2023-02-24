@@ -7,7 +7,7 @@ photo
 age	
 phone_number	
 national_id_number	
-occuptaion	
+	
 country	
 sub_county_id	
 district_id	

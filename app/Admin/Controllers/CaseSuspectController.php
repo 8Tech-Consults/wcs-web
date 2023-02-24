@@ -569,7 +569,7 @@ class CaseSuspectController extends AdminController
         $form->date('age', 'Date of birth')->rules('required');
         $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
         $form->text('national_id_number');
-        $form->text('occuptaion');
+        $form->text('occuptaion','Occupataion');
 
 
         $form->radio('is_ugandan', __('Is the suspect a Ugandan'))

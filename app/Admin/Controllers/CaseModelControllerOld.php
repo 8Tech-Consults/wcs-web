@@ -339,7 +339,7 @@ class CaseModelController extends AdminController
                     $form->date('age', 'Date of birth')->rules('required');
                     $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
                     $form->text('national_id_number');
-                    $form->text('Occupataion');
+                    $form->text('Occupation');
 
 
 
@@ -362,10 +362,11 @@ class CaseModelController extends AdminController
                             ->rules('required')
                             ->help('Where this suspect originally lives')
                             ->options(Location::get_sub_counties_array());
-                        $form->select('sub_county_id', __('Sub county'))
-                            ->rules('required')
-                            ->help('Where this suspect originally lives')
-                            ->options(Location::get_sub_counties_array());
+           
+
+                            $form->text('parish');
+                            $form->text('village');
+                            
                             $form->text('ethnicity');
                     })->when('Not Ugandan', function ($form) {
                         $form->select('country')

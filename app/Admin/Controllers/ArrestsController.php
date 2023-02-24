@@ -223,7 +223,7 @@ class ArrestsController extends AdminController
             ->sortable();
         $grid->column('national_id_number', __('NIN'))->hide();
         $grid->column('phone_number', __('Phone number'))->hide();
-        $grid->column('occuptaion', __('Occupataion'))->hide();
+        $grid->column('occuptaion', __('Occupation'))->hide();
         $grid->column('country', __('Country'))->hide()->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             return $this->district->name;

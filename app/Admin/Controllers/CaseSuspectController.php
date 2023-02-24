@@ -64,14 +64,14 @@ class CaseSuspectController extends AdminController
             ]);
             $grid->disableExport();
         } else if (
-            $u->isRole('ca-team') 
+            $u->isRole('ca-team')
         ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ])->orWhere([
                 'reported_by' => $u->id
             ]);
-        }  
+        }
 
 
 
@@ -248,7 +248,7 @@ class CaseSuspectController extends AdminController
                 return $this->ca->name;
             })
             ->sortable();
-        $grid->column('occuptaion', __('Occupataion'))->hide();
+        $grid->column('occuptaion', __('Occupation'))->hide();
         $grid->column('country', __('Country'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             return $this->district->name;
@@ -435,7 +435,7 @@ class CaseSuspectController extends AdminController
         $show->field('national_id_number', __('National id number'));
         $show->field('sex', __('Sex'));
         $show->field('age', __('Age'));
-        $show->field('occuptaion', __('Occupataion'));
+        $show->field('occuptaion', __('Occupation'));
         $show->field('country', __('Country'));
         $show->field('district_id', __('District id'));
         $show->field('sub_county_id', __('Sub county id'));
@@ -569,7 +569,7 @@ class CaseSuspectController extends AdminController
         $form->date('age', 'Date of birth')->rules('required');
         $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
         $form->text('national_id_number');
-        $form->text('occuptaion','Occupataion');
+        $form->text('occuptaion', 'Occupation');
 
 
         $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
@@ -595,6 +595,8 @@ class CaseSuspectController extends AdminController
                     ->rules('required')
                     ->help('Where this suspect originally lives')
                     ->options(Location::get_sub_counties_array());
+                $form->text('parish');
+                $form->text('village');
                 $form->text('ethnicity');
             })->when('Not Ugandan', function ($form) {
                 $form->select('country')

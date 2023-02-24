@@ -58,7 +58,7 @@ class NewCaseSuspectController extends AdminController
         $grid->column('national_id_number', __('National id number'));
         $grid->column('sex', __('Sex'));
         $grid->column('age', __('Age'));
-        $grid->column('occuptaion', __('Occupataion'));
+        $grid->column('occuptaion', __('Occupation'));
         $grid->column('country', __('Country'));
         $grid->column('district_id', __('District id'));
         $grid->column('sub_county_id', __('Sub county id'));
@@ -146,7 +146,7 @@ class NewCaseSuspectController extends AdminController
         $show->field('national_id_number', __('National id number'));
         $show->field('sex', __('Sex'));
         $show->field('age', __('Age'));
-        $show->field('occuptaion', __('Occupataion'));
+        $show->field('occuptaion', __('Occupation'));
         $show->field('country', __('Country'));
         $show->field('district_id', __('District id'));
         $show->field('sub_county_id', __('Sub county id'));
@@ -261,7 +261,7 @@ class NewCaseSuspectController extends AdminController
         $form->date('age', 'Date of birth')->rules('required');
         $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
         $form->text('national_id_number');
-        $form->text('occuptaion','Occupataion');
+        $form->text('occuptaion', 'Occupation');
 
         $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
             ->options([
@@ -282,16 +282,14 @@ class NewCaseSuspectController extends AdminController
                     ->rules('required')
                     ->help('Where this suspect originally lives')
                     ->options(Location::get_sub_counties_array());
-                $form->select('sub_county_id', __('Sub county'))
-                    ->rules('required')
-                    ->help('Where this suspect originally lives')
-                    ->options(Location::get_sub_counties_array());
+                $form->text('parish');
+                $form->text('village');
                 $form->text('ethnicity');
             })->when('Not Ugandan', function ($form) {
                 $form->select('country')
                     ->help('Nationality of the suspect')
                     ->options(Utils::COUNTRIES())->rules('required');
-            })->rules('required');  
+            })->rules('required');
         $form->divider('Offences');
 
         $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
@@ -299,11 +297,7 @@ class NewCaseSuspectController extends AdminController
             ->rules('required');
 
 
-        $form->divider('Offences');
-
-        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-            ->help("Select offences involded in this case")
-            ->rules('required');
+   
 
 
 

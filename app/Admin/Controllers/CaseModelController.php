@@ -180,7 +180,7 @@ class CaseModelController extends AdminController
                 Auth::user()->isRole('hq-team-leaders') ||
                 Auth::user()->isRole('ca-team')
             ) {
-                $actions->disableEdit();
+                //$actions->disableEdit();
             }
 
             $actions->disableDelete();

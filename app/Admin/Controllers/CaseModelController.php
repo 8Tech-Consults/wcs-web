@@ -176,12 +176,11 @@ class CaseModelController extends AdminController
         $grid->actions(function ($actions) {
 
             if (
-                Auth::user()->isRole('ca-agent') ||
                 Auth::user()->isRole('ca-manager') ||
                 Auth::user()->isRole('hq-team-leaders') ||
                 Auth::user()->isRole('ca-team')
             ) {
-                //$actions->disableEdit();
+                $actions->disableEdit();
             }
 
             $actions->disableDelete();
@@ -396,9 +395,12 @@ class CaseModelController extends AdminController
 
 
         if (
-            (!$form->isCreating()) &&
-            (!Auth::user()->isRole('ca-agent'))
+            ((!$form->isCreating()) &&
+                (!Auth::user()->isRole('ca-agent'))) ||
+            ((!$form->isCreating()) &&
+                (!Auth::user()->isRole('ca-team')))
         ) {
+
 
             $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
 

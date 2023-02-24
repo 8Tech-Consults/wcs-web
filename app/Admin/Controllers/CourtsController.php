@@ -359,7 +359,7 @@ class CourtsController extends AdminController
             <i class="fa fa-eye"></i>View</a>';
             $edit_link = "";
             if (
-                ((!$form->isCreating()) &&
+                (
                 (Auth::user()->isRole('admin')))
             
             ) {

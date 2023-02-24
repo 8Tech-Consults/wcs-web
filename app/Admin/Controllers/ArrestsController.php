@@ -367,7 +367,7 @@ class ArrestsController extends AdminController
             <i class="fa fa-eye"></i>View</a>';
             $edit_link = "";
             if (
-                ((!$form->isCreating()) &&
+                ( 
                 (Auth::user()->isRole('admin')))
             ) {
                 $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '"> 

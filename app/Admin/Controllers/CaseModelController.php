@@ -171,7 +171,6 @@ class CaseModelController extends AdminController
             ) {
                 $actions->disableEdit();
             }
-
             $actions->disableDelete();
             $actions->add(new CaseModelActionAddSuspect);
         });

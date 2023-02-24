@@ -12,9 +12,8 @@ use App\Models\Utils;
 
             @if (
             
-            ((!$form->isCreating()) &&
+            (
                 (Auth::user()->isRole('admin')))
-            
             )
                 <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>
                     EDIT</a>

@@ -90,14 +90,14 @@ class CaseModelController extends AdminController
             ]);
             $grid->disableExport();
         } else if (
-            $u->isRole('ca-team')  
+            $u->isRole('ca-team')
         ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ])->orWhere([
                 'reported_by' => $u->id
             ]);
-        }  
+        }
 
         //if($u->isRole('admin'))
 
@@ -385,17 +385,13 @@ class CaseModelController extends AdminController
 
         if (
             ((!$form->isCreating()) &&
-                (!Auth::user()->isRole('ca-agent'))) &&
-            ((!$form->isCreating()) &&
-                (!Auth::user()->isRole('ca-team'))) &&
-            ((!$form->isCreating()) &&
-                (!Auth::user()->isRole('ca-manager')))
+                (Auth::user()->isRole('admin')))
         ) {
 
 
             $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
 
-            $form->tab('Offence', function (Form $form) {
+            $form->tab('Case information', function (Form $form) {
 
 
                 /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))

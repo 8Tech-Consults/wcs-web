@@ -12,10 +12,8 @@ use App\Models\Utils;
 
             @if (
             
-            !Auth::user()->isRole('ca-agent') || 
-            !Auth::user()->isRole('ca-manager') ||
-            !Auth::user()->isRole('hq-team-leaders') ||
-            !Auth::user()->isRole('ca-team') 
+            ((!$form->isCreating()) &&
+                (Auth::user()->isRole('admin')))
             
             )
                 <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>

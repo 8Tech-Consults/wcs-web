@@ -35,19 +35,15 @@ class ExhibitController extends AdminController
             ]);
             $grid->disableExport();
         } else if (
-            $u->isRole('ca-team') ||
-            $u->isRole('ca-manager') ||
-            $u->isRole('hq-team-leaders')  
-        
+            $u->isRole('ca-team')
+
         ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
+            ])->orWhere([
+                'reported_by' => $u->id
             ]);
-        } else if (!$u->isRole('admin')) {
-            $grid->model()->where([
-                'ca_id' => $u->ca_id
-            ]);
-        }  
+        }
 
         $grid->disableCreateButton();
         $grid->disableActions();

@@ -69,6 +69,8 @@ class ArrestsController extends AdminController
         ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
+            ])->orWhere([
+                'reported_by' => $u->id
             ]);
         } else if (!$u->isRole('admin')) {
             $grid->model()->where([

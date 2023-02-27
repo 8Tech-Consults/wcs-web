@@ -335,7 +335,6 @@ class NewCaseSuspectController extends AdminController
 
 
 
-
         /* 
         $form->morphMany('offences', 'Click on new to add offence', function (Form\NestedForm $form) {
             $offences = Offence::all()->pluck('name', 'id');
@@ -360,60 +359,148 @@ class NewCaseSuspectController extends AdminController
             })
             ->when(1, function ($form) {
 
+
                 $form->divider('Arrest information');
-                $form->datetime('arrest_date_time', 'Arrest date and time');
 
-                $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
-                    ->options([
-                        'Yes' => 'Yes',
-                        'No' => 'No',
+                $hasPendingSusps = false;
+                $pendingCase = Utils::hasPendingCase(Auth::user());
+                if ($pendingCase != null) {
+                    if ($pendingCase->suspects->count() > 0) {
+                        $hasPendingSusps = true;
+                    }
+                }
+
+
+                if ($hasPendingSusps) {
+                    $form->radio('use_same_arrest_information', "Do you want to use existing arrest information for this suspect?")
+                        ->options([
+                            'No' => 'No',
+                            'Yes' => 'Yes',
+                        ])->when('No', function ($form) {
+
+
+                            $form->datetime('arrest_date_time', 'Arrest date and time');
+
+                            $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
+                                ->options([
+                                    'Yes' => 'Yes',
+                                    'No' => 'No',
+                                ])
+                                ->when('Yes', function ($form) {
+                                    $form->select('pa_id', __('Select PA'))
+                                        ->options(PA::all()->pluck('name_text', 'id'));
+                                })
+                                ->when('No', function ($form) {
+                                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+                                        ->rules('int|required')
+                                        ->help('Where this suspect was arrested')
+                                        ->options(Location::get_sub_counties_array());
+
+
+                                    $form->text('arrest_parish', 'Parish of Arrest');
+                                    $form->text('arrest_village', 'Arrest village');
+                                })
+                                ->rules('required');
+
+
+                            $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
+                            $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
+
+                            $form->text('arrest_first_police_station', 'Police station of Arrest');
+                            $form->text('arrest_current_police_station', 'Current police station');
+                            $form->select('arrest_agency', 'Arresting agency')->options([
+                                'UWA' => 'UWA',
+                                'UPDF' => 'UPDF',
+                                'UPF' => 'UPF',
+                                'ESO' => 'ESO',
+                                'ISO' => 'ISO',
+                                'URA' => 'URA',
+                                'DCIC' => 'DCIC',
+                                'INTERPOL' => 'INTERPOL',
+                                'UCAA' => 'UCAA',
+                            ])
+                                ->when('UWA', function ($form) {
+                                    $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+                                        'Canine Unit' => 'The Canine Unit',
+                                        'WCU' => 'WCU',
+                                        'NRCN' => 'NRCN',
+                                        'LEU' => 'LEU',
+                                    ]);
+                                });
+
+                            $form->text('arrest_crb_number', 'Police CRB number');
+                            $form->text('police_sd_number', 'Police SD number');
+                        })
+                        ->when('Yes', function ($form) {
+                            $supects = [];
+                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            if ($pendingCase != null) {
+                                if ($pendingCase->suspects->count() > 0) {
+                                    foreach ($pendingCase->suspects as $sus) {
+                                        $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
+                                    }
+                                }
+                            }
+                            $form->select('use_same_arrest_information_id', 'Select suspect')
+                                ->options($supects)
+                                ->rules('required');
+                        })
+                        ->rules('required');
+                } else {
+
+
+                    $form->datetime('arrest_date_time', 'Arrest date and time');
+
+                    $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
+                        ->options([
+                            'Yes' => 'Yes',
+                            'No' => 'No',
+                        ])
+                        ->when('Yes', function ($form) {
+                            $form->select('pa_id', __('Select PA'))
+                                ->options(PA::all()->pluck('name_text', 'id'));
+                        })
+                        ->when('No', function ($form) {
+                            $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+                                ->rules('int|required')
+                                ->help('Where this suspect was arrested')
+                                ->options(Location::get_sub_counties_array());
+
+
+                            $form->text('arrest_parish', 'Parish of Arrest');
+                            $form->text('arrest_village', 'Arrest village');
+                        })
+                        ->rules('required');
+
+
+                    $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
+                    $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
+
+                    $form->text('arrest_first_police_station', 'Police station of Arrest');
+                    $form->text('arrest_current_police_station', 'Current police station');
+                    $form->select('arrest_agency', 'Arresting agency')->options([
+                        'UWA' => 'UWA',
+                        'UPDF' => 'UPDF',
+                        'UPF' => 'UPF',
+                        'ESO' => 'ESO',
+                        'ISO' => 'ISO',
+                        'URA' => 'URA',
+                        'DCIC' => 'DCIC',
+                        'INTERPOL' => 'INTERPOL',
+                        'UCAA' => 'UCAA',
                     ])
-                    ->when('Yes', function ($form) {
-                        $form->select('pa_id', __('Select PA'))
-                            ->options(PA::all()->pluck('name_text', 'id'));
-                    })
-                    ->when('No', function ($form) {
-                        $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                            ->rules('int|required')
-                            ->help('Where this suspect was arrested')
-                            ->options(Location::get_sub_counties_array());
+                        ->when('UWA', function ($form) {
+                            $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+                                'Canine Unit' => 'The Canine Unit',
+                                'WCU' => 'WCU',
+                                'NRCN' => 'NRCN',
+                                'LEU' => 'LEU',
+                            ]);
+                        });
 
-
-                        $form->text('arrest_parish', 'Parish of Arrest');
-                        $form->text('arrest_village', 'Arrest village');
-                    })
-                    ->rules('required');
-
-
-                $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
-                $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
-
-                $form->text('arrest_first_police_station', 'Police station of Arrest');
-                $form->text('arrest_current_police_station', 'Current police station');
-                $form->select('arrest_agency', 'Arresting agency')->options([
-                    'UWA' => 'UWA',
-                    'UPDF' => 'UPDF',
-                    'UPF' => 'UPF',
-                    'ESO' => 'ESO',
-                    'ISO' => 'ISO',
-                    'URA' => 'URA',
-                    'DCIC' => 'DCIC',
-                    'INTERPOL' => 'INTERPOL',
-                    'UCAA' => 'UCAA',
-                ])
-                    ->when('UWA', function ($form) {
-                        $form->select('arrest_uwa_unit', 'UWA Unit')->options([
-                            'Canine Unit' => 'The Canine Unit',
-                            'WCU' => 'WCU',
-                            'NRCN' => 'NRCN',
-                            'LEU' => 'LEU',
-                        ]);
-                    });
-
-
-
-                $form->text('arrest_crb_number', 'Police CRB number');
-                $form->text('police_sd_number', 'Police SD number');
+                    $form->text('arrest_crb_number', 'Police CRB number');
+                    $form->text('police_sd_number', 'Police SD number');
+                }
 
 
                 $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))

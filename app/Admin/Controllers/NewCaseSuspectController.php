@@ -431,6 +431,7 @@ class NewCaseSuspectController extends AdminController
                             $form->text('arrest_crb_number', 'Police CRB number');
                             $form->text('police_sd_number', 'Police SD number');
                         })
+                        ->rules('required')
                         ->when('Yes', function ($form) {
                             $supects = [];
                             $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -502,121 +503,260 @@ class NewCaseSuspectController extends AdminController
                     $form->text('police_sd_number', 'Police SD number');
                 }
 
+                if ($hasPendingSusps) {
 
-                $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
-                    ->options([
-                        1 => 'Yes',
-                        0 => 'No',
-                    ])
-                    ->when(0, function ($form) {
-                        $form->radio('status', __('Case status'))
-                            ->options([
-                                1 => 'On-going investigation',
-                                2 => 'Closed',
-                                3 => 'Re-opened',
-                            ])
-                            ->rules('required')
-                            ->when(1, function ($form) {
-                                $form->select('police_action', 'Case outcome at police level')->options([
-                                    'Police bond' => 'Police bond',
-                                    'Skipped bond' => 'Skipped bond',
-                                ]);
-                            })
-                            ->when(2, function ($form) {
-                                $form->select('police_action', 'Case outcome at police level')->options([
-                                    'Dismissed by state' => 'Dismissed by state',
-                                    'Withdrawn by complainant' => 'Withdrawn by complainant',
-                                ]);
-                                $form->date('police_action_date', 'Date');
-                                $form->textarea('police_action_remarks', 'Remarks');
-                            })->when(3, function ($form) {
-                                $form->select('police_action', 'Case outcome at police level')->options([
-                                    'Police bond' => 'Police bond',
-                                    'Skipped bond' => 'Skipped bond',
-                                ]);
-                                $form->date('police_action_date', 'Date');
-                                $form->textarea('police_action_remarks', 'Remarks');
-                            });
-                    })
-                    ->when(1, function ($form) {
-
-                        $form->divider('Court information');
-                        $form->text('court_file_number', 'Court file number');
-                        $form->date('court_date', 'Court date');
-                        $form->text('court_name', 'Court Name');
-
-                        $form->text('prosecutor', 'Lead prosecutor');
-                        $form->text('magistrate_name', 'Magistrate Name');
-
-
-                        $form->radio('court_status', __('Court case status'))
-                            ->options([
-                                'On-going investigation' => 'On-going investigation',
-                                'On-going prosecution' => 'On-going prosecution',
-                                'Closed' => 'Closed',
-                            ])->when('Closed', function ($form) {
-
-                                $form->radio('case_outcome', 'Specific court case status')->options([
-                                    'Dismissed' => 'Dismissed',
-                                    'Convicted' => 'Convicted',
+                    $form->radio('use_same_court_information', "Do you want to use existing court information for this suspect?")
+                        ->rules('required')
+                        ->options([
+                            'No' => 'No',
+                            'Yes' => 'Yes',
+                        ])->when('No', function ($form) {
+                            $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                                ->options([
+                                    1 => 'Yes',
+                                    0 => 'No',
                                 ])
-                                    ->when('Convicted', function ($form) {
-                                        $form->radio('is_jailed', __('Was suspect jailed?'))
-                                            ->options([
-                                                1 => 'Yes',
-                                                0 => 'No',
+                                ->when(0, function ($form) {
+
+                                    $form->radio('status', __('Case status'))
+                                        ->options([
+                                            1 => 'On-going investigation',
+                                            2 => 'Closed',
+                                            3 => 'Re-opened',
+                                        ])
+                                        ->rules('required')
+                                        ->when(1, function ($form) {
+                                            $form->select('police_action', 'Case outcome at police level')->options([
+                                                'Police bond' => 'Police bond',
+                                                'Skipped bond' => 'Skipped bond',
+                                            ]);
+                                        })
+                                        ->when(2, function ($form) {
+                                            $form->select('police_action', 'Case outcome at police level')->options([
+                                                'Dismissed by state' => 'Dismissed by state',
+                                                'Withdrawn by complainant' => 'Withdrawn by complainant',
+                                            ]);
+                                            $form->date('police_action_date', 'Date');
+                                            $form->textarea('police_action_remarks', 'Remarks');
+                                        })->when(3, function ($form) {
+                                            $form->select('police_action', 'Case outcome at police level')->options([
+                                                'Police bond' => 'Police bond',
+                                                'Skipped bond' => 'Skipped bond',
+                                            ]);
+                                            $form->date('police_action_date', 'Date');
+                                            $form->textarea('police_action_remarks', 'Remarks');
+                                        });
+                                })
+                                ->when(1, function ($form) {
+
+                                    $form->divider('Court information');
+                                    $form->text('court_file_number', 'Court file number');
+                                    $form->date('court_date', 'Court date');
+                                    $form->text('court_name', 'Court Name');
+
+                                    $form->text('prosecutor', 'Lead prosecutor');
+                                    $form->text('magistrate_name', 'Magistrate Name');
+
+
+                                    $form->radio('court_status', __('Court case status'))
+                                        ->options([
+                                            'On-going investigation' => 'On-going investigation',
+                                            'On-going prosecution' => 'On-going prosecution',
+                                            'Closed' => 'Closed',
+                                        ])->when('Closed', function ($form) {
+
+                                            $form->radio('case_outcome', 'Specific court case status')->options([
+                                                'Dismissed' => 'Dismissed',
+                                                'Convicted' => 'Convicted',
                                             ])
-                                            ->when(1, function ($form) {
-                                                $form->date('jail_date', 'Jail date');
-                                                $form->decimal('jail_period', 'Jail period')->help("(In months)");
-                                                $form->text('prison', 'Prison name');
-                                                $form->date('jail_release_date', 'Date released');
-                                            });
+                                                ->when('Convicted', function ($form) {
+                                                    $form->radio('is_jailed', __('Was suspect jailed?'))
+                                                        ->options([
+                                                            1 => 'Yes',
+                                                            0 => 'No',
+                                                        ])
+                                                        ->when(1, function ($form) {
+                                                            $form->date('jail_date', 'Jail date');
+                                                            $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                                            $form->text('prison', 'Prison name');
+                                                            $form->date('jail_release_date', 'Date released');
+                                                        });
 
-                                        $form->radio('is_fined', __('Was suspect fined?'))
-                                            ->options([
-                                                1 => 'Yes',
-                                                0 => 'No',
-                                            ])
-                                            ->when(1, function ($form) {
-                                                $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
-                                            });
+                                                    $form->radio('is_fined', __('Was suspect fined?'))
+                                                        ->options([
+                                                            1 => 'Yes',
+                                                            0 => 'No',
+                                                        ])
+                                                        ->when(1, function ($form) {
+                                                            $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                                                        });
 
-                                        $form->radio('community_service', __('Was suspected issued a community service?'))
-                                            ->options([
-                                                'Yes' => 'Yes',
-                                                'No' => 'No',
-                                            ])
-                                            ->when(1, function ($form) {
-                                                $form->date('created_at', 'Court date');
-                                            });
+                                                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                                                        ->options([
+                                                            'Yes' => 'Yes',
+                                                            'No' => 'No',
+                                                        ])
+                                                        ->when(1, function ($form) {
+                                                            $form->date('created_at', 'Court date');
+                                                        });
 
-                                        $form->radio('suspect_appealed', __('Did the suspect appeal?'))
-                                            ->options([
-                                                'Yes' => 'Yes',
-                                                'No' => 'No',
-                                            ])
-                                            ->when('Yes', function ($form) {
-                                                $form->date('suspect_appealed_date', 'Suspect appeal Date');
-                                                $form->text('suspect_appealed_court_name', 'Court of appeal');
-                                                $form->text('suspect_appealed_court_file', 'Appeal court file number');
-                                            });
-                                    });
-                            })
-                            ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
+                                                    $form->radio('suspect_appealed', __('Did the suspect appeal?'))
+                                                        ->options([
+                                                            'Yes' => 'Yes',
+                                                            'No' => 'No',
+                                                        ])
+                                                        ->when('Yes', function ($form) {
+                                                            $form->date('suspect_appealed_date', 'Suspect appeal Date');
+                                                            $form->text('suspect_appealed_court_name', 'Court of appeal');
+                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                                        });
+                                                });
+                                        })
+                                        ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
 
-                                $form->radio('suspect_court_outcome', 'Suspect court case status')->options([
-                                    'Remand' => 'Remand',
-                                    'Court Bail' => 'Court bail',
-                                ]);
+                                            $form->radio('suspect_court_outcome', 'Suspect court case status')->options([
+                                                'Remand' => 'Remand',
+                                                'Court Bail' => 'Court bail',
+                                            ]);
 
-                                $form->radio('court_file_status', 'Court file status')->options([
-                                    'Perusal' => 'Perusal',
-                                    'Further investigation' => 'Further investigation',
-                                ]);
-                            });
-                    });
+                                            $form->radio('court_file_status', 'Court file status')->options([
+                                                'Perusal' => 'Perusal',
+                                                'Further investigation' => 'Further investigation',
+                                            ]);
+                                        });
+                                });
+                        })->when('Yes', function ($form) {
+                            $supects = [];
+                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            if ($pendingCase != null) {
+                                if ($pendingCase->suspects->count() > 0) {
+                                    foreach ($pendingCase->suspects as $sus) {
+                                        $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
+                                    }
+                                }
+                            }
+                            $form->select('use_same_court_information_id', 'Select suspect')
+                                ->options($supects)
+                                ->rules('required');
+                        });
+                } else {
+                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                        ->options([
+                            1 => 'Yes',
+                            0 => 'No',
+                        ])
+                        ->when(0, function ($form) {
+
+                            $form->radio('status', __('Case status'))
+                                ->options([
+                                    1 => 'On-going investigation',
+                                    2 => 'Closed',
+                                    3 => 'Re-opened',
+                                ])
+                                ->rules('required')
+                                ->when(1, function ($form) {
+                                    $form->select('police_action', 'Case outcome at police level')->options([
+                                        'Police bond' => 'Police bond',
+                                        'Skipped bond' => 'Skipped bond',
+                                    ]);
+                                })
+                                ->when(2, function ($form) {
+                                    $form->select('police_action', 'Case outcome at police level')->options([
+                                        'Dismissed by state' => 'Dismissed by state',
+                                        'Withdrawn by complainant' => 'Withdrawn by complainant',
+                                    ]);
+                                    $form->date('police_action_date', 'Date');
+                                    $form->textarea('police_action_remarks', 'Remarks');
+                                })->when(3, function ($form) {
+                                    $form->select('police_action', 'Case outcome at police level')->options([
+                                        'Police bond' => 'Police bond',
+                                        'Skipped bond' => 'Skipped bond',
+                                    ]);
+                                    $form->date('police_action_date', 'Date');
+                                    $form->textarea('police_action_remarks', 'Remarks');
+                                });
+                        })
+                        ->when(1, function ($form) {
+
+                            $form->divider('Court information');
+                            $form->text('court_file_number', 'Court file number');
+                            $form->date('court_date', 'Court date');
+                            $form->text('court_name', 'Court Name');
+
+                            $form->text('prosecutor', 'Lead prosecutor');
+                            $form->text('magistrate_name', 'Magistrate Name');
+
+
+                            $form->radio('court_status', __('Court case status'))
+                                ->options([
+                                    'On-going investigation' => 'On-going investigation',
+                                    'On-going prosecution' => 'On-going prosecution',
+                                    'Closed' => 'Closed',
+                                ])->when('Closed', function ($form) {
+
+                                    $form->radio('case_outcome', 'Specific court case status')->options([
+                                        'Dismissed' => 'Dismissed',
+                                        'Convicted' => 'Convicted',
+                                    ])
+                                        ->when('Convicted', function ($form) {
+                                            $form->radio('is_jailed', __('Was suspect jailed?'))
+                                                ->options([
+                                                    1 => 'Yes',
+                                                    0 => 'No',
+                                                ])
+                                                ->when(1, function ($form) {
+                                                    $form->date('jail_date', 'Jail date');
+                                                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                                    $form->text('prison', 'Prison name');
+                                                    $form->date('jail_release_date', 'Date released');
+                                                });
+
+                                            $form->radio('is_fined', __('Was suspect fined?'))
+                                                ->options([
+                                                    1 => 'Yes',
+                                                    0 => 'No',
+                                                ])
+                                                ->when(1, function ($form) {
+                                                    $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                                                });
+
+                                            $form->radio('community_service', __('Was suspected issued a community service?'))
+                                                ->options([
+                                                    'Yes' => 'Yes',
+                                                    'No' => 'No',
+                                                ])
+                                                ->when(1, function ($form) {
+                                                    $form->date('created_at', 'Court date');
+                                                });
+
+                                            $form->radio('suspect_appealed', __('Did the suspect appeal?'))
+                                                ->options([
+                                                    'Yes' => 'Yes',
+                                                    'No' => 'No',
+                                                ])
+                                                ->when('Yes', function ($form) {
+                                                    $form->date('suspect_appealed_date', 'Suspect appeal Date');
+                                                    $form->text('suspect_appealed_court_name', 'Court of appeal');
+                                                    $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                                });
+                                        });
+                                })
+                                ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
+
+
+                                    $form->radio('suspect_court_outcome', 'Suspect court case status')->options([
+                                        'Remand' => 'Remand',
+                                        'Court Bail' => 'Court bail',
+                                    ]);
+
+                                    $form->radio('court_file_status', 'Court file status')->options([
+                                        'Perusal' => 'Perusal',
+                                        'Further investigation' => 'Further investigation',
+                                    ]);
+                                });
+                        });
+                }
             });
 
 

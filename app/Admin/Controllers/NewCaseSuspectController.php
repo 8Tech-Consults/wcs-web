@@ -292,12 +292,37 @@ class NewCaseSuspectController extends AdminController
             })->rules('required');
         $form->divider('Offences');
 
-        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-            ->help("Select offences involded in this case")
+
+
+
+        $form->radio('use_offence', "Do you want to apply same offence for previous suspects?")
+            ->options([
+                'No' => 'No',
+                'Yes' => 'Yes',
+            ])->when('No', function ($form) {
+                $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+                    ->help("Select offences involded in this case")
+                    ->rules('required');
+            })
+            ->when('Yes', function ($form) {
+                $supects = [];
+                $pendingCase = Utils::hasPendingCase(Auth::user());
+                if ($pendingCase != null) {
+                    if ($pendingCase->suspects->count() > 0) {
+                        foreach ($pendingCase->suspects as $sus) {
+                            $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
+                        } 
+                    }
+                }
+                $form->select('use_offence_suspect_id', 'Select suspect')
+                    ->options($supects)
+                    ->rules('required');
+            })
             ->rules('required');
 
 
-   
+
+
 
 
 

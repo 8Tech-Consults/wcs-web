@@ -23,10 +23,10 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Crime rate - {{ count($labels) }} days ago</b>
-        </h3>  
+            <b>Cases - {{ count($labels) }} days ago</b>
+        </h3>
         <div>
-            <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+            <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
         </div>
@@ -56,14 +56,14 @@ use App\Models\Utils;
                     labels: JSON.parse('<?php echo json_encode($labels); ?>'),
                     datasets: [{
                         type: 'line',
-                        label: 'Suspects arrested',
+                        label: 'Active cases',
                         borderColor: window.chartColors.red,
                         borderWidth: 2,
                         fill: false,
                         data: {{ json_encode($count_arrests) }}
                     }, {
                         type: 'bar',
-                        label: 'Suspects reported',
+                        label: 'Closed cases',
                         backgroundColor: window.chartColors.green,
                         data: {{ json_encode($data) }}
                     }]

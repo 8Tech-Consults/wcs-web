@@ -24,9 +24,9 @@ use App\Models\Utils;
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
             @if (Auth::user()->isRole('ca-agent') || Auth::user()->isRole('ca-manager') || Auth::user()->isRole('ca-team'))
-                <b>Crime rate per PA</b>
+                <b>Cases per PA</b>
             @else
-                <b>Crime rate per CA</b>
+                <b>Cases per CA</b>
             @endif
 
         </h3>

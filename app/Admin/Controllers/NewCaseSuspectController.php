@@ -304,8 +304,8 @@ class NewCaseSuspectController extends AdminController
 
         if (!$hasPendingSusps) {
             $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-            ->help("Select offences involded in this case")
-            ->rules('required'); 
+                ->help("Select offences involded in this case")
+                ->rules('required');
         } else {
             $form->radio('use_offence', "Do you want to use existing offence information for this suspect?")
                 ->options([
@@ -400,13 +400,17 @@ class NewCaseSuspectController extends AdminController
                     'DCIC' => 'DCIC',
                     'INTERPOL' => 'INTERPOL',
                     'UCAA' => 'UCAA',
-                ]);
-                $form->select('arrest_uwa_unit', 'UWA Unit')->options([
-                    'Canine Unit' => 'The Canine Unit',
-                    'WCU' => 'WCU',
-                    'NRCN' => 'NRCN',
-                    'LEU' => 'LEU',
-                ]);
+                ])
+                    ->when('UWA', function ($form) {
+                        $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+                            'Canine Unit' => 'The Canine Unit',
+                            'WCU' => 'WCU',
+                            'NRCN' => 'NRCN',
+                            'LEU' => 'LEU',
+                        ]);
+                    });
+
+
 
                 $form->text('arrest_crb_number', 'Police CRB number');
                 $form->text('police_sd_number', 'Police SD number');

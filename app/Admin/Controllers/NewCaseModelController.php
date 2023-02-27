@@ -204,13 +204,13 @@ class NewCaseModelController extends AdminController
             ->help("Describe this case in details")
             ->rules('required');
 
-                    $form->date('case_date', 'Date when opened')
+        $form->date('case_date', 'Date when opened')
             ->required()
             ->rules('required');
 
         $form->text('officer_in_charge', 'Officer in charge')->rules('required');
 
-    /*     $form->select('offense_category', __('Case category'))
+        /*     $form->select('offense_category', __('Case category'))
             ->options([
                 'Category 1' => 'Category 1',
                 'Category 2' => 'Category 2',
@@ -227,6 +227,9 @@ class NewCaseModelController extends AdminController
             ->default(null)
             ->when(0, function (Form $form) {
 
+                $form->select('ca_id', __('Nearest conservation area'))
+                    ->rules('required')
+                    ->options(ConservationArea::all()->pluck('name', 'id'));
 
                 /* 
 
@@ -244,9 +247,7 @@ class NewCaseModelController extends AdminController
             });
 
 
-        $form->select('ca_id', __('Nearest conservation area'))
-            ->rules('required')
-            ->options(ConservationArea::all()->pluck('name', 'id'));
+
 
 
         $form->text('latitude', 'Case scene GPS - latitude');

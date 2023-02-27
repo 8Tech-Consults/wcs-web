@@ -307,7 +307,7 @@ class NewCaseSuspectController extends AdminController
             ->help("Select offences involded in this case")
             ->rules('required'); 
         } else {
-            $form->radio('use_offence', "Do you want to apply same offence for previous suspects?")
+            $form->radio('use_offence', "Do you want to use existing offence information for this suspect?")
                 ->options([
                     'No' => 'No',
                     'Yes' => 'Yes',

@@ -391,11 +391,10 @@ class NewCaseSuspectController extends AdminController
                             if ($pendingCase != null) {
                                 if ($pendingCase->suspects->count() > 0) {
                                     $hasPendingSusps = true;
-                                    $sd = $pendingCase->getSdNumber(); 
+                                    $sd = $pendingCase->getSdNumber();
                                     $csb = $pendingCase->getCrbNumber();
                                 }
                             }
-
 
                             $form->datetime('arrest_date_time', 'Arrest date and time');
 
@@ -467,7 +466,6 @@ class NewCaseSuspectController extends AdminController
                                     ->value($sd)
                                     ->readonly();
                             }
-
                         })
                         ->rules('required')
                         ->when('Yes', function ($form) {

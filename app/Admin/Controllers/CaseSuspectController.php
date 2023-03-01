@@ -345,20 +345,19 @@ class CaseSuspectController extends AdminController
 
         $grid->column('offences_text', 'Offences');
 
+        $grid->column('arrest_date_time', 'Arrest date')
+        ->hide()
+        ->display(function ($d) {
+            return Utils::my_date($d);
+        }); 
+
         $grid->column('is_suspects_arrested', 'Is arrested')
             ->using([
                 1 => 'Arrested',
                 0 => 'Not arrested',
             ], 'Not arrested')
             ->sortable();
-        $grid->column('arrest_date_time', 'Arrest date')
-            ->hide()
-            ->display(function ($d) {
-                return Utils::my_date($d);
-            });
-
-
-
+ 
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;

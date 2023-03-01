@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
@@ -259,7 +260,11 @@ class NewCaseSuspectController extends AdminController
             'Female' => 'Female',
         ])->rules('required');
         $form->date('age', 'Date of birth')->rules('required');
-        $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
+        $form->text('phone_number','Phone number')
+            ->rules('regex:/^\d+$/|min:10|max:10', [
+                'min'   => 'Phone number can not be less than 10 characters',
+                'max'   => 'Phone number can not be more than 10 characters',
+            ]);
         $form->text('national_id_number');
         $form->text('occuptaion', 'Occupation');
 
@@ -390,15 +395,18 @@ class NewCaseSuspectController extends AdminController
                                     $form->select('pa_id', __('Select PA'))
                                         ->options(PA::all()->pluck('name_text', 'id'));
                                 })
-                                ->when('No', function ($form) {
-                                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+                                ->when('No', function ($form) { 
+                                    $form->select('ca_id', __('Nearest conservation area'))
+                                    ->rules('required')
+                                    ->options(ConservationArea::all()->pluck('name', 'id')); 
+                                    /* $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                                         ->rules('int|required')
                                         ->help('Where this suspect was arrested')
                                         ->options(Location::get_sub_counties_array());
 
 
                                     $form->text('arrest_parish', 'Parish of Arrest');
-                                    $form->text('arrest_village', 'Arrest village');
+                                    $form->text('arrest_village', 'Arrest village'); */
                                 })
                                 ->rules('required');
 

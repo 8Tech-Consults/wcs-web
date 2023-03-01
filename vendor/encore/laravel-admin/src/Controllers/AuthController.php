@@ -143,8 +143,12 @@ class AuthController extends Controller
         $form->text('last_name', 'Last name')->rules('required');
         $form->date('date_of_birth', 'Date of birth');
 
-        $form->text('phone_number_1', 'Phone number')->rules('required');
+        $form->text('phone_number_1', 'Phone number')->rules('regex:/^\d+$/|min:10|max:10', [ 
+            'min'   => 'Phone number can not be less than 10 characters',
+            'max'   => 'Phone number can not be more than 10 characters',
+        ]);
         $form->text('phone_number_2', 'Phone number 2');
+
 
         $form->select('sub_county_id', __('Sub county'))
             ->rules('required')

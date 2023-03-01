@@ -322,7 +322,7 @@ class CaseSuspectController extends AdminController
             return $this->district->name;
         })->sortable();
 
-    
+
         $grid->column('parish')->display(function ($x) {
             if ($this->country != 'Uganda') {
                 return '-';
@@ -343,25 +343,60 @@ class CaseSuspectController extends AdminController
             return $x;
         })->hide()->sortable();
 
-        $grid->column('offences_text','Offences');
+        $grid->column('offences_text', 'Offences');
 
         $grid->column('is_suspects_arrested', 'Is arrested')
             ->using([
                 1 => 'Arrested',
                 0 => 'Not arrested',
-            ],'Not arrested')
+            ], 'Not arrested')
             ->sortable();
         $grid->column('arrest_date_time', 'Arrest date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
+
+
+
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
             })
             ->hide()
             ->sortable();
+
+        $grid->column('arrest_in_pa', __('Arrest in P.A'))
+            ->display(function ($x) {
+                if ($x == 'Yes') {
+                    return $x;
+                }
+                return $x;
+            })
+            ->hide()
+            ->sortable();
+
+        $grid->column('pa_id', 'P.A of Arrest ')
+            ->display(function ($x) {
+                if ($this->arrest_in_pa != 'Yes') {
+                    return '-';
+                }
+                if ($this->arrestPa == null) {
+                    return '-';
+                }
+                return $this->arrestPa->name;
+            })
+            ->sortable()
+            ->hide();
+        $grid->column('ca_id', 'Nearest C.A')
+            ->display(function ($x) {
+                if ($this->arrestCa == null) {
+                    return '-';
+                }
+                return $this->arrestCa->name;
+            })
+            ->sortable() 
+            ->hide();
 
         $grid->column('arrest_sub_county_id', __('Sub-county'))
             ->display(function ($x) {

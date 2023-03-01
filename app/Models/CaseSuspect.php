@@ -210,6 +210,14 @@ class CaseSuspect extends Model
     {
         return $this->belongsTo(Location::class, 'district_id');
     }
+    function arrestPa()
+    {
+        return $this->belongsTo(PA::class, 'pa_id');
+    }
+    function arrestCa()
+    {
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
+    }
     function sub_county()
     {
         return $this->belongsTo(Location::class, 'sub_county_id');

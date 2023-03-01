@@ -207,6 +207,17 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
+        $grid->column('case_num', __('Case'))
+            ->display(function ($x) {
+                return $this->case->case_number;
+            })
+            ->sortable();
+        $grid->column('case_id', __('Case'))
+            ->display(function ($x) {
+                return $this->case->title;
+            })
+            ->sortable();
+
 
         $grid->column('photo_url', __('Photo'))
             ->width(60)
@@ -254,11 +265,7 @@ class CaseSuspectController extends AdminController
             return $this->district->name;
         })->sortable();
 
-        $grid->column('case_id', __('Case'))
-            ->display(function ($x) {
-                return $this->case->title;
-            })
-            ->sortable();
+
         $grid->column('ethnicity')->hide()->sortable();
         $grid->column('parish')->hide()->sortable();
         $grid->column('village')->hide()->sortable();

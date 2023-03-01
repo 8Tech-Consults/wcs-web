@@ -78,7 +78,7 @@ class CaseSuspectController extends AdminController
 
 
         $grid->model()
-            ->orderBy('created_at', 'Desc');
+            ->orderBy('id', 'Desc');
 
 
 
@@ -200,7 +200,13 @@ class CaseSuspectController extends AdminController
 
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
-        $grid->column('id', __('ID'))->sortable()->hide();
+        $grid->column('id', __('Suspect number'))
+        ->display(function () {
+            return $this->suspect_number;
+        })
+        ->sortable();
+
+
         $grid->column('created_at', __('Date'))
             ->display(function ($x) {
                 return Utils::my_date_time($x);
@@ -267,9 +273,7 @@ class CaseSuspectController extends AdminController
                 return Utils::my_date_time($x);
             })
             ->sortable()->hide();
-        $grid->column('suspect_number', __('Suspect number'))
-            ->sortable();
-
+     
 
 
         $grid->column('first_name', __('Name'))

@@ -18,7 +18,6 @@ class CaseSuspect extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            
         });
 
         self::creating(function ($m) {
@@ -114,10 +113,10 @@ class CaseSuspect extends Model
     function ca()
     {
         $ca =  ConservationArea::find($this->ca_id);
-        if($ca == null){
+        if ($ca == null) {
             $this->ca_id = 1;
             $this->save();
-        } 
+        }
         return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
 
@@ -126,6 +125,87 @@ class CaseSuspect extends Model
     {
         return $this->belongsTo(CaseModel::class, 'case_id');
     }
+
+
+    function copyOffencesInfo($org)
+    {
+
+
+        foreach ($org->offences as $key => $of) {
+            $newOff = new SuspectHasOffence();
+            $newOff->case_suspect_id = $this->id;
+            $newOff->offence_id = $of->id;
+            $newOff->vadict = null;
+            $newOff->save();
+            //dd($of);
+        }
+        $this->use_offence_suspect_coped = 'Yes';
+        $this->use_offence = 'Yes';
+        $this->save();
+    }
+    function copyCourtInfo($org)
+    {
+
+        $this->is_suspect_appear_in_court = $org->is_suspect_appear_in_court;
+        $this->prosecutor = $org->prosecutor;
+        $this->is_convicted = $org->is_convicted;
+        $this->case_outcome = $org->case_outcome;
+        $this->magistrate_name = $org->magistrate_name;
+        $this->court_name = $org->court_name;
+        $this->court_file_number = $org->court_file_number;
+        $this->is_jailed = $org->is_jailed;
+        $this->jail_period = $org->jail_period;
+        $this->is_fined = $org->is_fined;
+        $this->fined_amount = $org->fined_amount;
+        $this->court_date = $org->court_date;
+        $this->jail_date = $org->jail_date;
+        $this->court_file_status = $org->court_file_status;
+        $this->court_status = $org->court_status;
+        $this->suspect_court_outcome = $org->suspect_court_outcome;
+        $this->use_same_court_information_id = $org->use_same_court_information_id;
+        $this->use_same_court_information_coped = $org->use_same_court_information_coped;
+        $this->use_same_court_information_coped = 'Yes';
+        $this->use_same_court_information = 'Yes';
+        $this->save();
+    }
+
+
+
+    function copyArrestInfo($org)
+    {
+        $this->is_suspects_arrested = $org->is_suspects_arrested;
+        $this->arrest_date_time = $org->arrest_date_time;
+        $this->arrest_district_id = $org->arrest_district_id;
+        $this->arrest_sub_county_id = $org->arrest_sub_county_id;
+        $this->arrest_parish = $org->arrest_parish;
+        $this->arrest_village = $org->arrest_village;
+        $this->arrest_latitude = $org->arrest_latitude;
+        $this->arrest_longitude = $org->arrest_longitude;
+        $this->arrest_first_police_station = $org->arrest_first_police_station;
+        $this->arrest_current_police_station = $org->arrest_current_police_station;
+        $this->arrest_agency = $org->arrest_agency;
+        $this->arrest_uwa_unit = $org->arrest_uwa_unit;
+        $this->arrest_detection_method = $org->arrest_detection_method;
+        $this->arrest_uwa_number = $org->arrest_uwa_number;
+        $this->arrest_crb_number = $org->arrest_crb_number;
+        $this->arrest_in_pa = $org->arrest_in_pa;
+        $this->pa_id = $org->pa_id;
+        $this->management_action = $org->management_action;
+        $this->community_service = $org->community_service;
+        $this->ca_id = $org->ca_id;
+        $this->not_arrested_remarks = $org->not_arrested_remarks;
+        $this->police_sd_number = $org->police_sd_number;
+        $this->police_action = $org->police_action;
+        $this->police_action_date = $org->police_action_date;
+        $this->police_action_remarks = $org->police_action_remarks;
+        $this->court_file_status = $org->court_file_status;
+        $this->court_status = $org->court_status;
+        $this->use_same_arrest_information_coped = 'Yes';
+        $this->use_same_arrest_information = 'Yes';
+        $this->save();
+    }
+
+
     function district()
     {
         return $this->belongsTo(Location::class, 'district_id');

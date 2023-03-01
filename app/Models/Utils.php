@@ -72,6 +72,11 @@ class Utils  extends Model
             $v->save();
         } */
 
+
+        Utils::copyPendingArrestInfo();
+        Utils::copyPendingCourtInfo();
+        Utils::copyOffencesCourtInfo();
+
         $cases = CaseSuspect::where([
             'reported_by' => null
         ])->get();
@@ -81,14 +86,14 @@ class Utils  extends Model
                 $sus->save();
             }
         }
-        
+
 
         foreach (CaseSuspect::where([
             'ca_id' => null
         ])->get() as $key => $sus) {
             if ($sus->case != null) {
                 $sus->ca_id = $sus->case->ca_id;
-                $sus->save(); 
+                $sus->save();
             }
         }
 
@@ -120,6 +125,56 @@ class Utils  extends Model
             }
         }
     }
+
+    public static function copyOffencesCourtInfo()
+    {
+
+        $suspects = CaseSuspect::where('use_offence_suspect_coped', null)->get();
+
+        foreach ($suspects as $key => $sus) {
+            $originalSuspect = CaseSuspect::find($sus->use_offence_suspect_id);
+            if ($originalSuspect == null) {
+                $sus->use_offence_suspect_coped = 'Yes';
+                $sus->use_offence = 'No';
+                $sus->save();
+                continue;
+            }
+            $sus->copyOffencesInfo($originalSuspect);
+        }
+    }
+
+
+    public static function copyPendingCourtInfo()
+    {
+        $suspects = CaseSuspect::where('use_same_court_information_coped', null)->get();
+        foreach ($suspects as $key => $sus) {
+            $originalSuspect = CaseSuspect::find($sus->use_same_court_information_id);
+            if ($originalSuspect == null) {
+                $sus->use_same_court_information_coped = 'Yes';
+                $sus->use_same_court_information = 'No';
+                $sus->save();
+                continue;
+            }
+            $sus->copyCourtInfo($originalSuspect);
+        }
+    }
+
+    public static function copyPendingArrestInfo()
+    {
+        $suspects = CaseSuspect::where('use_same_arrest_information_coped', null)->get();
+        foreach ($suspects as $key => $sus) {
+
+            $originalSuspect = CaseSuspect::find($sus->use_same_arrest_information_id);
+            if ($originalSuspect == null) {
+                $sus->use_same_arrest_information_coped = 'Yes';
+                $sus->use_same_arrest_information = 'No';
+                $sus->save();
+                continue;
+            }
+            $sus->copyArrestInfo($originalSuspect);
+        }
+    }
+
     public static function hasPendingCase($u)
     {
         $case =  CaseModel::where([
@@ -509,7 +564,7 @@ class Utils  extends Model
         $data = [];
         foreach ([
             '',
-            "Kenya", 
+            "Kenya",
             "Tanzania",
             "Rwanda",
             "Congo",

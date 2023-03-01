@@ -200,6 +200,11 @@ class CaseSuspectController extends AdminController
 
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
+        $grid->column('case_id', __('Case number'))
+        ->display(function ($x) {
+            return $this->case->case_number;
+        });
+
         $grid->column('id', __('Suspect number'))
         ->display(function () {
             return $this->suspect_number;
@@ -213,11 +218,7 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
-        $grid->column('case_id', __('Case number'))
-            ->display(function ($x) {
-                return $this->case->case_number;
-            })
-            ->sortable();
+    
 
         $grid->column('case_num', __('Case title'))
             ->display(function ($x) {

@@ -293,9 +293,7 @@ class CaseSuspectController extends AdminController
             ])
             ->sortable();
         $grid->column('national_id_number', __('NIN'))->hide();
-        $grid->column('phone_number', __('Phone number'))->hide();
-        $grid->column('uwa_suspect_number', __('UWA suspect number'))->sortable();
-
+        $grid->column('phone_number', __('Phone number'))->hide(); 
         $grid->column('ca_id', __('CA'))
             ->display(function () {
                 if ($this->ca == null) {

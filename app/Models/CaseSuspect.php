@@ -238,9 +238,13 @@ class CaseSuspect extends Model
         }
         $txt = ""; 
         $x = 0;
+        $ids = [];
         foreach ($this->offences as $key => $value) {
             $x++;
 
+            if(in_array($value->id,$ids)){
+                continue;
+            }
             $ids[] = $value->id;
             $txt .= $value->name;
             if ($x != $this->offences->count()) {

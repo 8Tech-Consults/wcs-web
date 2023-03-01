@@ -240,11 +240,13 @@ class CaseSuspect extends Model
         $x = 0;
         foreach ($this->offences as $key => $value) {
             $x++;
+
+            $ids[] = $value->id;
             $txt .= $value->name;
             if ($x != $this->offences->count()) {
-                $txt .= $value->name . ', ';
+                $txt .= ', ';
             } else {
-                $txt .= $value->name . '.';
+                $txt .=  '.';
             }
         }
         return $txt;

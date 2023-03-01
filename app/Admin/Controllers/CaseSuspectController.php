@@ -322,12 +322,7 @@ class CaseSuspectController extends AdminController
             return $this->district->name;
         })->sortable();
 
-        $grid->column('ethnicity')->display(function ($x) {
-            if ($this->country != 'Uganda') {
-                return '-';
-            }
-            return $x;
-        })->hide()->sortable();
+    
         $grid->column('parish')->display(function ($x) {
             if ($this->country != 'Uganda') {
                 return '-';
@@ -340,11 +335,21 @@ class CaseSuspectController extends AdminController
             }
             return $x;
         })->hide()->sortable();
+
+        $grid->column('ethnicity')->display(function ($x) {
+            if ($this->country != 'Uganda') {
+                return '-';
+            }
+            return $x;
+        })->hide()->sortable();
+
+        $grid->column('offences_text','Offences');
+
         $grid->column('is_suspects_arrested', 'Is arrested')
             ->using([
                 1 => 'Arrested',
                 0 => 'Not arrested',
-            ])
+            ],'Not arrested')
             ->sortable();
         $grid->column('arrest_date_time', 'Arrest date')
             ->hide()

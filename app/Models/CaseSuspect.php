@@ -231,6 +231,25 @@ class CaseSuspect extends Model
         return $this->hasMany(CaseSuspectsComment::class, 'suspect_id');
     }
 
+    function getOffencesTextAttribute()
+    {
+        if ($this->offences == null) {
+            return "-";
+        }
+        $txt = ""; 
+        $x = 0;
+        foreach ($this->offences as $key => $value) {
+            $x++;
+            $txt .= $value->name;
+            if ($x != $this->offences->count()) {
+                $txt .= $value->name . ', ';
+            } else {
+                $txt .= $value->name . '.';
+            }
+        }
+        return $txt;
+    }
+
     function getArrestSubCountyTextAttribute()
     {
         $d = Location::find($this->arrest_sub_county_id);
@@ -252,6 +271,7 @@ class CaseSuspect extends Model
         'photo_url',
         'name',
         'arrest_sub_county_text',
+        'offences_text',
         'arrest_district_text',
     ];
 }

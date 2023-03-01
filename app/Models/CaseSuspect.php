@@ -248,7 +248,7 @@ class CaseSuspect extends Model
             $ids[] = $value->id;
             $txt .= $value->name;
             if ($x != $this->offences->count()) {
-                $txt .= '\n, ';
+                $txt .= ', ';
             } else {
                 $txt .=  '.';
             }

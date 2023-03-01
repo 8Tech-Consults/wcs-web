@@ -242,6 +242,10 @@ class CaseSuspectController extends AdminController
 
         $grid->column('pa_id', __('P.A'))
             ->display(function ($x) {
+
+                if ($this->case->is_offence_committed_in_pa != 1) {
+                    return "-";
+                }
                 if ($this->case->pa == null) {
                     return  '-';
                 }

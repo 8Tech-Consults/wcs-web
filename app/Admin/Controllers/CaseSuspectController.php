@@ -212,13 +212,53 @@ class CaseSuspectController extends AdminController
                 return $this->case->case_number;
             })
             ->sortable();
+
         $grid->column('case_num', __('Case title'))
             ->display(function ($x) {
                 return $this->case->title;
             })
             ->hide();
 
+        $grid->column('officer', __('Officer'))
+            ->display(function ($x) {
+                return $this->case->officer_in_charge;
+            })->hide();
 
+        $grid->column('is_offence_committed_in_pa', __('In P.A'))
+            ->display(function ($x) {
+                if ($this->case->is_offence_committed_in_pa == 1) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            })->hide();
+
+        $grid->column('pa_id', __('P.A'))
+            ->display(function ($x) {
+                if ($this->case->pa == null) {
+                    return  '-';
+                }
+                return $this->case->pa->name;
+            })->hide();
+
+        $grid->column('ca_id', __('C.A'))
+            ->display(function ($x) {
+                if ($this->case->ca == null) {
+                    return  '-';
+                }
+                return $this->case->ca->name;
+            })->hide();
+        
+        $grid->column('gps', __('GPS'))
+            ->display(function ($x) {
+                return $this->case->latitude.",".$this->case->longitude;
+            })->hide();
+ 
+        $grid->column('detection_method', __('Detection method'))
+            ->display(function ($x) {
+                return $this->case->detection_method;
+            })->hide();
+ 
         $grid->column('photo_url', __('Photo'))
             ->width(60)
             ->lightbox(['width' => 60, 'height' => 80]);

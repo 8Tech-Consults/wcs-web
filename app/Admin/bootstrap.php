@@ -29,7 +29,7 @@ Encore\Admin\Form::forget(['map', 'editor']);
 
 
 $u = Auth::user();
-if ($u != null) {
+/* if ($u != null) {
 
     if (isset($_GET['log_me_out'])) {
 
@@ -49,7 +49,7 @@ if ($u != null) {
             die();
         }
     }
-}
+} */
 Utils::system_boot($u);
 
 

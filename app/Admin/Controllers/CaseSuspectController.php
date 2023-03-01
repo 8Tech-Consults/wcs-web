@@ -302,7 +302,7 @@ class CaseSuspectController extends AdminController
                 return $this->ca->name;
             })
             ->sortable();
-        $grid->column('occuptaion', __('Occupation'))->hide();
+        $grid->column('occuptaion', __('Occupation'))->hide(); 
         $grid->column('country', __('Country'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             return $this->district->name;

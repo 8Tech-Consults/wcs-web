@@ -260,7 +260,7 @@ class NewCaseSuspectController extends AdminController
             'Female' => 'Female',
         ])->rules('required');
         $form->date('age', 'Date of birth')->rules('required');
-        $form->text('phone_number','Phone number')
+        $form->text('phone_number', 'Phone number')
             ->rules('regex:/^\d+$/|min:10|max:10', [
                 'min'   => 'Phone number can not be less than 10 characters',
                 'max'   => 'Phone number can not be more than 10 characters',
@@ -368,10 +368,12 @@ class NewCaseSuspectController extends AdminController
                 $form->divider('Arrest information');
 
                 $hasPendingSusps = false;
+                $csb = null;
                 $pendingCase = Utils::hasPendingCase(Auth::user());
                 if ($pendingCase != null) {
                     if ($pendingCase->suspects->count() > 0) {
                         $hasPendingSusps = true;
+                        $csb = $pendingCase->getCrbNumber();
                     }
                 }
 
@@ -382,6 +384,17 @@ class NewCaseSuspectController extends AdminController
                             'No' => 'No',
                             'Yes' => 'Yes',
                         ])->when('No', function ($form) {
+                            $hasPendingSusps = false;
+                            $csb = null;
+                            $sd = null;
+                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            if ($pendingCase != null) {
+                                if ($pendingCase->suspects->count() > 0) {
+                                    $hasPendingSusps = true;
+                                    $sd = $pendingCase->getSdNumber(); 
+                                    $csb = $pendingCase->getCrbNumber();
+                                }
+                            }
 
 
                             $form->datetime('arrest_date_time', 'Arrest date and time');
@@ -395,10 +408,10 @@ class NewCaseSuspectController extends AdminController
                                     $form->select('pa_id', __('Select PA'))
                                         ->options(PA::all()->pluck('name_text', 'id'));
                                 })
-                                ->when('No', function ($form) { 
+                                ->when('No', function ($form) {
                                     $form->select('ca_id', __('Nearest conservation area'))
-                                    ->rules('required')
-                                    ->options(ConservationArea::all()->pluck('name', 'id')); 
+                                        ->rules('required')
+                                        ->options(ConservationArea::all()->pluck('name', 'id'));
                                     /* $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                                         ->rules('int|required')
                                         ->help('Where this suspect was arrested')
@@ -436,8 +449,25 @@ class NewCaseSuspectController extends AdminController
                                     ]);
                                 });
 
-                            $form->text('arrest_crb_number', 'Police CRB number');
-                            $form->text('police_sd_number', 'Police SD number');
+                            if ($csb == null) {
+                                $form->text('arrest_crb_number', 'Police CRB number')->rules('required');
+                            } else {
+                                $form->text('arrest_crb_number', 'Police CRB number')
+                                    ->rules('required')
+                                    ->default($csb)
+                                    ->value($csb)
+                                    ->readonly();
+                            }
+
+                            if ($sd == null) {
+                                $form->text('police_sd_number', 'Police SD number');
+                            } else {
+                                $form->text('police_sd_number', 'Police SD number')
+                                    ->default($sd)
+                                    ->value($sd)
+                                    ->readonly();
+                            }
+
                         })
                         ->rules('required')
                         ->when('Yes', function ($form) {
@@ -507,8 +537,36 @@ class NewCaseSuspectController extends AdminController
                             ]);
                         });
 
-                    $form->text('arrest_crb_number', 'Police CRB number');
-                    $form->text('police_sd_number', 'Police SD number');
+
+                    $hasPendingSusps = false;
+                    $csb = null;
+                    $sd = null;
+                    $pendingCase = Utils::hasPendingCase(Auth::user());
+                    if ($pendingCase != null) {
+                        if ($pendingCase->suspects->count() > 0) {
+                            $hasPendingSusps = true;
+                            $csb = $pendingCase->getCrbNumber();
+                            $sd = $pendingCase->getSdNumber();
+                        }
+                    }
+
+                    if ($csb == null) {
+                        $form->text('arrest_crb_number', 'Police CRB number')->rules('required');
+                    } else {
+                        $form->text('arrest_crb_number', 'Police CRB number')
+                            ->rules('required')
+                            ->default($csb)
+                            ->value($csb)
+                            ->readonly();
+                    }
+                    if ($sd == null) {
+                        $form->text('police_sd_number', 'Police SD number');
+                    } else {
+                        $form->text('police_sd_number', 'Police SD number')
+                            ->default($sd)
+                            ->value($sd)
+                            ->readonly();
+                    }
                 }
 
                 if ($hasPendingSusps) {

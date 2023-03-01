@@ -192,6 +192,35 @@ class CaseModel extends Model
         return $this->hasMany(CaseSuspect::class, 'case_id');
     }
 
+
+    function getCrbNumber()
+    {
+        $csb = null;
+        foreach ($this->suspects as $key => $suspect) {
+            if ($suspect->arrest_crb_number != null) {
+                if (strlen($suspect->arrest_crb_number) > 0) {
+                    $csb = $suspect->arrest_crb_number;
+                    break;
+                }
+            }
+        } 
+        return $csb;
+    }
+
+    function getSdNumber()
+    {
+        $csb = null;
+        foreach ($this->suspects as $key => $suspect) {
+            if ($suspect->police_sd_number != null) {
+                if (strlen($suspect->police_sd_number) > 0) {
+                    $csb = $suspect->police_sd_number;
+                    break;
+                }
+            }
+        } 
+        return $csb;
+    }
+
     public function getSuspectsCountAttribute()
     {
         return CaseSuspect::where('case_id', $this->id)->count();
@@ -243,14 +272,14 @@ class CaseModel extends Model
 
         if ($this->suspects != null) {
             if (!empty($this->suspects)) {
-                if(isset($this->suspects[0]))
-                if ($this->suspects[0]->photo != null) {
-                    if (isset($this->suspects[0])) {
-                        if (strlen($this->suspects[0]->photo) > 2) {
-                            return $this->suspects[0]->photo;
+                if (isset($this->suspects[0]))
+                    if ($this->suspects[0]->photo != null) {
+                        if (isset($this->suspects[0])) {
+                            if (strlen($this->suspects[0]->photo) > 2) {
+                                return $this->suspects[0]->photo;
+                            }
                         }
                     }
-                }
             }
         }
 

@@ -201,15 +201,15 @@ class CaseSuspectController extends AdminController
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
         $grid->column('case_id', __('Case number'))
-        ->display(function ($x) {
-            return $this->case->case_number;
-        });
+            ->display(function ($x) {
+                return $this->case->case_number;
+            });
 
         $grid->column('id', __('Suspect number'))
-        ->display(function () {
-            return $this->suspect_number;
-        })
-        ->sortable();
+            ->display(function () {
+                return $this->suspect_number;
+            })
+            ->sortable();
 
 
         $grid->column('created_at', __('Date'))
@@ -218,7 +218,7 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
-    
+
 
         $grid->column('case_num', __('Case title'))
             ->display(function ($x) {
@@ -259,29 +259,29 @@ class CaseSuspectController extends AdminController
                 }
                 return $this->case->ca->name;
             })->hide();
-        
+
         $grid->column('gps', __('GPS'))
             ->display(function ($x) {
-                return $this->case->latitude.",".$this->case->longitude;
+                return $this->case->latitude . "," . $this->case->longitude;
             })->hide();
- 
+
         $grid->column('detection_method', __('Detection method'))
             ->display(function ($x) {
                 return $this->case->detection_method;
             })->hide();
- 
+
         $grid->column('photo_url', __('Photo'))
             ->width(60)
             ->lightbox(['width' => 60, 'height' => 80]);
-        $grid->column('updated_at', __('Updated'))
+        /*      $grid->column('updated_at', __('Updated'))
             ->display(function ($x) {
                 return Utils::my_date_time($x);
             })
-            ->sortable()->hide();
-     
+            ->sortable()->hide(); */
 
 
-        $grid->column('first_name', __('Name'))
+
+        $grid->column('first_name', __('Suspect\'s Name'))
             ->display(function ($x) {
                 return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
             })
@@ -296,8 +296,15 @@ class CaseSuspectController extends AdminController
                 'Female' => 'Female',
             ])
             ->sortable();
+
+        $grid->column('age', __('D.O.B'))
+            ->display(function ($x) {
+                return Utils::my_date($x);
+            })
+            ->hide()
+            ->sortable();
+        $grid->column('phone_number', __('Phone number'))->hide();
         $grid->column('national_id_number', __('NIN'))->hide();
-        $grid->column('phone_number', __('Phone number'))->hide(); 
         $grid->column('ca_id', __('CA'))
             ->display(function () {
                 if ($this->ca == null) {
@@ -306,16 +313,33 @@ class CaseSuspectController extends AdminController
                 return $this->ca->name;
             })
             ->sortable();
-        $grid->column('occuptaion', __('Occupation'))->hide(); 
+        $grid->column('occuptaion', __('Occupation'))->hide();
         $grid->column('country', __('Country'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
+            if ($this->country != 'Uganda') {
+                return '-';
+            }
             return $this->district->name;
         })->sortable();
 
-
-        $grid->column('ethnicity')->hide()->sortable();
-        $grid->column('parish')->hide()->sortable();
-        $grid->column('village')->hide()->sortable();
+        $grid->column('ethnicity')->display(function ($x) {
+            if ($this->country != 'Uganda') {
+                return '-';
+            }
+            return $x;
+        })->hide()->sortable();
+        $grid->column('parish')->display(function ($x) {
+            if ($this->country != 'Uganda') {
+                return '-';
+            }
+            return $x;
+        })->hide()->sortable();
+        $grid->column('village')->display(function ($x) {
+            if ($this->country != 'Uganda') {
+                return '-';
+            }
+            return $x;
+        })->hide()->sortable();
         $grid->column('is_suspects_arrested', 'Is arrested')
             ->using([
                 1 => 'Arrested',

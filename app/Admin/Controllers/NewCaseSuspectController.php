@@ -613,8 +613,26 @@ class NewCaseSuspectController extends AdminController
                                 })
                                 ->when(1, function ($form) {
 
+
+
                                     $form->divider('Court information');
-                                    $form->text('court_file_number', 'Court file number');
+
+                                    $courtFileNumber = null;
+                                    $pendingCase = Utils::hasPendingCase(Auth::user());
+                                    if ($pendingCase != null) {
+                                        $courtFileNumber = $pendingCase->getCourtFileNumber();
+                                    }
+
+                                    if ($courtFileNumber == null) {
+                                        $form->text('court_file_number', 'Court file number');
+                                    } else {
+                                        $form->text('court_file_number', 'Court file number')
+                                            ->default($courtFileNumber)
+                                            ->value($courtFileNumber)
+                                            ->readonly();
+                                    }
+
+
                                     $form->date('court_date', 'Court date');
                                     $form->text('court_name', 'Court Name');
 
@@ -744,7 +762,21 @@ class NewCaseSuspectController extends AdminController
                         ->when(1, function ($form) {
 
                             $form->divider('Court information');
-                            $form->text('court_file_number', 'Court file number');
+                            $courtFileNumber = null;
+                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            if ($pendingCase != null) {
+                                $courtFileNumber = $pendingCase->getCourtFileNumber();
+                            }
+
+                            if ($courtFileNumber == null) {
+                                $form->text('court_file_number', 'Court file number');
+                            } else {
+                                $form->text('court_file_number', 'Court file number')
+                                    ->default($courtFileNumber)
+                                    ->value($courtFileNumber)
+                                    ->readonly();
+                            }
+
                             $form->date('court_date', 'Court date');
                             $form->text('court_name', 'Court Name');
 

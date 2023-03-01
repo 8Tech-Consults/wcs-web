@@ -221,6 +221,20 @@ class CaseModel extends Model
         return $csb;
     }
 
+    function getCourtFileNumber()
+    {
+        $csb = null;
+        foreach ($this->suspects as $key => $suspect) {
+            if ($suspect->court_file_number != null) {
+                if (strlen($suspect->court_file_number) > 0) {
+                    $csb = $suspect->court_file_number;
+                    break;
+                }
+            }
+        } 
+        return $csb;
+    }
+
     public function getSuspectsCountAttribute()
     {
         return CaseSuspect::where('case_id', $this->id)->count();

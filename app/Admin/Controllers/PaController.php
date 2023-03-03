@@ -42,13 +42,7 @@ class PaController extends AdminController
                 return count($this->cases);
             });
 
-        $grid->column('subcounty', __('Sub-county'))
-            ->display(function ($x) {
-                return Utils::get(Location::class, $this->subcounty)->name_text;
-            })
-            ->hide()
-            ->sortable();
-
+ 
 
         $grid->column('details', __('Details'));
 
@@ -93,10 +87,10 @@ class PaController extends AdminController
 
 
  
-        $form->select('subcounty', __('Sub county'))
+    /*     $form->select('subcounty', __('Sub county'))
             ->rules('required')
             ->help('Where this PA is located')
-            ->options(Location::get_sub_counties_array());
+            ->options(Location::get_sub_counties_array()); */
 
         $form->textarea('details', __('Details'));
 

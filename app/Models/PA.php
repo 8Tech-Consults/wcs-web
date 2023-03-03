@@ -13,6 +13,10 @@ class PA extends Model
     public static function boot()
     {
         parent::boot();
+        self::creating(function ($m) {
+            $m->subcounty = 1;
+
+        });
         self::deleting(function ($m) {
             if ($m->id == 1) {
                 die("Ooops! You cannot delete this item.");

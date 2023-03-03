@@ -18,6 +18,7 @@ use Faker\Factory as Faker;
 class Utils  extends Model
 {
 
+ 
     public static function getCaseNumber($case)
     {
         /* foreach (PA::all() as $key => $pa) {

@@ -390,7 +390,6 @@ class CaseSuspectController extends AdminController
             })
             ->sortable() 
             ->hide();
-
             
         $grid->column('arrest_district_id', __('District'))
         ->display(function ($x) {

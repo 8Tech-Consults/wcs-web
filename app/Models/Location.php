@@ -52,7 +52,7 @@ class Location extends Model
     {
 
 
-        return "$this->name - $this->district_name";
+        return "$this->name"; 
         if ($this->district == null) {
             return $this->name;
         }

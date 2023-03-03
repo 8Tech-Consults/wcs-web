@@ -32,7 +32,7 @@ class PaController extends AdminController
         $grid->disableBatchActions();
         $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Protected area'));
-        $grid->column('ca_id', __('C.A'))->display(function(){
+        $grid->column('ca_id', __('C.A'))->display(function(){ 
             return $this->ca->name;
         })->sortable();
 
@@ -40,13 +40,13 @@ class PaController extends AdminController
         $grid->column('Cases', __('Cases'))
             ->display(function ($x) {
                 return count($this->cases);
-            })
-            ->sortable();
+            });
 
         $grid->column('subcounty', __('Sub-county'))
             ->display(function ($x) {
                 return Utils::get(Location::class, $this->subcounty)->name_text;
             })
+            ->hide()
             ->sortable();
 
 

@@ -17,12 +17,13 @@ class CaseModel extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            CaseSuspect::where([
+            die("You cannot delete this CA");
+            /*  CaseSuspect::where([
                 'case_id' => $m->id
             ])->delete();
             CaseComment::where([
                 'case_id' => $m->id
-            ])->delete();
+            ])->delete(); */ 
         });
         self::created(function ($m) {
             $m->case_number = Utils::getCaseNumber($m);
@@ -203,7 +204,7 @@ class CaseModel extends Model
                     break;
                 }
             }
-        } 
+        }
         return $csb;
     }
 
@@ -217,7 +218,7 @@ class CaseModel extends Model
                     break;
                 }
             }
-        } 
+        }
         return $csb;
     }
 
@@ -231,7 +232,7 @@ class CaseModel extends Model
                     break;
                 }
             }
-        } 
+        }
         return $csb;
     }
 

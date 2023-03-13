@@ -33,11 +33,11 @@ class NewExhibitsCaseModelController extends AdminController
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
+                Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');return 'Loading...'; 
             } else if ($pendingCase->case_step == 2) {
-                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
+                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');return 'Loading...';  
             } else if ($pendingCase->case_step == 3) {
-                return redirect(admin_url("new-confirm-case-models/{$pendingCase->id}/edit"));
+                Admin::script('window.location.replace("' . admin_url('new-confirm-case-models/{$pendingCase->id}/edit') . '");');return 'Loading...';  
             } else {
             }
             //dd($pendingCase);

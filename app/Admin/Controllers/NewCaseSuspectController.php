@@ -34,16 +34,21 @@ class NewCaseSuspectController extends AdminController
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
+                Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
+                return 'Loading...';
             } else if ($pendingCase->case_step == 2) {
-                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
+                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');
+                return 'Loading...';
             } else if ($pendingCase->case_step == 3) {
             } else {
             }
-            return redirect(admin_url("new-confirm-case-models/{$pendingCase->id}/edit"));           //dd($pendingCase);
+            Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '");');
+            return 'Loading...';
         }
 
-        return redirect(admin_url("cases"));
+        Admin::script('window.location.replace("' . admin_url("cases") . '");');
+        return 'Loading...';
+
 
         $grid = new Grid(new CaseSuspect());
 
@@ -98,8 +103,7 @@ class NewCaseSuspectController extends AdminController
         $grid->column('photo', __('Photo'));
         $grid->column('court_date', __('Court date'));
         $grid->column('jail_date', __('Jail date'));
-        $grid->column('use_same_arrest_information', __('Use same arrest information'));
-        $grid->column('use_same_court_information', __('Use same court information'));
+        $grid->column('use_same_arrest_information', __('Use same arrest information')); 
         $grid->column('suspect_number', __('Suspect number'));
         $grid->column('arrest_in_pa', __('Arrest in pa'));
         $grid->column('pa_id', __('Pa id'));
@@ -122,16 +126,20 @@ class NewCaseSuspectController extends AdminController
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
+                Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
+                return 'Loading...';
             } else if ($pendingCase->case_step == 2) {
-                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
+                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');
+                return 'Loading...';
             } else if ($pendingCase->case_step == 3) {
             } else {
             }
-            return redirect(admin_url("new-confirm-case-models/{$pendingCase->id}/edit"));           //dd($pendingCase);
+            Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '");');
+            return 'Loading...';
         }
-
-        return redirect(admin_url("new-confirm-case-models/{$pendingCase->id}/edit"));           //dd($pendingCase);
+        Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '");');
+        return 'Loading...';
+        //dd($pendingCase);
         $show = new Show(CaseSuspect::findOrFail($id));
 
 
@@ -186,8 +194,7 @@ class NewCaseSuspectController extends AdminController
         $show->field('photo', __('Photo'));
         $show->field('court_date', __('Court date'));
         $show->field('jail_date', __('Jail date'));
-        $show->field('use_same_arrest_information', __('Use same arrest information'));
-        $show->field('use_same_court_information', __('Use same court information'));
+        $show->field('use_same_arrest_information', __('Use same arrest information')); 
         $show->field('suspect_number', __('Suspect number'));
         $show->field('arrest_in_pa', __('Arrest in pa'));
         $show->field('pa_id', __('Pa id'));
@@ -214,13 +221,14 @@ class NewCaseSuspectController extends AdminController
             $pendingCase = Utils::hasPendingCase(Auth::user());
             if ($pendingCase != null) {
                 if ($pendingCase->case_step == 1) {
-                    return redirect(admin_url('new-case-suspects/create'));
+                    Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
                 } else if ($pendingCase->case_step == 2) {
-                    return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
+                    Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');
                 } else if ($pendingCase->case_step == 3) {
                 } else {
                 }
-                return redirect(admin_url("new-confirm-case-models/{$pendingCase->id}/edit"));           //dd($pendingCase);
+
+                Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '");');
             }
         });
 
@@ -260,12 +268,22 @@ class NewCaseSuspectController extends AdminController
             'Female' => 'Female',
         ])->rules('required');
         $form->date('age', 'Date of birth')->rules('required');
-        $form->text('phone_number', 'Phone number')
-            ->rules('regex:/^\d+$/|min:10|max:10', [
+        $form->text('phone_number', 'Phone number');
+           /*  ->rules('regex:/^\d+$/|min:10|max:10', [
                 'min'   => 'Phone number can not be less than 10 characters',
                 'max'   => 'Phone number can not be more than 10 characters',
             ]);
-        $form->text('national_id_number');
+ */
+        $form->radio('type_of_id', 'Suspect Type of Identification Card')
+            ->options([
+                'National ID' => 'National ID',
+                'Passport ' => 'Passport',
+                'Driving license' => 'Driving license',
+                'School ID Card' => 'School ID Card',
+                'Employee ID Card' => 'Employee ID Card',
+                'Other' => 'Other',
+            ]);
+        $form->text('national_id_number', 'Suspect Identification Number');
         $form->text('occuptaion', 'Occupation');
 
         $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
@@ -350,11 +368,11 @@ class NewCaseSuspectController extends AdminController
 
         $form->radio('is_suspects_arrested', "Is this suspect arrested?")
             ->options([
-                1 => 'Yes',
-                0 => 'No',
+                'Yes' => 'Yes',
+                'No' => 'No',
             ])
             ->rules('required')
-            ->when(0, function ($form) {
+            ->when('No', function ($form) {
                 $form->select('management_action', 'Action taken by management')->options([
                     'Fined' => 'Fined',
                     'Cautioned' => 'Cautioned',
@@ -362,7 +380,7 @@ class NewCaseSuspectController extends AdminController
 
                 $form->textarea('not_arrested_remarks', 'Remarks');
             })
-            ->when(1, function ($form) {
+            ->when('Yes', function ($form) {
 
 
                 $form->divider('Arrest information');
@@ -396,7 +414,7 @@ class NewCaseSuspectController extends AdminController
                                 }
                             }
 
-                            $form->datetime('arrest_date_time', 'Arrest date and time');
+                            $form->date('arrest_date_time', 'Arrest date and time');
 
                             $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                                 ->options([
@@ -408,17 +426,14 @@ class NewCaseSuspectController extends AdminController
                                         ->options(PA::all()->pluck('name_text', 'id'));
                                 })
                                 ->when('No', function ($form) {
-                                    $form->select('ca_id', __('Nearest conservation area'))
-                                        ->rules('required')
-                                        ->options(ConservationArea::all()->pluck('name', 'id'));
-                                    /* $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+                                    $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
                                         ->rules('int|required')
                                         ->help('Where this suspect was arrested')
                                         ->options(Location::get_sub_counties_array());
 
 
                                     $form->text('arrest_parish', 'Parish of Arrest');
-                                    $form->text('arrest_village', 'Arrest village'); */
+                                    $form->text('arrest_village', 'Arrest village');
                                 })
                                 ->rules('required');
 
@@ -486,7 +501,7 @@ class NewCaseSuspectController extends AdminController
                 } else {
 
 
-                    $form->datetime('arrest_date_time', 'Arrest date and time');
+                    $form->date('arrest_date_time', 'Arrest date and time');
 
                     $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                         ->options([
@@ -577,10 +592,10 @@ class NewCaseSuspectController extends AdminController
                         ])->when('No', function ($form) {
                             $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                                 ->options([
-                                    1 => 'Yes',
-                                    0 => 'No',
+                                    'Yes' => 'Yes',
+                                    'No' => 'No',
                                 ])
-                                ->when(0, function ($form) {
+                                ->when('No', function ($form) {
 
                                     $form->radio('status', __('Case status'))
                                         ->options([
@@ -611,7 +626,7 @@ class NewCaseSuspectController extends AdminController
                                             $form->textarea('police_action_remarks', 'Remarks');
                                         });
                                 })
-                                ->when(1, function ($form) {
+                                ->when('Yes', function ($form) {
 
 
 
@@ -642,8 +657,9 @@ class NewCaseSuspectController extends AdminController
 
                                     $form->radio('court_status', __('Court case status'))
                                         ->options([
-                                            'On-going investigation' => 'On-going investigation',
                                             'On-going prosecution' => 'On-going prosecution',
+                                            'Acquittal' => 'Acquittal',
+                                            'Dismissed by DPP' => 'Dismissed by DPP',
                                             'Closed' => 'Closed',
                                         ])->when('Closed', function ($form) {
 
@@ -670,16 +686,17 @@ class NewCaseSuspectController extends AdminController
                                                             0 => 'No',
                                                         ])
                                                         ->when(1, function ($form) {
-                                                            $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                                                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                                         });
 
-                                                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                                                    $form->radio('community_service', __('Was suspected offered a community service?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
                                                             'No' => 'No',
                                                         ])
-                                                        ->when(1, function ($form) {
-                                                            $form->date('created_at', 'Court date');
+                                                        ->when('Yes', function ($form) {
+                                                            $form->decimal('community_service_duration', 
+                                                            'Community service duration (in Hours)');
                                                         });
 
                                                     $form->radio('suspect_appealed', __('Did the suspect appeal?'))
@@ -725,10 +742,10 @@ class NewCaseSuspectController extends AdminController
                 } else {
                     $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                         ->options([
-                            1 => 'Yes',
-                            0 => 'No',
+                            'Yes' => 'Yes',
+                            'No' => 'No',
                         ])
-                        ->when(0, function ($form) {
+                        ->when('No', function ($form) {
 
                             $form->radio('status', __('Case status'))
                                 ->options([
@@ -759,7 +776,7 @@ class NewCaseSuspectController extends AdminController
                                     $form->textarea('police_action_remarks', 'Remarks');
                                 });
                         })
-                        ->when(1, function ($form) {
+                        ->when('Yes', function ($form) {
 
                             $form->divider('Court information');
                             $courtFileNumber = null;
@@ -786,8 +803,9 @@ class NewCaseSuspectController extends AdminController
 
                             $form->radio('court_status', __('Court case status'))
                                 ->options([
-                                    'On-going investigation' => 'On-going investigation',
                                     'On-going prosecution' => 'On-going prosecution',
+                                    'Acquittal' => 'Acquittal',
+                                    'Dismissed by DPP' => 'Dismissed by DPP',
                                     'Closed' => 'Closed',
                                 ])->when('Closed', function ($form) {
 
@@ -814,16 +832,17 @@ class NewCaseSuspectController extends AdminController
                                                     0 => 'No',
                                                 ])
                                                 ->when(1, function ($form) {
-                                                    $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                                                    $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                                 });
 
-                                            $form->radio('community_service', __('Was suspected issued a community service?'))
+                                                $form->radio('community_service', __('Was suspected offered a community service?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
                                                 ])
-                                                ->when(1, function ($form) {
-                                                    $form->date('created_at', 'Court date');
+                                                ->when('Yes', function ($form) {
+                                                    $form->decimal('community_service_duration', 
+                                                    'Community service duration (in Hours)');
                                                 });
 
                                             $form->radio('suspect_appealed', __('Did the suspect appeal?'))

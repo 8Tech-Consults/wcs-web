@@ -67,27 +67,8 @@ class CaseSuspect extends Model
             }
         }
 
+ 
 
-        if (
-            isset($m->arrest_date_time)
-        ) {
-            if ($m->arrest_date_time != null) {
-                if (strlen(((string)($m->arrest_date_time))) > 5) {
-                    $m->is_suspects_arrested = 1;
-                }
-            }
-        }
-
-
-        if (
-            isset($m->use_same_court_information)
-        ) {
-            if ($m->use_same_court_information != null) {
-                if (strlen(((string)($m->use_same_court_information))) > 5) {
-                    $m->is_suspect_appear_in_court = 1;
-                }
-            }
-        }
 
 
 

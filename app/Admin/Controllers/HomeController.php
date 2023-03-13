@@ -51,11 +51,7 @@ class HomeController extends Controller
 
 
 
-        if (Utils::hasPendingCase(Auth::user()) != null) {
-            return redirect(admin_url('case-suspects/create'));
-        }
-
-
+ 
         $faker = Faker::create();
 
         $cas = [];

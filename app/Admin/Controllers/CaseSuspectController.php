@@ -34,6 +34,8 @@ class CaseSuspectController extends AdminController
      */
     protected function grid()
     {
+
+        
         $statuses = [1, 2, 3];
 
         $seg = "";
@@ -45,13 +47,10 @@ class CaseSuspectController extends AdminController
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
-            if ($pendingCase->case_step == 1) {
-                return redirect(admin_url("new-case-suspects/{$pendingCase->id}/edit"));
-            }
-            return redirect(admin_url("new-case-suspects/{$pendingCase->id}/edit"));
-            //dd($pendingCase);
-        }
-
+            Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
+            return 'Loading...';
+        } 
+      
 
 
         $grid = new Grid(new CaseSuspect());

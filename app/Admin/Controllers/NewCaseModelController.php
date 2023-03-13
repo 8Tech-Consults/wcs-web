@@ -37,27 +37,19 @@ class NewCaseModelController extends AdminController
             $case = CaseModel::find($id);
             if ($case != null) {
                 $case->delete();
-                return redirect(admin_url('cases'));
+                Admin::script('window.location.replace("' . admin_url('cases') . '");');
+                return 'Loading...';
             }
         }
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
-            return redirect(admin_url('new-case-suspects/create'));
-            if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 2) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 3) {
-                return redirect(admin_url('new-case-suspects/create'));
-                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
-            } else {
-
-                return redirect(admin_url("cases"));
-            }
+            Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
+            return 'Loading...';
             //dd($pendingCase); 
         }
-        return redirect(admin_url("new-case/create"));
+        Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
+        return 'Loading...';
 
         $grid = new Grid(new CaseModel());
 
@@ -101,7 +93,8 @@ class NewCaseModelController extends AdminController
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
+                Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
+                return 'Loading...';
             } else if ($pendingCase->case_step == 2) {
             } else if ($pendingCase->case_step == 3) {
             } else {
@@ -151,7 +144,8 @@ class NewCaseModelController extends AdminController
         if (isset($_GET['refresh_page'])) {
             $r = (int)($_GET['refresh_page']);
             if ($r == 1) {
-                return redirect(admin_url("new-case/create"));
+                Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
+                return 'Loading...';
             }
         }
 
@@ -161,7 +155,8 @@ class NewCaseModelController extends AdminController
             $pendingCase = Utils::hasPendingCase(Auth::user());
             if ($pendingCase != null) {
                 if ($pendingCase->case_step == 1) {
-                    return redirect(admin_url('new-case-suspects/create'));
+                    Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
+                    return 'Loading...';
                 }
             }
         });
@@ -170,7 +165,8 @@ class NewCaseModelController extends AdminController
             $pendingCase = Utils::hasPendingCase(Auth::user());
             if ($pendingCase != null) {
                 if ($pendingCase->case_step == 1) {
-                    return redirect(admin_url('new-case-suspects/create'));
+                    Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
+                    return 'Loading...';
                 }
             }
         }
@@ -221,17 +217,17 @@ class NewCaseModelController extends AdminController
         $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
             ->rules('required')
             ->options([
-                1 => 'Yes',
-                0 => 'No',
+                'Yes' => 'Yes',
+                'No' => 'No',
             ])
             ->default(null)
-            ->when(0, function (Form $form) {
+            ->when('No', function (Form $form) {
 
-                $form->select('ca_id', __('Nearest conservation area'))
+                /* $form->select('ca_id', __('Nearest conservation area'))
                     ->rules('required')
-                    ->options(ConservationArea::all()->pluck('name', 'id'));
+                    ->options(ConservationArea::all()->pluck('name', 'id')); */
 
-                /* 
+              
 
                 $form->select('sub_county_id', __('Sub county'))
                     ->rules('required')
@@ -239,8 +235,8 @@ class NewCaseModelController extends AdminController
 
                 $form->text('parish', __('Parish'))->rules('required');
                 $form->text('village', __('Village'))->rules('required');
-                $form->hidden('offence_category_id', __('Village'))->default(1)->value(1); */
-            })->when(1, function (Form $form) {
+               /*  $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);   */
+            })->when('Yes', function (Form $form) {
                 $form->select('pa_id', __('Select PA'))
                     ->rules('required')
                     ->options(PA::all()->pluck('name_text', 'id'));

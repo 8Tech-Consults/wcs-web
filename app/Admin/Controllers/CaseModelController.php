@@ -63,21 +63,16 @@ class CaseModelController extends AdminController
     protected function grid()
     {
 
+      
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
-            if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 2) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 3) {
-                return redirect(admin_url('new-case-suspects/create'));
-                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
-            }
+            Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
+            return 'Loading...';
         }
 
 
-        $grid = new Grid(new CaseModel());
+        $grid = new Grid(new CaseModel()); 
         $grid->disableCreateButton();
 
         $grid->model()->orderBy('id', 'Desc');

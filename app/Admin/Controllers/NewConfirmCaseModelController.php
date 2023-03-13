@@ -28,23 +28,8 @@ class NewConfirmCaseModelController extends AdminController
      */
     protected function grid()
     {
-        return redirect(admin_url("cases")); 
-        $pendingCase = Utils::hasPendingCase(Auth::user());
-        if ($pendingCase != null) {
-            if ($pendingCase->case_step == 1) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 2) {
-                return redirect(admin_url('new-case-suspects/create'));
-            } else if ($pendingCase->case_step == 3) {
-                return redirect(admin_url('new-case-suspects/create'));
-                return redirect(admin_url("new-exhibits-case-models/{$pendingCase->id}/edit"));
-            } else {
-                return redirect(admin_url("cases"));
-            }
-            //dd($pendingCase); 
-        }
-
-
+        Admin::script('window.location.replace("' . admin_url("cases") . '");'); return 'Loading...';
+     
         $grid = new Grid(new CaseModel());
  
         $grid->column('id', __('Id'));
@@ -144,11 +129,7 @@ class NewConfirmCaseModelController extends AdminController
         if ($pendingCase == null) {
             die("Active case not found.");
         }
-
-        if (count($pendingCase->suspects) < 0) {
-           // return redirect(admin_url('new-case-suspects/create'));  
-        }
-
+ 
         $form = new Form(new CaseModel());
 
         $form = new Form(new CaseModel());

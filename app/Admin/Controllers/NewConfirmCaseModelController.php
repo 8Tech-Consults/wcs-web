@@ -155,7 +155,7 @@ class NewConfirmCaseModelController extends AdminController
 
         $form->divider("exhibits ($sus) ");
         $form->html(view('case-exhibits-confirm', ['case' => $pendingCase]));
-        $form->divider("confirm & submit");
+        $form->divider("confirm & submit"); 
 
         $form->radio('case_submitted', 'Are you sure you want to submit?')
             ->options([1 => 'Yes'])

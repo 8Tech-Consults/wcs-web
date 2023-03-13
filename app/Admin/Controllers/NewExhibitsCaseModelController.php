@@ -40,7 +40,7 @@ class NewExhibitsCaseModelController extends AdminController
                 Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
                 return 'Loading...';
             } else if ($pendingCase->case_step == 3) {
-                Admin::script('window.location.replace("' . admin_url('new-confirm-case-models/{$pendingCase->id}/edit') . '");');
+                Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '");');
                 return 'Loading...';
             } else {
             }
@@ -85,8 +85,7 @@ class NewExhibitsCaseModelController extends AdminController
             $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
         }
 
-
-        $form = new Form(new CaseModel());
+ 
         Admin::css(url('/css/new-case.css'));
 
         $form->disableCreatingCheck();
@@ -107,18 +106,15 @@ class NewExhibitsCaseModelController extends AdminController
             ])
             ->when('Wildlife', function ($form) {
                 $form->text('wildlife', __('Species'));
+                $form->text('description', __('Description'))
+                    ->help('Explantion E.g skin, scales, meat, live animal, e.t.c');
                 $form->decimal('quantity', __('Quantity (in KGs)'));
-                $form->decimal('number_of_pieces', __('Number of pieces/equipment'));
+                $form->decimal('number_of_pieces', __('Number of pieces'));
             })
             ->when('Implement', function ($form) {
-                $form->text('implement', __('Implements'));
+                $form->text('implement', __('Implement description'));
+                $form->decimal('number_of_pieces', __('Number of pieces'));
             })
-            ->rules('required');
-
-
-
-
-        $form->textarea('description', __('Description'))
             ->rules('required');
 
 

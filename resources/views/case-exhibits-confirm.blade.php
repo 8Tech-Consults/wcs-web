@@ -11,7 +11,7 @@ $i = 0;
 @endforeach
 
     <div>
-        <b>ACTION:</b> <small><a href="{{ admin_url("new-exhibits-case-models/{$case->id}/edit") }}" title="Add, Edit or Remove exhibit"
-                class="text-success"><u>Modify</u></a></small>
+        <b>ACTION:</b> <small><a href="{{ admin_url("new-exhibits-case-models/create") }}" title="Add, Edit or Remove exhibit"
+                class="text-success"><u>Add</u></a></small>
     </div>
 </div>

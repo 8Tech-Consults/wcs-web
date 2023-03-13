@@ -37,7 +37,7 @@ class NewCaseSuspectController extends AdminController
                 Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
                 return 'Loading...';
             } else if ($pendingCase->case_step == 2) {
-                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');
+                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
                 return 'Loading...';
             } else if ($pendingCase->case_step == 3) {
             } else {
@@ -129,7 +129,7 @@ class NewCaseSuspectController extends AdminController
                 Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
                 return 'Loading...';
             } else if ($pendingCase->case_step == 2) {
-                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');
+                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
                 return 'Loading...';
             } else if ($pendingCase->case_step == 3) {
             } else {
@@ -223,7 +223,7 @@ class NewCaseSuspectController extends AdminController
                 if ($pendingCase->case_step == 1) {
                     Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
                 } else if ($pendingCase->case_step == 2) {
-                    Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '");');
+                    Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
                 } else if ($pendingCase->case_step == 3) {
                 } else {
                 }
@@ -254,7 +254,7 @@ class NewCaseSuspectController extends AdminController
 
 
         if (count($pendingCase->suspects) > 0) {
-            $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
+            $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
         }
         $form->image('photo', 'Suspect photo');
 
@@ -894,7 +894,7 @@ class NewCaseSuspectController extends AdminController
             ]);
 
         /*      if (count($pendingCase->suspects) > 0) {
-            $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/{$pendingCase->id}/edit") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
+            $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
         } */
 
         return $form;

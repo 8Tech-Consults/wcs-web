@@ -88,7 +88,7 @@ class CaseSuspectController extends AdminController
             // $export->only(['column3', 'column4' ...]);
 
 
-            $export->filename('Suspects.csv');
+            $export->filename('Suspects');
 
             $export->except(['photo_url', 'action']);
             // $export->originalValue(['is_jailed']);

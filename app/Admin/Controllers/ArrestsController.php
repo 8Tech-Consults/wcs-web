@@ -72,7 +72,7 @@ class ArrestsController extends AdminController
 
         $grid->export(function ($export) {
 
-            $export->filename('Suspects.csv');
+            $export->filename('Suspects');
 
             $export->except(['actions']);
 

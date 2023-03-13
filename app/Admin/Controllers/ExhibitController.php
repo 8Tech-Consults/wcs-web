@@ -29,7 +29,7 @@ class ExhibitController extends AdminController
     {
         $grid = new Grid(new Exhibit());
 
-        
+
         $grid->filter(function ($f) {
             // Remove the default id filter
             $f->disableIdFilter();
@@ -51,8 +51,6 @@ class ExhibitController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
-   
-
         });
 
 
@@ -96,8 +94,8 @@ class ExhibitController extends AdminController
         $grid->column('exhibit_catgory', __('Exhibit category'));
         $grid->column('wildlife', __('Wildlife'));
         $grid->column('implements', __('Implements'));
-/*         $grid->column('photos', __('Photos')); */
-/*         $grid->column('description', __('Description')); */
+        /*         $grid->column('photos', __('Photos')); */
+        /*         $grid->column('description', __('Description')); */
         $grid->column('quantity', __('Quantity'));
 
         return $grid;

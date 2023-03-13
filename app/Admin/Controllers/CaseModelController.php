@@ -99,7 +99,7 @@ class CaseModelController extends AdminController
 
         $grid->export(function ($export) {
 
-            $export->filename('Cases.csv');
+            $export->filename('Cases');
 
             $export->except(['actions']);
 

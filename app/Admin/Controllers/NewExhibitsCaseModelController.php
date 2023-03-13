@@ -118,7 +118,7 @@ class NewExhibitsCaseModelController extends AdminController
             ->rules('required');
 
 
-        $form->file('photos', __('Exhibit file/photo'));
+        $form->image('pics', __('Exhibit file/photo'));
         $form->file('attachment', __('Attachments'));
 
 

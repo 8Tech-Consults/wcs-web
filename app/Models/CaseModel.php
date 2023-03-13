@@ -17,13 +17,15 @@ class CaseModel extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            die("You cannot delete this CA");
-            /*  CaseSuspect::where([
+             CaseSuspect::where([
                 'case_id' => $m->id
             ])->delete();
             CaseComment::where([
                 'case_id' => $m->id
-            ])->delete(); */ 
+            ])->delete();  
+            Exhibit::where([
+                'case_id' => $m->id
+            ])->delete();  
         });
         self::created(function ($m) {
             $m->case_number = Utils::getCaseNumber($m);

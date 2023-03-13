@@ -178,13 +178,13 @@ class CaseSuspectController extends AdminController
 
 
             $f->equal('is_suspects_arrested', 'Filter by arrest status')->select([
-                0 => 'Not arrested',
-                1 => 'Arrested',
+                'Yes' => 'Not arrested',
+                'No' => 'Arrested',
             ]);
 
             $f->equal('is_suspect_appear_in_court', 'Filter by court status')->select([
-                0 => 'Not in court',
-                1 => 'In court',
+                'Yes' => 'Not in court',
+                'No' => 'In court',
             ]);
 
 
@@ -346,8 +346,8 @@ class CaseSuspectController extends AdminController
 
         $grid->column('is_suspects_arrested', 'Is arrested')
             ->using([
-                1 => 'Arrested',
-                0 => 'Not arrested',
+                'Yes' => 'Arrested',
+                'No' => 'Not arrested',
             ], 'Not arrested')
             ->sortable();
 
@@ -761,8 +761,8 @@ class CaseSuspectController extends AdminController
 
         $form->radio('is_suspects_arrested', "Is this suspect arrested?")
             ->options([
-                1 => 'Yes',
-                0 => 'No',
+                'Yes' => 'Yes',
+                'No' => 'No',
             ])
             ->rules('required')
             ->when(0, function ($form) {

@@ -25,7 +25,7 @@ class CaseModel extends Model
             ])->delete();  
             Exhibit::where([
                 'case_id' => $m->id
-            ])->delete();  
+            ])->delete();
         });
         self::created(function ($m) {
             $m->case_number = Utils::getCaseNumber($m);

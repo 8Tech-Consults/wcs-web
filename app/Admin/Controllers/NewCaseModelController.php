@@ -33,7 +33,16 @@ class NewCaseModelController extends AdminController
     {
 
         if (isset($_GET['remove_case'])) {
-            $id = ((int)($_GET['remove_case']));
+            $id = ((int)($_GET['remove_case'])); 
+            return '<div class="bg-light p-4 p-md-5" >
+                <h4 class="">Are you sure you want to cancel?</h4>
+                <p>Canceling this case creation will delete all information that you had entered about it.</p>
+                <p><a class="btn btn-danger" href="' . admin_url('new-case?do_remove_case=' . $id) . '">CANCEL & DELETE CASE</a> | <a class="btn btn-success" href="' . admin_url('cases') . '">CONTINUE CREATING CASE</a></p>
+            </div>';
+        }
+
+        if (isset($_GET['do_remove_case'])) {
+            $id = ((int)($_GET['do_remove_case']));
             $case = CaseModel::find($id);
             if ($case != null) {
                 $case->delete();
@@ -41,6 +50,7 @@ class NewCaseModelController extends AdminController
                 return 'Loading...';
             }
         }
+
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
@@ -227,7 +237,7 @@ class NewCaseModelController extends AdminController
                     ->rules('required')
                     ->options(ConservationArea::all()->pluck('name', 'id')); */
 
-              
+
 
                 $form->select('sub_county_id', __('Sub county'))
                     ->rules('required')
@@ -235,7 +245,7 @@ class NewCaseModelController extends AdminController
 
                 $form->text('parish', __('Parish'))->rules('required');
                 $form->text('village', __('Village'))->rules('required');
-               /*  $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);   */
+                /*  $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);   */
             })->when('Yes', function (Form $form) {
                 $form->select('pa_id', __('Select PA'))
                     ->rules('required')

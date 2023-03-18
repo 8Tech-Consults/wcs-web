@@ -103,7 +103,7 @@ class NewCaseSuspectController extends AdminController
         $grid->column('photo', __('Photo'));
         $grid->column('court_date', __('Court date'));
         $grid->column('jail_date', __('Jail date'));
-        $grid->column('use_same_arrest_information', __('Use same arrest information')); 
+        $grid->column('use_same_arrest_information', __('Use same arrest information'));
         $grid->column('suspect_number', __('Suspect number'));
         $grid->column('arrest_in_pa', __('Arrest in pa'));
         $grid->column('pa_id', __('Pa id'));
@@ -194,7 +194,7 @@ class NewCaseSuspectController extends AdminController
         $show->field('photo', __('Photo'));
         $show->field('court_date', __('Court date'));
         $show->field('jail_date', __('Jail date'));
-        $show->field('use_same_arrest_information', __('Use same arrest information')); 
+        $show->field('use_same_arrest_information', __('Use same arrest information'));
         $show->field('suspect_number', __('Suspect number'));
         $show->field('arrest_in_pa', __('Arrest in pa'));
         $show->field('pa_id', __('Pa id'));
@@ -269,7 +269,7 @@ class NewCaseSuspectController extends AdminController
         ])->rules('required');
         $form->date('age', 'Date of birth')->rules('required');
         $form->text('phone_number', 'Phone number');
-           /*  ->rules('regex:/^\d+$/|min:10|max:10', [
+        /*  ->rules('regex:/^\d+$/|min:10|max:10', [
                 'min'   => 'Phone number can not be less than 10 characters',
                 'max'   => 'Phone number can not be more than 10 characters',
             ]);
@@ -489,6 +489,12 @@ class NewCaseSuspectController extends AdminController
                             if ($pendingCase != null) {
                                 if ($pendingCase->suspects->count() > 0) {
                                     foreach ($pendingCase->suspects as $sus) {
+                                        if ($sus->arrest_date_time == null) {
+                                            continue;
+                                        }
+                                        if (strlen($sus->arrest_date_time) < 4) {
+                                            continue;
+                                        }
                                         $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
                                     }
                                 }
@@ -695,8 +701,10 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->decimal('community_service_duration', 
-                                                            'Community service duration (in Hours)');
+                                                            $form->decimal(
+                                                                'community_service_duration',
+                                                                'Community service duration (in Hours)'
+                                                            );
                                                         });
 
                                                     $form->radio('suspect_appealed', __('Did the suspect appeal?'))
@@ -835,14 +843,16 @@ class NewCaseSuspectController extends AdminController
                                                     $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                                 });
 
-                                                $form->radio('community_service', __('Was suspected offered a community service?'))
+                                            $form->radio('community_service', __('Was suspected offered a community service?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->decimal('community_service_duration', 
-                                                    'Community service duration (in Hours)');
+                                                    $form->decimal(
+                                                        'community_service_duration',
+                                                        'Community service duration (in Hours)'
+                                                    );
                                                 });
 
                                             $form->radio('suspect_appealed', __('Did the suspect appeal?'))

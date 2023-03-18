@@ -214,7 +214,7 @@ class NewCaseModelController extends AdminController
             ->required()
             ->rules('required');
 
-        $form->text('officer_in_charge', 'Officer in charge')->rules('required');
+        $form->text('officer_in_charge', 'Complainant')->rules('required');
 
         /*     $form->select('offense_category', __('Case category'))
             ->options([

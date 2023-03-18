@@ -17,15 +17,15 @@ class Exhibit extends Model
         return $this->belongsTo(CaseModel::class, 'case_id');
     }
 
-  /*   public function setPhotosAttribute($pictures)
+    public function setPicsAttribute($pictures)
     {
         if (is_array($pictures)) {
-            $this->attributes['photos'] = json_encode($pictures);
+            $this->attributes['pics'] = json_encode($pictures);
         }
     }
 
-    public function getPhotosAttribute($pictures)
-    { 
+    public function getPicsAttribute($pictures)
+    {
         return json_decode($pictures, true);
-    } */
+    }
 }

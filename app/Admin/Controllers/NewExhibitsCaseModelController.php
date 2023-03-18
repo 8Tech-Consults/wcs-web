@@ -33,6 +33,19 @@ class NewExhibitsCaseModelController extends AdminController
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
+
+            $ex = Exhibit::where([
+                'case_id' => $pendingCase->id
+            ])
+                ->orderBy('id', 'Desc')
+                ->first();
+            if ($ex != null) {
+                if ($ex->add_another_exhibit == 'Yes') {
+                    Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
+                    return 'Loading...';
+                }
+            }
+
             if ($pendingCase->case_step == 1) {
                 Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
                 return 'Loading...';
@@ -85,7 +98,7 @@ class NewExhibitsCaseModelController extends AdminController
             $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
         }
 
- 
+
         Admin::css(url('/css/new-case.css'));
 
         $form->disableCreatingCheck();
@@ -118,8 +131,14 @@ class NewExhibitsCaseModelController extends AdminController
             ->rules('required');
 
 
-        $form->image('pics', __('Exhibit file/photo'));
-        $form->file('attachment', __('Attachments'));
+        $form->multipleImage('pics', __('Exhibit file/photo'));
+        $form->multipleFile('attachment', __('Attachments'));
+
+        $form->radio('add_another_exhibit', __('Do you want to add another exhibit to this case?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])->required();
 
 
         return $form;

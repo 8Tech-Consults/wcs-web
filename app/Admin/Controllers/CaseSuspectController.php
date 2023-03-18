@@ -759,7 +759,7 @@ class CaseSuspectController extends AdminController
         }); */
 
 
-        $form->radio('is_suspects_arrested', "Is this suspect arrested?")
+        $form->radio('is_suspects_arrested', "Has suspect been handed over to police?")
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',

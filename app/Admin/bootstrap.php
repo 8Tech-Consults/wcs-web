@@ -24,23 +24,19 @@ use App\Admin\Extensions\Nav\Dropdown;
 use App\Models\Utils;
 use Illuminate\Support\Facades\Auth;
 
- 
+
 Encore\Admin\Form::forget(['map', 'editor']);
 
 
 $u = Auth::user();
-/* if ($u != null) {
+if ($u != null) {
 
     if (isset($_GET['log_me_out'])) {
-
     } else {
         if (isset($_GET['resend_2f_code'])) {
-
             $u->send2FCode();
             header('Location: ' . url('2fauth'));
         }
-
-
         if (!$u->authenticated) {
             if ($u->code == null) {
                 $u->send2FCode();
@@ -49,7 +45,7 @@ $u = Auth::user();
             die();
         }
     }
-} */
+}
 Utils::system_boot($u);
 
 

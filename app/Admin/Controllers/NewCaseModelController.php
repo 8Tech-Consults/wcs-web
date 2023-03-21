@@ -33,7 +33,7 @@ class NewCaseModelController extends AdminController
     {
 
         if (isset($_GET['remove_case'])) {
-            $id = ((int)($_GET['remove_case'])); 
+            $id = ((int)($_GET['remove_case']));
             return '<div class="bg-light p-4 p-md-5" >
                 <h4 class="">Are you sure you want to cancel?</h4>
                 <p>Canceling this case creation will delete all information that you had entered about it.</p>
@@ -198,7 +198,8 @@ class NewCaseModelController extends AdminController
             $form->html('<a class="btn btn-danger" href="' . admin_url("new-case-suspects/create") . '" >SKIP TO SUSPECTS</a>', 'SKIP');
         }
 
-        /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
+        /*        
+            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
             ->help("Select offences involded in this case")
             ->rules('required');
  */

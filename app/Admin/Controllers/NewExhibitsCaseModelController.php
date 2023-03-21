@@ -111,29 +111,56 @@ class NewExhibitsCaseModelController extends AdminController
         $form->html('<a class="btn btn-danger" href="' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '" >SKIP TO SUBMIT</a>', 'SKIP');
 
         $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
+        /* 
+ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_exhibit`, ADD `` VARCHAR(50) NULL DEFAULT NULL AFTER `type_wildlife`, ADD `type_other` VARCHAR(50) NULL DEFAULT NULL AFTER `type_implement`;
 
-        $form->radio('exhibit_catgory', __('Exhibit type'))
+*/
+        $form->radio('type_wildlife', __('Exibit type Wildlife?'))
             ->options([
-                'Wildlife' => 'Wildlife',
-                'Implement' => 'Implement',
+                'Yes' => 'Yes',
+                'No' => 'No',
             ])
-            ->when('Wildlife', function ($form) {
-                $form->text('wildlife', __('Species'));
-                $form->text('description', __('Description'))
+            ->when('Yes', function ($form) {
+                $form->divider('Wildlife Exibit(s) Information');
+                $form->text('wildlife_species', __('Species Name'))->rules('required')
                     ->help('Explantion E.g skin, scales, meat, live animal, e.t.c');
-                $form->decimal('quantity', __('Quantity (in KGs)'));
-                $form->decimal('number_of_pieces', __('Number of pieces'));
+                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'))->rules('required');
+                $form->decimal('wildlife_pieces', __('Number of pieces'))->rules('required');
+                $form->text('wildlife_description', __('Description'))->rules('required');
+                $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
+                $form->divider();
+            });
+        $form->radio('type_implement', __('Exibit type Implement?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->when('Yes', function ($form) {
+                $form->divider('Implements Exibit(s) Information')->rules('required');
+                $form->text('implement_name', __('Name of implement'))->rules('required');
+                $form->decimal('implement_pieces', __('No of pieces'))->rules('required');
+                $form->textarea('implement_description', __('Description'))->rules('required');
+                $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
+                $form->divider();
             })
-            ->when('Implement', function ($form) {
-                $form->text('implement', __('Implement description'));
-                $form->decimal('number_of_pieces', __('Number of pieces'));
+            ->rules('required');
+
+        $form->radio('type_other', __('Exibit type Others?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->when('Yes', function ($form) {
+                $form->divider('Other Exibit(s) Information')->rules('required');
+                $form->text('others_description', __('Description for others'))->rules('required');
+                $form->multipleFile('others_attachments', __('Attachments'));
+                $form->divider();
             })
             ->rules('required');
 
 
-        $form->multipleImage('pics', __('Exhibit file/photo'));
-        $form->multipleFile('attachment', __('Attachments'));
-
+        /*  $form->hidden('add_another_exhibit', __('Attachments'))->value('No')->default('No');
+ */
         $form->radio('add_another_exhibit', __('Do you want to add another exhibit to this case?'))
             ->options([
                 'Yes' => 'Yes',

@@ -4,8 +4,9 @@ $i = 0;
     @foreach ($case->exhibits as $sus)
         <?php $i++; ?>
         <div class="">
-            <b>{{ $i }}.</b> {{ $sus->exhibit_catgory }} - {{ $sus->description }} , {{ $sus->quantity }}
-            KGs/Pieces.
+            Exhibit  <b>{{ $i }}.</b>
+            {{--  {{ $sus->exhibit_catgory }} - {{ $sus->description }} , {{ $sus->quantity }}
+            Exhibit --}}
 
             <small><u><a href="/new-exhibits-case-models/{{ $sus->id }}/edit"
                         title="Edit this suspect's information">Edit</a></u></small>

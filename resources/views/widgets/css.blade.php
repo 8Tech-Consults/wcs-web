@@ -1,5 +1,4 @@
 <?php
-
 $primt_color = '#007C61';
 ?><style>
     .sidebar {

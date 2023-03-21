@@ -24,6 +24,48 @@ class Exhibit extends Model
         }
     }
 
+
+    public function setImplementAttachmentsAttribute($pictures)
+    {
+        if (is_array($pictures)) {
+            $this->attributes['implement_attachments'] = json_encode($pictures);
+        }
+    }
+
+
+    public function getImplementAttachmentsAttribute($pictures)
+    {
+        return json_decode($pictures, true);
+    }
+
+
+    public function setOthersAttachmentsAttribute($pictures)
+    {
+        if (is_array($pictures)) {
+            $this->attributes['others_attachments'] = json_encode($pictures);
+        }
+    }
+
+
+    public function getOthersAttachmentsAttribute($pictures)
+    {
+        return json_decode($pictures, true);
+    }
+
+
+    public function setWildlifeAttachmentsAttribute($pictures)
+    {
+        if (is_array($pictures)) {
+            $this->attributes['wildlife_attachments'] = json_encode($pictures);
+        }
+    }
+
+
+    public function getWildlifeAttachmentsAttribute($pictures)
+    {
+        return json_decode($pictures, true);
+    }
+
     public function getPicsAttribute($pictures)
     {
         return json_decode($pictures, true);

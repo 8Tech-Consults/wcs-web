@@ -77,7 +77,7 @@ class CaseSuspect extends Model
 
     function getPhotoUrlAttribute()
     {
-        return url('public/storage/images/' . $this->photo);
+        return url('public/storage/' . $this->photo);
     }
     function offences()
     {

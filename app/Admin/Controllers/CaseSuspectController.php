@@ -370,13 +370,8 @@ class CaseSuspectController extends AdminController
 
         $grid->column('pa_id', 'P.A of Arrest ')
             ->display(function ($x) {
-                if ($this->arrest_in_pa != 'Yes') {
-                    return '-';
-                }
-                if ($this->arrestPa == null) {
-                    return '-';
-                }
-                return $this->arrestPa->name;
+                 
+                return $this->case->pa->name;
             })
             ->sortable()
             ->hide();

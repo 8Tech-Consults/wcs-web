@@ -180,6 +180,12 @@ class CaseModel extends Model
 
     function pa()
     {
+        $pa = PA::find($this->pa_id);
+        if ($pa == null) {
+            $this->ca_id = 1;
+            $this->pa_id = 1;
+            $this->save();
+        }
         return $this->belongsTo(PA::class, 'pa_id');
     }
     function ca()
@@ -187,6 +193,7 @@ class CaseModel extends Model
         $ca =  ConservationArea::find($this->ca_id);
         if ($ca == null) {
             $this->ca_id = 1;
+            $this->pa_id = 1;
             $this->save();
         }
         return $this->belongsTo(ConservationArea::class, 'ca_id');

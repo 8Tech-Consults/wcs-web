@@ -59,12 +59,26 @@ class CaseModel extends Model
                 $m->ca_id = 1;
                 $m->pa_id = 1;
             }
-            $m->case_number = Utils::getCaseNumber($m);  
+            $m->case_number = Utils::getCaseNumber($m);
             return $m;
         });
         self::updating(function ($m) {
- 
-            $m->case_number = Utils::getCaseNumber($m); 
+
+            $pa = PA::find($m->pa_id);
+            if (
+                $pa != null
+            ) {
+                $m->is_offence_committed_in_pa = 'Yes';
+                $m->ca_id = $pa->ca_id;
+            } else {
+                $m->is_offence_committed_in_pa = 'No';
+                $m->pa_id = 1;
+                $m->ca_id = 1;
+                $m->save();
+            }
+
+
+            $m->case_number = Utils::getCaseNumber($m);
             $m->district_id = 1;
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);

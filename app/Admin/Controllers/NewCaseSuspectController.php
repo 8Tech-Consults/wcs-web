@@ -730,7 +730,6 @@ class NewCaseSuspectController extends AdminController
                                                 'Remand and Hearing' => 'Remand and Hearing',
                                                 'Court Bail and Hearing' => 'Court Bail and Hearing',
                                                 'Remand and on-going inquiries' => 'Remand and on-going inquiries',
-                                                'Court Bail and On-going' => 'Court Bail and On-going',
                                                 'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
                                             ]);
 
@@ -884,7 +883,6 @@ class NewCaseSuspectController extends AdminController
                                         'Remand and Hearing' => 'Remand and Hearing',
                                         'Court Bail and Hearing' => 'Court Bail and Hearing',
                                         'Remand and on-going inquiries' => 'Remand and on-going inquiries',
-                                        'Court Bail and On-going' => 'Court Bail and On-going',
                                         'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
                                     ]);
 

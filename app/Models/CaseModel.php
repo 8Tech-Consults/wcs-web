@@ -55,7 +55,7 @@ class CaseModel extends Model
             $m->offence_description = $m->title;
             $m->case_step = 1;
 
-            if ($m->is_offence_committed_in_pa = 'No') {
+            if ($m->is_offence_committed_in_pa == 'No') {
                 $m->ca_id = 1;
                 $m->pa_id = 1;
             }

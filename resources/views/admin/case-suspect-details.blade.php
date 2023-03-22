@@ -51,10 +51,10 @@ use App\Models\Utils;
                 's' => $s->ethnicity,
             ])
 
-            @include('components.detail-item', [
+          {{--   @include('components.detail-item', [
                 't' => 'District, Sub-county',
                 's' => $s->sub_county->name_text,
-            ])
+            ]) --}}
 
 
 
@@ -95,6 +95,7 @@ use App\Models\Utils;
 
                     <p class="py-1 my-0 "><b class="text-uppercase">CASE district:</b>
                         {{ Utils::get('App\Models\Location', $s->case->district_id)->name_text }} </p>
+                        
 
                     <p class="py-1 my-0 "><b class="text-uppercase">CASE sub-county:</b>
                         {{ Utils::get('App\Models\Location', $s->case->sub_county_id)->name_text }} </p>

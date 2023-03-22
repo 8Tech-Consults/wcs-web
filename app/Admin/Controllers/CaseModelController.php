@@ -63,7 +63,7 @@ class CaseModelController extends AdminController
     protected function grid()
     {
 
-      
+
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
@@ -72,7 +72,7 @@ class CaseModelController extends AdminController
         }
 
 
-        $grid = new Grid(new CaseModel()); 
+        $grid = new Grid(new CaseModel());
         $grid->disableCreateButton();
 
         $grid->model()->orderBy('id', 'Desc');
@@ -220,11 +220,11 @@ class CaseModelController extends AdminController
 
 
         $grid->column('suspects_count', __('Suspects'))->display(function () {
-            $link = admin_url('case-suspects?case_id='.$this->id);
+            $link = admin_url('case-suspects?case_id=' . $this->id);
             return '<a data-toggle="tooltip" data-placement="bottom"  title="View suspects" class="text-primary h3" href="' . $link . '" >' . $this->suspects_count . '</a>';
         });
         $grid->column('exhibit_count', __('Exhibits'))->display(function () {
-            $link = admin_url('exhibits?case_id='.$this->id);
+            $link = admin_url('exhibits?case_id=' . $this->id);
             return '<a data-toggle="tooltip" data-placement="bottom"  title="View exhibits" class="text-primary h3" href="' . $link . '" >' . $this->exhibit_count . '</a>';
         });
 
@@ -414,13 +414,6 @@ class CaseModelController extends AdminController
 
                 $form->text('officer_in_charge', 'Complainant')->rules('required');
 
-                $form->select('offense_category', __('Case category'))
-                    ->options([
-                        'Category 1' => 'Category 1',
-                        'Category 2' => 'Category 2',
-                        'Category 3' => 'Category 3',
-                    ])
-                    ->rules('required');
 
                 $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
                     ->rules('required')

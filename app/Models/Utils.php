@@ -18,7 +18,7 @@ use Faker\Factory as Faker;
 class Utils  extends Model
 {
 
- 
+
     public static function getCaseNumber($case)
     {
         /* foreach (PA::all() as $key => $pa) {
@@ -32,22 +32,24 @@ class Utils  extends Model
 
         $case_number = "UWA";
         $pa_found = false;
-        if ($case->is_offence_committed_in_pa) {
+        if (
+            $case->is_offence_committed_in_pa == 1 ||
+            $case->is_offence_committed_in_pa == 'Yes'
+        ) {
             $pa = PA::find($case->pa_id);
             if ($pa != null) {
-                $case_number .= "/{$pa->short_name}";
+                $case_number .= "/{$pa->ca->name}";
+                $pa_found = true;
+            }
+        } else {
+            $pa = PA::find(1);
+            if ($pa != null) {
+                $case_number .= "/{$pa->ca->name}";
                 $pa_found = true;
             }
         }
 
-        if (!$pa_found) {
-            $dis = Location::find($case->district_id);
-            if ($dis != null) {
-                //$case_number .= "/" . substr($dis->name, 0, 4);
-                $case_number .= "/" . $dis->name;
-                $pa_found = true;
-            }
-        }
+
         if (!$pa_found) {
             $case_number = "/-";
         }
@@ -111,8 +113,21 @@ class Utils  extends Model
         $cases = CaseModel::where([
             'case_number' => null
         ])->get();
+
         foreach ($cases as $key => $case) {
-            $case->case_number = Utils::getCaseNumber($case);
+            if (
+                $case->is_offence_committed_in_pa == 1 ||
+                $case->is_offence_committed_in_pa == 'Yes'
+            ) {
+                $case->is_offence_committed_in_pa = 'Yes';
+            } else {
+                $case->is_offence_committed_in_pa = 'No';
+                $case->pa_id = 1;
+                $case->ca_id = 1;
+                $case->save(); 
+            } 
+             
+            $case->case_number = Utils::getCaseNumber($case); 
             $case->save();
         }
 

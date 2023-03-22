@@ -28,10 +28,11 @@ class NewConfirmCaseModelController extends AdminController
      */
     protected function grid()
     {
-        Admin::script('window.location.replace("' . admin_url("cases") . '");'); return 'Loading...';
-     
+        Admin::script('window.location.replace("' . admin_url("cases") . '");');
+        return 'Loading...';
+
         $grid = new Grid(new CaseModel());
- 
+
         $grid->column('id', __('Id'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
@@ -129,7 +130,7 @@ class NewConfirmCaseModelController extends AdminController
         if ($pendingCase == null) {
             die("Active case not found.");
         }
- 
+
         $form = new Form(new CaseModel());
 
         $form = new Form(new CaseModel());
@@ -140,7 +141,7 @@ class NewConfirmCaseModelController extends AdminController
         $form->disableEditingCheck();
         $form->disableViewCheck();
 
-        $form->html(view('steps', ['active' => 4,'case' => $pendingCase]));
+        $form->html(view('steps', ['active' => 4, 'case' => $pendingCase]));
 
 
 
@@ -155,7 +156,7 @@ class NewConfirmCaseModelController extends AdminController
 
         $form->divider("exhibits ($sus) ");
         $form->html(view('case-exhibits-confirm', ['case' => $pendingCase]));
-        $form->divider("confirm & submit"); 
+        $form->divider("confirm & submit");
 
         $form->radio('case_submitted', 'Are you sure you want to submit?')
             ->options([1 => 'Yes'])

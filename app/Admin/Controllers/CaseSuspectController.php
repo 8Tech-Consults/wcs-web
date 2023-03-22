@@ -35,7 +35,7 @@ class CaseSuspectController extends AdminController
     protected function grid()
     {
 
-        
+
         $statuses = [1, 2, 3];
 
         $seg = "";
@@ -49,8 +49,8 @@ class CaseSuspectController extends AdminController
         if ($pendingCase != null) {
             Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
             return 'Loading...';
-        } 
-      
+        }
+
 
 
         $grid = new Grid(new CaseSuspect());
@@ -269,8 +269,7 @@ class CaseSuspectController extends AdminController
                 return $this->case->detection_method;
             })->hide();
 
-        $grid->column('photo_url', __('Photo'))
-            ->width(60)
+        $grid->column('photo', __('Photo'))
             ->lightbox(['width' => 60, 'height' => 80]);
         /*      $grid->column('updated_at', __('Updated'))
             ->display(function ($x) {
@@ -621,12 +620,14 @@ class CaseSuspectController extends AdminController
     protected function form()
     {
 
-        $pendingCase = Utils::hasPendingCase(Auth::user());
 
-        if ($pendingCase != null) {
+
+        /*   
+      $pendingCase = Utils::hasPendingCase(Auth::user());
+      if ($pendingCase != null) {
             $suspects_count = count($pendingCase->suspects);
             admin_warning("Adding suspects to new case {$pendingCase->case_number} - {$pendingCase->title}, with {$suspects_count} suspects.");
-        }
+        } */
 
         $form = new Form(new CaseSuspect());
 

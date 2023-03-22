@@ -44,11 +44,12 @@ class NewCaseModelController extends AdminController
         if (isset($_GET['do_remove_case'])) {
             $id = ((int)($_GET['do_remove_case']));
             $case = CaseModel::find($id);
+
             if ($case != null) {
                 $case->delete();
                 Admin::script('window.location.replace("' . admin_url('cases') . '");');
                 return 'Loading...';
-            }
+            } 
         }
 
 

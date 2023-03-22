@@ -124,7 +124,7 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                 $form->divider('Wildlife Exibit(s) Information');
                 $form->text('wildlife_species', __('Species Name'))->rules('required')
                     ->help('Explantion E.g skin, scales, meat, live animal, e.t.c');
-                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
+                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'))->rules('required');
                 $form->decimal('wildlife_pieces', __('Number of pieces'));
                 $form->text('wildlife_description', __('Description'));
                 $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));

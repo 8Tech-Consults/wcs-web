@@ -88,15 +88,24 @@ class ExhibitController extends AdminController
             ->sortable();
         $grid->column('case_id', __('Case'))
             ->display(function ($x) {
-                return $this->case_model->title;
+                return $this->case_model->case_number;
             })
             ->sortable();
-        $grid->column('exhibit_catgory', __('Exhibit category'));
+        $grid->column('type_wildlife', __('Exibit type Wildlife'));
+        $grid->column('wildlife_species', __('Wildlife Species Name'));
+        $grid->column('wildlife_quantity', __('Wildlife Quantity (in KGs)'));
+        $grid->column('wildlife_pieces', __('Wildlife Number of pieces'));
+        $grid->column('wildlife_description', __('Wildlife Description'));
+        $grid->column('type_implement', __('Exibit type implement'));
+        $grid->column('implement_name', __('Exibit name'));
+        $grid->column('implement_pieces', __('Implement pieces'));
+        $grid->column('implement_description', __('Implement description'));
+        $grid->column('type_other', __('Exibit type Others'));
+        $grid->column('others_description', __('Description for others')); 
+
+        /*         $grid->column('exhibit_catgory', __('Exhibit category'));
         $grid->column('wildlife', __('Wildlife'));
-        $grid->column('implements', __('Implements'));
-        /*         $grid->column('photos', __('Photos')); */
-        /*         $grid->column('description', __('Description')); */
-        $grid->column('quantity', __('Quantity'));
+        $grid->column('implements', __('Implements')); */
 
         return $grid;
     }

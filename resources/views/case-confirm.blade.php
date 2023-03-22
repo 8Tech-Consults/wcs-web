@@ -5,9 +5,7 @@
     <div>
         <b>TEMPORARY CASE NUMBER:</b> {{ $case->case_number }}
     </div>
-    <div>
-        <b>CASE CATEGORY:</b> {{ $case->offense_category }}
-    </div>
+ 
     <div>
         <b>CA:</b> {{ $case->ca->name }}
     </div>

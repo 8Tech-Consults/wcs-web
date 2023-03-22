@@ -665,8 +665,6 @@ class NewCaseSuspectController extends AdminController
                                     $form->radio('court_status', __('Court case status'))
                                         ->options([
                                             'On-going prosecution' => 'On-going prosecution',
-                                            'Acquittal' => 'Acquittal',
-                                            'Dismissed by DPP' => 'Dismissed by DPP',
                                             'Concluded' => 'Concluded',
                                         ])->when('Concluded', function ($form) {
 
@@ -723,9 +721,17 @@ class NewCaseSuspectController extends AdminController
                                         ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
 
-                                            $form->radio('suspect_court_outcome', 'Suspect court case status')->options([
+                                            $form->select('suspect_court_outcome', 'Suspect court case status')->options([
                                                 'Remand' => 'Remand',
                                                 'Court Bail' => 'Court bail',
+                                                'Committal' => 'Committal',
+                                                'Hearing' => 'Hearing',
+                                                'On-going inquiries' => 'On-going inquiries',
+                                                'Remand and Hearing' => 'Remand and Hearing',
+                                                'Court Bail and Hearing' => 'Court Bail and Hearing',
+                                                'Remand and on-going inquiries' => 'Remand and on-going inquiries',
+                                                'Court Bail and On-going' => 'Court Bail and On-going',
+                                                'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
                                             ]);
 
                                             $form->radio('court_file_status', 'Court file status')->options([
@@ -813,8 +819,6 @@ class NewCaseSuspectController extends AdminController
                             $form->radio('court_status', __('Court case status'))
                                 ->options([
                                     'On-going prosecution' => 'On-going prosecution',
-                                    'Acquittal' => 'Acquittal',
-                                    'Dismissed by DPP' => 'Dismissed by DPP',
                                     'Concluded' => 'Concluded',
                                 ])->when('Concluded', function ($form) {
 
@@ -871,9 +875,17 @@ class NewCaseSuspectController extends AdminController
                                 ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
 
-                                    $form->radio('suspect_court_outcome', 'Suspect court case status')->options([
+                                    $form->select('suspect_court_outcome', 'Suspect court case status')->options([
                                         'Remand' => 'Remand',
                                         'Court Bail' => 'Court bail',
+                                        'Committal' => 'Committal',
+                                        'Hearing' => 'Hearing',
+                                        'On-going inquiries' => 'On-going inquiries',
+                                        'Remand and Hearing' => 'Remand and Hearing',
+                                        'Court Bail and Hearing' => 'Court Bail and Hearing',
+                                        'Remand and on-going inquiries' => 'Remand and on-going inquiries',
+                                        'Court Bail and On-going' => 'Court Bail and On-going',
+                                        'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
                                     ]);
 
                                     $form->radio('court_file_status', 'Court file status')->options([

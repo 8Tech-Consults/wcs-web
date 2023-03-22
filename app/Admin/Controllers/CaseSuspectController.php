@@ -90,7 +90,7 @@ class CaseSuspectController extends AdminController
 
             $export->filename('Suspects');
 
-            $export->except(['photo_url', 'action']);
+            $export->except(['photo', 'action']);
             // $export->originalValue(['is_jailed']);
 
             $export->column('is_jailed', function ($value, $original) {

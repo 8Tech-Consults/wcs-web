@@ -114,10 +114,9 @@ class Utils  extends Model
             'case_number' => null
         ])->get();
 
-        foreach ($cases as $key => $case) {
+     /*    foreach ($cases as $key => $case) {
 
             $pa = PA::find($case->pa_id);
-            
             if (
                 $pa != null
             ) {
@@ -133,7 +132,7 @@ class Utils  extends Model
 
             $case->case_number = Utils::getCaseNumber($case);
             $case->save();
-        }
+        } */
 
         foreach (CaseSuspect::where([
             'suspect_number' => null

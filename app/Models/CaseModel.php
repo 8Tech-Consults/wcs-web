@@ -59,11 +59,12 @@ class CaseModel extends Model
                 $m->ca_id = 1;
                 $m->pa_id = 1;
             }
-
+            $m->case_number = Utils::getCaseNumber($m);  
             return $m;
         });
         self::updating(function ($m) {
-
+ 
+            $m->case_number = Utils::getCaseNumber($m); 
             $m->district_id = 1;
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);

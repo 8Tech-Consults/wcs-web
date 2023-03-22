@@ -233,15 +233,15 @@ class CaseSuspectController extends AdminController
         $grid->column('is_offence_committed_in_pa', __('In P.A'))
             ->display(function ($x) {
                 if (
-                    $this->case->is_offence_committed_in_pa == 'Yes'
+                    $this->case->pa_id == 1
                 ) {
-                    return 'Yes';
-                } else {
                     return 'No';
+                } else {
+                    return 'Yes';
                 }
             })->hide();
 
-        $grid->column('pa_id', __('P.A'))
+        $grid->column('pa_id', __('P.A of case'))
             ->display(function ($x) {
 
                 if ($this->case->is_offence_committed_in_pa != 1) {
@@ -381,7 +381,7 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
-        $grid->column('ca_id', 'Nearest C.A')
+        $grid->column('ca_id', 'C.A')
             ->display(function ($x) {
                 if ($this->arrestCa == null) {
                     return '-';

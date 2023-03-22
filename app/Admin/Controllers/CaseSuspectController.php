@@ -90,7 +90,7 @@ class CaseSuspectController extends AdminController
 
             $export->filename('Suspects');
 
-            $export->except(['photo_url', 'action']);
+            $export->except(['photo', 'action']);
             // $export->originalValue(['is_jailed']);
 
             $export->column('is_jailed', function ($value, $original) {
@@ -232,7 +232,10 @@ class CaseSuspectController extends AdminController
 
         $grid->column('is_offence_committed_in_pa', __('In P.A'))
             ->display(function ($x) {
-                if ($this->case->is_offence_committed_in_pa == 1) {
+                if (
+                    $this->case->is_offence_committed_in_pa == 1 ||
+                    $this->case->is_offence_committed_in_pa == 'Yes'
+                ) {
                     return 'Yes';
                 } else {
                     return 'No';

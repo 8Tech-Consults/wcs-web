@@ -517,7 +517,7 @@ class NewCaseSuspectController extends AdminController
                         ])
                         ->when('Yes', function ($form) {
                             $form->select('pa_id', __('Select PA'))
-                                ->options(PA::all()->pluck('name_text', 'id'));
+                                ->options(PA::all() ->pluck('name_text', 'id'));
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))

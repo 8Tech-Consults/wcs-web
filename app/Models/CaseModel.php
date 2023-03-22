@@ -162,11 +162,11 @@ class CaseModel extends Model
     }
     function ca()
     {
-        /* $ca =  ConservationArea::find($this->ca_id);
+        $ca =  ConservationArea::find($this->ca_id);
         if ($ca == null) {
             $this->ca_id = 1;
-            //$this->save();
-        } */
+            $this->save();
+        }
         return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
 

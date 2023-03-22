@@ -120,14 +120,23 @@ class Utils  extends Model
                 $case->is_offence_committed_in_pa == 'Yes'
             ) {
                 $case->is_offence_committed_in_pa = 'Yes';
+                $pa = PA::find($case->pa_id);
+                if ($pa != null) {
+                    $case->ca_id = $pa->ca_id;
+                    $case->save();
+                } else {
+                    $case->pa_id = 1;
+                    $case->ca_id = 1;
+                }
+                $case->save();
             } else {
                 $case->is_offence_committed_in_pa = 'No';
                 $case->pa_id = 1;
                 $case->ca_id = 1;
-                $case->save(); 
-            } 
-             
-            $case->case_number = Utils::getCaseNumber($case); 
+                $case->save();
+            }
+
+            $case->case_number = Utils::getCaseNumber($case);
             $case->save();
         }
 

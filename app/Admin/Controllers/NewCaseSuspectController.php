@@ -880,7 +880,7 @@ class NewCaseSuspectController extends AdminController
                                                             'On-going' => 'On-going',
                                                         ]);
 
-                                                    $form->text('suspect_appeal_remarks', 'Remarks');
+                                                    $form->textarea('suspect_appeal_remarks', 'Remarks');
                                                 });
                                         });
                                 })

@@ -142,8 +142,7 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                 $form->textarea('implement_description', __('Description'))->rules('required');
                 $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
                 $form->divider();
-            })
-            ->rules('required');
+            });
 
         $form->radio('type_other', __('Exibit type Others?'))
             ->options([
@@ -155,8 +154,7 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                 $form->text('others_description', __('Description for others'))->rules('required');
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
-            })
-            ->rules('required');
+            });
 
 
         /*  $form->hidden('add_another_exhibit', __('Attachments'))->value('No')->default('No');

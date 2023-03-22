@@ -267,7 +267,7 @@ class NewCaseSuspectController extends AdminController
             'Male' => 'Male',
             'Female' => 'Female',
         ])->rules('required');
-        $form->date('age', 'Date of birth')->rules('required');
+        $form->date('age', 'Date of birth');
         $form->text('phone_number', 'Phone number');
         /*  ->rules('regex:/^\d+$/|min:10|max:10', [
                 'min'   => 'Phone number can not be less than 10 characters',
@@ -872,6 +872,15 @@ class NewCaseSuspectController extends AdminController
                                                     $form->date('suspect_appealed_date', 'Suspect appeal Date');
                                                     $form->text('suspect_appealed_court_name', 'Appellate court');
                                                     $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                                    $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
+                                                        ->options([
+                                                            'Upheld' => 'Upheld',
+                                                            'Quashed and acquitted' => 'Quashed and acquitted',
+                                                            'Quashed and retrial ordered' => 'Quashed and retrial ordered',
+                                                            'On-going' => 'On-going',
+                                                        ]);
+
+                                                    $form->text('suspect_appeal_remarks', 'Remarks');
                                                 });
                                         });
                                 })

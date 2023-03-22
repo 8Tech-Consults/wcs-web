@@ -670,6 +670,8 @@ class NewCaseSuspectController extends AdminController
 
                                             $form->radio('case_outcome', 'Specific court case status')->options([
                                                 'Dismissed' => 'Dismissed',
+                                                'Withdrawn by DPP' => 'Withdrawn by DPP',
+                                                'Acquittal' => 'Acquittal',
                                                 'Convicted' => 'Convicted',
                                             ])
                                                 ->when('Convicted', function ($form) {
@@ -823,6 +825,8 @@ class NewCaseSuspectController extends AdminController
 
                                     $form->radio('case_outcome', 'Specific court case status')->options([
                                         'Dismissed' => 'Dismissed',
+                                        'Withdrawn by DPP' => 'Withdrawn by DPP',
+                                        'Acquittal' => 'Acquittal',
                                         'Convicted' => 'Convicted',
                                     ])
                                         ->when('Convicted', function ($form) {

@@ -716,7 +716,15 @@ class NewCaseSuspectController extends AdminController
                                                         ->when('Yes', function ($form) {
                                                             $form->date('suspect_appealed_date', 'Suspect appeal Date');
                                                             $form->text('suspect_appealed_court_name', 'Appellate court');
-                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number'); 
+                                                            $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
+                                                            ->options([
+                                                                'Upheld' => 'Upheld',
+                                                                'Quashed and acquitted' => 'Quashed and acquitted',
+                                                                'Quashed and retrial ordered' => 'Quashed and retrial ordered',
+                                                                'On-going' => 'On-going',
+                                                            ]); 
+                                                            $form->textarea('suspect_appeal_remarks', 'Remarks'); 
                                                         });
                                                 });
                                         })

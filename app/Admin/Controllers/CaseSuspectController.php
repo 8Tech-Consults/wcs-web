@@ -487,27 +487,35 @@ class CaseSuspectController extends AdminController
             ->sortable();
         $grid->column('fined_amount')->hide()->sortable();
         $grid->column('community_service')->hide()->sortable();
+        $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
 
 
         $grid->column('suspect_appealed', 'Suspect appealed')
             ->using([
-                1 => 'Appealed',
-                0 => 'Not Appealed',
+                1 => 'Yes',
+                0 => 'No',
             ])
             ->hide()
             ->sortable();
 
 
         $grid->column('suspect_appealed_date', 'Appeal date')
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
 
-            ->hide()
-            ->sortable();
-
-        $grid->column('suspect_appealed_court_name', 'Appeal court name')
+        $grid->column('suspect_appealed_court_name', 'Appellate court name')
             ->hide()
             ->sortable();
 
         $grid->column('suspect_appealed_court_file', 'Appeal court file number')
+            ->hide()
+            ->sortable();
+
+        $grid->column('suspect_appealed_outcome', 'Appeal outcome')
+            ->hide()
+            ->sortable();
+        $grid->column('suspect_appeal_remarks', 'Appeal remarks')
             ->hide()
             ->sortable();
 

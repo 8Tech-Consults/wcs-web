@@ -115,19 +115,14 @@ class Utils  extends Model
         ])->get();
 
         foreach ($cases as $key => $case) {
+
+            $pa = PA::find($case->pa_id);
+            
             if (
-                $case->is_offence_committed_in_pa == 1 ||
-                $case->is_offence_committed_in_pa == 'Yes'
+                $pa != null
             ) {
                 $case->is_offence_committed_in_pa = 'Yes';
-                $pa = PA::find($case->pa_id);
-                if ($pa != null) {
-                    $case->ca_id = $pa->ca_id;
-                    $case->save();
-                } else {
-                    $case->pa_id = 1;
-                    $case->ca_id = 1;
-                }
+                $case->ca_id = $pa->ca_id;
                 $case->save();
             } else {
                 $case->is_offence_committed_in_pa = 'No';

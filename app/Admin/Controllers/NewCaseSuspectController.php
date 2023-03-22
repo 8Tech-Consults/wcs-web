@@ -368,7 +368,7 @@ class NewCaseSuspectController extends AdminController
 
         $form->radio('is_suspects_arrested', "Has suspect been handed over to police?")
             ->options([
-                'Yes' => 'Yes',
+                'Yes' => 'Yes', 
                 'No' => 'No',
             ])
             ->rules('required')

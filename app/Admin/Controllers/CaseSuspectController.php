@@ -241,7 +241,7 @@ class CaseSuspectController extends AdminController
                 }
             })->hide();
 
-        $grid->column('pa_id', __('P.A of case'))
+        $grid->column('case_pa_id', __('P.A of case'))
             ->display(function ($x) {
 
                 if ($this->case->is_offence_committed_in_pa != 1) {
@@ -304,7 +304,8 @@ class CaseSuspectController extends AdminController
             ->hide()
             ->sortable();
         $grid->column('phone_number', __('Phone number'))->hide();
-        $grid->column('national_id_number', __('NIN'))->hide();
+        $grid->column('type_of_id', __('ID Type'))->hide();
+        $grid->column('national_id_number', __('ID Number'))->hide();
         $grid->column('ca_id', __('CA'))
             ->display(function () {
                 if ($this->ca == null) {
@@ -345,12 +346,10 @@ class CaseSuspectController extends AdminController
 
         $grid->column('offences_text', 'Offences');
 
-        $grid->column('is_suspects_arrested', 'Is arrested')
-            ->using([
-                'Yes' => 'Arrested',
-                'No' => 'Not arrested',
-            ], 'Not arrested')
+        $grid->column('is_suspects_arrested', 'At Police')
             ->sortable();
+        $grid->column('management_action', 'Managment action')->hide();
+        $grid->column('not_arrested_remarks', 'Managment remarks')->hide();
 
         $grid->column('arrest_date_time', 'Arrest date')
             ->hide()
@@ -415,46 +414,44 @@ class CaseSuspectController extends AdminController
         $grid->column('arrest_uwa_unit')->hide()->sortable();
         $grid->column('arrest_crb_number')->hide()->sortable();
         $grid->column('police_sd_number')->hide()->sortable();
-        $grid->column('case_outcome', 'Case ouctome at Police level')->hide()->sortable();
+        $grid->column('is_suspect_appear_in_court', __('Appeared Court'))
+            ->display(function ($x) {
+                if ($x == 1 || $x == 'Yes') {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            })->hide()->sortable();
+        $grid->column('status', 'Case status')->hide()->sortable();
         $grid->column('police_action', __('Police action'))->hide();
+        /*         $grid->column('case_outcome', 'Case ouctome at Police level')->hide()->sortable(); */
         $grid->column('police_action_date', __('Police action date'))->hide();
         $grid->column('police_action_remarks', __('Police remarks'))->hide();
 
 
-        $grid->column('is_suspect_appear_in_court', __('Appeared Court'))
-            ->display(function ($x) {
-                if ($x) {
-                    return 'In court';
-                } else {
-                    return 'Not in court';
-                }
-            })->hide()->sortable();
-
-
+        $grid->column('court_file_number')->hide()->sortable();
         $grid->column('court_date', 'Court date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-
-        $grid->column('court_file_number')->hide()->sortable();
         $grid->column('court_name')->hide()->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();
         $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
-        $grid->column('court_file_status', 'Suspect file status')->hide()->sortable();
-        $grid->column('case_outcome', 'Suspect court status')->hide()->sortable();
+        $grid->column('court_file_status', 'Court file status')->hide()->sortable();
+        $grid->column('case_outcome', 'Specifi court case status')->hide()->sortable();
 
 
 
         $grid->column('is_jailed', __('Jailed'))
 
             ->display(function ($is_jailed) {
-                if ($is_jailed) {
-                    return 'Jailed';
+                if ($is_jailed == 1 || $is_jailed == 'Yes') {
+                    return 'Yes';
                 } else {
-                    return 'Not jailed';
+                    return 'No';
                 }
             })
             ->dot([
@@ -474,6 +471,13 @@ class CaseSuspectController extends AdminController
             });
 
         $grid->column('jail_period')->hide()->sortable();
+        $grid->column('prison', 'Prison')->hide()->sortable();
+        $grid->column('jail_release_date', 'Date release')
+            ->hide()
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+
         $grid->column('is_fined', 'Suspect fined')
             ->using([
                 1 => 'Fined',
@@ -482,7 +486,6 @@ class CaseSuspectController extends AdminController
             ->hide()
             ->sortable();
         $grid->column('fined_amount')->hide()->sortable();
-        $grid->column('management_action')->hide()->sortable();
         $grid->column('community_service')->hide()->sortable();
 
 
@@ -507,6 +510,8 @@ class CaseSuspectController extends AdminController
         $grid->column('suspect_appealed_court_file', 'Appeal court file number')
             ->hide()
             ->sortable();
+
+
 
 
 
@@ -832,8 +837,8 @@ class CaseSuspectController extends AdminController
 
                 $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                     ->options([
-                        1 => 'Yes',
-                        0 => 'No',
+                        'Yes' => 'Yes',
+                        'No' => 'No',
                     ])
                     ->when(0, function ($form) {
                         $form->radio('status', __('Case status'))

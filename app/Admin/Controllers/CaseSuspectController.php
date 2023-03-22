@@ -243,6 +243,7 @@ class CaseSuspectController extends AdminController
 
         $grid->column('case_pa_id', __('P.A of case'))
             ->display(function ($x) {
+                return $this->case->pa->name;
 
                 if ($this->case->is_offence_committed_in_pa != 1) {
                     return "-";
@@ -371,7 +372,7 @@ class CaseSuspectController extends AdminController
         $grid->column('pa_id', 'P.A of Arrest ')
             ->display(function ($x) {
                  
-                return $this->case->pa->name;
+                return $this->arrestPa->name;
             })
             ->sortable()
             ->hide();

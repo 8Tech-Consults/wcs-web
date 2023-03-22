@@ -124,9 +124,9 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                 $form->divider('Wildlife Exibit(s) Information');
                 $form->text('wildlife_species', __('Species Name'))->rules('required')
                     ->help('Explantion E.g skin, scales, meat, live animal, e.t.c');
-                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'))->rules('required');
-                $form->decimal('wildlife_pieces', __('Number of pieces'))->rules('required');
-                $form->text('wildlife_description', __('Description'))->rules('required');
+                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
+                $form->decimal('wildlife_pieces', __('Number of pieces'));
+                $form->text('wildlife_description', __('Description'));
                 $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
                 $form->divider();
             });
@@ -137,9 +137,9 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Implements Exibit(s) Information')->rules('required');
-                $form->text('implement_name', __('Name of implement'))->rules('required');
-                $form->decimal('implement_pieces', __('No of pieces'))->rules('required');
-                $form->textarea('implement_description', __('Description'))->rules('required');
+                $form->text('implement_name', __('Name of implement'));
+                $form->decimal('implement_pieces', __('No of pieces'));
+                $form->textarea('implement_description', __('Description'));
                 $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
                 $form->divider();
             });
@@ -151,7 +151,7 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Other Exibit(s) Information')->rules('required');
-                $form->text('others_description', __('Description for others'))->rules('required');
+                $form->text('others_description', __('Description for others'));
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
             });

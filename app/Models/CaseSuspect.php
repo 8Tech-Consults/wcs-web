@@ -67,7 +67,7 @@ class CaseSuspect extends Model
             }
         }
 
- 
+
 
 
 
@@ -193,6 +193,12 @@ class CaseSuspect extends Model
     }
     function arrestPa()
     {
+        $ap = PA::find($this->pa_id);
+        if ($ap == null) {
+            $this->pa_id = 1;
+            $this->arrest_in_pa = 'No';
+            $this->save();
+        }
         return $this->belongsTo(PA::class, 'pa_id');
     }
     function arrestCa()
@@ -225,13 +231,13 @@ class CaseSuspect extends Model
         if ($this->offences == null) {
             return "-";
         }
-        $txt = ""; 
+        $txt = "";
         $x = 0;
         $ids = [];
         foreach ($this->offences as $key => $value) {
             $x++;
 
-            if(in_array($value->id,$ids)){
+            if (in_array($value->id, $ids)) {
                 continue;
             }
             $ids[] = $value->id;

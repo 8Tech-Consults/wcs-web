@@ -205,19 +205,19 @@ class CaseSuspectController extends AdminController
 
 
             $f->equal('is_suspects_arrested', 'Filter by arrest status')->select([
-                'Yes' => 'Not arrested',
-                'No' => 'Arrested',
+                'No' => 'Not arrested',
+                'Yes' => 'Arrested',
             ]);
 
             $f->equal('is_suspect_appear_in_court', 'Filter by court status')->select([
-                'Yes' => 'Not in court',
-                'No' => 'In court',
+                'No' => 'Not in court',
+                'Yes' => 'In court',
             ]);
 
 
             $f->equal('is_jailed', 'Filter by jail status')->select([
-                0 => 'Not jailed',
-                1 => 'Jailed',
+                'No' => 'Not jailed',
+                "Yes" => 'Jailed',
             ]);
         });
 
@@ -468,7 +468,7 @@ class CaseSuspectController extends AdminController
         $grid->column('police_action_date', __('Police action date'))->hide();
         $grid->column('police_action_remarks', __('Police remarks'))->hide();
 
-        
+
         $grid->column('court_file_number')->hide()->sortable();
         $grid->column('court_date', 'Court date')
             ->hide()

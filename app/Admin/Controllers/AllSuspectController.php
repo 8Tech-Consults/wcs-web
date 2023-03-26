@@ -65,7 +65,7 @@ class AllSuspectController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
-                
+
             $f->like('uwa_suspect_number', 'Filter by UWA Suspect number');
 
             $f->equal('country', 'Filter country of origin')->select(
@@ -90,18 +90,18 @@ class AllSuspectController extends AdminController
 
 
             $f->equal('is_suspects_arrested', 'Filter by arrest status')->select([
-                0 => 'Not arrested',
-                1 => 'Arrested',
+                'No' => 'Not arrested',
+                'Yes' => 'Arrested',
             ]);
 
             $f->equal('is_suspect_appear_in_court', 'Filter by court status')->select([
-                0 => 'Not in court',
-                1 => 'In court',
+                'No' => 'Not in court',
+                "Yes" => 'In court',
             ]);
- 
+
             $f->equal('is_jailed', 'Filter by jail status')->select([
-                0 => 'Not jailed',
-                1 => 'Jailed',
+                "No" => 'Not jailed',
+                "Yes" => 'Jailed',
             ]);
         });
 
@@ -179,7 +179,7 @@ class AllSuspectController extends AdminController
                 1 => 'success',
             ], 'danger');
 
- 
+
 
         $grid->column('is_jailed', __('Jailed'))
             ->sortable()

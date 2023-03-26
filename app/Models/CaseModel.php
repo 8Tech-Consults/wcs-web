@@ -32,9 +32,10 @@ class CaseModel extends Model
                 'case_id' => $m->id
             ])->delete();
         });
+
         self::created(function ($m) {
-            $m->case_number = Utils::getCaseNumber($m);
-            $m->save();
+            //  $m->case_number = Utils::getCaseNumber($m);
+            // $m->save();
             try {
                 CaseModel::created_suspectes($m);
             } catch (\Throwable $th) {
@@ -85,7 +86,7 @@ class CaseModel extends Model
             }
 
 
-            $m->case_number = Utils::getCaseNumber($m);
+
             $m->district_id = 1;
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);
@@ -93,7 +94,7 @@ class CaseModel extends Model
                     $m->district_id = $sub->parent;
                 }
             }
-
+            $m->case_number = Utils::getCaseNumber($m);
             return $m;
         });
     }

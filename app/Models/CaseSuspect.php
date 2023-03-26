@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,21 +31,11 @@ class CaseSuspect extends Model
             }
         });
         self::creating(function ($m) {
-            $case = CaseModel::find($m->case_id);
-
-            if ($case != null) {
-                $m->suspect_number = $case->get_suspect_number();
-            }
             $m = CaseSuspect::my_update($m);
-            $m->uwa_suspect_number = $m->suspect_number;
-            $m->arrest_uwa_number = $m->suspect_number;
-
             return $m;
         });
         self::updating(function ($m) {
             $m = CaseSuspect::my_update($m);
-            $m->uwa_suspect_number = $m->suspect_number;
-            $m->arrest_uwa_number = $m->suspect_number;
             return $m;
         });
     }
@@ -67,10 +58,44 @@ class CaseSuspect extends Model
             }
         }
 
+        $case = CaseModel::find($m->case_id);
+        if ($case != null) {
+            $m->suspect_number = $case->get_suspect_number();
+        } else {
+            throw new Exception("Suspect case not found.", 1);
+        }
+
+        $m->uwa_suspect_number = $m->suspect_number;
+        $m->arrest_uwa_number = $m->suspect_number;
+
+        if (
+            $m->is_suspects_arrested == 1 ||
+            $m->is_suspects_arrested == 'Yes' ||
+            $m->is_suspects_arrested == 'yes'
+        ) {
+            $m->is_suspects_arrested = 'Yes';
+        } else {
+            $m->is_suspect_appear_in_court = 'No';
+            $m->is_suspects_arrested == 'No';
+        }
 
 
-
-
+        if ($m->is_suspects_arrested == 'Yes') {
+            $pa = PA::find($m->pa_id);
+            if ($pa != null) {
+                $m->arrest_in_pa = 'Yes';
+                $m->ca_id = $pa->ca_id;
+                $sub = Location::find($pa->subcounty);
+                if ($sub != null) {
+                    $pa->arrest_sub_county_id = $sub->id;
+                    $pa->arrest_district_id = $sub->parent;
+                }
+            } else {
+                $m->pa_id = 1;
+                $m->ca_id = 1;
+                $m->arrest_in_pa = 'No';
+            }
+        }
 
         return $m;
     }

@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
+use App\Models\PA;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
 use Encore\Admin\Auth\Database\Administrator;
@@ -44,58 +45,10 @@ class CourtsController extends AdminController
         if ($pendingCase != null) {
             Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
             return 'Loading...';
-        } 
-
-  
-
-
+        }
 
 
         $grid = new Grid(new CaseSuspect());
-
-
-        $grid->export(function ($export) {
-
-            $export->filename('Cases.csv');
-
-            $export->except(['actions']);
-
-            // $export->only(['column3', 'column4' ...]);
-
-            $export->originalValue(['suspects_count', 'exhibit_count']);
-            $export->column('status', function ($value, $original) {
-
-                if ($value == 0) {
-                    return 'Pending';
-                } else if ($value == 1) {
-                    return 'Active';
-                } {
-                }
-                return 'Closed';
-            });
-        });
-
-
-
-        $grid->export(function ($export) {
-
-            $export->filename('Cases.csv');
-
-            $export->except(['photo_url', 'action']);
-            // $export->originalValue(['is_jailed']);
-
-            $export->column('is_jailed', function ($value, $original) {
-                if ($original) {
-                    return 'Jailed';
-                } else {
-                    return 'Not jailed';
-                }
-            });
-
-            $export->column('national_id_number', function ($value, $original) {
-                return 'CM' . $original;
-            });
-        });
 
 
 
@@ -109,6 +62,8 @@ class CourtsController extends AdminController
         $grid->model()
             ->where([
                 'is_suspect_appear_in_court' => 1
+            ])->orwhere([
+                'is_suspect_appear_in_court' => 'Yes'
             ])->orderBy('id', 'Desc');
 
         $u = Auth::user();
@@ -117,270 +72,11 @@ class CourtsController extends AdminController
                 'reported_by' => $u->id
             ]);
         } else if (
-            $u->isRole('ca-team')    
+            $u->isRole('ca-team')
         ) {
             $grid->model()->where([
                 'ca_id' => $u->ca_id
             ])->orWhere([
-                'reported_by' => $u->id
-            ]);
-        }  
-
-        $grid->filter(function ($f) {
-            // Remove the default id filter
-            $f->disableIdFilter();
-
-            $ajax_url = url(
-                '/api/ajax?'
-                    . "&search_by_1=title"
-                    . "&search_by_2=id"
-                    . "&model=CaseModel"
-            );
-            $district_ajax_url = url(
-                '/api/ajax?'
-                    . "&search_by_1=name"
-                    . "&search_by_2=id"
-                    . "&query_parent=0"
-                    . "&model=Location"
-            );
-
-            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
-                $a = CaseModel::find($id);
-                if ($a) {
-                    return [$a->id => "#" . $a->id . " - " . $a->title];
-                }
-            })
-                ->ajax($ajax_url);
-
-            $f->between('court_date', 'Filter by arrest date')->date();
-            $f->like('court_name', 'Filter by court name');
-            $f->like('court_file_number', 'Filter by court file number');
-            $f->like('prosecutor', 'Filter by prosecutor');
-            $f->like('magistrate_name', 'Filter by magistrate');
-        });
-
-
-        $grid->model()->orderBy('id', 'Desc');
-        $grid->quickSearch('first_name')->placeholder('Search by first name..');
-
-        $grid->column('ca_id', __('CA'))
-            ->display(function () {
-                if ($this->ca == null) {
-                    return  "-";
-                }
-                return $this->ca->name;
-            })
-            ->sortable();
-
-
-        $grid->model()->orderBy('id', 'Desc');
-
-
-        $grid->model()->orderBy('id', 'Desc');
-        $grid->quickSearch('first_name')->placeholder('Search by first name..');
-
-        $grid->column('id', __('ID'))->sortable()->hide();
-        $grid->column('created_at', __('Date'))->hide()
-            ->display(function ($x) {
-                return Utils::my_date_time($x);
-            })
-            ->sortable();
-
-        $grid->column('suspect_number', __('Suspect number'))
-            ->sortable();
-
-        $grid->column('photo_url', __('Photo'))
-            ->width(60)
-            ->lightbox(['width' => 60, 'height' => 80]);
-        $grid->column('updated_at', __('Updated'))
-            ->display(function ($x) {
-                return Utils::my_date_time($x);
-            })
-            ->sortable()->hide();
-
-        $grid->column('first_name', __('Name'))
-            ->display(function ($x) {
-                return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
-            })
-            ->sortable();
-
-
-        $grid->column('sex', __('Sex'))
-            ->filter([
-                'Male' => 'Male',
-                'Female' => 'Female',
-            ])->hide()
-            ->sortable();
-        $grid->column('national_id_number', __('NIN'))->hide();
-        $grid->column('phone_number', __('Phone number'))->hide();
-        $grid->column('occuptaion', __('Occupation'))->hide();
-        $grid->column('country', __('Country'))->hide()->sortable();
-        $grid->column('district_id', __('District'))->display(function () {
-            return $this->district->name;
-        })->hide()->sortable();
-
-        $grid->column('case_id', __('Case'))
-            ->display(function ($x) {
-                return $this->case->title;
-            })
-            ->sortable();
-
-
-
-        $grid->column('ethnicity')->hide()->sortable();
-        $grid->column('parish')->hide()->sortable();
-        $grid->column('village')->hide()->sortable();
-        $grid->column('is_suspects_arrested', 'Is arrested')
-            ->using([
-                1 => 'Arrested',
-                0 => 'Not arrested',
-            ])
-            ->hide()
-            ->sortable();
-        $grid->column('arrest_date_time', 'Arrest date')
-            ->display(function ($d) {
-                return Utils::my_date($d);
-            });
-        $grid->column('arrest_district_id', __('District'))
-            ->hide()
-            ->display(function ($x) {
-                return Utils::get('App\Models\Location', $this->arrest_district_id)->name;
-            })
-            ->sortable();
-
-        $grid->column('arrest_sub_county_id', __('Arrest Sub-county'))
-            ->hide()
-            ->display(function ($x) {
-                return Utils::get(Location::class, $this->arrest_sub_county_id)->name;
-            })
-            ->sortable();
-
-        $grid->column('arrest_parish')->hide()->sortable();
-        $grid->column('arrest_village')->hide()->sortable();
-        $grid->column('arrest_latitude', 'Arrest GPS latitude')->hide()->sortable();
-        $grid->column('arrest_longitude', 'Arrest GPS longitude')->hide()->sortable();
-        $grid->column('arrest_first_police_station', 'First police station')->hide()->sortable();
-        $grid->column('arrest_current_police_station', 'Current police station')->hide()->sortable();
-        $grid->column('arrest_agency', 'Arrest agency')->hide()->sortable();
-        $grid->column('arrest_uwa_unit')->hide()->sortable();
-        $grid->column('arrest_crb_number')->hide()->sortable();
-
-        $grid->column('is_suspect_appear_in_court', __('In court'))
-            ->display(function ($x) {
-                if ($x) {
-                    return 'In court';
-                } else {
-                    return 'Not in court';
-                }
-            })
-            ->sortable();
-        $grid->column('court_date', 'Court date')
-
-            ->display(function ($d) {
-                return Utils::my_date($d);
-            });
-
-        $grid->column('prosecutor')->sortable();
-
-        $grid->column('is_convicted', __('Is convicted'))
-            ->display(function ($x) {
-                if ($x) {
-                    return 'Convicted';
-                } else {
-                    return 'Not convicted';
-                }
-            })
-            ->sortable();
-
-        $grid->column('case_outcome', 'Court outcome')->sortable();
-        $grid->column('magistrate_name')->sortable();
-        $grid->column('court_name')->sortable();
-        $grid->column('court_file_number')->sortable();
-
-
-        $grid->column('is_jailed', __('Jailed'))
-
-            ->display(function ($is_jailed) {
-                if ($is_jailed) {
-                    return 'Jailed';
-                } else {
-                    return 'Not jailed';
-                }
-            })
-            ->dot([
-                null => 'danger',
-                1 => 'danger',
-                0 => 'success',
-            ], 'danger')
-            ->filter([
-                1 => 'Jailed',
-                0 => 'Not Jailed',
-            ]);
-
-        $grid->column('jail_date', 'Arrest date')
-            ->hide()
-            ->display(function ($d) {
-                return Utils::my_date($d);
-            });
-
-        $grid->column('jail_period')->sortable();
-        $grid->column('is_fined', 'Is fined')
-            ->using([
-                1 => 'Fined',
-                0 => 'Not fined',
-            ])
-            ->sortable();
-        $grid->column('fined_amount')->sortable();
-        $grid->column('management_action')->hide()->sortable();
-        $grid->column('community_service')->hide()->sortable();
-
-        $grid->column('reported_by', __('Reported by'))
-            ->display(function () {
-
-                return $this->case->reportor->name;
-            })->hide()
-            ->sortable();
-        $grid->actions(function ($actions) {
-            $actions->disableDelete();
-        });
-
-        $grid->column('action', __('Actions'))->display(function () {
-
-            $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
-            <i class="fa fa-eye"></i>View</a>';
-            $edit_link = "";
-            if (
-                (
-                (Auth::user()->isRole('admin')))
-            
-            ) {
-                $edit_link = '<br> <a class="" href="' . url("case-suspects/{$this->id}/edit") . '"> 
-            <i class="fa fa-edit"></i> Edit</a>';
-            }
-            return $view_link . $edit_link;
-        }); 
-        return $grid;
-    }
-
-
-
-
-    /*     protected function grid()
-    {
-
-        $grid = new Grid(new CaseSuspect());
-        $grid->disableBatchActions();
-        $grid->disableCreateButton();
-        $grid->disableActions();
-
-        $grid->model()
-            ->where([
-                'is_suspect_appear_in_court' => 1
-            ])->orderBy('id', 'Desc');
-
-        $u = Auth::user();
-        if ($u->isRole('ca-agent')) {
-            $grid->model()->where([
                 'reported_by' => $u->id
             ]);
         }
@@ -422,83 +118,370 @@ class CourtsController extends AdminController
         $grid->model()->orderBy('id', 'Desc');
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
-        $grid->column('id', __('Suspect ID'))->sortable();
-        $grid->column('created_at', __('Reported'))
-            ->display(function ($x) {
-                return Utils::my_date_time($x);
-            })
-            ->hide()
+
+
+
+        $grid->column('id', __('ID'))->sortable()->hide();
+        $grid->column('suspect_number', __('Suspect number'))
             ->sortable();
 
-
-        $grid->column('photo_url', __('Photo'))
-            ->width(60)
-            ->lightbox(['width' => 60, 'height' => 80]);
-        $grid->column('updated_at', __('Updated'))
-            ->display(function ($x) {
-                return Utils::my_date_time($x);
-            })
-            ->sortable()->hide();
-
-
-
-        $grid->column('first_name', __('Name'))
+        $grid->column('first_name', __('Suspect\'s Name'))
             ->display(function ($x) {
                 return $this->first_name . " " . $this->middle_name . " " . $this->last_name;
             })
             ->sortable();
-        $grid->column('case_id', __('Offence'))
-            ->display(function ($x) {
-                return $this->case->title;
+
+        $grid->column('court_file_number')->sortable();
+        $grid->column('court_date', 'Court date')
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+        $grid->column('court_name')->sortable();
+        $grid->column('prosecutor', 'Lead prosecutor')->sortable();
+        $grid->column('magistrate_name')->sortable();
+        $grid->column('court_status', 'Court case status')->label()->sortable();
+        $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
+        $grid->column('court_file_status', 'Court file status')->hide()->sortable();
+        $grid->column('case_outcome', 'Specific court case status')->hide()->sortable();
+
+
+
+        $grid->column('is_jailed', __('Jailed'))
+            ->display(function ($is_jailed) {
+                if ($is_jailed == 1 || $is_jailed == 'Yes') {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
             })
-            ->sortable();
-
-
-        $grid->column('is_suspect_appear_in_court', __('Court status'))
-            ->sortable()
-            ->using([
-                0 => 'Not in court',
-                1 => 'In court',
-            ], 'Not arrested')->label([
+            ->dot([
                 null => 'danger',
                 0 => 'danger',
+                'No' => 'danger',
+                'Yes' => 'success',
                 1 => 'success',
-            ], 'danger');
+            ], 'danger')
+            ->filter([
+                'Yes' => 'Jailed',
+                'No' => 'Not Jailed',
+            ]);
 
-        $grid->column('court_date', __('Court date'))
-            ->display(function ($x) {
-                return Utils::my_date($x);
-            })
+        $grid->column('jail_date', 'Jail date')
+            ->hide()
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+
+        $grid->column('jail_period')->display(function ($x) {
+            if ($x == null || strlen($x) < 1) {
+                return "-";
+            }
+            return $x . " Months";
+        })->sortable();
+        $grid->column('prison', 'Prison')->hide()->sortable();
+        $grid->column('jail_release_date', 'Date release')
+            ->hide()
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            });
+
+        $grid->column('is_fined', 'Is Fined')
+            ->using([
+                '1' => 'Yes',
+                'Yes' => 'Yes',
+                '0' => 'No',
+                'No' => 'No',
+            ], 'No')->label([
+                1 => 'success',
+                'Yes' => 'success',
+                0 => 'danger',
+                'No' => 'danger',
+            ], 'danger')
+            ->sortable();
+        $grid->column('fined_amount')->display(function ($x) {
+            if ($x == null || strlen($x) < 1) {
+                return "-";
+            }
+            return 'UGX ' . number_format($x);
+        })->sortable();
+        $grid->column('community_service')->hide()->sortable();
+        $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
+
+
+        $grid->column('suspect_appealed', 'Suspect appealed')
+             ->using([
+                '1' => 'Yes',
+                'Yes' => 'Yes',
+                '0' => 'No',
+                'No' => 'No',
+            ], 'No')->dot([
+                1 => 'success',
+                'Yes' => 'success',
+                0 => 'danger',
+                'No' => 'danger',
+            ], 'danger')
             ->sortable();
 
-        $grid->column('court_name', __('Court name'))
+        $grid->column('suspect_appealed_date', 'Appeal date')
+            ->display(function ($d) {
+                return Utils::my_date($d);
+            })->hide();
+
+        $grid->column('suspect_appealed_court_name', 'Appellate court name')
+            ->hide()
             ->sortable();
 
-        $grid->column('court_file_number', __('Court file number'))
+        $grid->column('suspect_appealed_court_file', 'Appeal court file number')
+            ->hide()
             ->sortable();
 
-        $grid->column('prosecutor', __('Prosecutor'))
+        $grid->column('suspect_appealed_outcome', 'Appeal outcome')
+            ->hide()
+            ->sortable();
+        $grid->column('suspect_appeal_remarks', 'Appeal remarks')
+            ->hide()
             ->sortable();
 
-        $grid->column('magistrate_name', __('Magistrate name'))
+
+
+
+
+
+        $grid->column('reported_by', __('Reported by'))
+            ->display(function () {
+
+                return $this->case->reportor->name;
+            })->hide()
             ->sortable();
-
-
-
-
-        $grid->column('case_outcome', __('Case outcome'))
-            ->sortable();
-        $grid->column('action', __('Actions'))->display(function () {
-
-            $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
-            <i class="fa fa-eye"></i>View</a>';
-            $edit_link = '<br><br><a class="" href="' . url("case-suspects/{$this->id}/edit") . '">
-            <i class="fa fa-edit"></i> Edit</a>';
-            return $view_link . $edit_link;
-        });
         $grid->actions(function ($actions) {
-            $actions->disableDelete();
+            if (
+                (!Auth::user()->isRole('admin'))
+            ) {
+                $actions->disableEdit();
+                $actions->disableDelete();
+            }
         });
+
+
+
+
         return $grid;
-    } */
+    }
+
+
+
+
+
+    protected function form()
+    {
+
+        $form = new Form(new CaseSuspect());
+
+        $arr = (explode('/', $_SERVER['REQUEST_URI']));
+        $pendingCase = null;
+        $ex = CaseSuspect::find($arr[2]);
+        if ($ex != null) {
+            $pendingCase = CaseModel::find($ex->case_id);
+        } else {
+            die("Exhibit not found.");
+        }
+        if ($pendingCase == null) {
+            die("Case not found.");
+        }
+
+        if ($pendingCase == null) {
+            die("active case not found.");
+        } else {
+            $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
+        }
+
+        $form->display('SUSPECT')->default($ex->uwa_suspect_number);
+        $form->divider();
+
+        $form->disableCreatingCheck();
+        $form->disableReset();
+        $form->disableEditingCheck();
+        $form->disableViewCheck();
+
+
+        $arr = (explode('/', $_SERVER['REQUEST_URI']));
+        $pendingCase = null;
+        $ex = CaseSuspect::find($arr[2]);
+        if ($ex != null) {
+            $pendingCase = CaseModel::find($ex->case_id);
+        } else {
+            die("Exhibit not found.");
+        }
+        if ($pendingCase == null) {
+            die("Case not found.");
+        }
+
+        if ($pendingCase == null) {
+            die("active case not found.");
+        } else {
+            $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
+        }
+        $csb = null;
+        $pendingCase = Utils::hasPendingCase(Auth::user());
+        if ($pendingCase != null) {
+            if ($pendingCase->suspects->count() > 0) {
+                $hasPendingSusps = true;
+                $csb = $pendingCase->getCrbNumber();
+            }
+        }
+
+
+
+        $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->when('No', function ($form) {
+
+                $form->radio('status', __('Case status'))
+                    ->options([
+                        1 => 'On-going investigation',
+                        2 => 'Closed',
+                        3 => 'Re-opened',
+                    ])
+                    ->rules('required')
+                    ->when(1, function ($form) {
+                        $form->select('police_action', 'Case outcome at police level')->options([
+                            'Police bond' => 'Police bond',
+                            'Skipped bond' => 'Skipped bond',
+                        ]);
+                    })
+                    ->when(2, function ($form) {
+                        $form->select('police_action', 'Case outcome at police level')->options([
+                            'Dismissed by state' => 'Dismissed by state',
+                            'Withdrawn by complainant' => 'Withdrawn by complainant',
+                        ]);
+                        $form->date('police_action_date', 'Date');
+                        $form->textarea('police_action_remarks', 'Remarks');
+                    })->when(3, function ($form) {
+                        $form->select('police_action', 'Case outcome at police level')->options([
+                            'Police bond' => 'Police bond',
+                            'Skipped bond' => 'Skipped bond',
+                        ]);
+                        $form->date('police_action_date', 'Date');
+                        $form->textarea('police_action_remarks', 'Remarks');
+                    });
+            })
+            ->when('Yes', function ($form) {
+
+                $form->divider('Court information');
+                $courtFileNumber = null;
+                $pendingCase = Utils::hasPendingCase(Auth::user());
+                if ($pendingCase != null) {
+                    $courtFileNumber = $pendingCase->getCourtFileNumber();
+                }
+
+                if ($courtFileNumber == null) {
+                    $form->text('court_file_number', 'Court file number');
+                } else {
+                    $form->text('court_file_number', 'Court file number')
+                        ->default($courtFileNumber)
+                        ->value($courtFileNumber)
+                        ->readonly();
+                }
+
+                $form->date('court_date', 'Court Date of first appearance');
+                $form->text('court_name', 'Court Name');
+
+                $form->text('prosecutor', 'Lead prosecutor');
+                $form->text('magistrate_name', 'Magistrate Name');
+
+
+                $form->radio('court_status', __('Court case status'))
+                    ->options([
+                        'On-going prosecution' => 'On-going prosecution',
+                        'Concluded' => 'Concluded',
+                    ])->when('Concluded', function ($form) {
+
+                        $form->radio('case_outcome', 'Specific court case status')->options([
+                            'Dismissed' => 'Dismissed',
+                            'Withdrawn by DPP' => 'Withdrawn by DPP',
+                            'Acquittal' => 'Acquittal',
+                            'Convicted' => 'Convicted',
+                        ])
+                            ->when('Convicted', function ($form) {
+                                $form->radio('is_jailed', __('Was suspect jailed?'))
+                                    ->options([
+                                        1 => 'Yes',
+                                        0 => 'No',
+                                    ])
+                                    ->when(1, function ($form) {
+                                        $form->date('jail_date', 'Jail date');
+                                        $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                        $form->text('prison', 'Prison name');
+                                        $form->date('jail_release_date', 'Date released');
+                                    });
+
+                                $form->radio('is_fined', __('Was suspect fined?'))
+                                    ->options([
+                                        1 => 'Yes',
+                                        0 => 'No',
+                                    ])
+                                    ->when(1, function ($form) {
+                                        $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                                    });
+
+                                $form->radio('community_service', __('Was the suspect offered community service?'))
+                                    ->options([
+                                        'Yes' => 'Yes',
+                                        'No' => 'No',
+                                    ])
+                                    ->when('Yes', function ($form) {
+                                        $form->decimal(
+                                            'community_service_duration',
+                                            'Community service duration (in Hours)'
+                                        );
+                                    });
+
+                                $form->radio('suspect_appealed', __('Did the suspect appeal?'))
+                                    ->options([
+                                        'Yes' => 'Yes',
+                                        'No' => 'No',
+                                    ])
+                                    ->when('Yes', function ($form) {
+                                        $form->date('suspect_appealed_date', 'Suspect appeal Date');
+                                        $form->text('suspect_appealed_court_name', 'Appellate court');
+                                        $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                        $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
+                                            ->options([
+                                                'Upheld' => 'Upheld',
+                                                'Quashed and acquitted' => 'Quashed and acquitted',
+                                                'Quashed and retrial ordered' => 'Quashed and retrial ordered',
+                                                'On-going' => 'On-going',
+                                            ]);
+
+                                        $form->textarea('suspect_appeal_remarks', 'Remarks');
+                                    });
+                            });
+                    })
+                    ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
+
+
+                        $form->select('suspect_court_outcome', 'Suspect court case status')->options([
+                            'Remand' => 'Remand',
+                            'Court Bail' => 'Court bail',
+                            'Committal' => 'Committal',
+                            'Hearing' => 'Hearing',
+                            'On-going inquiries' => 'On-going inquiries',
+                            'Remand and Hearing' => 'Remand and Hearing',
+                            'Court Bail and Hearing' => 'Court Bail and Hearing',
+                            'Remand and on-going inquiries' => 'Remand and on-going inquiries',
+                            'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
+                        ]);
+
+                        $form->radio('court_file_status', 'Court file status')->options([
+                            'Perusal' => 'Perusal',
+                            'Further investigation' => 'Further investigation',
+                        ]);
+                    });
+            });
+
+        return $form;
+    }
 }

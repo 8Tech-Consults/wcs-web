@@ -31,6 +31,7 @@ Route::group([
     $router->resource('new-case', NewCaseModelController::class);
     $router->resource('new-case-suspects', NewCaseSuspectController::class);
     $router->resource('new-exhibits-case-models', NewExhibitsCaseModelController::class); 
+    $router->resource('add-exhibit', AddExhibitCaseModelController::class); 
     $router->resource('new-confirm-case-models', NewConfirmCaseModelController::class); 
 
     $router->get('forms/settings', 'FormController@settings');  

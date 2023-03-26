@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\CaseModel\CaseModelActionAddExhibit;
 use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
@@ -23,23 +24,6 @@ use Encore\Admin\Widgets\InfoBox;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 
-
-class AddSuspectAction extends RowAction
-{
-    public $name = 'Add suspect';
-
-
-
-    public function handle(Model $model)
-    {
-        return $this->response()->success('Success!')->redirect('/admin/users');
-        // Here the model's `replicate` method is called to copy the data, then call the `save` method to save it.
-        $model->replicate()->save();
-
-        // return a success message with the content "copy success" and refresh the page
-        return $this->response()->success('copy success.')->refresh();
-    }
-}
 
 class CaseModelController extends AdminController
 {
@@ -168,6 +152,7 @@ class CaseModelController extends AdminController
             }
             $actions->disableDelete();
             $actions->add(new CaseModelActionAddSuspect);
+            $actions->add(new CaseModelActionAddExhibit);
         });
 
 

@@ -2,6 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\CaseModel\AddArrest;
+use App\Admin\Actions\CaseModel\AddCourte;
+use App\Admin\Actions\CaseModel\CaseModelActionAddExhibit;
+use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
@@ -94,15 +98,39 @@ class CaseSuspectController extends AdminController
             // $export->originalValue(['is_jailed']);
 
             $export->column('is_jailed', function ($value, $original) {
-                if ($original) {
-                    return 'Jailed';
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
                 } else {
-                    return 'Not jailed';
+                    return 'No';
+                }
+            });
+            $export->column('is_suspect_appear_in_court', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            });
+
+            $export->column('is_suspects_arrested', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
                 }
             });
 
             $export->column('national_id_number', function ($value, $original) {
-                return 'CM' . $original;
+                return  $original;
             });
 
             // $export->only(['column3', 'column4' ...]);
@@ -123,7 +151,6 @@ class CaseSuspectController extends AdminController
 
 
         $grid->disableBatchActions();
-        $grid->disableActions();
         $grid->disableCreateButton();
 
 
@@ -200,6 +227,7 @@ class CaseSuspectController extends AdminController
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
         $grid->column('case_id', __('Case number'))
+            ->hide()
             ->display(function ($x) {
                 return $this->case->case_number;
             });
@@ -316,13 +344,15 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
         $grid->column('occuptaion', __('Occupation'))->hide();
-        $grid->column('country', __('Country'))->sortable();
+        $grid->column('country', __('Nationality'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
             if ($this->country != 'Uganda') {
                 return '-';
             }
             return $this->district->name;
-        })->sortable();
+        })
+            ->hide()
+            ->sortable();
 
 
         $grid->column('parish')->display(function ($x) {
@@ -348,17 +378,25 @@ class CaseSuspectController extends AdminController
         $grid->column('offences_text', 'Offences');
 
         $grid->column('is_suspects_arrested', 'At Police')
+            ->dot([
+                null => 'danger',
+                0 => 'danger',
+                'No' => 'danger',
+                'Yes' => 'success',
+                1 => 'success',
+            ], 'danger')
             ->sortable();
+
+
+
+
         $grid->column('management_action', 'Managment action')->hide();
         $grid->column('not_arrested_remarks', 'Managment remarks')->hide();
-
         $grid->column('arrest_date_time', 'Arrest date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-
-
         $grid->column('arrest_in_pa', __('Arrest in P.A'))
             ->display(function ($x) {
                 if ($x == 'Yes') {
@@ -371,7 +409,7 @@ class CaseSuspectController extends AdminController
 
         $grid->column('pa_id', 'P.A of Arrest ')
             ->display(function ($x) {
-                 
+
                 return $this->arrestPa->name;
             })
             ->sortable()
@@ -385,7 +423,6 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
-
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -411,20 +448,27 @@ class CaseSuspectController extends AdminController
         $grid->column('arrest_crb_number')->hide()->sortable();
         $grid->column('police_sd_number')->hide()->sortable();
         $grid->column('is_suspect_appear_in_court', __('Appeared Court'))
-            ->display(function ($x) {
-                if ($x == 1 || $x == 'Yes') {
-                    return 'Yes';
-                } else {
-                    return 'No';
-                }
-            })->hide()->sortable();
+            ->using([
+                null => 'No',
+                0 => 'No',
+                'No' => 'No',
+                'Yes' => 'Yes',
+                1 => 'Yes',
+            ], 'danger')
+            ->dot([
+                null => 'danger',
+                0 => 'danger',
+                'No' => 'danger',
+                'Yes' => 'success',
+                1 => 'success',
+            ], 'danger')->sortable();
         $grid->column('status', 'Case status')->hide()->sortable();
         $grid->column('police_action', __('Police action'))->hide();
         /*         $grid->column('case_outcome', 'Case ouctome at Police level')->hide()->sortable(); */
         $grid->column('police_action_date', __('Police action date'))->hide();
         $grid->column('police_action_remarks', __('Police remarks'))->hide();
 
-
+        
         $grid->column('court_file_number')->hide()->sortable();
         $grid->column('court_date', 'Court date')
             ->hide()
@@ -437,7 +481,7 @@ class CaseSuspectController extends AdminController
         $grid->column('court_status', 'Court case status')->hide()->sortable();
         $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
         $grid->column('court_file_status', 'Court file status')->hide()->sortable();
-        $grid->column('case_outcome', 'Specifi court case status')->hide()->sortable();
+        $grid->column('case_outcome', 'Specific court case status')->hide()->sortable();
 
 
 
@@ -450,14 +494,17 @@ class CaseSuspectController extends AdminController
                     return 'No';
                 }
             })
+            ->hide()
             ->dot([
                 null => 'danger',
-                1 => 'danger',
-                0 => 'success',
+                0 => 'danger',
+                'No' => 'danger',
+                'Yes' => 'success',
+                1 => 'success',
             ], 'danger')
             ->filter([
-                1 => 'Jailed',
-                0 => 'Not Jailed',
+                'Yes' => 'Jailed',
+                'No' => 'Not Jailed',
             ]);
 
         $grid->column('jail_date', 'Jail date')
@@ -498,7 +545,7 @@ class CaseSuspectController extends AdminController
         $grid->column('suspect_appealed_date', 'Appeal date')
             ->display(function ($d) {
                 return Utils::my_date($d);
-            });
+            })->hide();
 
         $grid->column('suspect_appealed_court_name', 'Appellate court name')
             ->hide()
@@ -536,7 +583,7 @@ class CaseSuspectController extends AdminController
         });
 
 
-        $grid->column('action', __('Actions'))->display(function () {
+        /*     $grid->column('action', __('Actions'))->display(function () {
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">
             <i class="fa fa-eye"></i>View</a>';
@@ -552,6 +599,23 @@ class CaseSuspectController extends AdminController
             <i class="fa fa-edit"></i> Edit</a>';
             }
             return $view_link . $edit_link;
+        }); */
+
+
+        $grid->actions(function ($actions) {
+
+            if (
+                Auth::user()->isRole('hq-team-leaders') ||
+                Auth::user()->isRole('ca-team')
+            ) {
+            }
+            $actions->disableEdit();
+            $actions->disableDelete();
+            $actions->add(new AddArrest);
+
+            if ($actions->row->is_suspects_arrested == 'Yes') {
+                $actions->add(new AddCourte);
+            }
         });
 
         return $grid;

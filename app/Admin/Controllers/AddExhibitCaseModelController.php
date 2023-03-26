@@ -12,14 +12,14 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\Auth;
 
-class NewExhibitsCaseModelController extends AdminController
+class AddExhibitCaseModelController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Creating new case - exhibits';
+    protected $title = 'Addming new exhibit to case';
 
     /**
      * Make a grid builder.
@@ -29,6 +29,8 @@ class NewExhibitsCaseModelController extends AdminController
     protected function grid()
     {
 
+        Admin::script('window.location.replace("' . admin_url("cases") . '");');
+        return 'Loading...';
 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -89,39 +91,42 @@ class NewExhibitsCaseModelController extends AdminController
     {
 
 
+        $pendingCase = null;
+        if (isset($_GET['add_exhibit_to_case_id'])) {
+            $pendingCase = CaseModel::find($_GET['add_exhibit_to_case_id']);
+            if ($pendingCase != null) {
+                $x = new Exhibit();
+                $x->case_id =  $pendingCase->id;
+                $x->reported_by =  Auth::user()->id;
+                $x->save();
+                Admin::script('window.location.replace("' . admin_url("add-exhibit/{$x->id}/edit") . '");');
+                return 'Loading...';
+            }
+        }
 
-        $pendingCase = Utils::hasPendingCase(Auth::user());
-        if ($pendingCase == null) {
-            die("active case not found.");
+        $arr = (explode('/', $_SERVER['REQUEST_URI']));
+        $pendingCase = null;
+        $ex = Exhibit::find($arr[2]);
+        if ($ex != null) {
+            $pendingCase = CaseModel::find($ex->case_id);
         } else {
+            die("Exhibit not found.");
         }
-        if ($pendingCase->user_adding_suspect_id == Auth::user()->id) {
-            $pendingCase->user_adding_suspect_id = null;
-            $pendingCase->save();
-            Admin::script('window.location.replace("' . admin_url("cases") . '");');
-            return 'Loading...';
+        if ($pendingCase == null) {
+            die("Case not found.");
         }
+
 
         $form = new Form(new Exhibit());
 
         $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
-
-        Admin::css(url('/css/new-case.css'));
+        $form->display('ADDING EXHIBIT TO CASE')->default($pendingCase->case_number);
+        $form->divider();
 
         $form->disableCreatingCheck();
         $form->disableReset();
-        $form->disableEditingCheck();
         $form->disableViewCheck();
-        $form->html(view('steps', ['active' => 3, 'case' => $pendingCase]));
 
-
-        $form->html('<a class="btn btn-danger" href="' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '" >SKIP TO SUBMIT</a>', 'SKIP');
-
-        $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
-        /* 
-ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_exhibit`, ADD `` VARCHAR(50) NULL DEFAULT NULL AFTER `type_wildlife`, ADD `type_other` VARCHAR(50) NULL DEFAULT NULL AFTER `type_implement`;
-
-*/
         $form->radio('type_wildlife', __('Exibit type Wildlife?'))
             ->options([
                 'Yes' => 'Yes',

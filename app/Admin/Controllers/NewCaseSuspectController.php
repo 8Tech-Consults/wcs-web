@@ -22,7 +22,7 @@ class NewCaseSuspectController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Creating new case - suspects';
+    protected $title = 'Adding new suspect to case';
 
     /**
      * Make a grid builder.
@@ -239,13 +239,25 @@ class NewCaseSuspectController extends AdminController
             $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
         }
 
-        Admin::css(url('/css/new-case.css'));
+        if ($pendingCase->user_adding_suspect_id != Auth::user()->id) {
+            Admin::css(url('/css/new-case.css'));
+            $form->html(view('steps', ['active' => 2, 'case' => $pendingCase]));
+
+
+            if (count($pendingCase->suspects) > 0) {
+                $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
+            }
+        } else {
+
+            $form->html('<p style="padding: 0;margin: 0;"><a href="/new-exhibits-case-models" class="text-danger"><b>Cancel add suspect process</b></a></p>');
+            $form->display('ADDING SUSPECT TO CASE')->value($pendingCase->case_number);
+        }
 
         $form->disableCreatingCheck();
         $form->disableReset();
         $form->disableEditingCheck();
         $form->disableViewCheck();
-        $form->html(view('steps', ['active' => 2, 'case' => $pendingCase]));
+
 
 
 
@@ -253,9 +265,6 @@ class NewCaseSuspectController extends AdminController
         $form->divider('Suspect Bio data');
 
 
-        if (count($pendingCase->suspects) > 0) {
-            $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
-        }
         $form->image('photo', 'Suspect photo');
 
 
@@ -269,11 +278,7 @@ class NewCaseSuspectController extends AdminController
         ])->rules('required');
         $form->date('age', 'Date of birth');
         $form->text('phone_number', 'Phone number');
-        /*  ->rules('regex:/^\d+$/|min:10|max:10', [
-                'min'   => 'Phone number can not be less than 10 characters',
-                'max'   => 'Phone number can not be more than 10 characters',
-            ]);
- */
+
         $form->radio('type_of_id', 'Suspect Type of Identification Card')
             ->options([
                 'National ID' => 'National ID',
@@ -357,18 +362,9 @@ class NewCaseSuspectController extends AdminController
         }
 
 
-
-        /* 
-        $form->morphMany('offences', 'Click on new to add offence', function (Form\NestedForm $form) {
-            $offences = Offence::all()->pluck('name', 'id');
-            $form->select('offence_id', 'Select offence')->rules('required')->options($offences);
-            $form->text('vadict', __('Vadict'));
-        }); */
-
-
         $form->radio('is_suspects_arrested', "Has suspect been handed over to police?")
             ->options([
-                'Yes' => 'Yes', 
+                'Yes' => 'Yes',
                 'No' => 'No',
             ])
             ->rules('required')
@@ -424,7 +420,7 @@ class NewCaseSuspectController extends AdminController
                                 ])
                                 ->when('Yes', function ($form) {
                                     $form->select('pa_id', __('Select PA'))
-                                        ->options(PA::all()->pluck('name_text', 'id'));
+                                        ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -517,7 +513,7 @@ class NewCaseSuspectController extends AdminController
                         ])
                         ->when('Yes', function ($form) {
                             $form->select('pa_id', __('Select PA'))
-                                ->options(PA::all() ->pluck('name_text', 'id'));
+                                ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -716,15 +712,15 @@ class NewCaseSuspectController extends AdminController
                                                         ->when('Yes', function ($form) {
                                                             $form->date('suspect_appealed_date', 'Suspect appeal Date');
                                                             $form->text('suspect_appealed_court_name', 'Appellate court');
-                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number'); 
+                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number');
                                                             $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
-                                                            ->options([
-                                                                'Upheld' => 'Upheld',
-                                                                'Quashed and acquitted' => 'Quashed and acquitted',
-                                                                'Quashed and retrial ordered' => 'Quashed and retrial ordered',
-                                                                'On-going' => 'On-going',
-                                                            ]); 
-                                                            $form->textarea('suspect_appeal_remarks', 'Remarks'); 
+                                                                ->options([
+                                                                    'Upheld' => 'Upheld',
+                                                                    'Quashed and acquitted' => 'Quashed and acquitted',
+                                                                    'Quashed and retrial ordered' => 'Quashed and retrial ordered',
+                                                                    'On-going' => 'On-going',
+                                                                ]);
+                                                            $form->textarea('suspect_appeal_remarks', 'Remarks');
                                                         });
                                                 });
                                         })
@@ -926,18 +922,18 @@ class NewCaseSuspectController extends AdminController
 
 
 
-        $form->divider('ADD MORE SUSPECTS');
 
-        $form->radio('add_more_suspects', __('Do you want to add more suspects to this case?'))
-            ->rules('required')
-            ->options([
-                'Yes' => 'Yes',
-                'No' => 'No',
-            ]);
 
-        /*      if (count($pendingCase->suspects) > 0) {
-            $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
-        } */
+        if ($pendingCase->user_adding_suspect_id != Auth::user()->id) {
+            $form->divider('ADD MORE SUSPECTS');
+            $form->radio('add_more_suspects', __('Do you want to add more suspects to this case?'))
+                ->rules('required')
+                ->options([
+                    'Yes' => 'Yes',
+                    'No' => 'No',
+                ]);
+        }
+
 
         return $form;
     }

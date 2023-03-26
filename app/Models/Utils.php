@@ -114,7 +114,7 @@ class Utils  extends Model
             'case_number' => null
         ])->get();
 
-     /*    foreach ($cases as $key => $case) {
+        /*    foreach ($cases as $key => $case) {
 
             $pa = PA::find($case->pa_id);
             if (
@@ -196,6 +196,23 @@ class Utils  extends Model
 
     public static function hasPendingCase($u)
     {
+
+        $case = CaseModel::where(['user_adding_suspect_id' => Auth::user()->id])->orderBy('id', 'desc')->first();
+
+        if ($case != null) {
+            return $case;
+        }
+
+        if (isset($_GET['add_suspect_to_case_id'])) {
+            $case_id = ((int)($_GET['add_suspect_to_case_id']));
+            $case = CaseModel::find($case_id);
+            if ($case != null) {
+                $case->user_adding_suspect_id = Auth::user()->id;
+                $case->save();
+                return $case;
+            }
+        }
+
         $case =  CaseModel::where([
             'case_submitted' => 0,
             "reported_by" => $u->id

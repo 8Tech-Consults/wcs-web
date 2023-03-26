@@ -88,6 +88,9 @@ class ExhibitController extends AdminController
             ->sortable();
         $grid->column('case_id', __('Case'))
             ->display(function ($x) {
+                if ($this->case_model == null) {
+                    $this->case_model->delete();
+                }
                 return $this->case_model->case_number;
             })
             ->sortable();
@@ -101,7 +104,7 @@ class ExhibitController extends AdminController
         $grid->column('implement_pieces', __('Implement pieces'));
         $grid->column('implement_description', __('Implement description'));
         $grid->column('type_other', __('Exibit type Others'));
-        $grid->column('others_description', __('Description for others')); 
+        $grid->column('others_description', __('Description for others'));
 
         /*         $grid->column('exhibit_catgory', __('Exhibit category'));
         $grid->column('wildlife', __('Wildlife'));

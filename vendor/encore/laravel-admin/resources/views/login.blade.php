@@ -211,11 +211,13 @@ if (isset($_SESSION['reset_message'])) {
             <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
                 <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 350px;">
 
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="70%">
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="65%">
                     </center>
+                    <hr class="my-4">
+                    <h2 class="h3 text-center">Wildlife Offenders Database</h2>
 
 
-                    <h1 class="text-center text-xl-start mt-5 text-primary h3">Login</h1>
+                    <h1 class="text-center text-xl-start mt-3 text-primary h3">Login</h1>
 
                     <form class="needs-validation mb-2" action="{{ admin_url('auth/login') }}" method="post">
 
@@ -286,8 +288,9 @@ if (isset($_SESSION['reset_message'])) {
             <!-- Background -->
             <div class="position-absolute top-0 end-0 w-50 h-100 bg-position-center bg-repeat-0 bg-size-cover d-none d-md-block"
                 style="background-image: url({{ url('assets/bg/' . rand(1, 16) . '-min.jpg') }});
-                border: 15px solid white;
-                border-radius:40px;
+                padding: 0px;
+
+                border-radius: 0%;
                 background-color: #13502f;
                 ">
             </div>

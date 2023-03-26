@@ -3,9 +3,11 @@
 namespace Encore\Admin\Controllers;
 
 use App\Models\Location;
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Layout\Content;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -44,6 +46,13 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $this->loginValidator($request->all())->validate();
+
+
+        $u = Administrator::where('email', $request->email)->first();
+        if ($u != null) {
+            $u->code = null;
+            $u->save();
+        }
 
         $credentials = $request->only([$this->username(), 'password']);
         $remember = $request->get('remember', false);
@@ -143,7 +152,7 @@ class AuthController extends Controller
         $form->text('last_name', 'Last name')->rules('required');
         $form->date('date_of_birth', 'Date of birth');
 
-        $form->text('phone_number_1', 'Phone number')->rules('regex:/^\d+$/|min:10|max:10', [ 
+        $form->text('phone_number_1', 'Phone number')->rules('regex:/^\d+$/|min:10|max:10', [
             'min'   => 'Phone number can not be less than 10 characters',
             'max'   => 'Phone number can not be more than 10 characters',
         ]);

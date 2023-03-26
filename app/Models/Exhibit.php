@@ -14,6 +14,11 @@ class Exhibit extends Model
     protected $fillable = ['case_id', 'exhibit_catgory', 'wildlife', 'implements', 'photos', 'description', 'quantity'];
     function case_model()
     {
+        $case = CaseModel::find($this->case_id);
+        if ($case == null) {
+            $this->delete();
+            return '-';
+        }
         return $this->belongsTo(CaseModel::class, 'case_id');
     }
 

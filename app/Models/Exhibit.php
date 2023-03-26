@@ -17,7 +17,7 @@ class Exhibit extends Model
         $case = CaseModel::find($this->case_id);
         if ($case == null) {
             $this->delete();
-            return '-';
+            return null;
         }
         return $this->belongsTo(CaseModel::class, 'case_id');
     }

@@ -28,6 +28,27 @@ class Exhibit extends Model
             $this->attributes['pics'] = json_encode($pictures);
         }
     }
+    public function get_photos()
+    {
+        $pics = [];
+        if ($this->wildlife_attachments != null && is_array($this->wildlife_attachments)) {
+            foreach ($this->wildlife_attachments as $key => $img) {
+                $pics[] = url('public/storage/' . $img);
+            }
+        }
+        if ($this->implement_attachments != null && is_array($this->implement_attachments)) {
+            foreach ($this->implement_attachments as $key => $img) {
+                $pics[] = url('public/storage/' . $img);
+            }
+        }
+        if ($this->others_attachments != null && is_array($this->others_attachments)) {
+            foreach ($this->others_attachments as $key => $img) {
+                $pics[] = url('public/storage/' . $img);
+            }
+        }
+
+        return $pics;
+    }
 
 
     public function setImplementAttachmentsAttribute($pictures)

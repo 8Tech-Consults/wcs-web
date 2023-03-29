@@ -3,7 +3,8 @@ use App\Models\Utils;
 ?><div class="container bg-white p-1 p-md-5">
     <div class="d-md-flex justify-content-between">
         <div>
-            <h2 class="m-0 p-0 text-dark h3 text-uppercase"><b>Suspect {{ '#' . $s->id ?? '-' }}</b></h2>
+            <h2 class="m-0 p-0 text-dark h3 text-uppercase"><b>Suspect {{ ' - ' . $s->uwa_suspect_number ?? '-' }}</b>
+            </h2>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="{{ url('case-suspects') }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> BACK
@@ -51,7 +52,7 @@ use App\Models\Utils;
                 's' => $s->ethnicity,
             ])
 
-          {{--   @include('components.detail-item', [
+            {{--   @include('components.detail-item', [
                 't' => 'District, Sub-county',
                 's' => $s->sub_county->name_text,
             ]) --}}
@@ -71,7 +72,7 @@ use App\Models\Utils;
             ])
             @include('components.detail-item', [
                 't' => 'UWA SUSPECT',
-                's' => $s->uwa_suspect_number, 
+                's' => $s->uwa_suspect_number,
             ])
 
             @include('components.detail-item', ['t' => 'occuptaion', 's' => $s->occuptaion])
@@ -81,23 +82,34 @@ use App\Models\Utils;
                 <h3 class="text-uppercase h4 p-0 m-0 text-center"><b>Summary</b></h3>
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
-                    <p class="py-1 my-0 "><b>OFFENCE DATE:</b>
+                    <p class="py-1 my-0 "><b>CASE DATE:</b>
                         {{ Utils::to_date_time($s->case->created_at) }}</p>
-                    <p class="py-1 my-0 "><b>OFFENCE TITLE:</b> <a
-                            href="{{ admin_url('cases/' . $s->case->id) }}">{{ $s->case->title ?? $s->case->id }}</a>
+                    <p class="py-1 my-0 "><b>CASE TITLE:</b> <a href="{{ admin_url('cases/' . $s->case->id) }}"><span
+                                class="text-primary"
+                                title="View case details">{{ $s->case->title ?? $s->case->id }}</span></a>
                     </p>
-                    <p class="py-1 my-0"><b>OFFENCE STATUS:</b> <span
-                            class="badge bg-{{ Utils::tell_case_status_color($s->case->status) }}">
-                            {{ Utils::tell_case_status($s->case->status) ?? '-' }} </span></p>
+                    <p class="py-1 my-0 "><b>CASE NUMBER:</b> {{ $s->case->case_number }}</p>
+
 
                     <p class="py-1 my-0"><b class="text-uppercase">CASE suspetcs:</b> {{ count($s->case->suspects) }}
                     </p>
 
+                    <p class="py-1 my-0 "><b class="text-uppercase">Case committed in PA?:</b>
+                        @if ($s->case->is_offence_committed_in_pa == 1 || ($s->case->is_offence_committed_in_pa = 'Yes'))
+                            Yes
+                        @else
+                            No
+                        @endif
+                    </p>
+
+                    <p class="py-1 my-0 "><b class="text-uppercase">PA:</b>
+                        {{ $s->case->pa->name_text }} </p>
+
                     <p class="py-1 my-0 "><b class="text-uppercase">CASE district:</b>
                         {{ Utils::get('App\Models\Location', $s->case->district_id)->name_text }} </p>
-                        
 
-                    <p class="py-1 my-0 "><b class="text-uppercase">CASE sub-county:</b>
+
+                    <p class="py-1 my-0 "><b class="text-uppercase">CASE Sub-county:</b>
                         {{ Utils::get('App\Models\Location', $s->case->sub_county_id)->name_text }} </p>
 
                     <p class="py-1 my-0 "><b class="text-uppercase">Case Parish:</b>
@@ -172,7 +184,7 @@ use App\Models\Utils;
                     's' => $s->arrest_current_police_station,
                 ])
 
-      
+
                 @include('components.detail-item', [
                     't' => 'Arrest time',
                     's' => Utils::to_date_time($s->arrest_date_time),
@@ -228,7 +240,7 @@ use App\Models\Utils;
                     's' => $s->case_outcome,
                 ])
 
- 
+
 
             </div>
         </div>

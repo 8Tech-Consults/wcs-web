@@ -3,54 +3,39 @@ use App\Models\Utils;
 ?><div class="container bg-white p-1 p-md-5">
     <div class="d-md-flex justify-content-between">
         <div class="">
-            <h2 class="m-0 p-0 text-dark h3"><b>Offence {{ '#' . $c->id }} - details</b>
+            <h2 class="m-0 p-0 text-primary h3"><b>Case details</b>
             </h2>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="{{ url('cases') }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i> BACK
-                TO ALL OFFENCES</a>
+                TO ALL Case</a>
 
-            @if (
-            
-            (
-                (Auth::user()->isRole('admin')))
-            )
+            {{--             @if (Auth::user()->isRole('admin'))
                 <a href="{{ url('cases/' . $c->id . '/edit') }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i>
                     EDIT</a>
-            @endif
+            @endif --}}
             <a href="#" onclick="window.print();return false;" class="btn btn-primary btn-sm"><i
                     class="fa fa-print"></i> PRINT</a>
         </div>
     </div>
     <hr class="my-3 my-md-4">
     <div class="row">
-        <div class="col-3 col-md-2">
-            <div class="border border-1 rounded bg-">
-                <img class="img-fluid" src="{{ url('assets/user.jpeg') }}">
-            </div>
-        </div>
-        <div class="col-9 col-md-6">
+
+        <div class="col-9 col-md-8">
             <h3 class="h3 p-0 m-0">{{ $c->title }}</h3>
             <hr class="my-1 my-md-4">
-            @include('components.detail-item', ['t' => 'OFFENCE ID', 's' => '#' . $c->id])
+            @include('components.detail-item', ['t' => 'Case NUMBER', 's' => '#' . $c->case_number])
             @include('components.detail-item', [
                 't' => 'Report date',
                 's' => Utils::my_date_time($c->created_at),
             ])
             @include('components.detail-item', ['t' => 'Reported by', 's' => $c->reportor->name])
-            @include('components.detail-item', ['t' => 'Offence category', 's' => $c->offence_category_id])
         </div>
         <div class="pt-3 pt-md-0 col-md-4">
             <div class=" border border-primary p-3">
-                <h2 class="m-0 p-0 text-dark h3 text-center"><b>Offence Summary</b></h2>
+                <h2 class="m-0 p-0 text-dark h3 text-center"><b>Case Summary</b></h2>
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
-                    <p class="py-1 my-0"><b>STATUS:</b>
-
-                        <span class="badge badge-{{ Utils::tell_case_status_color($c->status) }}">
-                            {{ Utils::tell_case_status($c->status) }}
-                        </span>
-                    </p>
                     <p class="py-1 my-0 text-uppercase"><b>Number of Exhibits:</b> {{ count($c->exhibits) }}</p>
                     <p class="py-1 my-0 text-uppercase"><b>Number of Suspects:</b> {{ count($c->suspects) }}</p>
                 </div>
@@ -59,63 +44,135 @@ use App\Models\Utils;
     </div>
 
     <hr class="mt-4 mb-2 border-primary pb-0 mt-md-5 mb-md-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center mt-3 mt-md-5"><b>Offence location details</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center mt-3 mt-md-5"><b>Case location details</b></h3>
     <hr class="m-0 pt-0">
     <div class="row pt-2">
         <div class="col-md-6 pl-5 pl-md-5">
-            @include('components.detail-item', ['t' => 'Dsitrict', 's' => $c->district->name])
-            @include('components.detail-item', ['t' => 'Subcount', 's' => $c->sub_county->name])
-            @include('components.detail-item', ['t' => 'Parish', 's' => $c->parish])
-            @include('components.detail-item', ['t' => 'Village', 's' => $c->village])
 
-        </div>
-        <div class="col-md-6 border-left pl-2 pl-5">
-            @if ($c->is_offence_committed_in_pa)
-                @include('components.detail-item', ['t' => 'Is offence committed in pa?', 's' => 'Yes'])
+            @if ($c->is_offence_committed_in_pa == 1 || $c->is_offence_committed_in_pa == 'Yes')
+                @include('components.detail-item', ['t' => 'Is Case committed in pa?', 's' => 'Yes'])
             @else
-                @include('components.detail-item', ['t' => 'Is offence committed in pa?', 's' => 'No'])
+                @include('components.detail-item', ['t' => 'Is Case committed in pa?', 's' => 'No'])
             @endif
 
             @if ($c->pa != null)
-                @include('components.detail-item', ['t' => 'PA', 's' => $c->pa->nme])
+                @include('components.detail-item', ['t' => 'PA', 's' => $c->pa->name_text])
             @else
                 @include('components.detail-item', ['t' => 'PA', 's' => '-'])
             @endif
 
             @include('components.detail-item', ['t' => 'GPS Latitude', 's' => $c->latitude])
             @include('components.detail-item', ['t' => 'GPS Longitude', 's' => $c->longitude])
+
+        </div>
+        <div class="col-md-6 border-left pl-2 pl-5">
+            @include('components.detail-item', ['t' => 'Dsitrict', 's' => $c->district->name])
+            @include('components.detail-item', ['t' => 'Subcount', 's' => $c->sub_county->name])
+            @include('components.detail-item', ['t' => 'Parish', 's' => $c->parish])
+            @include('components.detail-item', ['t' => 'Village', 's' => $c->village])
         </div>
     </div>
 
 
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Exhibits</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover">
                 <thead class="bg-primary">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Photo</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col">Photos</th>
                         <th scope="col">Category</th>
+                        <th scope="col">No. of Pieces</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Action</th>
+                        {{--                         <th scope="col">Action</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($c->exhibits as $e)
+                        <?php
+                        $pics = $e->get_photos();
+                        ?>
                         <tr>
                             <th width="5%" scope="row">#{{ $e->id }}</th>
-                            <td width="10%"><img class="border img-fluid rounded p-1" class="img-fluid"
-                                    src="{{ url('assets/user.jpeg') }}"></td>
-                            <td>{{ number_format((int) $e->id) }} KGs</td>
-                            <td>{{ $e->exhibit_catgory }}</td>
-                            <td>{{ $e->description }}</td>
-                            <td width="20%">
+                            <td width="25%">
+                                @if (count($pics) < 1)
+                                    <b>No photo.</b>
+                                @else
+                                    @foreach ($pics as $pic)
+                                        <a href="{{ $pic }}" target="_blank" title="Click to view full image"
+                                            rel="noopener noreferrer">
+                                            <img class="border img-fluid rounded p-1" width="45%" class="img-fluid"
+                                                src="{{ $pic }}"></a>
+                                    @endforeach
+                                @endif
+
+                            </td>
+                            <td>
+                                @include('components.detail-item', [
+                                    't' => 'HAS Wildlife?',
+                                    's' => $e->type_wildlife,
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'HAS IMPLEMENT?',
+                                    's' => $e->type_implement,
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'HAS OTHERS?',
+                                    's' => $e->type_other,
+                                ])
+                            </td>
+
+                            <td>
+                                @include('components.detail-item', [
+                                    't' => 'Wildlife',
+                                    's' => $e->wildlife_pieces,
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'IMPLEMENT',
+                                    's' => $e->implement_pieces,
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'OTHERS',
+                                    's' => 'N/A',
+                                ])
+                            </td>
+
+                            <td>
+                                @include('components.detail-item', [
+                                    't' => 'Wildlife',
+                                    's' => $e->wildlife_quantity . ' KGs',
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'IMPLEMENT',
+                                    's' => 'N/A',
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'OTHERS',
+                                    's' => 'N/A',
+                                ])
+                            </td>
+                            <td>
+                                @include('components.detail-item', [
+                                    't' => 'Wildlife?',
+                                    's' => $e->wildlife_description,
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'IMPLEMENT?',
+                                    's' => $e->implement_description,
+                                ])
+                                @include('components.detail-item', [
+                                    't' => 'OTHERS?',
+                                    's' => $e->others_description,
+                                ])
+                            </td>
+
+                            {{-- <td width="20%">
                                 <a class="text-primary" href="{{ admin_url() }}">See full details about this
                                     exhibit</a>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>
@@ -126,7 +183,7 @@ use App\Models\Utils;
 
 
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Suspects</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Suspects</b></h3>
 
     @include('admin/section-suspects', ['items' => $c->suspects])
 

@@ -403,8 +403,8 @@ class CaseModelController extends AdminController
                 $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
                     ->rules('required')
                     ->options([
-                        1 => 'Yes',
-                        0 => 'No',
+                        'Yes' => 'Yes',
+                        'no' => 'No',
                     ])
                     ->default(null)
                     ->when(0, function (Form $form) {

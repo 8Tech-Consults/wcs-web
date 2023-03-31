@@ -78,8 +78,6 @@ class CaseSuspectController extends AdminController
 
 
 
-
-
         $grid->model()
             ->orderBy('id', 'Desc');
 
@@ -474,7 +472,7 @@ class CaseSuspectController extends AdminController
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-        $grid->column('court_name')->hide()->sortable(); 
+        $grid->column('court_name')->hide()->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();
@@ -526,7 +524,7 @@ class CaseSuspectController extends AdminController
                 0 => 'Not fined',
             ])
             ->hide()
-            ->sortable(); 
+            ->sortable();
         $grid->column('fined_amount')->hide()->sortable();
         $grid->column('community_service')->hide()->sortable();
         $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
@@ -562,7 +560,7 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
 
- 
+
 
         $grid->column('reported_by', __('Reported by'))
             ->display(function () {
@@ -608,10 +606,12 @@ class CaseSuspectController extends AdminController
             }
             $actions->disableEdit();
             $actions->disableDelete();
-            $actions->add(new AddArrest);
 
-            if ($actions->row->is_suspects_arrested == 'Yes') {
-                $actions->add(new AddCourte);
+            if (
+                !($actions->row->is_suspects_arrested == 'Yes' ||
+                    $actions->row->is_suspects_arrested == '1')
+            ) {
+                $actions->add(new AddArrest);
             }
         });
 

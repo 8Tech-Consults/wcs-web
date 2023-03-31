@@ -28,15 +28,26 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
-        
-  /*       foreach (CaseSuspect::where([])->orderBy('id', 'desc')->get() as $key => $v) {
 
-            $v->police_sd_number = "UG-2023-UWA-".rand(1000,10000);
+        foreach (CaseSuspect::where([])->orderBy('id', 'desc')->get() as $key => $v) {
+
+            if (
+                $v->is_suspect_appear_in_court == 'Yes' ||
+                $v->is_suspect_appear_in_court == 'No'
+            ) {
+                continue;
+            }
+            if (
+                $v->is_suspect_appear_in_court == '1' ||
+                $v->is_suspect_appear_in_court == 1
+            ) {
+                $v->is_suspect_appear_in_court = 'Yes';
+            } else {
+                $v->is_suspect_appear_in_court = 'No';
+            }
             $v->save();
-            echo $v->uwa_suspect_number."<hr>";
         }
-        dd("done"); */
-
+        dd("done");
 
         $content
             ->title('Online Wildlife Offenders Database - Dashboard')

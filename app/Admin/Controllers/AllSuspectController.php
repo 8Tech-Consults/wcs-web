@@ -171,12 +171,12 @@ class AllSuspectController extends AdminController
         $grid->column('is_suspect_appear_in_court', __('Court'))
             ->sortable()
             ->using([
-                0 => 'Not in Court',
-                1 => 'In Court',
+                'No' => 'Not in Court',
+                'Yes' => 'In Court',
             ], 'Not in Court')->label([
                 null => 'danger',
-                0 => 'danger',
-                1 => 'success',
+                'No' => 'danger',
+                'Yes' => 'success',
             ], 'danger');
 
 

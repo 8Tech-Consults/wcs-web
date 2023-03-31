@@ -111,7 +111,7 @@ class ArrestsController extends AdminController
 
             $export->column('national_id_number', function ($value, $original) {
                 return  $original;
-            }); 
+            });
 
             // $export->only(['column3', 'column4' ...]);
 
@@ -130,7 +130,7 @@ class ArrestsController extends AdminController
 
 
 
-  
+
 
 
 
@@ -141,8 +141,12 @@ class ArrestsController extends AdminController
 
         $grid->model()
             ->where([
-                'is_suspects_arrested' => 'Yes'
-            ])->orderBy('id', 'Desc');
+                'is_suspects_arrested' => 'Yes', 
+            ])
+            ->where(
+                'is_suspect_appear_in_court', '!=' ,'Yes'
+            )
+            ->orderBy('id', 'Desc');
 
         $u = Auth::user();
         if ($u->isRole('ca-agent')) {
@@ -329,13 +333,9 @@ class ArrestsController extends AdminController
                 Auth::user()->isRole('ca-team')
             ) {
             }
-            $actions->disableEdit();
             $actions->disableDelete();
-            $actions->add(new AddArrest);
 
-            if ($actions->row->is_suspects_arrested == 'Yes') {
-                $actions->add(new AddCourte);
-            }
+            $actions->add(new AddCourte);
         });
 
 

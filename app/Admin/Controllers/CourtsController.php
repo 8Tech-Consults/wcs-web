@@ -55,8 +55,7 @@ class CourtsController extends AdminController
         $grid = new Grid(new CaseSuspect());
         $grid->disableBatchActions();
         $grid->disableCreateButton();
-        $grid->disableActions();
-
+        
 
 
         $grid->model()
@@ -258,8 +257,9 @@ class CourtsController extends AdminController
                 (!Auth::user()->isRole('admin'))
             ) {
                 $actions->disableEdit();
-                $actions->disableDelete();
             }
+            $actions->disableView();
+            $actions->disableDelete();
         });
 
 

@@ -453,8 +453,8 @@ class CaseModelController extends AdminController
 
                     $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                         ->options([
-                            1 => 'Yes',
-                            0 => 'No',
+                            'Yes' => 'Yes',
+                            'No' => 'No',
                         ])
                         ->when(1, function ($form) {
                             $form->date('created_at', 'Court date');

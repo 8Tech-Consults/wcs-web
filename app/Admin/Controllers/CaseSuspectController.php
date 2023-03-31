@@ -407,9 +407,8 @@ class CaseSuspectController extends AdminController
             ->hide()
             ->sortable();
 
-        $grid->column('pa_id', 'P.A of Arrest ')
+        $grid->column('pa_id', 'P.A of Arrest')
             ->display(function ($x) {
-
                 return $this->arrestPa->name;
             })
             ->sortable()
@@ -475,7 +474,7 @@ class CaseSuspectController extends AdminController
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-        $grid->column('court_name')->hide()->sortable();
+        $grid->column('court_name')->hide()->sortable(); 
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();
@@ -527,7 +526,7 @@ class CaseSuspectController extends AdminController
                 0 => 'Not fined',
             ])
             ->hide()
-            ->sortable();
+            ->sortable(); 
         $grid->column('fined_amount')->hide()->sortable();
         $grid->column('community_service')->hide()->sortable();
         $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
@@ -563,9 +562,7 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
 
-
-
-
+ 
 
         $grid->column('reported_by', __('Reported by'))
             ->display(function () {

@@ -292,217 +292,98 @@ class CaseModelController extends AdminController
      *
      * @return Form
      */
-    protected function form()
-    {
 
 
-
-        /* 
-        
-        */
-        $form = new Form(new CaseModel());
-
-
-        $form->ignore('temp_want_to_add_suspect', 'want_to_add_suspect');
-        $form->ignore('temp_first_name', 'first_name');
-        $form->ignore('temp_middle_name', 'middle_name');
-        $form->ignore('temp_last_name', 'last_name');
-        $form->ignore('temp_phone_number', 'phone_number');
-        $form->ignore('temp_national_id_number', 'national_id_number');
-        $form->ignore('temp_sex', 'sex');
-        $form->ignore('temp_age', 'age');
-        $form->ignore('temp_occuptaion', 'occuptaion');
-        $form->ignore('temp_country', 'country');
-        $form->ignore('temp_district_id', 'district_id');
-        $form->ignore('temp_sub_county_id', 'sub_county_id');
-        $form->ignore('temp_parish', 'parish');
-        $form->ignore('temp_village', 'village');
-        $form->ignore('temp_ethnicity', 'ethnicity');
-        $form->ignore('temp_finger_prints', 'finger_prints');
-        $form->ignore('temp_is_suspects_arrested', 'is_suspects_arrested');
-        $form->ignore('temp_arrest_date_time', 'arrest_date_time');
-        $form->ignore('temp_arrest_district_id', 'arrest_district_id');
-        $form->ignore('temp_arrest_sub_county_id', 'arrest_sub_county_id');
-        $form->ignore('temp_arrest_parish', 'arrest_parish');
-        $form->ignore('temp_arrest_village', 'arrest_village');
-        $form->ignore('temp_arrest_latitude', 'arrest_latitude');
-        $form->ignore('temp_arrest_first_police_station', 'arrest_first_police_station');
-        $form->ignore('temp_arrest_longitude', 'arrest_longitude');
-        $form->ignore('temp_arrest_current_police_station', 'arrest_current_police_station');
-        $form->ignore('temp_arrest_agency', 'arrest_agency');
-        $form->ignore('temp_arrest_uwa_unit', 'arrest_uwa_unit');
-        $form->ignore('temp_arrest_detection_method', 'arrest_detection_method');
-        $form->ignore('temp_arrest_uwa_number', 'arrest_uwa_number');
-        $form->ignore('temp_arrest_crb_number', 'arrest_crb_number');
-        $form->ignore('temp_is_suspect_appear_in_court', 'is_suspect_appear_in_court');
-        $form->ignore('temp_prosecutor', 'prosecutor');
-        $form->ignore('temp_case_outcome', 'case_outcome');
-        $form->ignore('temp_magistrate_name', 'magistrate_name');
-        $form->ignore('temp_court_name', 'court_name');
-        $form->ignore('temp_court_file_number', 'court_file_number');
-        $form->ignore('temp_is_jailed', 'is_jailed');
-        $form->ignore('temp_jail_period', 'jail_period');
-        $form->ignore('temp_is_fined', 'is_fined');
-        $form->ignore('temp_fined_amount', 'fined_amount');
-        $form->ignore('temp_status', 'status');
-
-
-
-        $form->disableCreatingCheck();
-        $form->disableReset();
-        //$form->disableEditingCheck();
-
-
-
-
-
-        $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete();
-        });
-
-
-
-        if (
-            ((!$form->isCreating()) &&
-                (Auth::user()->isRole('admin')))
-        ) {
-
-
-            $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
-
-            $form->tab('Case information', function (Form $form) {
-
-
-                /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-                ->help("Select offences involded in this case")
-                ->rules('required'); */
-
-                $form->disableCreatingCheck();
-                $form->disableReset();
-                $form->disableEditingCheck();
-                $form->disableViewCheck();
-
-
-
-
-                /*        $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-                    ->help("Select offences involded in this case")
-                    ->rules('required');
-         */
-
-                $form->text('title', __('Case title'))
-                    ->help("Describe this case in summary")
-                    ->rules('required');
-                $form->textarea('offence_description', __('Case description'))
-                    ->help("Describe this case in details")
-                    ->rules('required');
-
-                $form->text('officer_in_charge', 'Complainant')->rules('required');
-
-
-                $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
-                    ->rules('required')
-                    ->options([
-                        'Yes' => 'Yes',
-                        'no' => 'No',
-                    ])
-                    ->default(null)
-                    ->when(0, function (Form $form) {
-
-
-                        /* 
-        
-                        $form->select('sub_county_id', __('Sub county'))
-                            ->rules('required')
-                            ->options(Location::get_sub_counties_array());
-        
-                        $form->text('parish', __('Parish'))->rules('required');
-                        $form->text('village', __('Village'))->rules('required');
-                        $form->hidden('offence_category_id', __('Village'))->default(1)->value(1); */
-                    })->when(1, function (Form $form) {
-                        $form->select('pa_id', __('Select PA'))
-                            ->rules('required')
-                            ->options(PA::all()->pluck('name_text', 'id'));
-                    });
-
-
-                $form->select('ca_id', __('Nearest conservation area'))
-                    ->rules('required')
-                    ->options(ConservationArea::all()->pluck('name', 'id'));
-
-
-                $form->text('latitude', 'Case scene GPS - latitude');
-                $form->text('longitude', 'Case scene GPS - longitude');
-
-
-
-
-                $form->hidden('has_exhibits', __('Does this case have exhibits?'))
-                    ->default(1);
-
-                $form->select('detection_method', __('Detection method'))
-                    ->options([
-                        'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
-                        'Contacted by security agencies' => 'Contacted by security agencies',
-                        'House visit based on intelligence' => 'House visit based on intelligence',
-                        'Intelligence led patrol' => 'Intelligence led patrol',
-                        'Observed during non-duty activities' => 'Observed during non-duty activities',
-                        'Routine patrol by rangers' => 'Routine patrol by rangers',
-                        'Routine security check' => 'Routine security check',
-                        'Investigation' => 'Investigation',
-                        'Risk profiling' => 'Risk profiling',
-                        'Random selection' => 'Random selection'
-                    ])
-                    ->rules('required');
-            });
-            $form->tab('Exhibits', function (Form $form) {
-
-                $form->morphMany('exhibits', 'Click on new to add exhibit', function (Form\NestedForm $form) {
-
-                    $form->select('exhibit_catgory', __('Exhibit category'))
-                        ->options([
-                            'Wildlife' => 'Wildlife',
-                            'Implements' => 'Implements',
-                            'Implement & Wildlife' => 'Both Implement & Wildlife',
-                        ])
-                        ->rules('required');
-                    $form->text('wildlife', __('Species'));
-                    $form->decimal('quantity', __('Quantity (in KGs)'));
-                    $form->text('implement', __('Implements'));
-                    $form->decimal('number_of_pieces', __('Number of pieces/equipment'));
-                    $form->textarea('description', __('Description'))
-                        ->rules('required');
-                    /* $form->textarea('wildlife', __('Wildlife'));
-                $form->textarea('implements', __('Implements')); */
-
-                    $form->file('photos', __('Exhibit file/photo'));
-                    $form->file('attachment', __('Attachments'));
-                });
-            });
-        }
-
-
-        $form->tab('Case progress comments', function (Form $form) {
-            $form->morphMany('comments', 'Click on new to add a case progress comment', function (Form\NestedForm $form) {
-                $u = Admin::user();
-                $form->hidden('comment_by')->default($u->id);
-
-                $form->text('body', __('Progress comment'))->rules('required');
-            });
-        });
-
-
-        /*        $form->tab('Case progress AddSuspectAction', function (Form $form) {
-            $form->morphMany('AddSuspectAction', 'Click on new to add a case progress comment', function (Form\NestedForm $form) {
-                $u = Admin::user();
-                $form->hidden('comment_by')->default($u->id);
-
-                $form->text('body', __('Progress comment'))->rules('required');
-            });
-        }); */
-
-
-
-        return $form;
-    }
+     protected function form()
+     {
+ 
+ 
+         if (isset($_GET['refresh_page'])) {
+             $r = (int)($_GET['refresh_page']);
+             if ($r == 1) {
+                 Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
+                 return 'Loading...';
+             }
+         }
+ 
+         $form = new Form(new CaseModel());
+ 
+   
+ 
+         $form->disableCreatingCheck();
+         $form->disableReset();
+         $form->disableEditingCheck();
+         $form->disableViewCheck();
+  
+ 
+         $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
+ 
+  
+ 
+         $form->text('title', __('Case title'))
+             ->help("Describe this case in summary")
+             ->rules('required');
+         $form->textarea('offence_description', __('Case description'))
+             ->help("Describe this case in details")
+             ->rules('required');
+ 
+         $form->date('case_date', 'Date when opened')
+             ->required()
+             ->rules('required');
+ 
+         $form->text('officer_in_charge', 'Complainant')->rules('required');
+ 
+ 
+         $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
+             ->rules('required')
+             ->options([
+                 'Yes' => 'Yes',
+                 'No' => 'No',
+             ])
+             ->default(null)
+             ->when('No', function (Form $form) {
+ 
+ 
+                 $form->select('sub_county_id', __('Sub county'))
+                     ->rules('required')
+                     ->options(Location::get_sub_counties_array());
+ 
+                 $form->text('parish', __('Parish'))->rules('required');
+                 $form->text('village', __('Village'))->rules('required');
+                 $form->hidden('pa_id', __('pa'))->value(1)->default(1)->value(1);
+             })->when('Yes', function (Form $form) {
+                 $form->select('pa_id', __('Select PA'))
+                     ->rules('required')
+                     ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+             });
+ 
+ 
+         $form->text('latitude', 'Case scene GPS - latitude');
+         $form->text('longitude', 'Case scene GPS - longitude');
+ 
+ 
+         $form->hidden('has_exhibits', __('Does this case have exhibits?'))
+             ->default(1);
+ 
+         $form->select('detection_method', __('Detection method'))
+             ->options([
+                 'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
+                 'Contacted by security agencies' => 'Contacted by security agencies',
+                 'House visit based on intelligence' => 'House visit based on intelligence',
+                 'Intelligence led patrol' => 'Intelligence led patrol',
+                 'Observed during non-duty activities' => 'Observed during non-duty activities',
+                 'Routine patrol by rangers' => 'Routine patrol by rangers',
+                 'Routine security check' => 'Routine security check',
+                 'Investigation' => 'Investigation',
+                 'Risk profiling' => 'Risk profiling',
+                 'Random selection' => 'Random selection'
+             ])
+             ->rules('required');
+ 
+ 
+ 
+ 
+         return $form;
+     }
+ 
 }

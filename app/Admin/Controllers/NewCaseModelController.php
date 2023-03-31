@@ -199,12 +199,6 @@ class NewCaseModelController extends AdminController
             $form->html('<a class="btn btn-danger" href="' . admin_url("new-case-suspects/create") . '" >SKIP TO SUSPECTS</a>', 'SKIP');
         }
 
-        /*        
-            $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
-            ->help("Select offences involded in this case")
-            ->rules('required');
- */
-
         $form->text('title', __('Case title'))
             ->help("Describe this case in summary")
             ->rules('required');
@@ -218,13 +212,6 @@ class NewCaseModelController extends AdminController
 
         $form->text('officer_in_charge', 'Complainant')->rules('required');
 
-        /*     $form->select('offense_category', __('Case category'))
-            ->options([
-                'Category 1' => 'Category 1',
-                'Category 2' => 'Category 2',
-                'Category 3' => 'Category 3',
-            ])
-            ->rules('required'); */
 
         $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
             ->rules('required')
@@ -234,11 +221,6 @@ class NewCaseModelController extends AdminController
             ])
             ->default(null)
             ->when('No', function (Form $form) {
-
-                /* $form->select('ca_id', __('Nearest conservation area'))
-                    ->rules('required')
-                    ->options(ConservationArea::all()->pluck('name', 'id')); */
-
 
 
                 $form->select('sub_county_id', __('Sub county'))
@@ -255,13 +237,8 @@ class NewCaseModelController extends AdminController
             });
 
 
-
-
-
         $form->text('latitude', 'Case scene GPS - latitude');
         $form->text('longitude', 'Case scene GPS - longitude');
-
-
 
 
         $form->hidden('has_exhibits', __('Does this case have exhibits?'))

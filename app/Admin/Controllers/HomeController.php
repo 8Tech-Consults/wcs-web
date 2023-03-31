@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
-
+/* 
         foreach (CaseSuspect::where([])->orderBy('id', 'desc')->get() as $key => $v) {
 
             if (
@@ -45,9 +45,9 @@ class HomeController extends Controller
             } else {
                 $v->is_suspect_appear_in_court = 'No';
             }
-            $v->save();
+            $v->save()
         }
-        dd("done");
+        dd("done"); */
 
         $content
             ->title('Online Wildlife Offenders Database - Dashboard')

@@ -37,6 +37,7 @@ class HomeController extends Controller
         }
         dd("done"); */
 
+
         $content
             ->title('Online Wildlife Offenders Database - Dashboard')
             ->description('Hello ' . Auth::user()->name . "!");

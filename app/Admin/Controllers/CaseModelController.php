@@ -7,6 +7,7 @@ use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
+use App\Models\Exhibit;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
@@ -47,6 +48,20 @@ class CaseModelController extends AdminController
     protected function grid()
     {
 
+
+        $pendingCase = null;
+        if (isset($_GET['add_exhibit_to_case_id'])) {
+            $pendingCase = CaseModel::find($_GET['add_exhibit_to_case_id']);
+            if ($pendingCase != null) {
+                $x = new Exhibit();
+                $x->case_id =  $pendingCase->id;
+                $x->reported_by =  Auth::user()->id;
+                $x->save();
+                Admin::script('window.location.replace("' . admin_url("add-exhibit/{$x->id}/edit") . '");');
+                return 'loading...';
+            }
+        }
+        
 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());

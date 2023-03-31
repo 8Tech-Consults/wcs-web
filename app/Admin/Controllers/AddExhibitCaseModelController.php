@@ -19,7 +19,7 @@ class AddExhibitCaseModelController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Addming new exhibit to case';
+    protected $title = 'Adding new exhibit to case';
 
     /**
      * Make a grid builder.
@@ -31,42 +31,6 @@ class AddExhibitCaseModelController extends AdminController
 
         Admin::script('window.location.replace("' . admin_url("cases") . '");');
         return 'Loading...';
-
-
-        $pendingCase = Utils::hasPendingCase(Auth::user());
-        if ($pendingCase != null) {
-
-            $ex = Exhibit::where([
-                'case_id' => $pendingCase->id
-            ])
-                ->orderBy('id', 'Desc')
-                ->first();
-            if ($ex != null) {
-                if ($ex->add_another_exhibit == 'Yes') {
-                    Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
-                    return 'Loading...';
-                }
-            }
-
-            if ($pendingCase->case_step == 1) {
-                Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
-                return 'Loading...';
-            } else if ($pendingCase->case_step == 2) {
-                Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
-                return 'Loading...';
-            } else if ($pendingCase->case_step == 3) {
-                Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '");');
-                return 'Loading...';
-            } else {
-            }
-            //dd($pendingCase);
-        }
-
-
-        $grid = new Grid(new Exhibit());
-
-
-        return $grid;
     }
 
     /**
@@ -77,6 +41,10 @@ class AddExhibitCaseModelController extends AdminController
      */
     protected function detail($id)
     {
+
+        Admin::script('window.location.replace("' . admin_url("cases") . '");');
+        return 'Loading...';
+
         $show = new Show(Exhibit::findOrFail($id));
 
         return $show;
@@ -91,18 +59,6 @@ class AddExhibitCaseModelController extends AdminController
     {
 
 
-        $pendingCase = null;
-        if (isset($_GET['add_exhibit_to_case_id'])) {
-            $pendingCase = CaseModel::find($_GET['add_exhibit_to_case_id']);
-            if ($pendingCase != null) {
-                $x = new Exhibit();
-                $x->case_id =  $pendingCase->id;
-                $x->reported_by =  Auth::user()->id;
-                $x->save();
-                Admin::script('window.location.replace("' . admin_url("add-exhibit/{$x->id}/edit") . '");');
-                return 'Loading...';
-            }
-        }
 
         $arr = (explode('/', $_SERVER['REQUEST_URI']));
         $pendingCase = null;
@@ -118,6 +74,7 @@ class AddExhibitCaseModelController extends AdminController
 
 
         $form = new Form(new Exhibit());
+        $form->disableEditingCheck();
 
         $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
         $form->display('ADDING EXHIBIT TO CASE')->default($pendingCase->case_number);

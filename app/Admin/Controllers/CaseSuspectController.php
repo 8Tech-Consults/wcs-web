@@ -612,6 +612,14 @@ class CaseSuspectController extends AdminController
                     $actions->row->is_suspects_arrested == '1')
             ) {
                 $actions->add(new AddArrest);
+            } else {
+
+                if (
+                    !($actions->row->is_suspect_appear_in_court == 'Yes' ||
+                        $actions->row->is_suspect_appear_in_court == '1')
+                ) {
+                    $actions->add(new AddCourte);
+                }
             }
         });
 

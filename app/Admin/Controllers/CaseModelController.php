@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\CaseModel\CaseModelActionAddExhibit;
 use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
+use App\Admin\Actions\CaseModel\CaseModelActionEditCase;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
@@ -61,7 +62,7 @@ class CaseModelController extends AdminController
                 return 'loading...';
             }
         }
-        
+
 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -105,16 +106,6 @@ class CaseModelController extends AdminController
             // $export->only(['column3', 'column4' ...]);
 
             $export->originalValue(['suspects_count', 'exhibit_count']);
-            $export->column('status', function ($value, $original) {
-
-                if ($value == 0) {
-                    return 'Pending';
-                } else if ($value == 1) {
-                    return 'Active';
-                } {
-                }
-                return 'Closed';
-            });
         });
 
 
@@ -143,13 +134,6 @@ class CaseModelController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
-
-
-            $f->equal('status', 'Filter case status')->select([
-                0 => 'Pending',
-                1 => 'Active',
-                2 => 'Closed',
-            ]);
         });
 
 
@@ -159,15 +143,18 @@ class CaseModelController extends AdminController
 
         $grid->actions(function ($actions) {
 
+            $actions->disableEdit();
+
+            $actions->disableDelete();
+            $actions->add(new CaseModelActionAddSuspect);
+            $actions->add(new CaseModelActionAddExhibit);
             if (
                 Auth::user()->isRole('hq-team-leaders') ||
                 Auth::user()->isRole('ca-team')
             ) {
-                $actions->disableEdit();
+            } else {
+                $actions->add(new CaseModelActionEditCase);
             }
-            $actions->disableDelete();
-            $actions->add(new CaseModelActionAddSuspect);
-            $actions->add(new CaseModelActionAddExhibit);
         });
 
 
@@ -233,18 +220,7 @@ class CaseModelController extends AdminController
                 return $this->reportor->name;
             })
             ->sortable();
-        $grid->column('status', __('Status'))
-            ->sortable()
-            ->using([
-                0 => 'Pending',
-                1 => 'Active',
-                2 => 'Closed',
-            ], 'Not in Court')->label([
-                null => 'warning',
-                0 => 'warning',
-                1 => 'success',
-                2 => 'danger',
-            ], 'danger');
+
 
 
         /*  $grid->column('actions', __('Actions'))->display(function () {
@@ -309,96 +285,95 @@ class CaseModelController extends AdminController
      */
 
 
-     protected function form()
-     {
- 
- 
-         if (isset($_GET['refresh_page'])) {
-             $r = (int)($_GET['refresh_page']);
-             if ($r == 1) {
-                 Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
-                 return 'Loading...';
-             }
-         }
- 
-         $form = new Form(new CaseModel());
- 
-   
- 
-         $form->disableCreatingCheck();
-         $form->disableReset();
-         $form->disableEditingCheck();
-         $form->disableViewCheck();
-  
- 
-         $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
- 
-  
- 
-         $form->text('title', __('Case title'))
-             ->help("Describe this case in summary")
-             ->rules('required');
-         $form->textarea('offence_description', __('Case description'))
-             ->help("Describe this case in details")
-             ->rules('required');
- 
-         $form->date('case_date', 'Date when opened')
-             ->required()
-             ->rules('required');
- 
-         $form->text('officer_in_charge', 'Complainant')->rules('required');
- 
- 
-         $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
-             ->rules('required')
-             ->options([
-                 'Yes' => 'Yes',
-                 'No' => 'No',
-             ])
-             ->default(null)
-             ->when('No', function (Form $form) {
- 
- 
-                 $form->select('sub_county_id', __('Sub county'))
-                     ->rules('required')
-                     ->options(Location::get_sub_counties_array());
- 
-                 $form->text('parish', __('Parish'))->rules('required');
-                 $form->text('village', __('Village'))->rules('required');
-                 $form->hidden('pa_id', __('pa'))->value(1)->default(1)->value(1);
-             })->when('Yes', function (Form $form) {
-                 $form->select('pa_id', __('Select PA'))
-                     ->rules('required')
-                     ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
-             });
- 
- 
-         $form->text('latitude', 'Case scene GPS - latitude');
-         $form->text('longitude', 'Case scene GPS - longitude');
- 
- 
-         $form->hidden('has_exhibits', __('Does this case have exhibits?'))
-             ->default(1);
- 
-         $form->select('detection_method', __('Detection method'))
-             ->options([
-                 'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
-                 'Contacted by security agencies' => 'Contacted by security agencies',
-                 'House visit based on intelligence' => 'House visit based on intelligence',
-                 'Intelligence led patrol' => 'Intelligence led patrol',
-                 'Observed during non-duty activities' => 'Observed during non-duty activities',
-                 'Routine patrol by rangers' => 'Routine patrol by rangers',
-                 'Routine security check' => 'Routine security check',
-                 'Investigation' => 'Investigation',
-                 'Risk profiling' => 'Risk profiling',
-                 'Random selection' => 'Random selection'
-             ])
-             ->rules('required');
- 
- 
- 
- 
-         return $form;
-     }
- 
+    protected function form()
+    {
+
+
+        if (isset($_GET['refresh_page'])) {
+            $r = (int)($_GET['refresh_page']);
+            if ($r == 1) {
+                Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
+                return 'Loading...';
+            }
+        }
+
+        $form = new Form(new CaseModel());
+
+
+
+        $form->disableCreatingCheck();
+        $form->disableReset();
+        $form->disableEditingCheck();
+        $form->disableViewCheck();
+
+
+        $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
+
+
+
+        $form->text('title', __('Case title'))
+            ->help("Describe this case in summary")
+            ->rules('required');
+        $form->textarea('offence_description', __('Case description'))
+            ->help("Describe this case in details")
+            ->rules('required');
+
+        $form->date('case_date', 'Date when opened')
+            ->required()
+            ->rules('required');
+
+        $form->text('officer_in_charge', 'Complainant')->rules('required');
+
+
+        $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
+            ->rules('required')
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->default(null)
+            ->when('No', function (Form $form) {
+
+
+                $form->select('sub_county_id', __('Sub county'))
+                    ->rules('required')
+                    ->options(Location::get_sub_counties_array());
+
+                $form->text('parish', __('Parish'))->rules('required');
+                $form->text('village', __('Village'))->rules('required');
+                $form->hidden('pa_id', __('pa'))->value(1)->default(1)->value(1);
+            })->when('Yes', function (Form $form) {
+                $form->select('pa_id', __('Select PA'))
+                    ->rules('required')
+                    ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+            });
+
+
+        $form->text('latitude', 'Case scene GPS - latitude');
+        $form->text('longitude', 'Case scene GPS - longitude');
+
+
+        $form->hidden('has_exhibits', __('Does this case have exhibits?'))
+            ->default(1);
+
+        $form->select('detection_method', __('Detection method'))
+            ->options([
+                'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
+                'Contacted by security agencies' => 'Contacted by security agencies',
+                'House visit based on intelligence' => 'House visit based on intelligence',
+                'Intelligence led patrol' => 'Intelligence led patrol',
+                'Observed during non-duty activities' => 'Observed during non-duty activities',
+                'Routine patrol by rangers' => 'Routine patrol by rangers',
+                'Routine security check' => 'Routine security check',
+                'Investigation' => 'Investigation',
+                'Risk profiling' => 'Risk profiling',
+                'Random selection' => 'Random selection'
+            ])
+            ->rules('required');
+
+
+
+
+        return $form;
+    }
 }

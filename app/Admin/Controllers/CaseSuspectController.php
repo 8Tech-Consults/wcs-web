@@ -6,6 +6,7 @@ use App\Admin\Actions\CaseModel\AddArrest;
 use App\Admin\Actions\CaseModel\AddCourte;
 use App\Admin\Actions\CaseModel\CaseModelActionAddExhibit;
 use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
+use App\Admin\Actions\CaseModel\EditSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
@@ -598,13 +599,13 @@ class CaseSuspectController extends AdminController
 
 
         $grid->actions(function ($actions) {
-
+            $actions->disableEdit();
             if (
                 Auth::user()->isRole('hq-team-leaders') ||
                 Auth::user()->isRole('ca-team')
             ) {
             }
-            $actions->disableEdit();
+
             $actions->disableDelete();
 
             if (
@@ -621,6 +622,8 @@ class CaseSuspectController extends AdminController
                     $actions->add(new AddCourte);
                 }
             }
+
+            $actions->add(new EditSuspect);
         });
 
         return $grid;
@@ -810,11 +813,11 @@ class CaseSuspectController extends AdminController
 
                 $form->select('sub_county_id', __('Sub county'))
                     ->rules('required')
-                    ->help('Where this suspect originally lives')
+                    ->help('Suspect’s place of residence')
                     ->options(Location::get_sub_counties_array());
                 $form->select('sub_county_id', __('Sub county'))
                     ->rules('required')
-                    ->help('Where this suspect originally lives')
+                    ->help('Suspect’s place of residence')
                     ->options(Location::get_sub_counties_array());
                 $form->text('parish');
                 $form->text('village');

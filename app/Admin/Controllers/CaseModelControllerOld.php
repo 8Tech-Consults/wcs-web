@@ -360,7 +360,7 @@ class CaseModelController extends AdminController
             
                         $form->select('sub_county_id', __('Sub county'))
                             ->rules('required')
-                            ->help('Where this suspect originally lives')
+                            ->help('Suspect’s place of residence')
                             ->options(Location::get_sub_counties_array());
            
 

@@ -91,8 +91,29 @@ class AddExhibitCaseModelController extends AdminController
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Wildlife Exibit(s) Information');
-                $form->text('wildlife_species', __('Species Name'))->rules('required')
-                    ->help('Explantion E.g skin, scales, meat, live animal, e.t.c');
+
+
+                $form->select('wildlife_species', 'Select Species')->options(
+                    array(
+                        "Pangolin scales" => "Pangolin scales",
+                        "Ivory" => "Ivory",
+                        "Hippo teeth" => "Hippo teeth",
+                        "Live pangolins" => "Live pangolins",
+                        "Bush meat" => "Bush meat",
+                        "Skins" => "Skins",
+                        "Rhino horns" => "Rhino horns",
+                        "Elephant tusks" => "Elephant tusks",
+                        "Dead wild animal" => "Dead wild animal",
+                        "Live wild animal" => "Live wild animal",
+                        "Dead wild bird" => "Dead wild bird",
+                        "Live wild bird" => "Live wild bird",
+                        "Wildlife trophies" => "Wildlife trophies",
+                        "Animal parts" => "Animal parts",
+                        "Horns" => "Horns",
+                        "Scales" => "Scales"
+                    )
+                )->rules('required');
+
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->decimal('wildlife_pieces', __('Number of pieces'));
                 $form->text('wildlife_description', __('Description'));
@@ -106,14 +127,29 @@ class AddExhibitCaseModelController extends AdminController
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Implements Exibit(s) Information')->rules('required');
-                $form->text('implement_name', __('Name of implement'));
+                $form->select('implement_name', 'Select implement')->options(
+                    array(
+                        "Pangas" => "Pangas",
+                        "Knives" => "Knives",
+                        "Wheal traps" => "Wheal traps",
+                        "Spears" => "Spears",
+                        "Wire snares" => "Wire snares",
+                        "Metal trap" => "Metal trap",
+                        "How" => "How",
+                        "Axe" => "Axe",
+                        "Spade" => "Spade",
+                        "Hooks" => "Hooks",
+                        "Fishing nets" => "Fishing nets"
+                    )
+                )->rules('required');
+
                 $form->decimal('implement_pieces', __('No of pieces'));
                 $form->textarea('implement_description', __('Description'));
                 $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
                 $form->divider();
             });
 
-        $form->radio('type_other', __('Exibit type Others?'))
+        $form->radio('type_other', __('Other exhibit types?'))
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',

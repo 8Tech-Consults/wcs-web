@@ -308,7 +308,7 @@ class NewCaseSuspectController extends AdminController
 
                 $form->select('sub_county_id', __('Sub county'))
                     ->rules('required')
-                    ->help('Where this suspect originally lives')
+                    ->help('Suspect’s place of residence')
                     ->options(Location::get_sub_counties_array());
                 $form->text('parish');
                 $form->text('village');
@@ -652,7 +652,39 @@ class NewCaseSuspectController extends AdminController
 
 
                                     $form->date('court_date', 'Court Date of first appearance');
-                                    $form->text('court_name', 'Court Name');
+
+                                    $courts = array(
+                                        "Chief Magistrates court of Rukungiri at Runkungiri" => "Chief Magistrates court of Rukungiri at Runkungiri",
+                                        "Chief Magistrates court of Kampala at Buganda Road (SUW Court)" => "Chief Magistrates court of Kampala at Buganda Road (SUW Court)",
+                                        "Chief Magistrates Court of Nwoya at Anaka" => "Chief Magistrates Court of Nwoya at Anaka",
+                                        "Magistrates court of Amuru" => "Magistrates court of Amuru",
+                                        "Chief Magistrate Court of Arua at Arua" => "Chief Magistrate Court of Arua at Arua",
+                                        "Chief Magistrates Court of Bundibugyo" => "Chief Magistrates Court of Bundibugyo",
+                                        "Chief Magistrates Court of Bushenyi" => "Chief Magistrates Court of Bushenyi",
+                                        "Magistrates Court of Rubirizi" => "Magistrates Court of Rubirizi",
+                                        "Chief Magistrates Court of Entebbe" => "Chief Magistrates Court of Entebbe",
+                                        "Chief Magistrates Court of Fortportal" => "Chief Magistrates Court of Fortportal",
+                                        "Chief Magistrates Court of Gulu" => "Chief Magistrates Court of Gulu",
+                                        "Chief Magistrates Court of Hoima" => "Chief Magistrates Court of Hoima",
+                                        "Chief Magistrates Court of Jinja" => "Chief Magistrates Court of Jinja",
+                                        "Chief Magistrates Court of Kamwenge" => "Chief Magistrates Court of Kamwenge",
+                                        "Chief Magistrates Court of Kanungu" => "Chief Magistrates Court of Kanungu",
+                                        "Chief Magistrates Court of Kapchorwa" => "Chief Magistrates Court of Kapchorwa",
+                                        "Chief Magistrates Court of Kasangati" => "Chief Magistrates Court of Kasangati",
+                                        "Chief Magistrates Court of Kasese" => "Chief Magistrates Court of Kasese",
+                                        "Chief Magistrates Court of Kayunga" => "Chief Magistrates Court of Kayunga",
+                                        "Chief Magistrates Court of Kiryandongo" => "Chief Magistrates Court of Kiryandongo",
+                                        "Chief Magistrates Court of Kitgum" => "Chief Magistrates Court of Kitgum",
+                                        "Chief Magistrates Court of Kyenjojo" => "Chief Magistrates Court of Kyenjojo",
+                                        "Chief Magistrates Court of Kyegegwa" => "Chief Magistrates Court of Kyegegwa",
+                                        "Chief Magistrates Court of Lira" => "Chief Magistrates Court of Lira",
+                                        "Chief Magistrates Court of Mbarara" => "Chief Magistrates Court of Mbarara",
+                                        "Chief Magistrates Court of Mubende" => "Chief Magistrates Court of Mubende",
+                                        "Chief Magistrates Court of Mukono" => "Chief Magistrates Court of Mukono",
+                                        "Chief Magistrate of Kasangati at Gayaza" => "Chief Magistrate of Kasangati at Gayaza"
+                                    );
+
+                                    $form->select('court_name', 'Select Court')->options($courts);
 
                                     $form->text('prosecutor', 'Lead prosecutor');
                                     $form->text('magistrate_name', 'Magistrate Name');
@@ -751,7 +783,9 @@ class NewCaseSuspectController extends AdminController
                             if ($pendingCase != null) {
                                 if ($pendingCase->suspects->count() > 0) {
                                     foreach ($pendingCase->suspects as $sus) {
-                                        $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
+                                        if ($sus->is_suspect_appear_in_court == 'Yes') {
+                                            $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
+                                        }
                                     }
                                 }
                             }
@@ -814,8 +848,39 @@ class NewCaseSuspectController extends AdminController
                                     ->readonly();
                             }
 
-                            $form->date('court_date', 'Court Date of first appearance');
-                            $form->text('court_name', 'Court Name');
+                            $form->date('court_date', 'Court Date of first appearance'); 
+                            $courts = array(
+                                "Chief Magistrates court of Rukungiri at Runkungiri" => "Chief Magistrates court of Rukungiri at Runkungiri",
+                                "Chief Magistrates court of Kampala at Buganda Road (SUW Court)" => "Chief Magistrates court of Kampala at Buganda Road (SUW Court)",
+                                "Chief Magistrates Court of Nwoya at Anaka" => "Chief Magistrates Court of Nwoya at Anaka",
+                                "Magistrates court of Amuru" => "Magistrates court of Amuru",
+                                "Chief Magistrate Court of Arua at Arua" => "Chief Magistrate Court of Arua at Arua",
+                                "Chief Magistrates Court of Bundibugyo" => "Chief Magistrates Court of Bundibugyo",
+                                "Chief Magistrates Court of Bushenyi" => "Chief Magistrates Court of Bushenyi",
+                                "Magistrates Court of Rubirizi" => "Magistrates Court of Rubirizi",
+                                "Chief Magistrates Court of Entebbe" => "Chief Magistrates Court of Entebbe",
+                                "Chief Magistrates Court of Fortportal" => "Chief Magistrates Court of Fortportal",
+                                "Chief Magistrates Court of Gulu" => "Chief Magistrates Court of Gulu",
+                                "Chief Magistrates Court of Hoima" => "Chief Magistrates Court of Hoima",
+                                "Chief Magistrates Court of Jinja" => "Chief Magistrates Court of Jinja",
+                                "Chief Magistrates Court of Kamwenge" => "Chief Magistrates Court of Kamwenge",
+                                "Chief Magistrates Court of Kanungu" => "Chief Magistrates Court of Kanungu",
+                                "Chief Magistrates Court of Kapchorwa" => "Chief Magistrates Court of Kapchorwa",
+                                "Chief Magistrates Court of Kasangati" => "Chief Magistrates Court of Kasangati",
+                                "Chief Magistrates Court of Kasese" => "Chief Magistrates Court of Kasese",
+                                "Chief Magistrates Court of Kayunga" => "Chief Magistrates Court of Kayunga",
+                                "Chief Magistrates Court of Kiryandongo" => "Chief Magistrates Court of Kiryandongo",
+                                "Chief Magistrates Court of Kitgum" => "Chief Magistrates Court of Kitgum",
+                                "Chief Magistrates Court of Kyenjojo" => "Chief Magistrates Court of Kyenjojo",
+                                "Chief Magistrates Court of Kyegegwa" => "Chief Magistrates Court of Kyegegwa",
+                                "Chief Magistrates Court of Lira" => "Chief Magistrates Court of Lira",
+                                "Chief Magistrates Court of Mbarara" => "Chief Magistrates Court of Mbarara",
+                                "Chief Magistrates Court of Mubende" => "Chief Magistrates Court of Mubende",
+                                "Chief Magistrates Court of Mukono" => "Chief Magistrates Court of Mukono",
+                                "Chief Magistrate of Kasangati at Gayaza" => "Chief Magistrate of Kasangati at Gayaza"
+                            );
+
+                            $form->select('court_name', 'Select Court')->options($courts);
 
                             $form->text('prosecutor', 'Lead prosecutor');
                             $form->text('magistrate_name', 'Magistrate Name');

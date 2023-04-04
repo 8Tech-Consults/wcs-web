@@ -150,8 +150,6 @@ class NewCaseModelController extends AdminController
      */
     protected function form()
     {
-
-
         if (isset($_GET['refresh_page'])) {
             $r = (int)($_GET['refresh_page']);
             if ($r == 1) {

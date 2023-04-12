@@ -25,7 +25,7 @@ php artisan make:model Offence
 php artisan make:model Location
 php artisan make:model CaseHasOffence
 php artisan make:model ConservationArea
-php artisan admin:make CaseModelController --model=App\\Models\\CaseModel
+php artisan admin:make CaseModelCommentsController --model=App\Models\CaseModel
 php artisan admin:make LocationController --model=App\\Models\\Location
 php artisan admin:make PaController --model=App\\Models\\PA
 php artisan admin:make ExhibitController --model=App\\Models\\Exhibit

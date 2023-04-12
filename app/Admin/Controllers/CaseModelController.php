@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\CaseModel\CaseModelActionAddExhibit;
 use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
 use App\Admin\Actions\CaseModel\CaseModelActionEditCase;
+use App\Admin\Actions\CaseModel\CaseModelAddComment;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
@@ -148,6 +149,7 @@ class CaseModelController extends AdminController
             $actions->disableDelete();
             $actions->add(new CaseModelActionAddSuspect);
             $actions->add(new CaseModelActionAddExhibit);
+            $actions->add(new CaseModelAddComment); 
             if (
                 Auth::user()->isRole('hq-team-leaders') ||
                 Auth::user()->isRole('ca-team')

@@ -61,6 +61,8 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
+        $case = CaseModel::find(250);
+        //dd($case->get_suspect_number()); 
         /*
         $faker = Faker::create();
         foreach (CaseModel::all() as $key => $v) {

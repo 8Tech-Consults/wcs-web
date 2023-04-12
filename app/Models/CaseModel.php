@@ -175,8 +175,10 @@ class CaseModel extends Model
     function get_suspect_number()
     {
         $suspects_length = count($this->suspects);
-        $suspects_length++;
-        return "{$this->case_number}/{$suspects_length}";
+        //$suspects_length++;
+        $num = "{$this->case_number}/{$suspects_length}";
+        $num = str_replace('//', '/', $num);
+        return $num;
     }
 
     function pa()

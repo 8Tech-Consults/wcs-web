@@ -76,6 +76,14 @@ class Utils  extends Model
         } */
 
 
+        $sus = CaseSuspect::where('suspect_number', 'like', '%//%')->get();
+        foreach ($sus as $key => $sus) {
+            $sus->suspect_number = str_replace('//', '/', $sus->suspect_number);
+            $sus->save();
+        }
+
+
+
         Utils::copyPendingArrestInfo();
         Utils::copyPendingCourtInfo();
         Utils::copyOffencesCourtInfo();

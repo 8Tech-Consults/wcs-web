@@ -341,7 +341,7 @@ class CaseModelController extends AdminController
 
                 $form->text('parish', __('Parish'))->rules('required');
                 $form->text('village', __('Village'))->rules('required');
-                $form->hidden('pa_id', __('pa'))->value(1)->default(1)->value(1);
+ 
             })->when('Yes', function (Form $form) {
                 $form->select('pa_id', __('Select PA'))
                     ->rules('required')

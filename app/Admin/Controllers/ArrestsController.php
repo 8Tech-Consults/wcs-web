@@ -141,10 +141,12 @@ class ArrestsController extends AdminController
 
         $grid->model()
             ->where([
-                'is_suspects_arrested' => 'Yes', 
+                'is_suspects_arrested' => 'Yes',
             ])
             ->where(
-                'is_suspect_appear_in_court', '!=' ,'Yes'
+                'is_suspect_appear_in_court',
+                '!=',
+                'Yes'
             )
             ->orderBy('id', 'Desc');
 
@@ -436,11 +438,14 @@ class ArrestsController extends AdminController
                                 ])
                                 ->when('Yes', function ($form) {
                                     $form->select('pa_id', __('Select PA'))
-                                        ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+                                        ->rules('required')
+                                        ->options(PA::where('id', '!=', 1)->get()
+
+                                            ->pluck('name_text', 'id'));
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                                        ->rules('int|required')
+                                        ->rules('required')
                                         ->help('Where this suspect was arrested')
                                         ->options(Location::get_sub_counties_array());
 
@@ -529,7 +534,10 @@ class ArrestsController extends AdminController
                         ])
                         ->when('Yes', function ($form) {
                             $form->select('pa_id', __('Select PA'))
-                                ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+                                ->rules('required')
+                                ->options(PA::where('id', '!=', 1)->get()
+
+                                    ->pluck('name_text', 'id'));
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))

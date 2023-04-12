@@ -231,7 +231,8 @@ class NewCaseModelController extends AdminController
             })->when('Yes', function (Form $form) {
                 $form->select('pa_id', __('Select PA'))
                     ->rules('required')
-                    ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+                    ->options(PA::where('id', '!=', 1)->get()
+                    ->pluck('name_text', 'id'));
             });
 
 

@@ -420,7 +420,9 @@ class NewCaseSuspectController extends AdminController
                                 ])
                                 ->when('Yes', function ($form) {
                                     $form->select('pa_id', __('Select PA'))
-                                        ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+                                        ->rules('required')
+                                        ->options(PA::where('id', '!=', 1)->get()
+                                            ->pluck('name_text', 'id'));
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -513,6 +515,7 @@ class NewCaseSuspectController extends AdminController
                         ])
                         ->when('Yes', function ($form) {
                             $form->select('pa_id', __('Select PA'))
+                                ->rules('required')
                                 ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
                         })
                         ->when('No', function ($form) {
@@ -848,7 +851,7 @@ class NewCaseSuspectController extends AdminController
                                     ->readonly();
                             }
 
-                            $form->date('court_date', 'Court Date of first appearance'); 
+                            $form->date('court_date', 'Court Date of first appearance');
                             $courts = array(
                                 "Chief Magistrates court of Rukungiri at Runkungiri" => "Chief Magistrates court of Rukungiri at Runkungiri",
                                 "Chief Magistrates court of Kampala at Buganda Road (SUW Court)" => "Chief Magistrates court of Kampala at Buganda Road (SUW Court)",

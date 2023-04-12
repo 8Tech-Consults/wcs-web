@@ -954,20 +954,20 @@ class CaseSuspectController extends AdminController
                         $form->date('court_date', 'Court date');
                         $form->text('court_name', 'Court Name');
 
-                    
+
                         $form->select('prosecutor', 'Lead prosecutor')
-                        ->options(function ($id) {
-                            $a = User::find($id);
-                            if ($a) {
-                                return [$a->id => "#" . $a->id . " - " . $a->name];
-                            }
-                        })
-                        ->ajax(url(
-                            '/api/ajax?'
-                                . "&search_by_1=name"
-                                . "&search_by_2=id"
-                                . "&model=User"
-                        ))->rules('required');
+                            ->options(function ($id) {
+                                $a = User::find($id);
+                                if ($a) {
+                                    return [$a->id => "#" . $a->id . " - " . $a->name];
+                                }
+                            })
+                            ->ajax(url(
+                                '/api/ajax?'
+                                    . "&search_by_1=name"
+                                    . "&search_by_2=id"
+                                    . "&model=User"
+                            ))->rules('required');
 
                         $form->text('magistrate_name', 'Magistrate Name');
 
@@ -1023,6 +1023,16 @@ class CaseSuspectController extends AdminController
                                                 $form->text('suspect_appealed_court_name', 'Court of appeal');
                                                 $form->text('suspect_appealed_court_file', 'Appeal court file number');
                                             });
+                                    });
+
+
+                                $form->radio('cautioned', __('Was suspected cautioned?'))
+                                    ->options([
+                                        'Yes' => 'Yes',
+                                        'No' => 'No',
+                                    ])
+                                    ->when('Yes', function ($form) {
+                                        $form->text('cautioned_remarks', 'Enter caution remarks');
                                     });
                             })
                             ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {

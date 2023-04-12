@@ -779,6 +779,16 @@ class NewCaseSuspectController extends AdminController
                                                                 ]);
                                                             $form->textarea('suspect_appeal_remarks', 'Remarks');
                                                         });
+
+
+                                                    $form->radio('cautioned', __('Was suspected cautioned?'))
+                                                        ->options([
+                                                            'Yes' => 'Yes',
+                                                            'No' => 'No',
+                                                        ])
+                                                        ->when('Yes', function ($form) {
+                                                            $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                        }); 
                                                 });
                                         })
                                         ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
@@ -988,6 +998,16 @@ class NewCaseSuspectController extends AdminController
                                                         ]);
 
                                                     $form->textarea('suspect_appeal_remarks', 'Remarks');
+                                                });
+
+
+                                            $form->radio('cautioned', __('Was suspected cautioned?'))
+                                                ->options([
+                                                    'Yes' => 'Yes',
+                                                    'No' => 'No',
+                                                ])
+                                                ->when('Yes', function ($form) {
+                                                    $form->text('cautioned_remarks', 'Enter caution remarks');
                                                 });
                                         });
                                 })

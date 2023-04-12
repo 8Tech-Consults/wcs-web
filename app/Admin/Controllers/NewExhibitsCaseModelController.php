@@ -146,7 +146,8 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                         "Wildlife trophies" => "Wildlife trophies",
                         "Animal parts" => "Animal parts",
                         "Horns" => "Horns",
-                        "Scales" => "Scales"
+                        "Scales" => "Scales",
+                        "Other" => "Other", 
                     )
                 )->rules('required');
 
@@ -176,7 +177,8 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                         "Axe" => "Axe",
                         "Spade" => "Spade",
                         "Hooks" => "Hooks",
-                        "Fishing nets" => "Fishing nets"
+                        "Fishing nets" => "Fishing nets",
+                        "Other" => "Other",
                     )
                 )->rules('required');
 

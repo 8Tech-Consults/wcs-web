@@ -7,6 +7,7 @@ use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\User;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -423,6 +424,8 @@ class NewCaseSuspectController extends AdminController
                                         ->rules('required')
                                         ->options(PA::where('id', '!=', 1)->get()
                                             ->pluck('name_text', 'id'));
+                                    $form->text('arrest_village', 'Enter arrest location')
+                                        ->rules('required');
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -518,6 +521,8 @@ class NewCaseSuspectController extends AdminController
                             $form->select('pa_id', __('Select PA'))
                                 ->rules('required')
                                 ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
+                            $form->text('arrest_village', 'Enter arrest location')
+                                ->rules('required');
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -691,7 +696,22 @@ class NewCaseSuspectController extends AdminController
 
                                     $form->select('court_name', 'Select Court')->options($courts);
 
-                                    $form->text('prosecutor', 'Lead prosecutor');
+
+                                    $form->select('prosecutor', 'Lead prosecutor')
+                                        ->options(function ($id) {
+                                            $a = User::find($id);
+                                            if ($a) {
+                                                return [$a->id => "#" . $a->id . " - " . $a->name];
+                                            }
+                                        })
+                                        ->ajax(url(
+                                            '/api/ajax?'
+                                                . "&search_by_1=name"
+                                                . "&search_by_2=id"
+                                                . "&model=User"
+                                        ))->rules('required');
+
+
                                     $form->text('magistrate_name', 'Magistrate Name');
 
 
@@ -887,7 +907,20 @@ class NewCaseSuspectController extends AdminController
 
                             $form->select('court_name', 'Select Court')->options($courts);
 
-                            $form->text('prosecutor', 'Lead prosecutor');
+
+                            $form->select('prosecutor', 'Lead prosecutor')
+                                ->options(function ($id) {
+                                    $a = User::find($id);
+                                    if ($a) {
+                                        return [$a->id => "#" . $a->id . " - " . $a->name];
+                                    }
+                                })
+                                ->ajax(url(
+                                    '/api/ajax?'
+                                        . "&search_by_1=name"
+                                        . "&search_by_2=id"
+                                        . "&model=User"
+                                ))->rules('required');
                             $form->text('magistrate_name', 'Magistrate Name');
 
 

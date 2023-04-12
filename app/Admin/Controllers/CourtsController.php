@@ -6,6 +6,7 @@ use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
 use App\Models\PA;
+use App\Models\User;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
 use Encore\Admin\Auth\Database\Administrator;
@@ -389,7 +390,20 @@ class CourtsController extends AdminController
                 $form->date('court_date', 'Court Date of first appearance');
                 $form->text('court_name', 'Court Name');
 
-                $form->text('prosecutor', 'Lead prosecutor');
+      
+                $form->select('prosecutor', 'Lead prosecutor')
+                ->options(function ($id) {
+                    $a = User::find($id);
+                    if ($a) {
+                        return [$a->id => "#" . $a->id . " - " . $a->name];
+                    }
+                })
+                ->ajax(url(
+                    '/api/ajax?'
+                        . "&search_by_1=name"
+                        . "&search_by_2=id"
+                        . "&model=User"
+                ))->rules('required'); 
                 $form->text('magistrate_name', 'Magistrate Name');
 
 

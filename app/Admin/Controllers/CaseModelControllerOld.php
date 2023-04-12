@@ -8,6 +8,7 @@ use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\User;
 use App\Models\Utils;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
@@ -260,7 +261,7 @@ class CaseModelController extends AdminController
                     0 => 'No',
                 ])
                 ->default(null)
-                ->when(0, function (Form $form) {
+                ->when('No', function (Form $form) {
 
                     $form->select('ca_id', __('Nearest conservation area'))
                         ->rules('required')
@@ -274,10 +275,12 @@ class CaseModelController extends AdminController
                     $form->text('parish', __('Parish'))->rules('required');
                     $form->text('village', __('Village'))->rules('required');
                     $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
-                })->when(1, function (Form $form) {
+                })->when('Yes', function (Form $form) {
                     $form->select('pa_id', __('Select PA'))
                         ->rules('required')
                         ->options(PA::all()->pluck('name_text', 'id'));
+                    $form->text('village', 'Enter location')
+                        ->rules('required');
                 });
 
 
@@ -344,43 +347,43 @@ class CaseModelController extends AdminController
 
 
                     $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
-                    ->options([
-                        'Ugandan' => 'Yes',
-                        'Not Ugandan' => 'No',
-                    ])
-                    ->when('Ugandan', function ($form) {
-                        $form->select('country')
-                            ->help('Nationality of the suspect')
-                            ->options([
-                                'Uganda' => 'Uganda'
-                            ])
-                            ->default('Uganda')
-                            ->readonly()
-                            ->rules('required');
-            
-                        $form->select('sub_county_id', __('Sub county'))
-                            ->rules('required')
-                            ->help('Suspect’s place of residence')
-                            ->options(Location::get_sub_counties_array());
-           
+                        ->options([
+                            'Ugandan' => 'Yes',
+                            'Not Ugandan' => 'No',
+                        ])
+                        ->when('Ugandan', function ($form) {
+                            $form->select('country')
+                                ->help('Nationality of the suspect')
+                                ->options([
+                                    'Uganda' => 'Uganda'
+                                ])
+                                ->default('Uganda')
+                                ->readonly()
+                                ->rules('required');
+
+                            $form->select('sub_county_id', __('Sub county'))
+                                ->rules('required')
+                                ->help('Suspect’s place of residence')
+                                ->options(Location::get_sub_counties_array());
+
 
                             $form->text('parish');
                             $form->text('village');
-                            
+
                             $form->text('ethnicity');
-                    })->when('Not Ugandan', function ($form) {
-                        $form->select('country')
-                            ->help('Nationality of the suspect')
-                            ->options(Utils::COUNTRIES())->rules('required');
-                    })->rules('required'); 
-                 
+                        })->when('Not Ugandan', function ($form) {
+                            $form->select('country')
+                                ->help('Nationality of the suspect')
+                                ->options(Utils::COUNTRIES())->rules('required');
+                        })->rules('required');
+
                     $form->divider('Offences');
-            
+
                     $form->listbox('offences', 'Offences')->options(Offence::all()->pluck('name', 'id'))
                         ->help("Select offences involded in this case")
                         ->rules('required');
-            
-            
+
+
 
 
 
@@ -406,7 +409,8 @@ class CaseModelController extends AdminController
 
                     $form->select('pa_id', __('Select PA'))
                         ->options(PA::all()->pluck('name_text', 'id'));
-
+                        $form->text('arrest_village', 'Enter arrest location')
+                        ->rules('required'); 
 
 
                     $subs = Location::get_sub_counties_array();
@@ -476,7 +480,20 @@ class CaseModelController extends AdminController
                     $form->text('court_name', 'Court Name');
 
 
-                    $form->text('prosecutor', 'Names of the prosecutors');
+  
+                    $form->select('prosecutor', 'Lead prosecutor')
+                    ->options(function ($id) {
+                        $a = User::find($id);
+                        if ($a) {
+                            return [$a->id => "#" . $a->id . " - " . $a->name];
+                        }
+                    })
+                    ->ajax(url(
+                        '/api/ajax?'
+                            . "&search_by_1=name"
+                            . "&search_by_2=id"
+                            . "&model=User"
+                    ))->rules('required'); 
 
                     $form->text('magistrate_name', 'Magistrate Name');
 

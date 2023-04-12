@@ -471,6 +471,7 @@ class ArrestsController extends AdminController
                                 'DCIC' => 'DCIC',
                                 'INTERPOL' => 'INTERPOL',
                                 'UCAA' => 'UCAA',
+                                'Other' => 'Other',
                             ])
                                 ->when('UWA', function ($form) {
                                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -567,6 +568,7 @@ class ArrestsController extends AdminController
                         'DCIC' => 'DCIC',
                         'INTERPOL' => 'INTERPOL',
                         'UCAA' => 'UCAA',
+                        'Other' => 'Other',
                     ])
                         ->when('UWA', function ($form) {
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([

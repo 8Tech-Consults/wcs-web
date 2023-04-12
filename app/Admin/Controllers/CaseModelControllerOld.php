@@ -433,6 +433,7 @@ class CaseModelController extends AdminController
                         'DCIC' => 'DCIC',
                         'INTERPOL' => 'INTERPOL',
                         'UCAA' => 'UCAA',
+                        'Other' => 'Other',
                     ]);
 
                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([

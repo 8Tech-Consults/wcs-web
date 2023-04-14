@@ -62,7 +62,7 @@ class Utils  extends Model
     public static function system_boot($u)
     {
 
-   /*      foreach (CaseSuspect::all() as $key => $c) {
+        /*      foreach (CaseSuspect::all() as $key => $c) {
             $c->arrest_latitude = '0.00000';
             $c->arrest_longitude = '0.00000';
             $c->save();
@@ -517,31 +517,38 @@ class Utils  extends Model
         $c = Carbon::parse($t);
         if ($t == null) {
             return $t;
-        }
+        } 
         return $c->format('d M, Y - h:m a');
     }
 
     public static function tell_suspect_status($s)
     {
-        if ($s->is_arrested) {
+        if ($s->court_status != null && strlen($s->court_status) > 2) {
+            return $s->court_status;
+        } else if ($s->is_suspect_appear_in_court == 'Yes') {
+            return 'In Court';
+        } else if ($s->is_arrested  == 'Yes') {
             return 'Arrested';
-        } else if ($s->is_suspect_appear_in_court) {
-            return 'In court';
-        } else if ($s->is_jailed) {
-            return 'Jailed';
         } else {
-            return 'Pending';
+            return 'Not Arrested';
         }
     }
 
     public static function tell_suspect_status_color($s)
     {
-        if ($s->is_arrested) {
+        if ($s->court_status != null && strlen($s->court_status) > 2) {
             return 'success';
-        } else if ($s->is_suspect_appear_in_court) {
+        } else if ($s->is_suspect_appear_in_court == 'Yes') {
             return 'info';
-        } else if ($s->is_jailed) {
+        } else if ($s->is_arrested  == 'Yes') {
+            return 'warning';
+        } else {
             return 'danger';
+        }
+
+        if ($s->is_arrested) {
+        } else if ($s->is_suspect_appear_in_court) {
+        } else if ($s->is_jailed) {
         } else {
             return 'Pending';
         }

@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
+use App\Models\Court;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
@@ -663,41 +664,17 @@ class NewCaseSuspectController extends AdminController
 
                                     $form->date('court_date', 'Court Date of first appearance');
 
-                                    $courts = array(
-                                        "Chief Magistrates court of Rukungiri at Runkungiri" => "Chief Magistrates court of Rukungiri at Runkungiri",
-                                        "Chief Magistrates court of Kampala at Buganda Road (SUW Court)" => "Chief Magistrates court of Kampala at Buganda Road (SUW Court)",
-                                        "Chief Magistrates Court of Nwoya at Anaka" => "Chief Magistrates Court of Nwoya at Anaka",
-                                        "Magistrates court of Amuru" => "Magistrates court of Amuru",
-                                        "Chief Magistrate Court of Arua at Arua" => "Chief Magistrate Court of Arua at Arua",
-                                        "Chief Magistrates Court of Bundibugyo" => "Chief Magistrates Court of Bundibugyo",
-                                        "Chief Magistrates Court of Bushenyi" => "Chief Magistrates Court of Bushenyi",
-                                        "Magistrates Court of Rubirizi" => "Magistrates Court of Rubirizi",
-                                        "Chief Magistrates Court of Entebbe" => "Chief Magistrates Court of Entebbe",
-                                        "Chief Magistrates Court of Fortportal" => "Chief Magistrates Court of Fortportal",
-                                        "Chief Magistrates Court of Gulu" => "Chief Magistrates Court of Gulu",
-                                        "Chief Magistrates Court of Hoima" => "Chief Magistrates Court of Hoima",
-                                        "Chief Magistrates Court of Jinja" => "Chief Magistrates Court of Jinja",
-                                        "Chief Magistrates Court of Kamwenge" => "Chief Magistrates Court of Kamwenge",
-                                        "Chief Magistrates Court of Kanungu" => "Chief Magistrates Court of Kanungu",
-                                        "Chief Magistrates Court of Kapchorwa" => "Chief Magistrates Court of Kapchorwa",
-                                        "Chief Magistrates Court of Kasangati" => "Chief Magistrates Court of Kasangati",
-                                        "Chief Magistrates Court of Kasese" => "Chief Magistrates Court of Kasese",
-                                        "Chief Magistrates Court of Kayunga" => "Chief Magistrates Court of Kayunga",
-                                        "Chief Magistrates Court of Kiryandongo" => "Chief Magistrates Court of Kiryandongo",
-                                        "Chief Magistrates Court of Kitgum" => "Chief Magistrates Court of Kitgum",
-                                        "Chief Magistrates Court of Kyenjojo" => "Chief Magistrates Court of Kyenjojo",
-                                        "Chief Magistrates Court of Kyegegwa" => "Chief Magistrates Court of Kyegegwa",
-                                        "Chief Magistrates Court of Lira" => "Chief Magistrates Court of Lira",
-                                        "Chief Magistrates Court of Mbarara" => "Chief Magistrates Court of Mbarara",
-                                        "Chief Magistrates Court of Mubende" => "Chief Magistrates Court of Mubende",
-                                        "Chief Magistrates Court of Mukono" => "Chief Magistrates Court of Mukono",
-                                        "Chief Magistrate of Kasangati at Gayaza" => "Chief Magistrate of Kasangati at Gayaza"
-                                    );
+                                    $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
 
-                                    $form->select('court_name', 'Select Court')->options($courts);
+                                    $form->select('court_name', 'Select Court')->options($courts)
+                                        ->when(1, function ($form) {
+                                            $form->text('other_court_name', 'Specify other court name')
+                                                ->rules('required');
+                                        })
+                                        ->rules('required');
 
 
-                                    $form->select('prosecutor', 'Lead prosecutor')
+                                  /*   $form->select('prosecutor', 'Lead prosecutor')
                                         ->options(function ($id) {
                                             $a = User::find($id);
                                             if ($a) {
@@ -710,8 +687,9 @@ class NewCaseSuspectController extends AdminController
                                                 . "&search_by_2=id"
                                                 . "&model=User"
                                         ))->rules('required');
+ */
 
-
+                                     $form->text('prosecutor', 'Lead prosecutor');
                                     $form->text('magistrate_name', 'Magistrate Name');
 
 
@@ -788,7 +766,7 @@ class NewCaseSuspectController extends AdminController
                                                         ])
                                                         ->when('Yes', function ($form) {
                                                             $form->text('cautioned_remarks', 'Enter caution remarks');
-                                                        }); 
+                                                        });
                                                 });
                                         })
                                         ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
@@ -884,40 +862,16 @@ class NewCaseSuspectController extends AdminController
                             }
 
                             $form->date('court_date', 'Court Date of first appearance');
-                            $courts = array(
-                                "Chief Magistrates court of Rukungiri at Runkungiri" => "Chief Magistrates court of Rukungiri at Runkungiri",
-                                "Chief Magistrates court of Kampala at Buganda Road (SUW Court)" => "Chief Magistrates court of Kampala at Buganda Road (SUW Court)",
-                                "Chief Magistrates Court of Nwoya at Anaka" => "Chief Magistrates Court of Nwoya at Anaka",
-                                "Magistrates court of Amuru" => "Magistrates court of Amuru",
-                                "Chief Magistrate Court of Arua at Arua" => "Chief Magistrate Court of Arua at Arua",
-                                "Chief Magistrates Court of Bundibugyo" => "Chief Magistrates Court of Bundibugyo",
-                                "Chief Magistrates Court of Bushenyi" => "Chief Magistrates Court of Bushenyi",
-                                "Magistrates Court of Rubirizi" => "Magistrates Court of Rubirizi",
-                                "Chief Magistrates Court of Entebbe" => "Chief Magistrates Court of Entebbe",
-                                "Chief Magistrates Court of Fortportal" => "Chief Magistrates Court of Fortportal",
-                                "Chief Magistrates Court of Gulu" => "Chief Magistrates Court of Gulu",
-                                "Chief Magistrates Court of Hoima" => "Chief Magistrates Court of Hoima",
-                                "Chief Magistrates Court of Jinja" => "Chief Magistrates Court of Jinja",
-                                "Chief Magistrates Court of Kamwenge" => "Chief Magistrates Court of Kamwenge",
-                                "Chief Magistrates Court of Kanungu" => "Chief Magistrates Court of Kanungu",
-                                "Chief Magistrates Court of Kapchorwa" => "Chief Magistrates Court of Kapchorwa",
-                                "Chief Magistrates Court of Kasangati" => "Chief Magistrates Court of Kasangati",
-                                "Chief Magistrates Court of Kasese" => "Chief Magistrates Court of Kasese",
-                                "Chief Magistrates Court of Kayunga" => "Chief Magistrates Court of Kayunga",
-                                "Chief Magistrates Court of Kiryandongo" => "Chief Magistrates Court of Kiryandongo",
-                                "Chief Magistrates Court of Kitgum" => "Chief Magistrates Court of Kitgum",
-                                "Chief Magistrates Court of Kyenjojo" => "Chief Magistrates Court of Kyenjojo",
-                                "Chief Magistrates Court of Kyegegwa" => "Chief Magistrates Court of Kyegegwa",
-                                "Chief Magistrates Court of Lira" => "Chief Magistrates Court of Lira",
-                                "Chief Magistrates Court of Mbarara" => "Chief Magistrates Court of Mbarara",
-                                "Chief Magistrates Court of Mubende" => "Chief Magistrates Court of Mubende",
-                                "Chief Magistrates Court of Mukono" => "Chief Magistrates Court of Mukono",
-                                "Chief Magistrate of Kasangati at Gayaza" => "Chief Magistrate of Kasangati at Gayaza"
-                            );
+                            $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
 
-                            $form->select('court_name', 'Select Court')->options($courts);
+                            $form->select('court_name', 'Select Court')->options($courts)
+                                ->when(1, function ($form) {
+                                    $form->text('other_court_name', 'Specify other court name')
+                                        ->rules('required');
+                                })
+                                ->rules('required');
 
-
+/* 
                             $form->select('prosecutor', 'Lead prosecutor')
                                 ->options(function ($id) {
                                     $a = User::find($id);
@@ -930,7 +884,9 @@ class NewCaseSuspectController extends AdminController
                                         . "&search_by_1=name"
                                         . "&search_by_2=id"
                                         . "&model=User"
-                                ))->rules('required');
+                                ))->rules('required'); */
+                                
+                            $form->text('prosecutor', 'Lead prosecutor');
                             $form->text('magistrate_name', 'Magistrate Name');
 
 

@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\CaseModel\AddArrest;
 use App\Admin\Actions\CaseModel\AddCourte;
+use App\Admin\Actions\CaseModel\EditArrest;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
@@ -335,9 +336,12 @@ class ArrestsController extends AdminController
                 Auth::user()->isRole('ca-team')
             ) {
             }
+
             $actions->disableDelete();
+            $actions->disableedit();
 
             $actions->add(new AddCourte);
+            $actions->add(new EditArrest);
         });
 
 

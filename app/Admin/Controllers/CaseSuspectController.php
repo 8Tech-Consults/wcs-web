@@ -955,7 +955,7 @@ class CaseSuspectController extends AdminController
                         $form->text('court_name', 'Court Name');
 
 
-                        $form->select('prosecutor', 'Lead prosecutor')
+                        /* $form->select('prosecutor', 'Lead prosecutor')
                             ->options(function ($id) {
                                 $a = User::find($id);
                                 if ($a) {
@@ -967,8 +967,8 @@ class CaseSuspectController extends AdminController
                                     . "&search_by_1=name"
                                     . "&search_by_2=id"
                                     . "&model=User"
-                            ))->rules('required');
-
+                            ))->rules('required'); */
+                            $form->text('prosecutor', 'Lead prosecutor');
                         $form->text('magistrate_name', 'Magistrate Name');
 
                         $form->radio('court_status', __('Court case status'))

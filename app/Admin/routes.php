@@ -28,6 +28,7 @@ Route::group([
     $router->resource('p-as', PaController::class);
     $router->resource('offences', OffenceController::class);
     $router->resource('conservation-areas', ConservationAreaController::class);
+    $router->resource('courts', CourtController::class);
 
     $router->resource('new-case', NewCaseModelController::class);
     $router->resource('new-case-suspects', NewCaseSuspectController::class);

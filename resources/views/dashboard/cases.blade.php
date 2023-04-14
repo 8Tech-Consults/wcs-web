@@ -35,8 +35,8 @@ use App\Models\Utils;
         @foreach ($items as $i)
             <a href="{{ url("/cases/{$i->id}") }}" class="text-dark text-hover-primary">
                 <div class="d-flex align-items-center mb-4 case-item">
-                    <div style="border-left: solid red 5px;"
-                        class="flex-grow-1 pl-2 pl-md-3 border-{{ Utils::tell_case_status_color($i->status) }}">
+                    <div style="border-left: solid #ECF0F5 5px;"
+                        class="flex-grow-1 pl-2 pl-md-3 border-primary">
 
                         <b>{{ $i->title }}</b>
 
@@ -45,9 +45,7 @@ use App\Models\Utils;
                             {{ count($i->suspects) }} Suspects -
                             {{ Utils::my_time_ago($i->created_at) }}.
                         </span>
-                    </div>
-                    <b
-                        class="badge bg-{{ Utils::tell_case_status_color($i->status) }} ">{{ Utils::tell_case_status($i->status) }}</b>
+                    </div> 
                 </div>
             </a>
         @endforeach

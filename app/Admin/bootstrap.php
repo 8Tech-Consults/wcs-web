@@ -21,7 +21,9 @@
 use Encore\Admin\Facades\Admin;
 use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
+use App\Models\Court;
 use App\Models\Utils;
+use Encore\Admin\Form;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -88,3 +90,18 @@ Admin::js('/js/charts.js');
 
 Admin::css(url('/assets/bootstrap.css'));
 Admin::css('/assets/styles.css');
+
+Form::init(function (Form $form) {
+
+    $form->disableEditingCheck();
+
+    $form->disableCreatingCheck();
+
+    $form->disableViewCheck();
+    $form->disableReset();
+
+    $form->tools(function (Form\Tools $tools) {
+        $tools->disableDelete();
+        $tools->disableView(); 
+    });
+}); 

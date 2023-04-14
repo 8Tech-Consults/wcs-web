@@ -118,10 +118,7 @@ class NewExhibitsCaseModelController extends AdminController
         $form->html('<a class="btn btn-danger" href="' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '" >SKIP TO SUBMIT</a>', 'SKIP');
 
         $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
-        /* 
-ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_exhibit`, ADD `` VARCHAR(50) NULL DEFAULT NULL AFTER `type_wildlife`, ADD `type_other` VARCHAR(50) NULL DEFAULT NULL AFTER `type_implement`;
-
-*/
+    
         $form->radio('type_wildlife', __('Exibit type Wildlife?'))
             ->options([
                 'Yes' => 'Yes',
@@ -200,10 +197,6 @@ ALTER TABLE `exhibits` ADD `` VARCHAR(100) NULL DEFAULT NULL AFTER `add_another_
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
             });
-
-
-        /*  $form->hidden('add_another_exhibit', __('Attachments'))->value('No')->default('No');
- */
         $form->radio('add_another_exhibit', __('Do you want to add another exhibit to this case?'))
             ->options([
                 'Yes' => 'Yes',

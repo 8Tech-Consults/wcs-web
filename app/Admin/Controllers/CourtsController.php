@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\CaseModel\EditCourtCase;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
@@ -56,7 +57,7 @@ class CourtsController extends AdminController
         $grid = new Grid(new CaseSuspect());
         $grid->disableBatchActions();
         $grid->disableCreateButton();
-        
+
 
 
         $grid->model()
@@ -209,7 +210,7 @@ class CourtsController extends AdminController
 
 
         $grid->column('suspect_appealed', 'Suspect appealed')
-             ->using([
+            ->using([
                 '1' => 'Yes',
                 'Yes' => 'Yes',
                 '0' => 'No',
@@ -257,9 +258,10 @@ class CourtsController extends AdminController
             if (
                 (!Auth::user()->isRole('admin'))
             ) {
-                $actions->disableEdit();
             }
-            $actions->disableView();
+            $actions->disableEdit();
+            $actions->add(new EditCourtCase);
+
             $actions->disableDelete();
         });
 
@@ -390,20 +392,21 @@ class CourtsController extends AdminController
                 $form->date('court_date', 'Court Date of first appearance');
                 $form->text('court_name', 'Court Name');
 
-      
-                $form->select('prosecutor', 'Lead prosecutor')
-                ->options(function ($id) {
-                    $a = User::find($id);
-                    if ($a) {
-                        return [$a->id => "#" . $a->id . " - " . $a->name];
-                    }
-                })
-                ->ajax(url(
-                    '/api/ajax?'
-                        . "&search_by_1=name"
-                        . "&search_by_2=id"
-                        . "&model=User"
-                ))->rules('required'); 
+
+                /*  $form->select('prosecutor', 'Lead prosecutor')
+                    ->options(function ($id) {
+                        $a = User::find($id);
+                        if ($a) {
+                            return [$a->id => "#" . $a->id . " - " . $a->name];
+                        }
+                    })
+                    ->ajax(url(
+                        '/api/ajax?'
+                            . "&search_by_1=name"
+                            . "&search_by_2=id"
+                            . "&model=User"
+                    ))->rules('required'); */
+                $form->text('prosecutor', 'Lead prosecutor');
                 $form->text('magistrate_name', 'Magistrate Name');
 
 
@@ -473,7 +476,7 @@ class CourtsController extends AdminController
                                         $form->textarea('suspect_appeal_remarks', 'Remarks');
                                     });
 
-                                    $form->radio('cautioned', __('Was suspected cautioned?'))
+                                $form->radio('cautioned', __('Was suspected cautioned?'))
                                     ->options([
                                         'Yes' => 'Yes',
                                         'No' => 'No',

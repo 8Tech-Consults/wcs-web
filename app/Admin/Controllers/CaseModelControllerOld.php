@@ -409,8 +409,8 @@ class CaseModelController extends AdminController
 
                     $form->select('pa_id', __('Select PA'))
                         ->options(PA::all()->pluck('name_text', 'id'));
-                        $form->text('arrest_village', 'Enter arrest location')
-                        ->rules('required'); 
+                    $form->text('arrest_village', 'Enter arrest location')
+                        ->rules('required');
 
 
                     $subs = Location::get_sub_counties_array();
@@ -479,9 +479,7 @@ class CaseModelController extends AdminController
                     $form->date('court_date', 'Court date');
                     $form->text('court_name', 'Court Name');
 
-
-  
-                    $form->select('prosecutor', 'Lead prosecutor')
+                    /*  $form->select('prosecutor', 'Lead prosecutor')
                     ->options(function ($id) {
                         $a = User::find($id);
                         if ($a) {
@@ -493,8 +491,9 @@ class CaseModelController extends AdminController
                             . "&search_by_1=name"
                             . "&search_by_2=id"
                             . "&model=User"
-                    ))->rules('required'); 
+                    ))->rules('required');  */ 
 
+                    $form->text('prosecutor', 'Lead prosecutor');
                     $form->text('magistrate_name', 'Magistrate Name');
 
 

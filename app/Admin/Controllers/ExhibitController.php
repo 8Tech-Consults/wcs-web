@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\CaseModel\EditCourtCase;
+use App\Admin\Actions\CaseModel\EditExhibit;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
 use App\Models\Utils;
@@ -18,7 +20,7 @@ class ExhibitController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Exhibit';
+    protected $title = 'Exhibits';
 
     /**
      * Make a grid builder.
@@ -78,7 +80,8 @@ class ExhibitController extends AdminController
             ->orderBy('id', 'Desc');
 
         $grid->disableCreateButton();
-        $grid->disableActions();
+
+
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('Date'))->hide()
@@ -106,9 +109,17 @@ class ExhibitController extends AdminController
         $grid->column('type_other', __('Exibit type Others'));
         $grid->column('others_description', __('Description for others'));
 
-        /*         $grid->column('exhibit_catgory', __('Exhibit category'));
-        $grid->column('wildlife', __('Wildlife'));
-        $grid->column('implements', __('Implements')); */
+        $grid->actions(function ($actions) {
+            if (
+                (!Auth::user()->isRole('admin'))
+            ) {
+            }
+            $actions->disableEdit();
+            $actions->add(new EditExhibit);
+
+            $actions->disableDelete();
+        });
+
 
         return $grid;
     }
@@ -121,6 +132,11 @@ class ExhibitController extends AdminController
      */
     protected function detail($id)
     {
+        $c = Exhibit::findOrFail($id);
+        return view('admin.exhibit-details', [
+            'e' => $c
+        ]);
+
         $show = new Show(Exhibit::findOrFail($id));
 
         $show->field('id', __('Id'));
@@ -144,15 +160,93 @@ class ExhibitController extends AdminController
      */
     protected function form()
     {
+
+
         $form = new Form(new Exhibit());
 
-        $form->number('case_id', __('Case id'));
-        $form->text('exhibit_catgory', __('Exhibit category'));
-        $form->textarea('wildlife', __('Wildlife'));
-        $form->textarea('implements', __('Implements'));
-        $form->textarea('photos', __('Photos'));
-        $form->textarea('description', __('Description'));
-        $form->number('quantity', __('Quantity'));
+        $form->disableCreatingCheck();
+        $form->disableReset();
+        $form->disableEditingCheck();
+        $form->disableViewCheck();
+
+        $form->radio('type_wildlife', __('Exibit type Wildlife?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->when('Yes', function ($form) {
+                $form->divider('Wildlife Exibit(s) Information');
+                $form->select('wildlife_species', 'Select Species')->options(
+                    array(
+                        "Pangolin scales" => "Pangolin scales",
+                        "Ivory" => "Ivory",
+                        "Hippo teeth" => "Hippo teeth",
+                        "Live pangolins" => "Live pangolins",
+                        "Bush meat" => "Bush meat",
+                        "Skins" => "Skins",
+                        "Rhino horns" => "Rhino horns",
+                        "Elephant tusks" => "Elephant tusks",
+                        "Dead wild animal" => "Dead wild animal",
+                        "Live wild animal" => "Live wild animal",
+                        "Dead wild bird" => "Dead wild bird",
+                        "Live wild bird" => "Live wild bird",
+                        "Wildlife trophies" => "Wildlife trophies",
+                        "Animal parts" => "Animal parts",
+                        "Horns" => "Horns",
+                        "Scales" => "Scales",
+                        "Other" => "Other",
+                    )
+                )->rules('required');
+
+                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
+                $form->decimal('wildlife_pieces', __('Number of pieces'));
+                $form->text('wildlife_description', __('Description'));
+                $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
+                $form->divider();
+            });
+        $form->radio('type_implement', __('Exibit type Implement?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->when('Yes', function ($form) {
+                $form->divider('Implements Exibit(s) Information')->rules('required');
+
+                $form->select('implement_name', 'Select implement')->options(
+                    array(
+                        "Pangas" => "Pangas",
+                        "Knives" => "Knives",
+                        "Wheal traps" => "Wheal traps",
+                        "Spears" => "Spears",
+                        "Wire snares" => "Wire snares",
+                        "Metal trap" => "Metal trap",
+                        "How" => "How",
+                        "Axe" => "Axe",
+                        "Spade" => "Spade",
+                        "Hooks" => "Hooks",
+                        "Fishing nets" => "Fishing nets",
+                        "Other" => "Other",
+                    )
+                )->rules('required');
+
+
+                $form->decimal('implement_pieces', __('No of pieces'));
+                $form->textarea('implement_description', __('Description'));
+                $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
+                $form->divider();
+            });
+
+        $form->radio('type_other', __('Other exhibit types?'))
+            ->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])
+            ->when('Yes', function ($form) {
+                $form->divider('Other Exibit(s) Information')->rules('required');
+                $form->text('others_description', __('Description for others'));
+                $form->multipleFile('others_attachments', __('Attachments'));
+                $form->divider();
+            });
 
         return $form;
     }

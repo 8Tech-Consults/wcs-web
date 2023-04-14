@@ -68,6 +68,10 @@ class CaseModel extends Model
                 $m->ca_id = 1;
             }
 
+            if ($m->pa_id == 1) {
+                $m->is_offence_committed_in_pa = 'No';
+            }
+
             $m->case_number = Utils::getCaseNumber($m);
             return $m;
         });
@@ -85,7 +89,9 @@ class CaseModel extends Model
                 $m->ca_id = 1;
             }
 
-
+            if ($m->pa_id == 1) {
+                $m->is_offence_committed_in_pa = 'No';
+            }
 
             $m->district_id = 1;
             if ($m->sub_county_id != null) {

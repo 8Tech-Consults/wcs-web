@@ -10,6 +10,7 @@ php artisan make:migration create_conservation_areas_table
 php artisan make:migration create_case_comments_table
 php artisan make:migration create_temp_data_table
 php artisan make:migration create_suspect_has_offences_table
+php artisan make:migration create_crop_categories_table
 
 
 php artisan make:model TempData

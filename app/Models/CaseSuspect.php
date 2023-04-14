@@ -24,7 +24,7 @@ class CaseSuspect extends Model
         self::creating(function ($m) {
             $m->case->case_step = 1;
             if ($m->add_more_suspects == 'No') {
-                if ($m->case != null) {
+                if ($m->case != null) { 
                     $m->case->case_step = 2;
                     $m->case->save();
                 }
@@ -95,6 +95,10 @@ class CaseSuspect extends Model
                 $m->ca_id = 1;
                 $m->arrest_in_pa = 'No';
             }
+        }
+
+        if ($m->pa_id == 1) {
+            $m->arrest_in_pa = 'No';
         }
 
         return $m;

@@ -7,9 +7,11 @@ use App\Models\Utils;
             </h2>
         </div>
         <div class="mt-3 mt-md-0">
-            <a href="{{ $_SERVER['HTTP_REFERER'] }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i>
-                BACK
-                TO ALL SUSPECTS</a>
+            @isset($_SERVER['HTTP_REFERER'])
+                <a href="{{ $_SERVER['HTTP_REFERER'] }}" class="btn btn-secondary btn-sm"><i class="fa fa-chevron-left"></i>
+                    BACK
+                    TO ALL SUSPECTS</a>
+            @endisset
             <a href="{{ url('case-suspects/' . $s->id . '/edit') }}" class="btn btn-warning btn-sm"><i
                     class="fa fa-edit"></i>
                 EDIT</a>

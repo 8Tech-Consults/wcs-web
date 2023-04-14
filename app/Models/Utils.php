@@ -62,16 +62,19 @@ class Utils  extends Model
     public static function system_boot($u)
     {
 
-/* 
-        foreach (CaseModel::all() as $key => $c) {
-            $c->latitude = '0.00000';
-            $c->longitude = '0.00000';
+        foreach (CaseSuspect::all() as $key => $c) {
+            $c->arrest_latitude = '0.00000';
+            $c->arrest_longitude = '0.00000';
             $c->save();
-            echo ($c->is_offence_committed_in_pa . "<hr>");
+            echo ($c->arrest_in_pa . "<hr>");
         }
- */
-        $case = CaseModel::find(250);
-        //dd($case->get_suspect_number()); 
+        die(""); 
+ 
+        $case = CaseSuspect::find(2777);
+        $case->arrest_latitude = '0.0000000';
+        $case->arrest_longitude = '0.0000000';
+        $case->save();
+        dd($case->arrest_in_pa); 
         /*
         $faker = Faker::create();
         foreach (CaseModel::all() as $key => $v) {

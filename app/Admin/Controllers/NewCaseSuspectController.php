@@ -665,7 +665,6 @@ class NewCaseSuspectController extends AdminController
                                     $form->date('court_date', 'Court Date of first appearance');
 
                                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
-
                                     $form->select('court_name', 'Select Court')->options($courts)
                                         ->when(1, function ($form) {
                                             $form->text('other_court_name', 'Specify other court name')

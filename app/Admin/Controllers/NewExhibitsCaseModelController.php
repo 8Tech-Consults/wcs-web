@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
 use App\Models\Utils;
@@ -118,7 +119,7 @@ class NewExhibitsCaseModelController extends AdminController
         $form->html('<a class="btn btn-danger" href="' . admin_url("new-confirm-case-models/{$pendingCase->id}/edit") . '" >SKIP TO SUBMIT</a>', 'SKIP');
 
         $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
-    
+
         $form->radio('type_wildlife', __('Exibit type Wildlife?'))
             ->options([
                 'Yes' => 'Yes',
@@ -126,31 +127,34 @@ class NewExhibitsCaseModelController extends AdminController
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Wildlife Exibit(s) Information');
-                $form->select('wildlife_species', 'Select Species')->options(
+
+
+                $options =  Animal::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
+                $form->select('wildlife_species', 'Select Species')->options($options)
+                    ->when(1, function ($form) {
+                        $form->text('other_wildlife_species', 'Specify Species')
+                            ->rules('required');
+                    })
+                    ->rules('required');
+
+
+                $form->select('specimen', 'Specimen')->options(
                     array(
-                        "Pangolin scales" => "Pangolin scales",
-                        "Ivory" => "Ivory",
-                        "Hippo teeth" => "Hippo teeth",
-                        "Live pangolins" => "Live pangolins",
-                        "Bush meat" => "Bush meat",
-                        "Skins" => "Skins",
-                        "Rhino horns" => "Rhino horns",
-                        "Elephant tusks" => "Elephant tusks",
-                        "Dead wild animal" => "Dead wild animal",
-                        "Live wild animal" => "Live wild animal",
-                        "Dead wild bird" => "Dead wild bird",
-                        "Live wild bird" => "Live wild bird",
-                        "Wildlife trophies" => "Wildlife trophies",
-                        "Animal parts" => "Animal parts",
-                        "Horns" => "Horns",
                         "Scales" => "Scales",
-                        "Other" => "Other", 
+                        "Ivory" => "Ivory",
+                        "Teeth" => "Teeth",
+                        "Live animal" => "Live animal",
+                        "Meat" => "Meat",
+                        "Skin" => "Skin",
+                        "Horns" => "Horns",
+                        "Tusks" => "Tusks",
+                        "Trophies" => "Trophies",
                     )
                 )->rules('required');
 
-                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
-                $form->decimal('wildlife_pieces', __('Number of pieces'));
                 $form->text('wildlife_description', __('Description'));
+                $form->decimal('wildlife_pieces', __('Number of pieces'));
+                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
                 $form->divider();
             });
@@ -197,6 +201,7 @@ class NewExhibitsCaseModelController extends AdminController
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
             });
+
         $form->radio('add_another_exhibit', __('Do you want to add another exhibit to this case?'))
             ->options([
                 'Yes' => 'Yes',

@@ -491,11 +491,10 @@ class CaseModelController extends AdminController
                             . "&search_by_1=name"
                             . "&search_by_2=id"
                             . "&model=User"
-                    ))->rules('required');  */ 
+                    ))->rules('required');  */
 
                     $form->text('prosecutor', 'Lead prosecutor');
                     $form->text('magistrate_name', 'Magistrate Name');
-
 
                     $form->select('status', __('Case status'))
                         ->rules('required')

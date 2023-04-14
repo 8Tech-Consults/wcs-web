@@ -12,9 +12,14 @@ php artisan make:migration create_temp_data_table
 php artisan make:migration create_suspect_has_offences_table
 php artisan make:migration create_crop_categories_table
 php artisan make:migration create_courts_table
+php artisan make:migration create_animals_table
+php artisan make:migration create_implement_types_table
 
 
+php artisan make:model ImplementType
 php artisan make:model TempData
+php artisan make:model ImplementType
+php artisan make:model Animal
 php artisan make:model SuspectHasOffence
 php artisan make:model CaseCuspectsComment
 php artisan make:model CaseSuspect
@@ -25,7 +30,7 @@ php artisan make:model District
 php artisan make:model PA
 php artisan make:model Offence
 php artisan make:model Court
-php artisan make:model Location
+php artisan make:model Location 
 php artisan make:model CaseHasOffence
 php artisan make:model ConservationArea
 php artisan admin:make CaseModelCommentsController --model=App\Models\CaseModel

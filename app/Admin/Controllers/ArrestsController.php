@@ -367,7 +367,8 @@ class ArrestsController extends AdminController
         }
 
         if ($pendingCase == null) {
-            die("active case not found.");
+            Admin::script('window.location.replace("' . admin_url("cases") . '");');
+            return 'Loading...';
         } else {
             $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
         }

@@ -92,6 +92,29 @@ class Exhibit extends Model
         return json_decode($pictures, true);
     }
 
+    public function get_species()
+    {
+        if ($this->wildlife_species == null) {
+            return "-";
+        }
+        $an = Animal::find($this->wildlife_species);
+        if ($an != null) {
+            return $an->name;
+        }
+        return $this->wildlife_species;
+    }
+    public function get_implement()
+    { 
+        if ($this->implement_name == null) {
+            return "-";
+        }
+        $an = ImplementType::find($this->implement_name);
+        if ($an != null) {
+            return $an->name;
+        }
+        return $this->implement_name;
+    }
+
     public function getPicsAttribute($pictures)
     {
         return json_decode($pictures, true);

@@ -42,12 +42,12 @@ use App\Models\Utils;
                         </td>
                         <td>
                             @include('components.detail-item', [
-                                't' => 'HAS Wildlife?',
-                                's' => $e->type_wildlife,
+                                't' => 'Wildlife Species ',
+                                's' => $e->get_species(),
                             ])
                             @include('components.detail-item', [
-                                't' => 'HAS IMPLEMENT?',
-                                's' => $e->type_implement,
+                                't' => 'IMPLEMENT ',
+                                's' => $e->get_implement(),
                             ])
                             @include('components.detail-item', [
                                 't' => 'HAS OTHERS?',

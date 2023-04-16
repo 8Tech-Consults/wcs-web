@@ -8,9 +8,12 @@ $i = 0;
 
             <small><u><a href="/new-case-suspects/{{ $sus->id }}/edit"
                         title="Edit this suspect's information">Edit</a></u></small>
-            <small><u><a href="/new-confirm-case-models/{{ $case->id }}/edit?remove_suspect={{ $sus->id }}"
-                        class="text-danger" title="Remove this suspect from this case">Remove</a></u>
-            </small>
+
+            @if (count($case->suspects) > 1)
+                <small><u><a href="/new-confirm-case-models/{{ $case->id }}/edit?remove_suspect={{ $sus->id }}"
+                            class="text-danger" title="Remove this suspect from this case">Remove</a></u>
+                </small>
+            @endif
         </div>
     @endforeach
 

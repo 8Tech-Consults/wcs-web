@@ -2,8 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
+use App\Models\ImplementType;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -127,24 +129,18 @@ class AddExhibitCaseModelController extends AdminController
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Implements Exibit(s) Information')->rules('required');
-                $form->select('implement_name', 'Select implement')->options(
-                    array(
-                        "Pangas" => "Pangas",
-                        "Knives" => "Knives",
-                        "Wheal traps" => "Wheal traps",
-                        "Spears" => "Spears",
-                        "Wire snares" => "Wire snares",
-                        "Metal trap" => "Metal trap",
-                        "How" => "How",
-                        "Axe" => "Axe",
-                        "Spade" => "Spade",
-                        "Hooks" => "Hooks",
-                        "Fishing nets" => "Fishing nets"
-                    )
-                )->rules('required');
+
+
+                $options =  ImplementType::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
+                $form->select('implement_name', 'Select implement')->options($options)
+                    ->when(1, function ($form) {
+                        $form->text('other_implement', 'Specify implement')
+                            ->rules('required');
+                    })
+                    ->rules('required'); 
 
                 $form->decimal('implement_pieces', __('No of pieces'));
-                $form->textarea('implement_description', __('Description'));
+                $form->text('implement_description', __('Description'));
                 $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
                 $form->divider();
             });

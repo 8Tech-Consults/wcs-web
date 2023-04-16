@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class CaseSuspect extends Model
 {
@@ -24,15 +25,27 @@ class CaseSuspect extends Model
         self::creating(function ($m) {
             $m->case->case_step = 1;
             if ($m->add_more_suspects == 'No') {
-                if ($m->case != null) { 
+                if ($m->case != null) {
                     $m->case->case_step = 2;
                     $m->case->save();
                 }
             }
-        });
-        self::creating(function ($m) {
             $m = CaseSuspect::my_update($m);
             return $m;
+        });
+        self::created(function ($m) {
+            $case = CaseModel::find($m->case_id);
+            if ($case != null) {
+                $case->user_adding_suspect_id = null;
+                $case->save();
+            }
+        });
+        self::updated(function ($m) {
+            $case = CaseModel::find($m->case_id);
+            if ($case != null) {
+                $case->user_adding_suspect_id = null;
+                $case->save();
+            }
         });
         self::updating(function ($m) {
             $m = CaseSuspect::my_update($m);

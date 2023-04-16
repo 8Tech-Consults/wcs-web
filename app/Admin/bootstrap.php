@@ -95,7 +95,7 @@ Form::init(function (Form $form) {
 
     $form->disableEditingCheck();
 
-    $form->disableCreatingCheck();
+   // $form->disableCreatingCheck();
 
     $form->disableViewCheck();
     $form->disableReset();

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
 use App\Models\Court;
@@ -34,6 +35,18 @@ class NewCaseSuspectController extends AdminController
     protected function grid()
     {
         $pendingCase = Utils::hasPendingCase(Auth::user());
+
+        if (isset($_GET['cancel_add_suspect'])) {
+            $c = CaseModel::find($_GET['cancel_add_suspect']);
+            if ($c != null) {
+                $c->user_adding_suspect_id = null;
+                $c->save();
+
+                Admin::script('window.location.replace("' . admin_url("cases") . '");');
+                return 'Loading...';
+            }
+        }
+
         if ($pendingCase != null) {
             if ($pendingCase->case_step == 1) {
                 Admin::script('window.location.replace("' . admin_url("new-case-suspects/create") . '");');
@@ -217,8 +230,6 @@ class NewCaseSuspectController extends AdminController
 
         $form = new Form(new CaseSuspect());
 
-
-
         $form->saved(function (Form $form) {
             $pendingCase = Utils::hasPendingCase(Auth::user());
             if ($pendingCase != null) {
@@ -250,9 +261,8 @@ class NewCaseSuspectController extends AdminController
                 $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
             }
         } else {
-
-            $form->html('<p style="padding: 0;margin: 0;"><a href="/new-exhibits-case-models" class="text-danger"><b>Cancel add suspect process</b></a></p>');
-            $form->display('ADDING SUSPECT TO CASE')->value($pendingCase->case_number);
+            $form->html('<p style="padding: 0;margin: 0;"><a href="/new-case-suspects?cancel_add_suspect=' . $pendingCase->id . '" class="text-danger"><b>Cancel add suspect process</b></a></p>');
+            $form->display('ADDING SUSPECT TO CASE')->value($pendingCase->case_number)->default($pendingCase->case_number);
         }
 
         $form->disableCreatingCheck();
@@ -673,7 +683,7 @@ class NewCaseSuspectController extends AdminController
                                         ->rules('required');
 
 
-                                  /*   $form->select('prosecutor', 'Lead prosecutor')
+                                    /*   $form->select('prosecutor', 'Lead prosecutor')
                                         ->options(function ($id) {
                                             $a = User::find($id);
                                             if ($a) {
@@ -688,7 +698,7 @@ class NewCaseSuspectController extends AdminController
                                         ))->rules('required');
  */
 
-                                     $form->text('prosecutor', 'Lead prosecutor');
+                                    $form->text('prosecutor', 'Lead prosecutor');
                                     $form->text('magistrate_name', 'Magistrate Name');
 
 
@@ -870,7 +880,7 @@ class NewCaseSuspectController extends AdminController
                                 })
                                 ->rules('required');
 
-/* 
+                            /* 
                             $form->select('prosecutor', 'Lead prosecutor')
                                 ->options(function ($id) {
                                     $a = User::find($id);
@@ -884,7 +894,7 @@ class NewCaseSuspectController extends AdminController
                                         . "&search_by_2=id"
                                         . "&model=User"
                                 ))->rules('required'); */
-                                
+
                             $form->text('prosecutor', 'Lead prosecutor');
                             $form->text('magistrate_name', 'Magistrate Name');
 

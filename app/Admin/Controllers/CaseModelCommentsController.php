@@ -57,7 +57,7 @@ class CaseModelCommentsController extends AdminController
         $grid->column('case_step', __('Case step'));
         $grid->column('add_more_suspects', __('Add more suspects'));
         $grid->column('case_date', __('Case date'));
-        $grid->column('officer_in_charge', __('Officer in charge'));
+        $grid->column('officer_in_charge', __('Complainant'));
         $grid->column('court_file_status', __('Court file status'));
         $grid->column('prison', __('Prison'));
         $grid->column('jail_release_date', __('Jail release date'));
@@ -109,7 +109,7 @@ class CaseModelCommentsController extends AdminController
         $show->field('case_step', __('Case step'));
         $show->field('add_more_suspects', __('Add more suspects'));
         $show->field('case_date', __('Case date'));
-        $show->field('officer_in_charge', __('Officer in charge'));
+        $show->field('officer_in_charge', __('Complainant'));
         $show->field('court_file_status', __('Court file status'));
         $show->field('prison', __('Prison'));
         $show->field('jail_release_date', __('Jail release date'));

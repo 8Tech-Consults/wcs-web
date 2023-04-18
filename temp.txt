@@ -59,4 +59,4 @@ use_same_court_information
 suspect_number	
 
 
-ssh eightechconsults@8technologies.store
+ssh eightechconsults@8technologies.cloud

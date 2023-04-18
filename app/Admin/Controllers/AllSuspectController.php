@@ -48,7 +48,7 @@ class AllSuspectController extends AdminController
             // Remove the default id filter
             $f->disableIdFilter();
             $f->between('created_at', 'Filter by date')->date();
-            /*             $f->equal('reported_by', "Filter by reporter")
+            /*             $f->equal('reported_by', "Filter by complainant")
                 ->select(Administrator::all()->pluck('name', 'id')); */
 
             $ajax_url = url(

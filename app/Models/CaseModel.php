@@ -34,8 +34,8 @@ class CaseModel extends Model
         });
 
         self::created(function ($m) {
-            //  $m->case_number = Utils::getCaseNumber($m);
-            // $m->save();
+            $m->case_number = Utils::getCaseNumber($m); 
+            $m->save();
             try {
                 CaseModel::created_suspectes($m);
             } catch (\Throwable $th) {
@@ -72,7 +72,7 @@ class CaseModel extends Model
                 $m->is_offence_committed_in_pa = 'No';
             }
 
-            $m->case_number = Utils::getCaseNumber($m);
+
             return $m;
         });
         self::updating(function ($m) {

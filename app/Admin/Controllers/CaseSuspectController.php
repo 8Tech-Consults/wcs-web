@@ -253,7 +253,7 @@ class CaseSuspectController extends AdminController
             })
             ->hide();
 
-        $grid->column('officer', __('Officer'))
+        $grid->column('officer', __('Complainant'))
             ->display(function ($x) {
                 return $this->case->officer_in_charge;
             })->hide();

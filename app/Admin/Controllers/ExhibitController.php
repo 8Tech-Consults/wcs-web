@@ -90,10 +90,7 @@ class ExhibitController extends AdminController
         });
 
 
-
-
-
-
+ 
         $u = Auth::user();
         if ($u->isRole('ca-agent')) {
             $grid->model()->where([

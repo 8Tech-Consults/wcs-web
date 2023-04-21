@@ -95,21 +95,21 @@ Route::get('ajax', function (Request $r) {
     foreach ($res_1 as $key => $v) {
         $name = "";
         if (isset($v->$search_by_1)) {
-            $name = " - " . $v->$search_by_1;
+            $name = $v->$search_by_1;
         }
         $data[] = [
             'id' => $v->id,
-            'text' => "#$v->id" . $name
+            'text' =>  $name
         ];
     }
     foreach ($res_2 as $key => $v) {
         $name = "";
         if (isset($v->name)) {
-            $name = " - " . $v->$search_by_1;
+            $name = $v->$search_by_1;
         }
         $data[] = [
             'id' => $v->id,
-            'text' => "#$v->id" . $name
+            'text' =>  $name
         ];
     }
 

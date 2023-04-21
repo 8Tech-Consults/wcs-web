@@ -141,15 +141,27 @@ class NewExhibitsCaseModelController extends AdminController
 
                 $form->select('specimen', 'Specimen')->options(
                     array(
-                        "Scales" => "Scales",
-                        "Ivory" => "Ivory",
-                        "Teeth" => "Teeth",
-                        "Live animal" => "Live animal",
-                        "Meat" => "Meat",
-                        "Skin" => "Skin",
-                        "Horns" => "Horns",
-                        "Tusks" => "Tusks",
-                        "Trophies" => "Trophies",
+                        'Skins' => 'Skins',
+                        'Meat' => 'Meat',
+                        'Live animal' => 'Live animal',
+                        'Eggs' => 'Eggs',
+                        'Molars' => 'Molars',
+                        'Jaws' => 'Jaws',
+                        'Spikes /Ruills' => 'Spikes /Ruills',
+                        'Hair' => 'Hair',
+                        'Bone' => 'Bone',
+                        'Bangle' => 'Bangle',
+                        'Chopsticks' => 'Chopsticks',
+                        'Rosary' => 'Rosary',
+                        'Necklace' => 'Necklace',
+                        'Belt' => 'Belt',
+                        'Handbag' => 'Handbag',
+                        'Keyholder' => 'Keyholder',
+                        'Sculpture' => 'Sculpture',
+                        'Beads' => 'Beads',
+                        'Powder' => 'Powder',
+                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
+                        'Other' => 'Other',
                     )
                 )->rules('required');
 

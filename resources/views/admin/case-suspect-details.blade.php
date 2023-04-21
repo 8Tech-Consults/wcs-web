@@ -98,11 +98,7 @@ use App\Models\Utils;
                     </p>
 
                     <p class="py-1 my-0 "><b class="text-uppercase">Case committed in PA?:</b>
-                        @if ($s->case->is_offence_committed_in_pa == 1 || ($s->case->is_offence_committed_in_pa = 'Yes'))
-                            Yes
-                        @else
-                            No
-                        @endif
+                        {{ $s->case->is_offence_committed_in_pa }}
                     </p>
 
                     <p class="py-1 my-0 "><b class="text-uppercase">PA:</b>
@@ -141,6 +137,10 @@ use App\Models\Utils;
     @if ($s->is_suspects_arrested == 1 || $s->is_suspects_arrested == 'Yes')
         <div class="row pt-2">
             <div class="col-md-6 pl-5 pl-md-5">
+                @include('components.detail-item', [
+                    't' => 'Has suspect been handed over to police?',
+                    's' => $s->is_suspects_arrested,
+                ])
                 @include('components.detail-item', [
                     't' => 'Arrest date',
                     's' => Utils::my_date($s->arrest_date_time),
@@ -224,9 +224,18 @@ use App\Models\Utils;
             </div>
         </div>
     @else
-        <div class="alert alert-secondary mt-2">
-            <p>This has not been arrested yet.</p>
-        </div>
+        @include('components.detail-item', [
+            't' => 'Has suspect been handed over to police?',
+            's' => $s->is_suspects_arrested,
+        ])
+        @include('components.detail-item', [
+            't' => 'Action taken by management',
+            's' => $s->management_action,
+        ])
+        @include('components.detail-item', [
+            't' => 'Remarks by management',
+            's' => $s->not_arrested_remarks,
+        ])
     @endif
 
 
@@ -239,6 +248,10 @@ use App\Models\Utils;
         <div class="row pt-2">
             <div class="col-md-6 pl-5 pl-md-5">
 
+                @include('components.detail-item', [
+                    't' => 'Has this suspect appeared in court?',
+                    's' => $s->is_suspect_appear_in_court,
+                ])
                 @include('components.detail-item', [
                     't' => 'Court date',
                     's' => $s->court_file_number,
@@ -348,9 +361,26 @@ use App\Models\Utils;
             </div>
         </div>
     @else
-        <div class="alert alert-secondary mt-2">
-            <p>This has not appeared in court yet.</p>
-        </div>
+        @include('components.detail-item', [
+            't' => 'Has this suspect appeared in court?',
+            's' => $s->is_suspect_appear_in_court,
+        ])
+
+
+        @if ($s->is_suspects_arrested == 1 || $s->is_suspects_arrested == 'Yes')
+            @include('components.detail-item', [
+                't' => 'Case outcome at police level',
+                's' => $s->police_action,
+            ])
+            @include('components.detail-item', [
+                't' => 'Case outcome at police level',
+                's' => $s->police_action,
+            ])
+            @include('components.detail-item', [
+                't' => 'Remarks by Police',
+                's' => $s->police_action_remarks,
+            ])
+        @endif
     @endif
 
 

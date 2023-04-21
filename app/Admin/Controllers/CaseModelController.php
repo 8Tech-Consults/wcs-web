@@ -114,12 +114,15 @@ class CaseModelController extends AdminController
 
 
         $grid->filter(function ($f) {
-            // Remove the default id filter
+
             $f->disableIdFilter();
             $f->between('created_at', 'Filter by date')->date();
             $f->equal('reported_by', "Filter by complainant")
                 ->select(Administrator::all()->pluck('name', 'id'));
 
+
+            $f->equal('ca_id', "Filter by CA")
+                ->select(ConservationArea::all()->pluck('name', 'id')); 
             $ajax_url = url(
                 '/api/ajax?'
                     . "&search_by_1=name"
@@ -129,6 +132,21 @@ class CaseModelController extends AdminController
             );
 
             $f->equal('district_id', 'Filter by district')->select(function ($id) {
+                $a = Location::find($id);
+                if ($a) {
+                    return [ $a->name];
+                }
+            })
+                ->ajax($ajax_url);
+
+
+            $ajax_url = url(
+                '/api/ajax?'
+                    . "&search_by_1=name"
+                    . "&search_by_2=id"
+                    . "&model=Location"
+            );
+            $f->equal('sub_county_id', 'Filter by Sub county')->select(function ($id) {
                 $a = Location::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->name];
@@ -149,7 +167,7 @@ class CaseModelController extends AdminController
             $actions->disableDelete();
             $actions->add(new CaseModelActionAddSuspect);
             $actions->add(new CaseModelActionAddExhibit);
-            $actions->add(new CaseModelAddComment); 
+            $actions->add(new CaseModelAddComment);
             if (
                 Auth::user()->isRole('hq-team-leaders') ||
                 Auth::user()->isRole('ca-team')

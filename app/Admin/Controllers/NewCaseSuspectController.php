@@ -227,7 +227,7 @@ class NewCaseSuspectController extends AdminController
      */
     protected function form()
     {
-/* 
+        /* 
         $pendingCase = Utils::hasPendingCase(Auth::user()); 
         $d = $pendingCase->get_suspect_number(); 
         $pendingCase->delete();
@@ -628,9 +628,9 @@ class NewCaseSuspectController extends AdminController
 
                                     $form->radio('status', __('Case status'))
                                         ->options([
-                                            1 => 'On-going investigation',
-                                            2 => 'Closed',
-                                            3 => 'Re-opened',
+                                            'On-going investigation' => 'On-going investigation',
+                                            'Closed' => 'Closed',
+                                            'Re-opened' => 'Re-opened',
                                         ])
                                         ->rules('required')
                                         ->when(1, function ($form) {
@@ -753,6 +753,16 @@ class NewCaseSuspectController extends AdminController
                                                             );
                                                         });
 
+
+                                                    $form->radio('cautioned', __('Was suspect cautioned?'))
+                                                        ->options([
+                                                            'Yes' => 'Yes',
+                                                            'No' => 'No',
+                                                        ])
+                                                        ->when('Yes', function ($form) {
+                                                            $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                        });
+
                                                     $form->radio('suspect_appealed', __('Did the suspect appeal?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
@@ -770,16 +780,6 @@ class NewCaseSuspectController extends AdminController
                                                                     'On-going' => 'On-going',
                                                                 ]);
                                                             $form->textarea('suspect_appeal_remarks', 'Remarks');
-                                                        });
-
-
-                                                    $form->radio('cautioned', __('Was suspected cautioned?'))
-                                                        ->options([
-                                                            'Yes' => 'Yes',
-                                                            'No' => 'No',
-                                                        ])
-                                                        ->when('Yes', function ($form) {
-                                                            $form->text('cautioned_remarks', 'Enter caution remarks');
                                                         });
                                                 });
                                         })
@@ -830,9 +830,9 @@ class NewCaseSuspectController extends AdminController
 
                             $form->radio('status', __('Case status'))
                                 ->options([
-                                    1 => 'On-going investigation',
-                                    2 => 'Closed',
-                                    3 => 'Re-opened',
+                                    'On-going investigation' => 'On-going investigation',
+                                    'Closed' => 'Closed',
+                                    'Re-opened' => 'Re-opened',
                                 ])
                                 ->rules('required')
                                 ->when(1, function ($form) {
@@ -950,6 +950,16 @@ class NewCaseSuspectController extends AdminController
                                                     );
                                                 });
 
+
+                                            $form->radio('cautioned', __('Was suspect cautioned?'))
+                                                ->options([
+                                                    'Yes' => 'Yes',
+                                                    'No' => 'No',
+                                                ])
+                                                ->when('Yes', function ($form) {
+                                                    $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                });
+
                                             $form->radio('suspect_appealed', __('Did the suspect appeal?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
@@ -968,16 +978,6 @@ class NewCaseSuspectController extends AdminController
                                                         ]);
 
                                                     $form->textarea('suspect_appeal_remarks', 'Remarks');
-                                                });
-
-
-                                            $form->radio('cautioned', __('Was suspected cautioned?'))
-                                                ->options([
-                                                    'Yes' => 'Yes',
-                                                    'No' => 'No',
-                                                ])
-                                                ->when('Yes', function ($form) {
-                                                    $form->text('cautioned_remarks', 'Enter caution remarks');
                                                 });
                                         });
                                 })

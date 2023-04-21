@@ -34,11 +34,12 @@ class ExhibitController extends AdminController
         $grid = new Grid(new Exhibit());
 
 
+
         $grid->filter(function ($f) {
             // Remove the default id filter
             $f->disableIdFilter();
             $f->between('created_at', 'Filter by date')->date();
-            /*             $f->equal('reported_by', "Filter by reporter")
+            /*             $f->equal('reported_by', "Filter by complainant")
                 ->select(Administrator::all()->pluck('name', 'id')); */
 
             $ajax_url = url(
@@ -48,14 +49,46 @@ class ExhibitController extends AdminController
                     . "&model=CaseModel"
             );
 
-            $f->equal('case_id', 'Filter by Case')->select(function ($id) {
+            $f->equal('case_id', 'Filter by case')->select(function ($id) {
                 $a = CaseModel::find($id);
                 if ($a) {
                     return [$a->id => "#" . $a->id . " - " . $a->title];
                 }
             })
                 ->ajax($ajax_url);
+
+            $f->equal('wildlife_species', "Filter by Wildlife Species")
+                ->select(Animal::all()->pluck('name', 'id'));
+
+            $f->equal('specimen', "Filter by specimen")
+                ->select([
+                    'Skins' => 'Skins',
+                    'Meat' => 'Meat',
+                    'Live animal' => 'Live animal',
+                    'Eggs' => 'Eggs',
+                    'Molars' => 'Molars',
+                    'Jaws' => 'Jaws',
+                    'Spikes /Ruills' => 'Spikes /Ruills',
+                    'Hair' => 'Hair',
+                    'Bone' => 'Bone',
+                    'Bangle' => 'Bangle',
+                    'Chopsticks' => 'Chopsticks',
+                    'Rosary' => 'Rosary',
+                    'Necklace' => 'Necklace',
+                    'Belt' => 'Belt',
+                    'Handbag' => 'Handbag',
+                    'Keyholder' => 'Keyholder',
+                    'Sculpture' => 'Sculpture',
+                    'Beads' => 'Beads',
+                    'Powder' => 'Powder',
+                    'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
+                    'Other' => 'Other',
+                ]);
+
+            $f->equal('implement_name', "Filter by Implement type")
+                ->select(ImplementType::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id'));
         });
+
 
 
 
@@ -99,16 +132,21 @@ class ExhibitController extends AdminController
                 return $this->case_model->case_number;
             })
             ->sortable();
-        $grid->column('type_wildlife', __('Exibit type Wildlife'));
-        $grid->column('wildlife_species', __('Wildlife Species Name'));
+        $grid->column('type_wildlife', __('Has Wildlife'));
+        $grid->column('wildlife_species', __('Wildlife Species'))->display(function () {
+            return $this->get_species();
+        });
+        $grid->column('specimen', __('Specimen'));
         $grid->column('wildlife_quantity', __('Wildlife Quantity (in KGs)'));
         $grid->column('wildlife_pieces', __('Wildlife Number of pieces'));
         $grid->column('wildlife_description', __('Wildlife Description'));
-        $grid->column('type_implement', __('Exibit type implement'));
-        $grid->column('implement_name', __('Exibit name'));
+        $grid->column('type_implement', __('Has implement'));
+        $grid->column('implement_name', __('Implement'))->display(function () {
+            return $this->get_implement();
+        });
         $grid->column('implement_pieces', __('Implement pieces'));
         $grid->column('implement_description', __('Implement description'));
-        $grid->column('type_other', __('Exibit type Others'));
+        $grid->column('type_other', __('Has Others'));
         $grid->column('others_description', __('Description for others'));
 
         $grid->actions(function ($actions) {
@@ -191,15 +229,27 @@ class ExhibitController extends AdminController
 
                 $form->select('specimen', 'Specimen')->options(
                     array(
-                        "Scales" => "Scales",
-                        "Ivory" => "Ivory",
-                        "Teeth" => "Teeth",
-                        "Live animal" => "Live animal",
-                        "Meat" => "Meat",
-                        "Skin" => "Skin",
-                        "Horns" => "Horns",
-                        "Tusks" => "Tusks",
-                        "Trophies" => "Trophies",
+                        'Skins' => 'Skins',
+                        'Meat' => 'Meat',
+                        'Live animal' => 'Live animal',
+                        'Eggs' => 'Eggs',
+                        'Molars' => 'Molars',
+                        'Jaws' => 'Jaws',
+                        'Spikes /Ruills' => 'Spikes /Ruills',
+                        'Hair' => 'Hair',
+                        'Bone' => 'Bone',
+                        'Bangle' => 'Bangle',
+                        'Chopsticks' => 'Chopsticks',
+                        'Rosary' => 'Rosary',
+                        'Necklace' => 'Necklace',
+                        'Belt' => 'Belt',
+                        'Handbag' => 'Handbag',
+                        'Keyholder' => 'Keyholder',
+                        'Sculpture' => 'Sculpture',
+                        'Beads' => 'Beads',
+                        'Powder' => 'Powder',
+                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
+                        'Other' => 'Other',
                     )
                 )->rules('required');
 
@@ -223,10 +273,10 @@ class ExhibitController extends AdminController
                         $form->text('other_implement', 'Specify implement')
                             ->rules('required');
                     })
-                    ->rules('required');  
+                    ->rules('required');
 
                 $form->decimal('implement_pieces', __('No of pieces'));
-                $form->text('implement_description', __('Description')); 
+                $form->text('implement_description', __('Description'));
                 $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
                 $form->divider();
             });

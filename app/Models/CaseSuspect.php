@@ -31,7 +31,7 @@ class CaseSuspect extends Model
                 }
             }
             $m = CaseSuspect::my_update($m);
-            
+
             return $m;
         });
         self::created(function ($m) {
@@ -114,13 +114,28 @@ class CaseSuspect extends Model
         if ($m->pa_id == 1) {
             $m->arrest_in_pa = 'No';
         }
- 
+
         return $m;
     }
 
     function getPhotoUrlAttribute()
     {
         return url('public/storage/' . $this->photo);
+    }
+
+
+    function getStatusAttribute($s)
+    {
+
+        if ($s == '1') {
+            return 'On-going investigation';
+        } else if ($s == '2') {
+            return 'Closed';
+        } else if ($s == '3') {
+            return 'Re-opened';
+        } else {
+            return $s;
+        }
     }
     function offences()
     {

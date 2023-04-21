@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\CaseModel\AddArrest;
 use App\Admin\Actions\CaseModel\AddCourte;
 use App\Admin\Actions\CaseModel\EditArrest;
+use App\Admin\Actions\CaseModel\ViewSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Location;
@@ -144,11 +145,11 @@ class ArrestsController extends AdminController
             ->where([
                 'is_suspects_arrested' => 'Yes',
             ])
-            ->where(
+/*             ->where(
                 'is_suspect_appear_in_court',
                 '!=',
                 'Yes'
-            )
+            ) */
             ->orderBy('id', 'Desc');
 
         $u = Auth::user();
@@ -337,9 +338,11 @@ class ArrestsController extends AdminController
             ) {
             }
 
+            $actions->disableView();
             $actions->disableDelete();
             $actions->disableedit();
 
+            $actions->add(new ViewSuspect);
             $actions->add(new AddCourte);
             $actions->add(new EditArrest);
         });
@@ -637,9 +640,9 @@ class ArrestsController extends AdminController
 
                                     $form->radio('status', __('Case status'))
                                         ->options([
-                                            1 => 'On-going investigation',
-                                            2 => 'Closed',
-                                            3 => 'Re-opened',
+                                                                    'On-going investigation' => 'On-going investigation',
+                                    'Closed' => 'Closed',
+                                    'Re-opened' => 'Re-opened',
                                         ])
                                         ->rules('required')
                                         ->when(1, function ($form) {

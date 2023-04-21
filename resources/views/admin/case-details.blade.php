@@ -98,6 +98,9 @@ use App\Models\Utils;
                         <tr>
                             <th width="5%" scope="row">#{{ $e->id }}</th>
                             <td width="25%">
+                                <?php
+                                $pics = $e->get_photos();
+                                ?>
                                 @if (count($pics) < 1)
                                     <b>No photo.</b>
                                 @else
@@ -112,12 +115,12 @@ use App\Models\Utils;
                             </td>
                             <td>
                                 @include('components.detail-item', [
-                                    't' => 'HAS Wildlife?',
-                                    's' => $e->type_wildlife,
+                                    't' => 'Wildlife Species ',
+                                    's' => $e->get_species(),
                                 ])
                                 @include('components.detail-item', [
-                                    't' => 'HAS IMPLEMENT?',
-                                    's' => $e->type_implement,
+                                    't' => 'IMPLEMENT ',
+                                    's' => $e->get_implement(),
                                 ])
                                 @include('components.detail-item', [
                                     't' => 'HAS OTHERS?',

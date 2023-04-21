@@ -499,9 +499,9 @@ class CaseModelController extends AdminController
                     $form->select('status', __('Case status'))
                         ->rules('required')
                         ->options([
-                            1 => 'On-going investigation',
-                            2 => 'Closed',
-                            3 => 'Re-opened',
+                            'On-going investigation' => 'On-going investigation',
+                            'Closed' => 'Closed',
+                            'Re-opened' => 'Re-opened',
                         ]);
 
                     $form->select('case_outcome', 'Specific case status')->options([
@@ -528,7 +528,7 @@ class CaseModelController extends AdminController
                         ]);
                     $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
 
-                    $form->radio('community_service', __('Was suspected issued a community service?'))
+                    $form->radio('community_service', __('Was suspect issued a community service?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',

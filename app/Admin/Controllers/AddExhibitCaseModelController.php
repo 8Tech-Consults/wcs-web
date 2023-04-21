@@ -84,7 +84,7 @@ class AddExhibitCaseModelController extends AdminController
 
         $form->disableCreatingCheck();
         $form->disableReset();
-        $form->disableViewCheck();
+        $form->disableViewCheck(); 
 
         $form->radio('type_wildlife', __('Exibit type Wildlife?'))
             ->options([
@@ -95,30 +95,44 @@ class AddExhibitCaseModelController extends AdminController
                 $form->divider('Wildlife Exibit(s) Information');
 
 
-                $form->select('wildlife_species', 'Select Species')->options(
+                $options =  Animal::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
+                $form->select('wildlife_species', 'Select Species')->options($options)
+                    ->when(1, function ($form) {
+                        $form->text('other_wildlife_species', 'Specify Species')
+                            ->rules('required');
+                    })
+                    ->rules('required');
+
+
+                $form->select('specimen', 'Specimen')->options(
                     array(
-                        "Pangolin scales" => "Pangolin scales",
-                        "Ivory" => "Ivory",
-                        "Hippo teeth" => "Hippo teeth",
-                        "Live pangolins" => "Live pangolins",
-                        "Bush meat" => "Bush meat",
-                        "Skins" => "Skins",
-                        "Rhino horns" => "Rhino horns",
-                        "Elephant tusks" => "Elephant tusks",
-                        "Dead wild animal" => "Dead wild animal",
-                        "Live wild animal" => "Live wild animal",
-                        "Dead wild bird" => "Dead wild bird",
-                        "Live wild bird" => "Live wild bird",
-                        "Wildlife trophies" => "Wildlife trophies",
-                        "Animal parts" => "Animal parts",
-                        "Horns" => "Horns",
-                        "Scales" => "Scales"
+                        'Skins' => 'Skins',
+                        'Meat' => 'Meat',
+                        'Live animal' => 'Live animal',
+                        'Eggs' => 'Eggs',
+                        'Molars' => 'Molars',
+                        'Jaws' => 'Jaws',
+                        'Spikes /Ruills' => 'Spikes /Ruills',
+                        'Hair' => 'Hair',
+                        'Bone' => 'Bone',
+                        'Bangle' => 'Bangle',
+                        'Chopsticks' => 'Chopsticks',
+                        'Rosary' => 'Rosary',
+                        'Necklace' => 'Necklace',
+                        'Belt' => 'Belt',
+                        'Handbag' => 'Handbag',
+                        'Keyholder' => 'Keyholder',
+                        'Sculpture' => 'Sculpture',
+                        'Beads' => 'Beads',
+                        'Powder' => 'Powder',
+                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)', 
+                        'Other' => 'Other',
                     )
                 )->rules('required');
 
-                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
-                $form->decimal('wildlife_pieces', __('Number of pieces'));
                 $form->text('wildlife_description', __('Description'));
+                $form->decimal('wildlife_pieces', __('Number of pieces'));
+                $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
                 $form->divider();
             });
@@ -130,14 +144,13 @@ class AddExhibitCaseModelController extends AdminController
             ->when('Yes', function ($form) {
                 $form->divider('Implements Exibit(s) Information')->rules('required');
 
-
                 $options =  ImplementType::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                 $form->select('implement_name', 'Select implement')->options($options)
                     ->when(1, function ($form) {
                         $form->text('other_implement', 'Specify implement')
                             ->rules('required');
                     })
-                    ->rules('required'); 
+                    ->rules('required');
 
                 $form->decimal('implement_pieces', __('No of pieces'));
                 $form->text('implement_description', __('Description'));
@@ -156,15 +169,6 @@ class AddExhibitCaseModelController extends AdminController
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
             });
-
-
-        /*  $form->hidden('add_another_exhibit', __('Attachments'))->value('No')->default('No');
- */
-        $form->radio('add_another_exhibit', __('Do you want to add another exhibit to this case?'))
-            ->options([
-                'Yes' => 'Yes',
-                'No' => 'No',
-            ])->required();
 
 
         return $form;

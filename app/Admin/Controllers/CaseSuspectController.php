@@ -179,7 +179,7 @@ class CaseSuspectController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
-            $f->like('uwa_suspect_number', 'Filter by UWA Suspect number');
+ 
 
 
 
@@ -204,6 +204,21 @@ class CaseSuspectController extends AdminController
                 ->ajax($district_ajax_url);
 
 
+            $ajax_url = url(
+                '/api/ajax?'
+                    . "&search_by_1=name"
+                    . "&search_by_2=id"
+                    . "&model=Location"
+            );
+            $f->equal('sub_county_id', 'Filter by Sub county')->select(function ($id) {
+                $a = Location::find($id);
+                if ($a) {
+                    return [$a->id => "#" . $a->id . " - " . $a->name];
+                }
+            })
+                ->ajax($ajax_url);
+
+
             $f->equal('is_suspects_arrested', 'Filter by arrest status')->select([
                 'No' => 'Not arrested',
                 'Yes' => 'Arrested',
@@ -215,10 +230,11 @@ class CaseSuspectController extends AdminController
             ]);
 
 
-            $f->equal('is_jailed', 'Filter by jail status')->select([
-                'No' => 'Not jailed',
-                "Yes" => 'Jailed',
-            ]);
+            $f->equal('status', 'Filter by Court status')->select([
+                'On-going investigation' => 'On-going investigation',
+                'Closed' => 'Closed',
+                'Re-opened' => 'Re-opened',
+            ]); 
         });
 
 
@@ -920,9 +936,9 @@ class CaseSuspectController extends AdminController
                     ->when(0, function ($form) {
                         $form->radio('status', __('Case status'))
                             ->options([
-                                1 => 'On-going investigation',
-                                2 => 'Closed',
-                                3 => 'Re-opened',
+                                'On-going investigation' => 'On-going investigation',
+                                'Closed' => 'Closed',
+                                'Re-opened' => 'Re-opened',
                             ])
                             ->rules('required')
                             ->when(1, function ($form) {
@@ -968,7 +984,7 @@ class CaseSuspectController extends AdminController
                                     . "&search_by_2=id"
                                     . "&model=User"
                             ))->rules('required'); */
-                            $form->text('prosecutor', 'Lead prosecutor');
+                        $form->text('prosecutor', 'Lead prosecutor');
                         $form->text('magistrate_name', 'Magistrate Name');
 
                         $form->radio('court_status', __('Court case status'))
@@ -1004,7 +1020,7 @@ class CaseSuspectController extends AdminController
                                                 $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                             });
 
-                                        $form->radio('community_service', __('Was suspected issued a community service?'))
+                                        $form->radio('community_service', __('Was suspect issued a community service?'))
                                             ->options([
                                                 'Yes' => 'Yes',
                                                 'No' => 'No',
@@ -1026,7 +1042,7 @@ class CaseSuspectController extends AdminController
                                     });
 
 
-                                $form->radio('cautioned', __('Was suspected cautioned?'))
+                                $form->radio('cautioned', __('Was suspect cautioned?'))
                                     ->options([
                                         'Yes' => 'Yes',
                                         'No' => 'No',

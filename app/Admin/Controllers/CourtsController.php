@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\CaseModel\EditCourtCase;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\Court;
 use App\Models\Location;
 use App\Models\PA;
 use App\Models\User;
@@ -346,9 +347,9 @@ class CourtsController extends AdminController
 
                 $form->radio('status', __('Case status'))
                     ->options([
-                        1 => 'On-going investigation',
-                        2 => 'Closed',
-                        3 => 'Re-opened',
+                        'On-going investigation' => 'On-going investigation',
+                        'Closed' => 'Closed',
+                        'Re-opened' => 'Re-opened',
                     ])
                     ->rules('required')
                     ->when(1, function ($form) {
@@ -392,8 +393,13 @@ class CourtsController extends AdminController
                 }
 
                 $form->date('court_date', 'Court Date of first appearance');
-                $form->text('court_name', 'Court Name');
-
+                $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
+                $form->select('court_name', 'Select Court')->options($courts)
+                    ->when(1, function ($form) {
+                        $form->text('other_court_name', 'Specify other court name')
+                            ->rules('required');
+                    })
+                    ->rules('required');
 
                 /*  $form->select('prosecutor', 'Lead prosecutor')
                     ->options(function ($id) {
@@ -458,6 +464,16 @@ class CourtsController extends AdminController
                                         );
                                     });
 
+
+                                $form->radio('cautioned', __('Was suspect cautioned?'))
+                                    ->options([
+                                        'Yes' => 'Yes',
+                                        'No' => 'No',
+                                    ])
+                                    ->when('Yes', function ($form) {
+                                        $form->text('cautioned_remarks', 'Enter caution remarks');
+                                    });
+
                                 $form->radio('suspect_appealed', __('Did the suspect appeal?'))
                                     ->options([
                                         'Yes' => 'Yes',
@@ -476,15 +492,6 @@ class CourtsController extends AdminController
                                             ]);
 
                                         $form->textarea('suspect_appeal_remarks', 'Remarks');
-                                    });
-
-                                $form->radio('cautioned', __('Was suspected cautioned?'))
-                                    ->options([
-                                        'Yes' => 'Yes',
-                                        'No' => 'No',
-                                    ])
-                                    ->when('Yes', function ($form) {
-                                        $form->text('cautioned_remarks', 'Enter caution remarks');
                                     });
                             });
                     })

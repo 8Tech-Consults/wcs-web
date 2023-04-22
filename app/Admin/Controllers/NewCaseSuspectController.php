@@ -633,20 +633,20 @@ class NewCaseSuspectController extends AdminController
                                             'Re-opened' => 'Re-opened',
                                         ])
                                         ->rules('required')
-                                        ->when(1, function ($form) {
+                                        ->when('On-going investigation', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
                                             ]);
                                         })
-                                        ->when(2, function ($form) {
+                                        ->when('Closed', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Dismissed by state' => 'Dismissed by state',
                                                 'Withdrawn by complainant' => 'Withdrawn by complainant',
                                             ]);
                                             $form->date('police_action_date', 'Date');
                                             $form->textarea('police_action_remarks', 'Remarks');
-                                        })->when(3, function ($form) {
+                                        })->when('Re-opened', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
@@ -729,7 +729,7 @@ class NewCaseSuspectController extends AdminController
                                                             $form->date('jail_date', 'Jail date');
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                             $form->text('prison', 'Prison name');
-                                                            $form->date('jail_release_date', 'Date released');
+                                                            $form->date('jail_release_date', 'Release Date');
                                                         });
 
                                                     $form->radio('is_fined', __('Was suspect fined?'))
@@ -919,8 +919,8 @@ class NewCaseSuspectController extends AdminController
                                         ->when('Convicted', function ($form) {
                                             $form->radio('is_jailed', __('Was suspect jailed?'))
                                                 ->options([
-                                                    1 => 'Yes',
-                                                    0 => 'No',
+                                                    'Yes' => 'Yes',
+                                                    'No' => 'No',
                                                 ])
                                                 ->when(1, function ($form) {
                                                     $form->date('jail_date', 'Jail date');
@@ -931,8 +931,8 @@ class NewCaseSuspectController extends AdminController
 
                                             $form->radio('is_fined', __('Was suspect fined?'))
                                                 ->options([
-                                                    1 => 'Yes',
-                                                    0 => 'No',
+                                                    'Yes' => 'Yes',
+                                                    'No' => 'No',
                                                 ])
                                                 ->when(1, function ($form) {
                                                     $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");

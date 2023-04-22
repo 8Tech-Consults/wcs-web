@@ -14,8 +14,10 @@ php artisan make:migration create_crop_categories_table
 php artisan make:migration create_courts_table
 php artisan make:migration create_animals_table
 php artisan make:migration create_implement_types_table
+php artisan make:migration create_gens_table
 
 
+php artisan make:model Gen
 php artisan make:model ImplementType
 php artisan make:model TempData
 php artisan make:model ImplementType
@@ -45,14 +47,4 @@ php artisan admin:make ConservationAreaController --model=App\\Models\\Conservat
 php artisan admin:make NewCaseModelController --model=App\Models\CaseModel
 php artisan admin:make NewCaseSuspectController --model=App\Models\CaseSuspect
 php artisan admin:make NewExhibitsCaseModelController --model=App\Models\CaseModel
-php artisan admin:make CourtController --model=App\Models\Court
-php artisan admin:action CaseModel\\CaseModelActionAddSuspect --grid-row --name="Add suspect"
-
-
---
-
---
---
---
---
---
+php artisan admin:make GenController --model=App\Models\Gen

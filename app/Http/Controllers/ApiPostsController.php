@@ -7,6 +7,7 @@ use App\Models\CaseHasOffence;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
+use App\Models\Court;
 use App\Models\Enterprise;
 use App\Models\Exhibit;
 use App\Models\Image;
@@ -138,6 +139,12 @@ class ApiPostsController extends Controller
     {
         $data =  Offence::where([])->get();
         return $this->success($data, 'Offences');
+    }
+
+    public function courts(Request $r)
+    {
+        $data =  Court::where([])->get();
+        return $this->success($data, 'courts');
     }
     public function create_post(Request $r)
     {

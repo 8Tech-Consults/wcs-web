@@ -38,6 +38,7 @@ Route::group([
     $router->resource('add-exhibit', AddExhibitCaseModelController::class);
     $router->resource('new-confirm-case-models', NewConfirmCaseModelController::class);
     $router->resource('comments', CaseModelCommentsController::class);
+    $router->resource('gens', GenController::class);   
 
     $router->get('forms/settings', 'FormController@settings');
 });

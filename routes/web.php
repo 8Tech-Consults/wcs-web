@@ -6,6 +6,7 @@ use App\Models\AcademicClass;
 use App\Models\Book;
 use App\Models\BooksCategory;
 use App\Models\Course;
+use App\Models\Gen;
 use App\Models\StudentHasClass;
 use App\Models\Subject;
 use Encore\Admin\Auth\Database\Administrator;
@@ -31,6 +32,10 @@ Route::get('/logout', function () {
 Route::get('/login', function () {
   die("login");
 })->name("login");
+
+Route::get('/gen', function () {
+  die(Gen::find($_GET['id'])->do_get());
+})->name("register");
 
 Route::get('/register', function () {
   die("register");

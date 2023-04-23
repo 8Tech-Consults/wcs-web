@@ -13,6 +13,19 @@ class Gen extends Model
 
 
 
+    public static function to_json($recs)
+    {
+      $_data = "";
+      foreach ($recs as $v) {
+        $key = trim($v);
+        if (strlen($key) < 2) {
+          continue;
+        }
+        $_data .= "'$key' : $key,<br>";
+      }
+  
+      return $_data;
+    }
 
     public static function fromJsons($recs = [])
     {
@@ -71,9 +84,9 @@ class Gen extends Model
         $tables = Schema::getColumnListing($this->table_name);
         $generate_vars = $this->makeVars($tables);
         $fromJson = Gen::fromJsons($tables);
-        $toJson = "toJson";
+        $toJson = Gen::to_json($tables); 
         $x = <<<EOT
-  <pre>  
+  <pre>   
   import 'RespondModel.dart';
   import '../utils/Utils.dart';
   import 'package:hive_flutter/adapters.dart';

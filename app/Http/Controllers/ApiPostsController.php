@@ -19,6 +19,7 @@ use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -119,7 +120,7 @@ class ApiPostsController extends Controller
 
     public function index(Request $r)
     {
-        $data =  CaseModel::where([])->with('suspects')->orderBy('id','Desc') ->limit(100)->get();
+        $data =  CaseModel::where([])->with('suspects')->orderBy('id', 'Desc')->limit(100)->get();
         return $this->success($data, 'Success.');
     }
 
@@ -174,39 +175,95 @@ class ApiPostsController extends Controller
             $case->reported_by = $u->id;
         }
 
-
-
-        $case->case_submitted = 1;
-        $case->latitude = $case_data->latitude;
-        $case->title = $case_data->title;
-        $case->longitude = $case_data->longitude;
-        $case->sub_county_id = $case_data->sub_county_id;
-        $case->parish = $case_data->parish;
-        $case->village = $case_data->village;
-        $case->offence_description = $case_data->offence_description;
-        $case->is_offence_committed_in_pa = $case_data->is_offence_committed_in_pa;
-        $case->pa_id = $case_data->pa_id;
-        $case->ca_id = $case_data->ca_id;
-        $case->detection_method = $case_data->detection_method;
-        $case->offence_category_id = ((int)($case_data->offence_category_id));
-
-
-        if (!$case->save()) {
-            return $this->error('Failed to update case, please try again.');
+        $ignore = [
+            'id',
+            'created_at',
+            'updated_at',
+            'reported_by',
+            'deleted_at',
+        ];
+        foreach (Schema::getColumnListing('case_models') as $key) {
+            if (in_array($key, $ignore)) {
+                continue;
+            }
+            if (isset($case_data->$key)) {
+                $case->$key = $case_data->$key;
+            }
         }
 
+        $case->user_adding_suspect_id = null;
+        $case->case_submitted = '1';
 
+        try {
+            $case->save();
+        } catch (\Throwable $th) {
+            return $this->error('Failed to update case, because .' . $th->getPrevious()->getMessage());
+        }
+
+  
         $suspects = [];
         $exhibits = [];
         if (isset($r->suspects)) {
-         
-            $suspects = json_decode($r->suspects); 
-            
+            $suspects = json_decode($r->suspects);
             if ($suspects == null) {
-                
                 $suspects = [];
             }
-        } 
+        }
+ 
+        foreach ($suspects as $key => $v) {
+
+            $s = null;
+            if (isset($v->online_id)) {
+                //$s = CaseSuspect::find(((int)($v->online_id)));
+            }
+
+            if ($s == null) {
+                $s = new CaseSuspect();
+            }
+
+
+       
+
+            foreach (Schema::getColumnListing('case_suspects') as $key) {
+                if (in_array($key, $ignore)) {
+                    continue;
+                }
+                if (isset($v->$key)) {
+                    $s->$key = $v->$key;
+                }
+            }
+
+            $s->uwa_suspect_number = $v->uwa_suspect_number;
+            $s->case_id = $case->id;
+            
+       
+            try {
+                $s->save();  
+            } catch (\Throwable $th) {
+ 
+            } 
+
+
+            $offences_ids = [];
+            try {
+                $offences_ids = json_decode($v->offences_ids);
+            } catch (\Throwable $th) {
+                $offences_ids = [];
+            }
+
+            if ($offences_ids != null) {
+                if (is_array($offences_ids)) {
+                    foreach ($offences_ids as $offence_id) {
+                        $offence = new SuspectHasOffence();
+                        $offence->case_suspect_id = $s->id;
+                        $offence->offence_id = ((int)($offence_id));
+                        $offence->save();
+                    }
+                }
+            }
+        }
+        
+
         if (isset($r->exhibits)) {
             $exhibits = json_decode($r->exhibits);
             if ($exhibits == null) {
@@ -225,7 +282,7 @@ class ApiPostsController extends Controller
             if ($e == null) {
                 $e = new Exhibit();
             }
- 
+
             $e->case_id = $case->id;
             $e->exhibit_catgory = $v->exhibit_catgory;
             $e->wildlife = '';
@@ -238,104 +295,10 @@ class ApiPostsController extends Controller
         }
 
 
-        foreach ($suspects as $key => $v) {
-
-            $s = null;
-            if (isset($v->online_id)) {
-                //$s = CaseSuspect::find(((int)($v->online_id)));
-            }
-
-            if ($s == null) {
-                $s = new CaseSuspect();
-            }
+   
 
 
-            $s->uwa_suspect_number = $v->uwa_suspect_number;
-            $s->case_id = $case->id;
-       
-            $s->first_name = $v->first_name;
-            $s->middle_name = $v->middle_name;
-            $s->last_name = $v->last_name;
-            $s->phone_number = $v->phone_number;
-            $s->national_id_number = $v->national_id_number;
-            $s->sex = $v->sex;
-            if (strlen($v->age) > 3) {
-                $s->age = Carbon::parse($v->age);
-            }
-            if (strlen($v->arrest_date_time) > 3) {
-                $s->arrest_date_time = Carbon::parse($v->arrest_date_time);
-            }
-
-
-            $s->occuptaion = $v->occuptaion;
-            $s->country = $v->country;
-            $s->district_id = $v->district_id;
-            $s->sub_county_id = $v->sub_county_id;
-            $s->parish = $v->parish;
-            $s->sub_county_id = $v->sub_county_id;
-            $s->village = $v->village;
-            $s->ethnicity = $v->ethnicity;
-            $s->finger_prints = $v->finger_prints;
-            $s->is_suspects_arrested = $v->is_suspects_arrested;
-
-            $s->arrest_district_id = $v->arrest_district_id;
-            $s->arrest_sub_county_id = $v->arrest_sub_county_id;
-            $s->arrest_parish = $v->arrest_parish;
-            $s->arrest_village = $v->arrest_village;
-            $s->arrest_latitude = $v->arrest_latitude;
-            $s->arrest_longitude = $v->arrest_longitude;
-            $s->arrest_first_police_station = $v->arrest_first_police_station;
-            $s->arrest_current_police_station = $v->arrest_current_police_station;
-            $s->arrest_agency = $v->arrest_agency;
-            $s->arrest_uwa_unit = $v->arrest_uwa_unit;
-            $s->arrest_detection_method = $v->arrest_detection_method;
-            $s->arrest_uwa_number = $v->arrest_uwa_number;
-            $s->arrest_crb_number = $v->arrest_crb_number;
-            $s->is_suspect_appear_in_court = $v->is_suspect_appear_in_court;
-            $s->prosecutor = $v->prosecutor;
-            $s->case_outcome = $v->case_outcome;
-            $s->magistrate_name = $v->magistrate_name;
-            $s->court_name = isset($v->court_name) ? $v->court_name : "";
-            $s->court_file_number = isset($v->court_file_number) ? $v->court_file_number : "";
-            $s->is_jailed = isset($v->is_jailed) ? $v->is_jailed : "";
-            $s->jail_period = ((int)($v->jail_period));
-            $s->is_fined = $v->is_fined;
-            $s->fined_amount = ((int)($v->fined_amount));
-            $s->status = ((int)($v->status));
-
-            $s->jail_date = $v->jail_date;
-            $s->arrest_in_pa = $v->arrest_in_pa;
-            $s->pa_id = $v->pa_id;
-            $s->community_service = $v->community_service;
-            $s->police_sd_number = $v->police_sd_number;
-            $s->court_file_status = $v->court_file_status;
-            $s->court_status = $v->court_status;
-            $s->suspect_court_outcome = $v->suspect_court_outcome;
-
-            $s->save();
-
-
-            $offence_ids = [];
-            try {
-                $offence_ids = json_decode($v->offence_ids);
-            } catch (\Throwable $th) {
-                $offence_ids = [];
-            }
-
-            if ($offence_ids != null) {
-                if (is_array($offence_ids)) {
-                    foreach ($offence_ids as $offence_id) {
-                        $offence = new SuspectHasOffence();
-                        $offence->case_suspect_id = $s->id;
-                        $offence->offence_id = ((int)($offence_id));
-                        $offence->save();
-                    }
-                }
-            }
-        }
-
-
-        return $this->success($case, 'Case submitted successfully.');
+        return $this->success(null, 'Case submitted successfully.');
     }
 
     public function upload_media(Request $request)

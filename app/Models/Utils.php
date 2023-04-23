@@ -240,7 +240,7 @@ class Utils  extends Model
         }
 
         $case =  CaseModel::where([
-            'case_submitted' => 0,
+            'case_submitted' => '0',
             "reported_by" => $u->id
         ])
             ->orderBy('id', 'Desc')

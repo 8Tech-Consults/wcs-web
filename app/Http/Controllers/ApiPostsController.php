@@ -295,8 +295,6 @@ class ApiPostsController extends Controller
         }
 
 
-   
-
 
         return $this->success(null, 'Case submitted successfully.');
     }

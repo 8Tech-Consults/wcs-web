@@ -221,6 +221,9 @@ class CaseModelController extends AdminController
         $grid->column('sub_county_id', __('Sub-county'))
             ->hide()
             ->display(function () {
+                if($this->sub_county == null){
+                    return '-';
+                }
                 return $this->sub_county->name;
             })
             ->sortable();

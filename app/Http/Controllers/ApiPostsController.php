@@ -246,10 +246,10 @@ class ApiPostsController extends Controller
             foreach (Schema::getColumnListing('case_suspects') as $key) {
                 if ($v->deleted_at != null) {
                     if (strlen($v->deleted_at) > 3) {
-                        $s->photo = $v->deleted_at;
+                        $s->photo = 'images/'.$v->deleted_at;
                     }
                 }
-                
+
                 if (in_array($key, $ignore)) {
                     continue;
                 }

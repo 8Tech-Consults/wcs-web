@@ -66,20 +66,20 @@ class Exhibit extends Model
 
     public function getPhotosAttribute()
     {
-        if(is_array($this->wildlife_attachments)){
-            if(isset($this->wildlife_attachments[0])){
+        if (is_array($this->wildlife_attachments)) {
+            if (isset($this->wildlife_attachments[0])) {
                 return ($this->wildlife_attachments[0]);
             }
         }
 
-        if(is_array($this->others_attachments)){
-            if(isset($this->others_attachments[0])){
+        if (is_array($this->others_attachments)) {
+            if (isset($this->others_attachments[0])) {
                 return ($this->others_attachments[0]);
-            } 
+            }
         }
 
-        if(is_array($this->implement_attachments)){
-            if(isset($this->implement_attachments[0])){
+        if (is_array($this->implement_attachments)) {
+            if (isset($this->implement_attachments[0])) {
                 return ($this->implement_attachments[0]);
             }
         }
@@ -96,7 +96,8 @@ class Exhibit extends Model
 
     public function getOthersAttachmentsAttribute($pictures)
     {
-        return json_decode($pictures, true);
+        if ($pictures != null)
+            return json_decode($pictures, true);
     }
 
 
@@ -110,7 +111,8 @@ class Exhibit extends Model
 
     public function getWildlifeAttachmentsAttribute($pictures)
     {
-        return json_decode($pictures, true);
+        if ($pictures != null)
+            return json_decode($pictures, true);
     }
 
     public function get_species()
@@ -125,7 +127,7 @@ class Exhibit extends Model
         return $this->wildlife_species;
     }
     public function get_implement()
-    { 
+    {
         if ($this->implement_name == null) {
             return "-";
         }
@@ -138,6 +140,7 @@ class Exhibit extends Model
 
     public function getPicsAttribute($pictures)
     {
-        return json_decode($pictures, true);
+        if ($pictures != null)
+            return json_decode($pictures, true);
     }
 }

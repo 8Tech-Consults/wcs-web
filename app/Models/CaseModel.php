@@ -300,14 +300,16 @@ class CaseModel extends Model
     public function getCaTextAttribute()
     {
         if ($this->ca == null) {
-            return "";
+            $this->ca_id = 1;
+            $this->save();
         }
         return $this->ca->name;
     }
     public function getPaTextAttribute()
     {
         if ($this->pa == null) {
-            return "";
+            $this->pa_id = 1; 
+            $this->save();
         }
         return $this->pa->name;
     }

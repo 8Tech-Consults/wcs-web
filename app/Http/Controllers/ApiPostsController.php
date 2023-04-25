@@ -12,6 +12,7 @@ use App\Models\Court;
 use App\Models\Enterprise;
 use App\Models\Exhibit;
 use App\Models\Image;
+use App\Models\ImplementType;
 use App\Models\Offence;
 use App\Models\PA;
 use App\Models\SuspectHasOffence;
@@ -135,6 +136,12 @@ class ApiPostsController extends Controller
     {
         $data =  Animal::where([])->get();
         return $this->success($data, 'Animals.');
+    }
+
+    public function implements(Request $r)
+    {
+        $data =  ImplementType::where([])->get(); 
+        return $this->success($data, 'implements.');
     }
 
     public function conservation_areas(Request $r)

@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
 
  
-  
+  /* 
         $faker = Faker::create();
         $ids = []; 
         foreach (CaseModel::all() as $key => $s){
@@ -119,7 +119,7 @@ class HomeController extends Controller
             }
             $v->save();
         }
-        dd("done"); 
+        dd("done");  */
 
         $content
             ->title('Online Wildlife Offenders Database - Dashboard')

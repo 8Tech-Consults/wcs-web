@@ -66,6 +66,7 @@ class Exhibit extends Model
 
     public function getPhotosAttribute()
     {
+        return ''; 
         if(is_array($this->wildlife_attachments)){
             if(isset($this->wildlife_attachments[0])){
                 return ($this->wildlife_attachments[0]);

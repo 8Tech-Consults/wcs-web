@@ -115,10 +115,7 @@ class ApiPostsController extends Controller
 
         return $this->success($_u, $message = "Password updated details", 200);
     }
-
-
-
-
+ 
 
     public function index(Request $r)
     {

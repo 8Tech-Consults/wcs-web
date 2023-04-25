@@ -34,7 +34,7 @@ class CaseModel extends Model
         });
 
         self::created(function ($m) {
-            $m->case_number = Utils::getCaseNumber($m); 
+            $m->case_number = Utils::getCaseNumber($m);
             $m->save();
             try {
                 CaseModel::created_suspectes($m);
@@ -308,7 +308,7 @@ class CaseModel extends Model
     public function getPaTextAttribute()
     {
         if ($this->pa == null) {
-            $this->pa_id = 1; 
+            $this->pa_id = 1;
             $this->save();
         }
         return $this->pa->name;
@@ -330,7 +330,31 @@ class CaseModel extends Model
         if ($this->exhibits != null) {
             if (!empty($this->exhibits)) {
                 if (isset($this->exhibits[0])) {
-                    return $this->exhibits[0]->photos;
+                    if (is_array($this->exhibits[0]->wildlife_attachments)) {
+                        foreach ($this->exhibits[0]->wildlife_attachments as $key => $p) {
+                            if (str_contains($p, 'files') || str_contains($p, 'images')) {
+                                return $p;
+                            }
+                        }
+                    }
+
+                    if (is_array($this->exhibits[0]->implement_attachments)) {
+                        foreach ($this->exhibits[0]->implement_attachments as $key => $p) {
+                            if (str_contains($p, 'files') || str_contains($p, 'images')) {
+                                return $p;
+                            }
+                        }
+                    }
+
+                    if (is_array($this->exhibits[0]->others_attachments)) {
+                        foreach ($this->exhibits[0]->others_attachments as $key => $p) {
+                            if (str_contains($p, 'files') || str_contains($p, 'images')) {
+                                return $p;
+                            }
+                        }
+                    }
+
+                    return;
                 }
             }
         }
@@ -343,14 +367,16 @@ class CaseModel extends Model
                     if ($this->suspects[0]->photo != null) {
                         if (isset($this->suspects[0])) {
                             if (strlen($this->suspects[0]->photo) > 2) {
-                                return $this->suspects[0]->photo;
+                                if (str_contains($this->suspects[0]->photo, 'images')) {
+                                    return $this->suspects[0]->photo;
+                                }
                             }
                         }
                     }
             }
         }
 
-        return "logo.png";
+        return "";
     }
 
     protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo', 'suspects_count', 'exhibit_count'];

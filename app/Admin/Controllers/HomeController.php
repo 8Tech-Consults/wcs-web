@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
@@ -30,25 +31,68 @@ class HomeController extends Controller
     {
 
  
-    /*  
-
+  
         $faker = Faker::create();
         $ids = []; 
-        foreach (CaseSuspect::all() as $key => $s){
+        foreach (CaseModel::all() as $key => $s){
             $ids[] = $s->id;
         }
-        foreach (SuspectHasOffence::all() as $key => $s){
- 
+
+
+        $Animals =  Animal::where([])->orderBy('id', 'desc')->get(); 
+        foreach (Exhibit::all() as $key => $s){
             shuffle($ids);
-            $s->case_suspect_id = $ids[rand(10,20)]; 
+         
+            $s->case_id = $ids[rand(10,20)]; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+
+            $s->wildlife_attachments = $pics; 
+            $s->implement_attachments = $pics2; 
+            $s->quantity = rand(1,25); 
+            $s->wildlife_quantity = rand(1,25); 
+            $s->number_of_pieces = rand(1,25); 
+            $s->wildlife_pieces = rand(1,10); 
+            $s->reported_by = 1; 
+            $s->type_wildlife = ['Yes','No'][rand(0,1)]; 
+            $s->type_implement = ['Yes','No'][rand(0,1)]; 
+            $s->type_other = ['Yes','No'][rand(0,1)]; 
+            $s->wildlife_desciprion = 'Some details about this exhibit....'; 
+            $s->wildlife_description = 'Some details about this wildlife exhibit....'; 
+            $s->wildlife_species = $Animals[rand(0,($Animals->count()-1))]->id; 
+ 
             $s->save(); 
-      
+        }
 
   
         die("romina"); 
  
-	
- 
+	  /*      
+    
+    "" => null
+    "" => null
+    "implement_pieces" => null
+    "implement_description" => null
+    "" => null
+    "others_description" => null
+    "others_attachments" => null
+    "other_wildlife_species" => null
+    "specimen" => null
+    "other_implement" => null
+
 
 
         foreach (CaseSuspect::where([])->orderBy('id', 'desc')->get() as $key => $v) {

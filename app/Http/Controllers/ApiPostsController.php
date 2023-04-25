@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Animal;
 use App\Models\CaseHasOffence;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
@@ -128,6 +129,12 @@ class ApiPostsController extends Controller
     {
         $data =  PA::where([])->get();
         return $this->success($data, 'Protected areas.');
+    }
+
+    public function animals(Request $r)
+    {
+        $data =  Animal::where([])->get();
+        return $this->success($data, 'Animals.');
     }
 
     public function conservation_areas(Request $r)

@@ -64,6 +64,27 @@ class Exhibit extends Model
         return json_decode($pictures, true);
     }
 
+    public function getPhotosAttribute()
+    {
+        if(is_array($this->wildlife_attachments)){
+            if(isset($this->wildlife_attachments[0])){
+                return ($this->wildlife_attachments[0]);
+            }
+        }
+
+        if(is_array($this->others_attachments)){
+            if(isset($this->others_attachments[0])){
+                return ($this->others_attachments[0]);
+            } 
+        }
+
+        if(is_array($this->implement_attachments)){
+            if(isset($this->implement_attachments[0])){
+                return ($this->implement_attachments[0]);
+            }
+        }
+    }
+
 
     public function setOthersAttachmentsAttribute($pictures)
     {

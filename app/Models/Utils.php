@@ -61,7 +61,7 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
-        ini_set('memory_limit', '44M');
+        ini_set('memory_limit', '-1');
  
 
         /*      foreach (CaseSuspect::all() as $key => $c) {

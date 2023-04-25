@@ -122,7 +122,10 @@ class ApiPostsController extends Controller
 
     public function index(Request $r)
     {
-        $data =  CaseModel::where([])->with('suspects')->orderBy('id', 'Desc')->limit(100)->get();
+        $data =  CaseModel::where([])
+        ->with('suspects','exhibits')
+        ->orderBy('id', 'Desc')
+        ->limit(100)->get();
         return $this->success($data, 'Success.');
     }
 

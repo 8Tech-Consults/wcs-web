@@ -68,19 +68,19 @@ class Exhibit extends Model
     {
         if (is_array($this->wildlife_attachments)) {
             if (isset($this->wildlife_attachments[0])) {
-                return ($this->wildlife_attachments[0]);
+                return ($this->wildlife_attachments[rand(0,(count($this->wildlife_attachments)-1))]);
             }
         }
 
         if (is_array($this->others_attachments)) {
-            if (isset($this->others_attachments[0])) {
-                return ($this->others_attachments[0]);
+            if (!empty($this->others_attachments[0])) {
+                return ($this->others_attachments[rand(0,(count($this->others_attachments)-1))]);
             }
         }
 
         if (is_array($this->implement_attachments)) {
             if (isset($this->implement_attachments[0])) {
-                return ($this->implement_attachments[0]);
+                return ($this->implement_attachments[rand(0,(count($this->implement_attachments)-1))]);
             }
         }
     }

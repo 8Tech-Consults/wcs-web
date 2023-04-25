@@ -115,14 +115,17 @@ class ApiPostsController extends Controller
 
         return $this->success($_u, $message = "Password updated details", 200);
     }
- 
+
+
+
+
 
     public function index(Request $r)
     {
         $data =  CaseModel::where([])
-        ->with('suspects')
+        ->with('suspects','exhibits')
         ->orderBy('id', 'Desc')
-        ->limit(25)->get(); 
+        ->limit(25)->get();
         return $this->success($data, 'Success.');
     }
 

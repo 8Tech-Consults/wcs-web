@@ -30,7 +30,7 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
- 	  /*     
+ 
   
         $faker = Faker::create();
         $ids = []; 
@@ -44,21 +44,39 @@ class HomeController extends Controller
             shuffle($ids);
          
             $s->case_id = $ids[rand(10,20)]; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics[] = 'images/ex-'.$x.'.jpg'; 
+            
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
+            $pics2[] = 'images/ex-'.$x.'.jpg'; 
+            $x = rand(1,17);
 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
-            $pics2[] = 'images/ex-'.rand(1,17).'.jpg'; 
+            shuffle($pics2);
+            shuffle($pics);
 
             $s->wildlife_attachments = $pics; 
             $s->implement_attachments = $pics2; 
@@ -80,19 +98,7 @@ class HomeController extends Controller
   
         die("romina"); 
  
-  
-    
-    "" => null
-    "" => null
-    "implement_pieces" => null
-    "implement_description" => null
-    "" => null
-    "others_description" => null
-    "others_attachments" => null
-    "other_wildlife_species" => null
-    "specimen" => null
-    "other_implement" => null
-
+ 
 
 
         foreach (CaseSuspect::where([])->orderBy('id', 'desc')->get() as $key => $v) {

@@ -322,7 +322,7 @@ class ApiPostsController extends Controller
             $d = json_decode($e->attachment);
             if ((is_array($d))) {
                 foreach ($d as $c) {
-                    $imgs[] = str_replace('"', '', $c);
+                    $imgs[] =  'images/'.str_replace('"', '', $c);
                 }
             }
 

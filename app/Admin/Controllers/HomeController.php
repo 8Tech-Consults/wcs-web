@@ -30,7 +30,7 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
- 
+ 	  /*     
   
         $faker = Faker::create();
         $ids = []; 
@@ -80,7 +80,7 @@ class HomeController extends Controller
   
         die("romina"); 
  
-	  /*      
+  
     
     "" => null
     "" => null

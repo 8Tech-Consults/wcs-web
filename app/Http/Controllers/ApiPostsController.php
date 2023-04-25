@@ -140,7 +140,7 @@ class ApiPostsController extends Controller
 
     public function implements(Request $r)
     {
-        $data =  ImplementType::where([])->get(); 
+        $data =  ImplementType::where([])->get();
         return $this->success($data, 'implements.');
     }
 
@@ -163,6 +163,11 @@ class ApiPostsController extends Controller
     }
     public function create_post(Request $r)
     {
+
+
+
+
+
         $u = auth('api')->user();
         $administrator_id = $u->id;
         $u = Administrator::find($administrator_id);
@@ -214,7 +219,7 @@ class ApiPostsController extends Controller
             return $this->error('Failed to update case, because .' . $th->getPrevious()->getMessage());
         }
 
-  
+
         $suspects = [];
         $exhibits = [];
         if (isset($r->suspects)) {
@@ -223,7 +228,7 @@ class ApiPostsController extends Controller
                 $suspects = [];
             }
         }
- 
+
         foreach ($suspects as $key => $v) {
 
             $s = null;
@@ -236,7 +241,7 @@ class ApiPostsController extends Controller
             }
 
 
-       
+
 
             foreach (Schema::getColumnListing('case_suspects') as $key) {
                 if (in_array($key, $ignore)) {
@@ -247,15 +252,21 @@ class ApiPostsController extends Controller
                 }
             }
 
+
+            if ($v->deleted_at != null) {
+                if (strlen($v->deleted_at) > 3) {
+                    $s->photo = $v->deleted_at;
+                }
+            }
+
             $s->uwa_suspect_number = $v->uwa_suspect_number;
             $s->case_id = $case->id;
-            
-       
+
+
             try {
-                $s->save();  
+                $s->save();
             } catch (\Throwable $th) {
- 
-            } 
+            }
 
 
             $offences_ids = [];
@@ -276,8 +287,15 @@ class ApiPostsController extends Controller
                 }
             }
         }
-        
 
+
+        $ignore = [
+            'id',
+            'created_at',
+            'updated_at',
+            'reported_by',
+            'deleted_at',
+        ];
         if (isset($r->exhibits)) {
             $exhibits = json_decode($r->exhibits);
             if ($exhibits == null) {
@@ -286,24 +304,47 @@ class ApiPostsController extends Controller
         }
 
         foreach ($exhibits as $key => $v) {
-
-
-            $e = null;
-            if (isset($v->online_id)) {
-                $e = Exhibit::find(((int)($v->online_id)));
+            $e = new Exhibit();
+            foreach (Schema::getColumnListing('exhibits') as $key) {
+                if (in_array($key, $ignore)) {
+                    continue;
+                }
+                if (isset($v->$key)) {
+                    $e->$key = $v->$key;
+                }
             }
 
-            if ($e == null) {
-                $e = new Exhibit();
+            $type = $e->type_wildlife;
+
+            $imgs = [];
+            $d = json_decode($e->attachment);
+            if ((is_array($d))) {
+                foreach ($d as $c) {
+                    $imgs[] = str_replace('"', '', $c);
+                }
             }
 
-            $e->case_id = $case->id;
-            $e->exhibit_catgory = $v->exhibit_catgory;
-            $e->wildlife = '';
-            $e->implements = '';
-            $e->photos = $v->online_image_ids;
-            $e->description = $v->description;
-            $e->quantity = ((int)($v->quantity));
+            if ($e->type_wildlife == 'Other') {
+                $e->type_other = 'Yes';
+                $e->others_attachments = $imgs;
+            } else {
+                $e->type_other = 'No';
+            }
+
+            if ($e->type_wildlife == 'Implement') {
+                $e->type_implement = 'Yes';
+                $e->implement_attachments = $imgs;
+            } else {
+                $e->type_implement = 'No';
+            }
+
+            if ($e->type_wildlife == 'Wildlife') {
+                $e->type_implement = 'Yes';
+                $e->wildlife_attachments = $imgs;
+            } else {
+                $e->type_implement = 'No';
+            }
+            $s->case_id = $case->id;
 
             $e->save();
         }

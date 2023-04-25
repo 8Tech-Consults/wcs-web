@@ -346,8 +346,9 @@ class ApiPostsController extends Controller
             } else {
                 $e->type_implement = 'No';
             }
-            $s->case_id = $case->id;
+            $e->case_id = $case->id;
 
+            
             $e->save();
         }
 

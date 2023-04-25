@@ -21,7 +21,7 @@ class CaseModel extends Model
             if ($m->id == 1) {
                 die("Ooops! You cannot delete this item.");
             }
-
+ 
             CaseSuspect::where([
                 'case_id' => $m->id
             ])->delete();
@@ -31,7 +31,10 @@ class CaseModel extends Model
             Exhibit::where([
                 'case_id' => $m->id
             ])->delete();
-        });
+            CaseComment::where([
+                'case_id' => $m->id
+            ])->delete(); 
+        }); 
 
         self::created(function ($m) {
             $m->case_number = Utils::getCaseNumber($m);

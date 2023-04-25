@@ -10,6 +10,7 @@ use App\Models\ConservationArea;
 use App\Models\Exhibit;
 use App\Models\MenuItem;
 use App\Models\PA;
+use App\Models\SuspectHasOffence;
 use App\Models\Utils;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
@@ -28,7 +29,28 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
-/* 
+    } 
+    /*  
+
+        $faker = Faker::create();
+        $ids = []; 
+        foreach (CaseSuspect::all() as $key => $s){
+            $ids[] = $s->id;
+        }
+        foreach (SuspectHasOffence::all() as $key => $s){
+ 
+            shuffle($ids);
+            $s->case_suspect_id = $ids[rand(10,20)]; 
+            $s->save(); 
+      
+
+  
+        die("romina"); 
+ 
+	
+ 
+
+
         foreach (CaseSuspect::where([])->orderBy('id', 'desc')->get() as $key => $v) {
 
             if (

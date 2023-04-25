@@ -122,7 +122,7 @@ class ApiPostsController extends Controller
         $data =  CaseModel::where([])
         ->with('suspects')
         ->orderBy('id', 'Desc')
-        ->limit(5)->get(); 
+        ->limit(25)->get(); 
         return $this->success($data, 'Success.');
     }
 

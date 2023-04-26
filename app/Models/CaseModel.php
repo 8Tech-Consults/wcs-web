@@ -329,6 +329,7 @@ class CaseModel extends Model
     {
 
 
+        $_pics = [];
 
         if ($this->exhibits != null) {
             if (!empty($this->exhibits)) {
@@ -336,7 +337,7 @@ class CaseModel extends Model
                     if (is_array($this->exhibits[0]->wildlife_attachments)) {
                         foreach ($this->exhibits[0]->wildlife_attachments as $key => $p) {
                             if (str_contains($p, 'files') || str_contains($p, 'images')) {
-                                return $p;
+                                $_pics[] = $p;
                             }
                         }
                     }
@@ -344,7 +345,7 @@ class CaseModel extends Model
                     if (is_array($this->exhibits[0]->implement_attachments)) {
                         foreach ($this->exhibits[0]->implement_attachments as $key => $p) {
                             if (str_contains($p, 'files') || str_contains($p, 'images')) {
-                                return $p;
+                                $_pics[] = $p;
                             }
                         }
                     }
@@ -352,12 +353,12 @@ class CaseModel extends Model
                     if (is_array($this->exhibits[0]->others_attachments)) {
                         foreach ($this->exhibits[0]->others_attachments as $key => $p) {
                             if (str_contains($p, 'files') || str_contains($p, 'images')) {
-                                return $p;
+                                $_pics[] = $p;
                             }
                         }
                     }
 
-                    return;
+            
                 }
             }
         }
@@ -371,12 +372,17 @@ class CaseModel extends Model
                         if (isset($this->suspects[0])) {
                             if (strlen($this->suspects[0]->photo) > 2) {
                                 if (str_contains($this->suspects[0]->photo, 'images')) {
-                                    return $this->suspects[0]->photo;
+                                    $_pics[] = $this->suspects[0]->photo; 
                                 }
                             }
                         }
                     }
             }
+        }
+
+        if(!empty($_pics)){
+            shuffle($_pics);
+            return $_pics[0];
         }
 
         return "";

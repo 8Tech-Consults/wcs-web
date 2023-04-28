@@ -130,6 +130,7 @@ class MainController extends Controller
             $message = "We have sent a secret code to your email address {$u->email}. Check your email  inbox or spam and use that code to reset your password.";
             $success = true;
         } catch (\Throwable $th) {
+            dd($th);
             $message = 'Failed to send you email addresss.';
             $success = false;
         }

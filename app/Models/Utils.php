@@ -245,6 +245,10 @@ class Utils  extends Model
             'case_submitted' => '0',
             "reported_by" => $u->id
         ])
+        ->orwhere([
+            'case_submitted' => '0',
+            "reported_by" => $u->id
+        ])
             ->orderBy('id', 'Desc')
             ->first();
         if ($case == null) {

@@ -49,7 +49,11 @@ class CaseSuspect extends Model
             }
         });
         self::updating(function ($m) {
+           
             $m = CaseSuspect::my_update($m);
+            if ($m->case_submitted == 1 || $m->case_submitted == '1') {
+                $m->case_submitted = '1';
+            } 
             return $m;
         });
     }

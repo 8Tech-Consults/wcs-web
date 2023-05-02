@@ -192,6 +192,7 @@ class NewCaseModelController extends AdminController
         $form->html(view('steps', ['case' => $pendingCase]));
 
         $form->hidden('reported_by', __('Reported by'))->default(Admin::user()->id)->rules('required');
+        $form->hidden('case_submitted', __('Reported by'))->default(0);
 
         if ($form->isEditing()) {
             $form->html('<a class="btn btn-danger" href="' . admin_url("new-case-suspects/create") . '" >SKIP TO SUSPECTS</a>', 'SKIP');

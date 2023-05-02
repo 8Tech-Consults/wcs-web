@@ -242,19 +242,24 @@ class Utils  extends Model
         }
 
         $case =  CaseModel::where([
-            'case_submitted' => '0',
-            "reported_by" => $u->id
-        ])
-        ->orwhere([
-            'case_submitted' => '0',
+            'case_submitted' => null,
             "reported_by" => $u->id
         ])
             ->orderBy('id', 'Desc')
             ->first();
         if ($case == null) {
-            return null;
+            $case =  CaseModel::where([
+                'case_submitted' => '0',
+                "reported_by" => $u->id
+            ])
+                ->orderBy('id', 'Desc')
+                ->first(); 
         }
 
+        if ($case == null) { 
+            return null;
+        }
+        
         if ($case->exhibits != null) {
             if (count($case->exhibits) > 0) {
                 if ($case->case_step < 3) {

@@ -241,6 +241,7 @@ class Utils  extends Model
             }
         }
 
+        //new changes
         $case =  CaseModel::where([
             'case_submitted' => null,
             "reported_by" => $u->id

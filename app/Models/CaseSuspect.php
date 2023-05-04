@@ -257,6 +257,10 @@ class CaseSuspect extends Model
     {
         return $this->belongsTo(Location::class, 'district_id');
     }
+    function court()
+    {
+        return $this->belongsTo(Court::class, 'court_name');
+    }
     function arrestPa()
     {
         $ap = PA::find($this->pa_id);

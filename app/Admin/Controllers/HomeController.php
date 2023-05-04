@@ -29,10 +29,9 @@ class HomeController extends Controller
 {
     public function index(Content $content)
     {
-        return $content;
 
- 
-  /* 
+
+        /* 
         $faker = Faker::create();
         $ids = []; 
         foreach (CaseModel::all() as $key => $s){
@@ -126,6 +125,8 @@ class HomeController extends Controller
             ->title('Online Wildlife Offenders Database - Dashboard')
             ->description('Hello ' . Auth::user()->name . "!");
 
+      
+
         $content->row(function (Row $row) {
             $row->column(4, function (Column $column) {
                 $column->append(Dashboard::month_ago());
@@ -154,11 +155,7 @@ class HomeController extends Controller
             /* $row->column(2, function (Column $column) {
                 $column->append(Dashboard::graph_animals());
             }); */
-        });
-
-
-
-        return $content;
-        return $content->row("Romina Home");
+        }); 
+        return $content; 
     }
 }

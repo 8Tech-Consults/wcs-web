@@ -138,7 +138,12 @@ class CourtsController extends AdminController
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-        $grid->column('court_name')->sortable();
+        $grid->column('court_name')->display(function ($d) {
+            if ($this->court == null) {
+                return '-';
+            }
+            return $this->court->name;
+        })->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->sortable();
         $grid->column('magistrate_name')->sortable();
         $grid->column('court_status', 'Court case status')->label()->sortable();
@@ -362,7 +367,7 @@ class CourtsController extends AdminController
                             'Dismissed by state' => 'Dismissed by state',
                             'Withdrawn by complainant' => 'Withdrawn by complainant',
                         ]);
-                        $form->date('police_action_date', 'Date'); 
+                        $form->date('police_action_date', 'Date');
                         $form->textarea('police_action_remarks', 'Remarks');
                     })->when('Re-opened', function ($form) {
                         $form->select('police_action', 'Case outcome at police level')->options([

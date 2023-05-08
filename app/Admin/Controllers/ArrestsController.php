@@ -79,6 +79,17 @@ class ArrestsController extends AdminController
 
             $export->except(['actions']);
 
+            $export->column('arrest_in_pa', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            });
+            
             $export->column('is_jailed', function ($value, $original) {
                 if (
                     $original == 1 ||

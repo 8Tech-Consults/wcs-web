@@ -55,9 +55,80 @@ class CourtsController extends AdminController
 
         $grid = new Grid(new CaseSuspect());
 
+ 
+        $grid->export(function ($export) {
+
+            $export->except(['actions']);
+ 
+            // $export->only(['column3', 'column4' ...]);
 
 
-        $grid = new Grid(new CaseSuspect());
+            $export->filename('Court Cases');
+ 
+            $export->except(['photo', 'action']);
+            // $export->originalValue(['is_jailed']);
+
+            $export->column('is_jailed', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            }); 
+            $export->column('is_fined', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            }); 
+            $export->column('is_suspect_appear_in_court', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            });
+            $export->column('suspect_appealed', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            });
+
+            $export->column('is_suspects_arrested', function ($value, $original) {
+                if (
+                    $original == 1 ||
+                    $original == 'Yes'
+                ) {
+                    return 'Yes';
+                } else {
+                    return 'No';
+                }
+            });
+
+            $export->column('national_id_number', function ($value, $original) {
+                return  $original;
+            });
+
+ 
+        });
+
+
+         
         $grid->disableBatchActions();
         $grid->disableCreateButton();
 

@@ -33,7 +33,7 @@ Encore\Admin\Form::forget(['map', 'editor']);
 $u = Auth::user();
 if ($u != null) {
 
-    if (isset($_GET['log_me_out'])) {
+/*     if (isset($_GET['log_me_out'])) {
     } else {
         if (isset($_GET['resend_2f_code'])) {
             $u->send2FCode();
@@ -46,7 +46,7 @@ if ($u != null) {
             header('Location: ' . url('2fauth'));
             die();
         }
-    }
+    } */
 }
 Utils::system_boot($u);
 

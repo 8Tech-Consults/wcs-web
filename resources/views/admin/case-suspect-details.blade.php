@@ -372,10 +372,7 @@ use App\Models\Utils;
                 't' => 'Case outcome at police level',
                 's' => $s->police_action,
             ])
-            @include('components.detail-item', [
-                't' => 'Case outcome at police level',
-                's' => $s->police_action,
-            ])
+        
             @include('components.detail-item', [
                 't' => 'Remarks by Police',
                 's' => $s->police_action_remarks,

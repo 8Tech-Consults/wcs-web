@@ -144,12 +144,11 @@ class ArrestsController extends AdminController
         $grid->model()
             ->where([
                 'is_suspects_arrested' => 'Yes',
-            ])
-/*             ->where(
+            ])->where(
                 'is_suspect_appear_in_court',
                 '!=',
                 'Yes'
-            ) */
+            )
             ->orderBy('id', 'Desc');
 
         $u = Auth::user();
@@ -640,9 +639,9 @@ class ArrestsController extends AdminController
 
                                     $form->radio('status', __('Case status'))
                                         ->options([
-                                                                    'On-going investigation' => 'On-going investigation',
-                                    'Closed' => 'Closed',
-                                    'Re-opened' => 'Re-opened',
+                                            'On-going investigation' => 'On-going investigation',
+                                            'Closed' => 'Closed',
+                                            'Re-opened' => 'Re-opened',
                                         ])
                                         ->rules('required')
                                         ->when(1, function ($form) {

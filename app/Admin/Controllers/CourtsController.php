@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\CaseModel\EditCourtCase;
+use App\Admin\Actions\CaseModel\ViewCase;
+use App\Admin\Actions\CaseModel\ViewSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Court;
@@ -254,6 +256,7 @@ class CourtsController extends AdminController
 
 
 
+            
         $grid->column('reported_by', __('Reported by'))
             ->display(function () {
 
@@ -265,7 +268,9 @@ class CourtsController extends AdminController
                 (!Auth::user()->isRole('admin'))
             ) {
             }
+            $actions->disableView();
             $actions->disableEdit();
+            $actions->add(new ViewSuspect);
             $actions->add(new EditCourtCase);
 
             $actions->disableDelete();

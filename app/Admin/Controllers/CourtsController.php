@@ -65,7 +65,7 @@ class CourtsController extends AdminController
 
             $export->filename('Court Cases');
  
-            $export->except(['photo', 'action']);
+            $export->except(['photo', 'action']); 
             // $export->originalValue(['is_jailed']);
 
             $export->column('is_jailed', function ($value, $original) {
@@ -219,7 +219,7 @@ class CourtsController extends AdminController
         })->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->sortable();
         $grid->column('magistrate_name')->sortable();
-        $grid->column('court_status', 'Court case status')->label()->sortable();
+        $grid->column('court_status', 'Court case status')->sortable();
         $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
         $grid->column('court_file_status', 'Court file status')->hide()->sortable();
         $grid->column('case_outcome', 'Specific court case status')->hide()->sortable();

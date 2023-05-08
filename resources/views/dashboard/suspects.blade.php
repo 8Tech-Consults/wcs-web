@@ -71,7 +71,6 @@ use App\Models\Utils;
                             <td>
                                 <b class="text-dark fw-bold  d-block fs-7"
                                     style="color: black">{{ Str::of($i->case->title)->limit(35) }}</b>
-                                <p class="text-dark d-block fs-6 p-0 m-0">{{ $i->case->sub_county->name_text }}</p>
                                 <span class="fw-bold text-primary d-block fs-7">{{ $i->case->created_at }}</span>
                             </td>
                             <td class="text-end">

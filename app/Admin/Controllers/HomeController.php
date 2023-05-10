@@ -31,6 +31,25 @@ class HomeController extends Controller
     {
 
 
+        $done = [];
+        $sus = CaseSuspect::all();
+        foreach ($sus as $key => $s) {
+            $case = CaseModel::find($s->case_id);
+
+            $s->suspect_number = $case->get_suspect_number($s);
+            $s->uwa_suspect_number = $s->suspect_number;
+            $s->arrest_uwa_number = $s->suspect_number; 
+            $s->save();
+
+            echo $s->suspect_number."<br>";
+
+            if(in_array($s->uwa_suspect_number,$done)){
+                continue;
+            }
+            $done[] = $s->uwa_suspect_number;
+        }
+        dd(count($sus) . " ==> " . count($done));
+
         /* 
         $faker = Faker::create();
         $ids = []; 
@@ -125,7 +144,7 @@ class HomeController extends Controller
             ->title('Online Wildlife Offenders Database - Dashboard')
             ->description('Hello ' . Auth::user()->name . "!");
 
-      
+
 
         $content->row(function (Row $row) {
             $row->column(4, function (Column $column) {
@@ -155,7 +174,7 @@ class HomeController extends Controller
             /* $row->column(2, function (Column $column) {
                 $column->append(Dashboard::graph_animals());
             }); */
-        }); 
-        return $content; 
+        });
+        return $content;
     }
 }

@@ -227,12 +227,7 @@ class NewCaseSuspectController extends AdminController
      */
     protected function form()
     {
-        /* 
-        $pendingCase = Utils::hasPendingCase(Auth::user()); 
-        $d = $pendingCase->get_suspect_number(); 
-        $pendingCase->delete();
-        dd($d);
-        die("romina"); */
+ 
         $form = new Form(new CaseSuspect());
 
         $form->saved(function (Form $form) {

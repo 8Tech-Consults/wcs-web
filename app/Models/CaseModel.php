@@ -21,7 +21,7 @@ class CaseModel extends Model
             if ($m->id == 1) {
                 die("Ooops! You cannot delete this item.");
             }
- 
+
             CaseSuspect::where([
                 'case_id' => $m->id
             ])->delete();
@@ -33,8 +33,8 @@ class CaseModel extends Model
             ])->delete();
             CaseComment::where([
                 'case_id' => $m->id
-            ])->delete(); 
-        }); 
+            ])->delete();
+        });
 
         self::created(function ($m) {
             $m->case_number = Utils::getCaseNumber($m);
@@ -181,13 +181,21 @@ class CaseModel extends Model
             $tem->delete();
         }
     }
-    function get_suspect_number()
+    function get_suspect_number($s)
     {
-        $suspects_length = count($this->suspects);
-        //$suspects_length++;
-        $num = "{$this->case_number}/{$suspects_length}";
-        $num = str_replace('//', '/', $num);
-        return $num;
+        $suspects = CaseSuspect::where(['case_id' => $this->id])->orderby('id', 'asc')->get();
+
+        $sus_num = "";
+        foreach ($suspects as $key => $sus) {
+            $sus_num = $this->case_number;
+            $_key = ($key + 1);
+            $sus_num = "{$this->case_number}/{$_key}";
+            $sus_num = str_replace('//', '/', $sus_num);
+            if ($sus->id == $s->id) {
+                break;
+            }
+        }
+        return $sus_num;
     }
 
     function pa()
@@ -357,8 +365,6 @@ class CaseModel extends Model
                             }
                         }
                     }
-
-            
                 }
             }
         }
@@ -372,7 +378,7 @@ class CaseModel extends Model
                         if (isset($this->suspects[0])) {
                             if (strlen($this->suspects[0]->photo) > 2) {
                                 if (str_contains($this->suspects[0]->photo, 'images')) {
-                                    $_pics[] = $this->suspects[0]->photo; 
+                                    $_pics[] = $this->suspects[0]->photo;
                                 }
                             }
                         }
@@ -380,7 +386,7 @@ class CaseModel extends Model
             }
         }
 
-        if(!empty($_pics)){
+        if (!empty($_pics)) {
             shuffle($_pics);
             return $_pics[0];
         }

@@ -78,7 +78,7 @@ class CaseSuspect extends Model
 
         $case = CaseModel::find($m->case_id);
         if ($case != null) {
-            $m->suspect_number = $case->get_suspect_number();
+            $m->suspect_number = $case->get_suspect_number($m);
         } else {
             throw new Exception("Suspect case not found.", 1);
         }

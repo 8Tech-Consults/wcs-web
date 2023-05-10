@@ -97,7 +97,7 @@ class Gen extends Model
   class $this->class_name {
     
     static int file_id = $this->file_id;
-    static String endPoint = "'{$this->end_point}'";
+    static String endPoint = "{$this->end_point}";
     $generate_vars
   
     static fromJson(dynamic m) {

@@ -72,16 +72,14 @@ class CaseModelController extends AdminController
             return 'Loading...';
         }
 
-
         $grid = new Grid(new CaseModel());
         $grid->disableCreateButton();
-
-        $grid->model()->orderBy('id', 'Desc');
 
 
         $u = Auth::user();
         if ($u->isRole('ca-agent')) {
             $grid->model()->where([
+                'case_submitted' => 1,
                 'reported_by' => $u->id
             ]);
             $grid->disableExport();
@@ -89,10 +87,16 @@ class CaseModelController extends AdminController
             $u->isRole('ca-team')
         ) {
             $grid->model()->where([
+                'case_submitted' => 1,
                 'ca_id' => $u->ca_id
             ])->orWhere([
+                'case_submitted' => 1,
                 'reported_by' => $u->id
             ]);
+        } else {
+            $grid->model()->where([
+                'case_submitted' => 1
+            ])->orderBy('id', 'Desc');
         }
 
         //if($u->isRole('admin'))
@@ -122,7 +126,7 @@ class CaseModelController extends AdminController
 
 
             $f->equal('ca_id', "Filter by CA")
-                ->select(ConservationArea::all()->pluck('name', 'id')); 
+                ->select(ConservationArea::all()->pluck('name', 'id'));
             $ajax_url = url(
                 '/api/ajax?'
                     . "&search_by_1=name"
@@ -134,7 +138,7 @@ class CaseModelController extends AdminController
             $f->equal('district_id', 'Filter by district')->select(function ($id) {
                 $a = Location::find($id);
                 if ($a) {
-                    return [ $a->name];
+                    return [$a->name];
                 }
             })
                 ->ajax($ajax_url);
@@ -221,7 +225,7 @@ class CaseModelController extends AdminController
         $grid->column('sub_county_id', __('Sub-county'))
             ->hide()
             ->display(function () {
-                if($this->sub_county == null){
+                if ($this->sub_county == null) {
                     return '-';
                 }
                 return $this->sub_county->name;

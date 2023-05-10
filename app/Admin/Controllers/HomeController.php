@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
 
 
-        $done = [];
+/*         $done = [];
         $sus = CaseSuspect::all();
         foreach ($sus as $key => $s) {
             $case = CaseModel::find($s->case_id);
@@ -48,7 +48,7 @@ class HomeController extends Controller
             }
             $done[] = $s->uwa_suspect_number;
         }
-        dd(count($sus) . " ==> " . count($done));
+        dd(count($sus) . " ==> " . count($done)); */
 
         /* 
         $faker = Faker::create();

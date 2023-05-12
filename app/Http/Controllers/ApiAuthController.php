@@ -45,6 +45,67 @@ class ApiAuthController extends Controller
     }
 
 
+    public function min_login(Request $r)
+    {
+        if ($r->phone_number == null) {
+            return $this->error('Email address is required.');
+        }
+        $phone_number = Utils::prepare_phone_number($r->phone_number);
+
+        if (!Utils::phone_number_is_valid($phone_number)) {
+            $phone_number = $r->phone_number;
+        }
+        if ($r->password == null) {
+            return $this->error('Password is required.');
+        }
+
+        $u = Administrator::where('phone_number_1', $phone_number)
+            ->orWhere('username', $phone_number)
+            ->orWhere('email', $phone_number)
+            ->first();
+        if ($u == null) {
+            return $this->error('User account not found.');
+        }
+
+        //auth('api')->factory()->setTTL(Carbon::now()->addMonth(12)->timestamp);
+
+        Config::set('jwt.ttl', 60 * 24 * 30 * 365);
+
+        $token = auth('api')->attempt([
+            'username' => $phone_number,
+            'password' => trim($r->password),
+        ]);
+
+
+        if ($token == null) {
+            $token = auth('api')->attempt([
+                'phone_number_1' => $phone_number,
+                'password' => trim($r->password),
+            ]);
+        }
+
+
+        if ($token == null) {
+            $token = auth('api')->attempt([
+                'email' => $phone_number,
+                'password' => trim($r->password),
+            ]);
+        }
+
+
+
+        if ($token == null) {
+            return $this->error('Wrong credentials.');
+        }
+        $u->token = $token;
+
+        $data['id'] = $u->id;
+        $data['token'] = $u->token;
+        $data['name'] = $u->name;
+
+        return $this->success(json_encode($data), 'Logged in successfully.');
+    }
+
     public function login(Request $r)
     {
         if ($r->phone_number == null) {

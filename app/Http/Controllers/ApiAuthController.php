@@ -29,7 +29,16 @@ class ApiAuthController extends Controller
             'password' => 'admin',
         ]);
         die($token); */
-        $this->middleware('auth:api', ['except' => ['login', 'register','users/min/login','min/login']]);
+        $this->middleware(
+            'auth:api',
+            [
+                'except' => [
+                    'login',
+                    'register',
+                    'min/login',
+                ]
+            ]
+        );
     }
 
 

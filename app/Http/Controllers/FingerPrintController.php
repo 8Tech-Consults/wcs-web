@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaseSuspect;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;

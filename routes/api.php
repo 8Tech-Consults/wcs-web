@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::POST("users/register", [ApiAuthController::class, "register"]);
 Route::POST("users/login", [ApiAuthController::class, "login"]);
-Route::POST("users/min/login", [FingerPrintController::class, "min_login"]);
+Route::POST("min/login", [FingerPrintController::class, "min_login"]);
 Route::POST("temp-data", function (Request $r) {
     if (
         $r->user_id == null ||

@@ -25,22 +25,22 @@ class FingerPrintController extends Controller
 
 
     public function link_suspects(Request $r)
-    { 
-        $id_1 = $r->get('id1');
-        $id_2 = $r->get('id2');
+    {
+        $id_1 = $r->id1;
+        $id_2 = $r->id2;
         die("{$id_1}-{$id_2}");
     }
 
     public function fingers_to_download(Request $r)
-    { 
+    {
         //$destination = $_SERVER['DOCUMENT_ROOT'].('/uwa/public/storage/images/'); 
-        $destination = Utils::docs_root() . '/storage/images/' ;
+        $destination = Utils::docs_root() . '/storage/images/';
         $files = array_diff(scandir($destination), array('.', '..'));
         $my_files = [];
         foreach ($files as $key => $f) {
             $ext = pathinfo($f, PATHINFO_EXTENSION);
-            if($ext != 'bmp'){
-                continue; 
+            if ($ext != 'bmp') {
+                continue;
             }
             $my_files[] = $f;
         }

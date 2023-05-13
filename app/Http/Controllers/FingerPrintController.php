@@ -24,6 +24,22 @@ class FingerPrintController extends Controller
      */
 
 
+    public function fingers_to_download(Request $r)
+    { 
+        //$destination = $_SERVER['DOCUMENT_ROOT'].('/uwa/public/storage/images/'); 
+        $destination = Utils::docs_root() . '/storage/images/' ;
+        $files = array_diff(scandir($destination), array('.', '..'));
+        $my_files = [];
+        foreach ($files as $key => $f) {
+            $ext = pathinfo($f, PATHINFO_EXTENSION);
+            if($ext != 'bmp'){
+                continue; 
+            }
+            $my_files[] = $f;
+        }
+        die(json_encode($my_files));
+    }
+
     public function min_suspects(Request $r)
     {
         $suss = [];

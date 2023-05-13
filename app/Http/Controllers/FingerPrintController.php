@@ -26,9 +26,47 @@ class FingerPrintController extends Controller
 
     public function link_suspects(Request $r)
     {
-        $id_1 = $r->id1;
+        $id_1 = $_GET['id1'];
         $id_2 = $r->id2;
-        die("{$id_1}-{$id_2}");
+        $suspect_1 = CaseSuspect::find($id_1);
+        $suspect_2 = CaseSuspect::find($id_2);
+
+        if ($suspect_1 == null) {
+            die("Suspect 1 not found.");
+        }
+        if ($suspect_2 == null) {
+            die("Suspect 2 not found.");
+        }
+
+        $unique_id_1 = $suspect_1->unique_id;
+        $unique_id_2 = $suspect_1->unique_id;
+
+        $unique_id = "";
+        if ($unique_id_1 != null && strlen($unique_id_1) > 2) {
+            if ($unique_id_1 == $unique_id_2) {
+                die("Suspects already linked");
+            }
+            $unique_id = $unique_id_1;
+        }
+
+        if (strlen($unique_id) < 2) {
+            if ($unique_id_2 != null && strlen($unique_id_2) > 2) {
+                if ($unique_id_1 == $unique_id_2) {
+                    die("Suspects already linked");
+                }
+                $unique_id = $unique_id_2;
+            }
+        }
+
+        if (strlen($unique_id) < 2) {
+            $unique_id = time() . "" . rand(10000, 1000000);
+        }
+
+        $suspect_1->unique_id = $unique_id;
+        $suspect_2->unique_id = $unique_id;
+        $suspect_2->save();
+        $suspect_1->save();
+        die("SUCCESSFULLY LINKED!");
     }
 
     public function fingers_to_download(Request $r)

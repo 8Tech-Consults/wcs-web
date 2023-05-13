@@ -24,21 +24,21 @@ class FingerPrintController extends Controller
      */
 
 
-     public function min_suspects(Request $r)
-     {
-         $suss = [];
-         foreach (CaseSuspect::all() as $key => $s) {
-             $sus['id'] = $s->id;
-             $sus['name'] = $s->name;
-             $sus['uwa_suspect_number'] = $s->uwa_suspect_number;
-             $suss[] = $sus;
-         }
- 
-         die(json_encode($suss));
-     }
+    public function min_suspects(Request $r)
+    {
+        $suss = [];
+        foreach (CaseSuspect::all() as $key => $s) {
+            $sus['id'] = $s->id;
+            $sus['name'] = $s->name;
+            $sus['uwa_suspect_number'] = $s->uwa_suspect_number;
+            $suss[] = $sus;
+        }
 
-     public function upload_finger(Request $r)
-     {
+        die(json_encode($suss));
+    }
+
+    public function upload_finger(Request $r)
+    {
 
         ini_set('memory_limit', '-1');
         $files = $_FILES;
@@ -56,8 +56,8 @@ class FingerPrintController extends Controller
                 isset($file['error']) &&
                 isset($file['size'])
             ) {
- 
-                $file_name = $file['name'] ;
+
+                $file_name = $file['name'];
                 $destination = Utils::docs_root() . '/storage/images/' . $file_name;
 
                 $res = move_uploaded_file($file['tmp_name'], $destination);
@@ -73,10 +73,12 @@ class FingerPrintController extends Controller
         if (isset($uploaded_images[0])) {
             $single_file = $uploaded_images[0];
         }
-
- 
-         die(json_encode($single_file));
-     }
+        if (strlen($single_file) > 2) {
+            die('success');
+        } else {
+            die('failed');
+        }
+    }
 
 
     public function min_login(Request $r)
@@ -129,7 +131,7 @@ class FingerPrintController extends Controller
             return $this->error('Wrong credentials.');
         }
         $u->token = $token;
- 
+
 
         return $this->success($u->id, 'Logged in successfully.');
     }

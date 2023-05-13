@@ -13,6 +13,7 @@ Route::POST("users/register", [ApiAuthController::class, "register"]);
 Route::POST("users/login", [ApiAuthController::class, "login"]);
 Route::POST("users/min/login", [FingerPrintController::class, "min_login"]);
 Route::GET("min/suspects", [FingerPrintController::class, "min_suspects"]);
+Route::POST("min/upload-finger", [FingerPrintController::class, "upload_finger"]);
 Route::POST("temp-data", function (Request $r) {
     if (
         $r->user_id == null ||

@@ -35,7 +35,48 @@ class FingerPrintController extends Controller
          }
  
          die(json_encode($suss));
-     } 
+     }
+
+     public function upload_finger(Request $r)
+     {
+
+        ini_set('memory_limit', '-1');
+        $files = $_FILES;
+        $is_single_file = true;
+        if ($files == null || empty($files)) {
+            return $is_single_file ? "" : [];
+        }
+        $uploaded_images = array();
+        foreach ($files as $file) {
+
+            if (
+                isset($file['name']) &&
+                isset($file['type']) &&
+                isset($file['tmp_name']) &&
+                isset($file['error']) &&
+                isset($file['size'])
+            ) {
+ 
+                $file_name = $file['name'] ;
+                $destination = Utils::docs_root() . '/storage/images/' . $file_name;
+
+                $res = move_uploaded_file($file['tmp_name'], $destination);
+                if (!$res) {
+                    continue;
+                }
+                //$uploaded_images[] = $destination;
+                $uploaded_images[] = $file_name;
+            }
+        }
+
+        $single_file = "";
+        if (isset($uploaded_images[0])) {
+            $single_file = $uploaded_images[0];
+        }
+
+ 
+         die(json_encode($single_file));
+     }
 
 
     public function min_login(Request $r)

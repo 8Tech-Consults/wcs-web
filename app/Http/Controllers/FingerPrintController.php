@@ -147,11 +147,8 @@ class FingerPrintController extends Controller
         if ($r->phone_number == null) {
             return $this->error('Email address is required.');
         }
-        $phone_number = Utils::prepare_phone_number($r->phone_number);
-
-        if (!Utils::phone_number_is_valid($phone_number)) {
-            $phone_number = $r->phone_number;
-        }
+        $phone_number = $r->phone_number;
+ 
         if ($r->password == null) {
             return $this->error('Password is required.');
         }

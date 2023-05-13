@@ -24,6 +24,13 @@ class FingerPrintController extends Controller
      */
 
 
+    public function link_suspects(Request $r)
+    { 
+        $id_1 = $r->get('id1');
+        $id_2 = $r->get('id2');
+        die("{$id_1}-{$id_2}");
+    }
+
     public function fingers_to_download(Request $r)
     { 
         //$destination = $_SERVER['DOCUMENT_ROOT'].('/uwa/public/storage/images/'); 

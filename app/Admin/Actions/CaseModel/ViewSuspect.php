@@ -11,6 +11,6 @@ class ViewSuspect  extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/case-suspects/{$model->id}");
+        return $this->response()->redirect(admin_url("/case-suspects/{$model->id}"));
     }
 }

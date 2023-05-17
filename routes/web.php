@@ -35,7 +35,7 @@ Route::get('/login', function () {
 
 Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
-})->name("register");
+})->name("gen");
 
 Route::get('/register', function () {
   die("register");

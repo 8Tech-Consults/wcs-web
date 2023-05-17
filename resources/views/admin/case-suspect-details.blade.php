@@ -141,15 +141,17 @@ use App\Models\Utils;
                     't' => 'Has suspect been handed over to police?',
                     's' => $s->is_suspects_arrested,
                 ])
-                @include('components.detail-item', [
-                    't' => 'Arrest date',
-                    's' => Utils::my_date($s->arrest_date_time),
-                ])
 
                 @include('components.detail-item', [
                     't' => 'Managment action',
                     's' => $s->management_action,
                 ])
+
+                @include('components.detail-item', [
+                    't' => 'Arrest date',
+                    's' => Utils::my_date($s->arrest_date_time),
+                ])
+
                 @include('components.detail-item', [
                     't' => 'Managment remarks',
                     's' => $s->not_arrested_remarks,
@@ -179,8 +181,6 @@ use App\Models\Utils;
                     't' => 'Arrest parish',
                     's' => $s->arrest_parish,
                 ])
-
-
 
             </div>
             <div class="col-md-6 border-left pl-2 pl-5">
@@ -372,7 +372,7 @@ use App\Models\Utils;
                 't' => 'Case outcome at police level',
                 's' => $s->police_action,
             ])
-        
+
             @include('components.detail-item', [
                 't' => 'Remarks by Police',
                 's' => $s->police_action_remarks,
@@ -407,6 +407,9 @@ use App\Models\Utils;
                         <tr>
                             <th width="5%" scope="row">#{{ $e->id }}</th>
                             <td width="25%">
+                                <?php
+                                $pics = $e->get_photos();
+                                ?>
                                 @if (count($pics) < 1)
                                     <b>No photo.</b>
                                 @else
@@ -421,12 +424,12 @@ use App\Models\Utils;
                             </td>
                             <td>
                                 @include('components.detail-item', [
-                                    't' => 'HAS Wildlife?',
-                                    's' => $e->type_wildlife,
+                                    't' => 'Wildlife Species ',
+                                    's' => $e->get_species(),
                                 ])
                                 @include('components.detail-item', [
-                                    't' => 'HAS IMPLEMENT?',
-                                    's' => $e->type_implement,
+                                    't' => 'IMPLEMENT ',
+                                    's' => $e->get_implement(),
                                 ])
                                 @include('components.detail-item', [
                                     't' => 'HAS OTHERS?',
@@ -489,6 +492,7 @@ use App\Models\Utils;
 
         </div>
     </div>
+
 
 
     <hr class="my-5">

@@ -155,11 +155,12 @@ class ArrestsController extends AdminController
         $grid->model()
             ->where([
                 'is_suspects_arrested' => 'Yes',
-            ])->where(
+            ])
+           /*  ->where(
                 'is_suspect_appear_in_court',
                 '!=',
                 'Yes'
-            )
+            ) */
             ->orderBy('id', 'Desc');
 
         $u = Auth::user();
@@ -353,7 +354,11 @@ class ArrestsController extends AdminController
             $actions->disableedit();
 
             $actions->add(new ViewSuspect);
-            $actions->add(new AddCourte);
+            if($actions->row->is_suspect_appear_in_court != 'Yes'){
+                $actions->add(new AddCourte);
+            }
+
+            
             $actions->add(new EditArrest);
         });
 

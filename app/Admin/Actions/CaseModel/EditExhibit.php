@@ -11,6 +11,6 @@ class EditExhibit extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/exhibits/{$model->id}/edit");
+        return $this->response()->redirect(admin_url("/exhibits/{$model->id}/edit"));
     }
 }

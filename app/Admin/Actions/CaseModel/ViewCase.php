@@ -11,6 +11,6 @@ class ViewCase  extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/cases/{$model->id}");
+        return $this->response()->redirect(admin_url("/cases/{$model->id}"));
     }
 }

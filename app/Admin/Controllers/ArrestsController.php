@@ -89,7 +89,7 @@ class ArrestsController extends AdminController
                     return 'No';
                 }
             });
-            
+
             $export->column('is_jailed', function ($value, $original) {
                 if (
                     $original == 1 ||
@@ -156,7 +156,7 @@ class ArrestsController extends AdminController
             ->where([
                 'is_suspects_arrested' => 'Yes',
             ])
-           /*  ->where(
+            /*  ->where(
                 'is_suspect_appear_in_court',
                 '!=',
                 'Yes'
@@ -354,11 +354,11 @@ class ArrestsController extends AdminController
             $actions->disableedit();
 
             $actions->add(new ViewSuspect);
-            if($actions->row->is_suspect_appear_in_court != 'Yes'){
+            if ($actions->row->is_suspect_appear_in_court != 'Yes') {
                 $actions->add(new AddCourte);
             }
 
-            
+
             $actions->add(new EditArrest);
         });
 
@@ -373,12 +373,23 @@ class ArrestsController extends AdminController
         $form = new Form(new CaseSuspect());
 
         $arr = (explode('/', $_SERVER['REQUEST_URI']));
-        $pendingCase = null;
+
+
         $ex = CaseSuspect::find($arr[2]);
+        if ($ex == null) {
+            foreach ($arr as $key => $val) {
+                $ex = CaseSuspect::find($val);
+                if ($ex != null) {
+                    break;
+                }
+            }
+        }
+
+        $pendingCase = Utils::get_edit_case();
         if ($ex != null) {
             $pendingCase = CaseModel::find($ex->case_id);
         } else {
-            die("Exhibit not found.");
+            die("Case not found.");
         }
         if ($pendingCase == null) {
             die("Case not found.");
@@ -393,6 +404,11 @@ class ArrestsController extends AdminController
 
         $form->display('SUSPECT')->default($ex->uwa_suspect_number);
         $form->divider();
+
+        /*  $crb_no = null;
+        foreach ($pendingCase->suspects as $key => $val) {
+            dd($val);
+        } */
 
         $form->disableCreatingCheck();
         $form->disableReset();
@@ -425,7 +441,8 @@ class ArrestsController extends AdminController
 
                 $hasPendingSusps = null;
                 $csb = null;
-                $pendingCase = Utils::hasPendingCase(Auth::user());
+                $pendingCase = Utils::get_edit_case();
+                $pendingCase = Utils::get_edit_case();
                 if ($pendingCase != null) {
                     if ($pendingCase->suspects->count() > 0) {
                         $hasPendingSusps = true;
@@ -443,7 +460,7 @@ class ArrestsController extends AdminController
                             $hasPendingSusps = false;
                             $csb = null;
                             $sd = null;
-                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            $pendingCase = Utils::get_edit_case();
                             if ($pendingCase != null) {
                                 if ($pendingCase->suspects->count() > 0) {
                                     $hasPendingSusps = true;
@@ -508,7 +525,7 @@ class ArrestsController extends AdminController
                                 });
 
                             if ($csb == null) {
-                                $form->text('arrest_crb_number', 'Police CRB number');
+                                $form->text('arrest_crb_number', 'Police CRB number')->rules('required');
                             } else {
                                 $form->text('arrest_crb_number', 'Police CRB number')
                                     ->rules('required')
@@ -529,7 +546,7 @@ class ArrestsController extends AdminController
                         ->rules('required')
                         ->when('Yes', function ($form) {
                             $supects = [];
-                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            $pendingCase = Utils::get_edit_case();
                             if ($pendingCase != null) {
                                 if ($pendingCase->suspects->count() > 0) {
                                     foreach ($pendingCase->suspects as $sus) {
@@ -610,7 +627,7 @@ class ArrestsController extends AdminController
                     $hasPendingSusps = false;
                     $csb = null;
                     $sd = null;
-                    $pendingCase = Utils::hasPendingCase(Auth::user());
+                    $pendingCase = Utils::get_edit_case();
                     if ($pendingCase != null) {
                         if ($pendingCase->suspects->count() > 0) {
                             $hasPendingSusps = true;
@@ -684,7 +701,7 @@ class ArrestsController extends AdminController
                                 });
                         })->when('Yes', function ($form) {
                             $supects = [];
-                            $pendingCase = Utils::hasPendingCase(Auth::user());
+                            $pendingCase = Utils::get_edit_case();
                             if ($pendingCase != null) {
                                 if ($pendingCase->suspects->count() > 0) {
                                     foreach ($pendingCase->suspects as $sus) {

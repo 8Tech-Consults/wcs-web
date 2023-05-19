@@ -133,6 +133,12 @@ use App\Models\Utils;
                                     't' => 'Wildlife',
                                     's' => $e->wildlife_pieces,
                                 ])
+                                
+                                @include('components.detail-item', [
+                                    't' => 'Specimen',
+                                    's' => $e->specimen,
+                                ])
+                                
                                 @include('components.detail-item', [
                                     't' => 'IMPLEMENT',
                                     's' => $e->implement_pieces,

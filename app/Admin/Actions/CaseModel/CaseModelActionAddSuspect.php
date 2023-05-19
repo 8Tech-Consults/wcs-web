@@ -11,6 +11,6 @@ class CaseModelActionAddSuspect extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/new-case-suspects/create?add_suspect_to_case_id={$model->id}");
+        return $this->response()->redirect(admin_url("/new-case-suspects/create?add_suspect_to_case_id={$model->id}"));
     }
 }

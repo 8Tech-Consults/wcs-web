@@ -11,6 +11,6 @@ class EditSuspect extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/case-suspects/{$model->id}/edit");
+        return $this->response()->redirect(admin_url("/case-suspects/{$model->id}/edit"));
     }
 }

@@ -11,6 +11,6 @@ class AddArrest extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/arrests/{$model->id}/edit");
+        return $this->response()->redirect(admin_url("/arrests/{$model->id}/edit"));
     }
 }

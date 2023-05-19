@@ -42,9 +42,7 @@ class CourtsController extends AdminController
     protected function grid()
     {
         $statuses = [1, 2, 3];
-
-
-
+ 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
@@ -55,17 +53,17 @@ class CourtsController extends AdminController
 
         $grid = new Grid(new CaseSuspect());
 
- 
+
         $grid->export(function ($export) {
 
             $export->except(['actions']);
- 
+
             // $export->only(['column3', 'column4' ...]);
 
 
             $export->filename('Court Cases');
- 
-            $export->except(['photo', 'action']); 
+
+            $export->except(['photo', 'action']);
             // $export->originalValue(['is_jailed']);
 
             $export->column('is_jailed', function ($value, $original) {
@@ -77,7 +75,7 @@ class CourtsController extends AdminController
                 } else {
                     return 'No';
                 }
-            }); 
+            });
             $export->column('is_fined', function ($value, $original) {
                 if (
                     $original == 1 ||
@@ -87,7 +85,7 @@ class CourtsController extends AdminController
                 } else {
                     return 'No';
                 }
-            }); 
+            });
             $export->column('is_suspect_appear_in_court', function ($value, $original) {
                 if (
                     $original == 1 ||
@@ -123,12 +121,10 @@ class CourtsController extends AdminController
             $export->column('national_id_number', function ($value, $original) {
                 return  $original;
             });
-
- 
         });
 
 
-         
+
         $grid->disableBatchActions();
         $grid->disableCreateButton();
 
@@ -327,7 +323,7 @@ class CourtsController extends AdminController
 
 
 
-            
+
         $grid->column('reported_by', __('Reported by'))
             ->display(function () {
 
@@ -364,16 +360,13 @@ class CourtsController extends AdminController
 
         $arr = (explode('/', $_SERVER['REQUEST_URI']));
         $pendingCase = null;
-        $ex = CaseSuspect::find($arr[2]);
-        if ($ex != null) {
-            $pendingCase = CaseModel::find($ex->case_id);
-        } else {
-            die("Exhibit not found.");
-        }
-        if ($pendingCase == null) {
-            die("Case not found.");
-        }
 
+        $pendingCase = Utils::get_edit_case();
+        $ex = Utils::get_edit_suspect();
+ 
+        if ($ex == null || $pendingCase == null ) {
+            die("Suspect or case not found."); 
+        }  
         if ($pendingCase == null) {
             Admin::script('window.location.replace("' . admin_url("cases") . '");');
             return 'Loading...';
@@ -390,13 +383,12 @@ class CourtsController extends AdminController
         $form->disableViewCheck();
 
 
-        $arr = (explode('/', $_SERVER['REQUEST_URI']));
-        $pendingCase = null;
-        $ex = CaseSuspect::find($arr[2]);
+        $pendingCase = Utils::get_edit_case();
+        $ex = Utils::get_edit_suspect(); 
         if ($ex != null) {
             $pendingCase = CaseModel::find($ex->case_id);
         } else {
-            die("Exhibit not found.");
+            die("Suspect not found.");
         }
         if ($pendingCase == null) {
             die("Case not found.");
@@ -409,7 +401,8 @@ class CourtsController extends AdminController
             $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
         }
         $csb = null;
-        $pendingCase = Utils::hasPendingCase(Auth::user());
+        $pendingCase = Utils::get_edit_case();
+        $ex = Utils::get_edit_suspect();
         if ($pendingCase != null) {
             if ($pendingCase->suspects->count() > 0) {
                 $hasPendingSusps = true;
@@ -458,7 +451,8 @@ class CourtsController extends AdminController
 
                 $form->divider('Court information');
                 $courtFileNumber = null;
-                $pendingCase = Utils::hasPendingCase(Auth::user());
+                $pendingCase = Utils::get_edit_case();
+                $ex = Utils::get_edit_suspect();
                 if ($pendingCase != null) {
                     $courtFileNumber = $pendingCase->getCourtFileNumber();
                 }

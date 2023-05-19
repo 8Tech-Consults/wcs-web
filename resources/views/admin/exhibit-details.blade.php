@@ -21,7 +21,7 @@ use App\Models\Utils;
                         {{--                         <th scope="col">Action</th> --}}
                     </tr>
                 </thead>
-                <tbody> 
+                <tbody>
                     <tr>
                         <th width="5%" scope="row">#{{ $e->id }}</th>
                         <td width="25%">
@@ -60,6 +60,12 @@ use App\Models\Utils;
                                 't' => 'Wildlife',
                                 's' => $e->wildlife_pieces,
                             ])
+
+                            @include('components.detail-item', [
+                                't' => 'Specimen',
+                                's' => $e->specimen,
+                            ])
+
                             @include('components.detail-item', [
                                 't' => 'IMPLEMENT',
                                 's' => $e->implement_pieces,

@@ -11,6 +11,6 @@ class CaseModelActionEditCase extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect("/cases/{$model->id}/edit");
+        return $this->response()->redirect(admin_url("/cases/{$model->id}/edit"));
     }
 }

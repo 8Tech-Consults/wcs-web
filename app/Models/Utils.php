@@ -62,7 +62,7 @@ class Utils  extends Model
     public static function system_boot($u)
     {
         ini_set('memory_limit', '-1');
- 
+
 
         /*      foreach (CaseSuspect::all() as $key => $c) {
             $c->arrest_latitude = '0.00000';
@@ -254,13 +254,13 @@ class Utils  extends Model
                 "reported_by" => $u->id
             ])
                 ->orderBy('id', 'Desc')
-                ->first(); 
+                ->first();
         }
 
-        if ($case == null) { 
+        if ($case == null) {
             return null;
         }
-        
+
         if ($case->exhibits != null) {
             if (count($case->exhibits) > 0) {
                 if ($case->case_step < 3) {
@@ -298,6 +298,43 @@ class Utils  extends Model
         return Utils::my_date_time($raw);
     }
 
+    public static function get_edit_suspect()
+    {
+        $arr = (explode('/', $_SERVER['REQUEST_URI']));
+        $pendingCase = null;
+        $ex = CaseSuspect::find($arr[2]);
+        if ($ex == null) {
+            foreach ($arr as $key => $val) {
+                $ex = CaseSuspect::find($val);
+                if ($ex != null) {
+                    break;
+                }
+            }
+        }
+ 
+        return $ex;
+    }
+
+    public static function get_edit_case()
+    {
+        $arr = (explode('/', $_SERVER['REQUEST_URI']));
+        $pendingCase = null;
+        $ex = CaseSuspect::find($arr[2]);
+        if ($ex == null) {
+            foreach ($arr as $key => $val) {
+                $ex = CaseSuspect::find($val);
+                if ($ex != null) {
+                    break;
+                }
+            }
+        }
+
+        $pendingCase = null; 
+        if($ex != null){
+            $pendingCase = CaseModel::find($ex->case_id);
+        }
+        return $pendingCase;
+    }
     public static function docs_root($params = array())
     {
         $r = $_SERVER['DOCUMENT_ROOT'] . "";
@@ -529,7 +566,7 @@ class Utils  extends Model
         $c = Carbon::parse($t);
         if ($t == null) {
             return $t;
-        } 
+        }
         return $c->format('d M, Y - h:m a');
     }
 

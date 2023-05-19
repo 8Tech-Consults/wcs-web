@@ -257,9 +257,16 @@ use App\Models\Utils;
                     's' => $s->court_file_number,
                 ])
 
+                
+                <?php 
+                    $court_name = "";
+                    if($s->court!=null){
+                        $court_name = $s->court->name;
+                    }
+                ?>
                 @include('components.detail-item', [
                     't' => 'Court name',
-                    's' => $s->court_name,
+                    's' => $court_name,
                 ])
                 @include('components.detail-item', [
                     't' => 'Lead prosecutor',
@@ -442,6 +449,12 @@ use App\Models\Utils;
                                     't' => 'Wildlife',
                                     's' => $e->wildlife_pieces,
                                 ])
+
+                                @include('components.detail-item', [
+                                    't' => 'Specimen',
+                                    's' => $e->specimen,
+                                ])
+
                                 @include('components.detail-item', [
                                     't' => 'IMPLEMENT',
                                     's' => $e->implement_pieces,

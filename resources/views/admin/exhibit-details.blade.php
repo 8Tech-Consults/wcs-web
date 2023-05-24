@@ -45,6 +45,12 @@ use App\Models\Utils;
                                 't' => 'Wildlife Species ',
                                 's' => $e->get_species(),
                             ])
+
+                            @include('components.detail-item', [
+                                't' => 'Specimen',
+                                's' => $e->specimen,
+                            ])
+
                             @include('components.detail-item', [
                                 't' => 'IMPLEMENT ',
                                 's' => $e->get_implement(),
@@ -61,10 +67,7 @@ use App\Models\Utils;
                                 's' => $e->wildlife_pieces,
                             ])
 
-                            @include('components.detail-item', [
-                                't' => 'Specimen',
-                                's' => $e->specimen,
-                            ])
+
 
                             @include('components.detail-item', [
                                 't' => 'IMPLEMENT',

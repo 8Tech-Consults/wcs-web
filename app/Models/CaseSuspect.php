@@ -255,6 +255,11 @@ class CaseSuspect extends Model
 
     function district()
     {
+        $sub = Location::find($this->district_id);
+        if ($sub == null) {
+            $this->district_id = 0;
+            $this->save();
+        } 
         return $this->belongsTo(Location::class, 'district_id');
     }
     function court()
@@ -277,6 +282,11 @@ class CaseSuspect extends Model
     }
     function sub_county()
     {
+        $sub = Location::find($this->sub_county_id);
+        if ($sub == null) {
+            $this->sub_county_id = 0;
+            $this->save();
+        } 
         return $this->belongsTo(Location::class, 'sub_county_id');
     }
     public function getNameAttribute()
@@ -287,6 +297,12 @@ class CaseSuspect extends Model
     function arrest_district()
     {
         //$ids Location::find($this->arrest_district_id);
+
+        $sub = Location::find($this->arrest_district_id);
+        if ($sub == null) {
+            $this->arrest_district_id = 0;
+            $this->save();
+        } 
 
         return $this->belongsTo(Location::class, 'arrest_district_id');
     }

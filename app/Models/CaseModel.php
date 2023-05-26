@@ -226,11 +226,21 @@ class CaseModel extends Model
 
     function district()
     {
+        $sub = Location::find($this->district_id);
+        if ($sub == null) {
+            $this->district_id = 0;
+            $this->save();
+        }
         return $this->belongsTo(Location::class, 'district_id');
     }
 
     function sub_county()
     {
+        $sub = Location::find($this->sub_county_id);
+        if ($sub == null) {
+            $this->sub_county_id = 0;
+            $this->save();
+        }
         return $this->belongsTo(Location::class, 'sub_county_id');
     }
 

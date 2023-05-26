@@ -66,8 +66,12 @@ use App\Models\Utils;
 
         </div>
         <div class="col-md-6 border-left pl-2 pl-5">
-            @include('components.detail-item', ['t' => 'Dsitrict', 's' => $c->district->name])
-            @include('components.detail-item', ['t' => 'Subcount', 's' => $c->sub_county->name])
+            @if ($c->district != null)
+                @include('components.detail-item', ['t' => 'Dsitrict', 's' => $c->district->name])
+            @endif
+            @if ($c->sub_county != null)
+                @include('components.detail-item', ['t' => 'Subcount', 's' => $c->sub_county->name])
+            @endif
             @include('components.detail-item', ['t' => 'Parish', 's' => $c->parish])
             @include('components.detail-item', ['t' => 'Village', 's' => $c->village])
         </div>

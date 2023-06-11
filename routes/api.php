@@ -8,6 +8,28 @@ use App\Models\TempData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('test',function (){
+    $data['name'] = 'Muhindo Mubaraka';
+    $data['sex'] = 'Male';
+    $data['country'] = 'Uganda';
+
+    die(json_encode($data));
+});
+
+Route::get('test-2',function (){
+    $data['name'] = 'Muhindo Mubaraka';
+    $data['sex'] = 'Male';
+    $data['country'] = 'Uganda';
+
+    $list[] = $data;
+
+    $data['name'] = 'Masiak Amina';
+    $data['sex'] = 'Female';
+    $data['country'] = 'Kenya';
+
+    $list[] = $data;
+    die(json_encode($list));
+});
 
 Route::POST("users/register", [ApiAuthController::class, "register"]);
 Route::POST("users/login", [ApiAuthController::class, "login"]);

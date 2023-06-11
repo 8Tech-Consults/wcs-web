@@ -15,8 +15,8 @@ use App\Models\Utils;
                         <th scope="col">ID</th>
                         <th scope="col">Photos</th>
                         <th scope="col">Category</th>
-                        <th scope="col">No. of Pieces</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">No. of Pieces</th>
                         <th scope="col">Description</th>
                         {{--                         <th scope="col">Action</th> --}}
                     </tr>
@@ -64,6 +64,21 @@ use App\Models\Utils;
                         <td>
                             @include('components.detail-item', [
                                 't' => 'Wildlife',
+                                's' => $e->wildlife_quantity . ' KGs',
+                            ])
+                            @include('components.detail-item', [
+                                't' => 'IMPLEMENT',
+                                's' => 'N/A',
+                            ])
+                            @include('components.detail-item', [
+                                't' => 'OTHERS',
+                                's' => 'N/A',
+                            ])
+                        </td>
+
+                        <td>
+                            @include('components.detail-item', [
+                                't' => 'Wildlife',
                                 's' => $e->wildlife_pieces,
                             ])
 
@@ -79,20 +94,7 @@ use App\Models\Utils;
                             ])
                         </td>
 
-                        <td>
-                            @include('components.detail-item', [
-                                't' => 'Wildlife',
-                                's' => $e->wildlife_quantity . ' KGs',
-                            ])
-                            @include('components.detail-item', [
-                                't' => 'IMPLEMENT',
-                                's' => 'N/A',
-                            ])
-                            @include('components.detail-item', [
-                                't' => 'OTHERS',
-                                's' => 'N/A',
-                            ])
-                        </td>
+
                         <td>
                             @include('components.detail-item', [
                                 't' => 'Wildlife?',

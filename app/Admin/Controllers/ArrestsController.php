@@ -654,7 +654,7 @@ class ArrestsController extends AdminController
                             ->readonly();
                     }
                 }
-
+/* 
                 if ($hasPendingSusps) {
 
                     $form->radio('use_same_court_information', "Do you want to use existing court information for this suspect?")
@@ -713,7 +713,7 @@ class ArrestsController extends AdminController
                                 ->options($supects)
                                 ->rules('required');
                         });
-                }
+                } */
             });
 
 

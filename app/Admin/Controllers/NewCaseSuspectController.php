@@ -639,15 +639,15 @@ class NewCaseSuspectController extends AdminController
                                                 'Dismissed by state' => 'Dismissed by state',
                                                 'Withdrawn by complainant' => 'Withdrawn by complainant',
                                             ]);
-                                            $form->date('police_action_date', 'Date');
-                                            $form->textarea('police_action_remarks', 'Remarks');
+                                            $form->date('police_action_date', 'Date')->rules('required');
+                                            $form->textarea('police_action_remarks', 'Remarks')->rules('required');
                                         })->when('Re-opened', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
                                             ]);
-                                            $form->date('police_action_date', 'Date');
-                                            $form->textarea('police_action_remarks', 'Remarks');
+                                            $form->date('police_action_date', 'Date')->rules('required');
+                                            $form->textarea('police_action_remarks', 'Remarks')->rules('required');
                                         });
                                 })
                                 ->when('Yes', function ($form) {
@@ -755,7 +755,7 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                            $form->text('cautioned_remarks', 'Enter caution remarks')->rules('required');
                                                         });
 
                                                     $form->radio('suspect_appealed', __('Did the suspect appeal?'))
@@ -842,14 +842,14 @@ class NewCaseSuspectController extends AdminController
                                         'Withdrawn by complainant' => 'Withdrawn by complainant',
                                     ]);
                                     $form->date('police_action_date', 'Date');
-                                    $form->textarea('police_action_remarks', 'Remarks');
+                                    $form->textarea('police_action_remarks', 'Remarks')->rules('required');
                                 })->when(3, function ($form) {
                                     $form->select('police_action', 'Case outcome at police level')->options([
                                         'Police bond' => 'Police bond',
                                         'Skipped bond' => 'Skipped bond',
                                     ]);
                                     $form->date('police_action_date', 'Date');
-                                    $form->textarea('police_action_remarks', 'Remarks');
+                                    $form->textarea('police_action_remarks', 'Remarks')->rules('required');
                                 });
                         })
                         ->when('Yes', function ($form) {
@@ -917,7 +917,7 @@ class NewCaseSuspectController extends AdminController
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
                                                 ])
-                                                ->when(1, function ($form) {
+                                                ->when('Yes', function ($form) {
                                                     $form->date('jail_date', 'Jail date');
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                     $form->text('prison', 'Prison name');
@@ -952,7 +952,7 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                    $form->text('cautioned_remarks', 'Enter caution remarks')->rules('required');
                                                 });
 
                                             $form->radio('suspect_appealed', __('Did the suspect appeal?'))

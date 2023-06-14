@@ -4,15 +4,15 @@ $i = 0;
     @foreach ($case->exhibits as $sus)
         <?php $i++; ?>
         <div class="">
-            Exhibit  <b>{{ $i }}.</b>
+            Exhibit <b>{{ $i }}.</b>
             {{--  {{ $sus->exhibit_catgory }} - {{ $sus->description }} , {{ $sus->quantity }}
             Exhibit --}}
 
             <small><u><a href="/new-exhibits-case-models/{{ $sus->id }}/edit"
-                        title="Edit this suspect's information">Edit</a></u></small>
+                        title="Edit this exhibit's information">Edit</a></u></small>
             <small><u>
-                    <a href="javascript:;" {{-- href="/new-exhibits-case-models/{{ $case->id }}/edit?remove_suspect={{ $sus->id }}" --}} class="text-danger"
-                        title="Remove this suspect from this case">Remove</a></u>
+                    <a href="{{ url('/new-exhibits-case-models?remove_exhibit=' . $sus->id) }}" class="text-danger"
+                        title="Remove this exhibit from this case">Remove</a></u>
             </small>
 
         </div>

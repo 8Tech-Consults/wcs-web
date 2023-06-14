@@ -64,7 +64,7 @@ use App\Models\Utils;
                         <td>
                             @include('components.detail-item', [
                                 't' => 'Wildlife',
-                                's' => $e->wildlife_quantity . ' KGs',
+                                's' =>  ($e->wildlife_quantity) ? $e->wildlife_quantity." KGs" : "-"  ,
                             ])
                             @include('components.detail-item', [
                                 't' => 'IMPLEMENT',

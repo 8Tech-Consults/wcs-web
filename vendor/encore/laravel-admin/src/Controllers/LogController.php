@@ -40,11 +40,10 @@ class LogController extends AdminController
             if (empty($input)) {
                 return '<code>{}</code>';
             }
-
-            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</pre>';
+            return '<pre>' . json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG) . '</pre>';
         });
 
-        $grid->column('created_at', trans('admin.created_at'));
+        $grid->column('created_at', 'Accessed')->sortable();
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableEdit();

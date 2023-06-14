@@ -31,6 +31,15 @@ class NewExhibitsCaseModelController extends AdminController
     protected function grid()
     {
 
+        if (isset($_GET['remove_exhibit'])) {
+            $remove_suspect = ((int)($_GET['remove_exhibit']));
+            if ($remove_suspect > 0) {
+                $_sus = Exhibit::find($remove_suspect);
+                if ($_sus != null) {
+                    $_sus->delete();
+                }
+            }
+        } 
 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());

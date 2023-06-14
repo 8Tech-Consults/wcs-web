@@ -29,7 +29,10 @@ use App\Models\Utils;
                 't' => 'Report date',
                 's' => Utils::my_date_time($c->created_at),
             ])
+            @include('components.detail-item', ['t' => 'Complainant', 's' => $c->officer_in_charge])
+            @include('components.detail-item', ['t' => 'Detection method', 's' => $c->detection_method])
             @include('components.detail-item', ['t' => 'Reported by', 's' => $c->reportor->name])
+
         </div>
         <div class="pt-3 pt-md-0 col-md-4">
             <div class=" border border-primary p-3">
@@ -161,7 +164,7 @@ use App\Models\Utils;
                             <td>
                                 @include('components.detail-item', [
                                     't' => 'Wildlife',
-                                    's' => $e->wildlife_quantity . ' KGs',
+                                    's' =>  ($e->wildlife_quantity) ? $e->wildlife_quantity." KGs" : "-"  ,
                                 ])
                                 @include('components.detail-item', [
                                     't' => 'IMPLEMENT',

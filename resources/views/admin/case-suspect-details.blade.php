@@ -78,7 +78,7 @@ use App\Models\Utils;
                 's' => $s->uwa_suspect_number,
             ])
 
-            @include('components.detail-item', ['t' => 'occuptaion', 's' => $s->occuptaion])
+            @include('components.detail-item', ['t' => 'OCCUPATION', 's' => $s->occuptaion])
         </div>
         <div class="pt-3 pt-md-0 col-md-5">
             <div class=" border border-primary p-3">
@@ -255,8 +255,12 @@ use App\Models\Utils;
                     's' => $s->is_suspect_appear_in_court,
                 ])
                 @include('components.detail-item', [
-                    't' => 'Court date',
+                    't' => 'Court File Number',
                     's' => $s->court_file_number,
+                ])
+                @include('components.detail-item', [
+                    't' => 'Court date',
+                    's' => Utils::my_date($s->court_date),
                 ])
 
 

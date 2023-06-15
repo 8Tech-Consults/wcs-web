@@ -929,7 +929,7 @@ class NewCaseSuspectController extends AdminController
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
                                                 ])
-                                                ->when(1, function ($form) {
+                                                ->when('Yes', function ($form) {
                                                     $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                                 });
 

@@ -525,8 +525,9 @@ class CaseModelController extends AdminController
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
-                        ]);
-                    $form->decimal('fined_amount', 'File amount')->help("(In UGX)");
+                        ])->when('Yes',function($form){
+                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                        });
 
                     $form->radio('community_service', __('Was suspect issued a community service?'))
                         ->options([

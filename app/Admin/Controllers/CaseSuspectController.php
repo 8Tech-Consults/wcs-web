@@ -1013,10 +1013,10 @@ class CaseSuspectController extends AdminController
 
                                         $form->radio('is_fined', __('Was suspect fined?'))
                                             ->options([
-                                                1 => 'Yes',
-                                                0 => 'No',
+                                                'Yes' => 'Yes',
+                                                'No' => 'No',
                                             ])
-                                            ->when(1, function ($form) {
+                                            ->when('Yes', function ($form) {
                                                 $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                             });
 

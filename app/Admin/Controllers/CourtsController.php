@@ -507,10 +507,10 @@ class CourtsController extends AdminController
                             ->when('Convicted', function ($form) {
                                 $form->radio('is_jailed', __('Was suspect jailed?'))
                                     ->options([
-                                        1 => 'Yes',
-                                        0 => 'No',
+                                        "Yes" => 'Yes',
+                                        "No" => 'No',
                                     ])
-                                    ->when(1, function ($form) {
+                                    ->when('Yes', function ($form) {
                                         $form->date('jail_date', 'Jail date');
                                         $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                         $form->text('prison', 'Prison name');
@@ -519,10 +519,10 @@ class CourtsController extends AdminController
 
                                 $form->radio('is_fined', __('Was suspect fined?'))
                                     ->options([
-                                        1 => 'Yes',
-                                        0 => 'No',
+                                        'Yes' => 'Yes',
+                                        'No' => 'No',
                                     ])
-                                    ->when(1, function ($form) {
+                                    ->when('Yes', function ($form) {
                                         $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                     });
 

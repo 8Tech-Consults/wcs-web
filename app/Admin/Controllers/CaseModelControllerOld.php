@@ -453,7 +453,7 @@ class CaseModelController extends AdminController
                         'Cautioned' => 'Cautioned',
                         'Police bond' => 'Police bond',
                         'Skipped bond' => 'Skipped bond'
-                    ]);
+                    ])->rules('required');
 
 
                     $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))

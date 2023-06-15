@@ -430,9 +430,9 @@ class ArrestsController extends AdminController
                     'Fined' => 'Fined',
                     'Cautioned and Released' => 'Cautioned and Released',
                     'At Large' => 'At Large',
-                ]);
+                ])->rules('required');
 
-                $form->textarea('not_arrested_remarks', 'Remarks');
+                $form->textarea('not_arrested_remarks', 'Remarks')->rules('required');
             })
             ->when('Yes', function ($form) {
 
@@ -654,7 +654,7 @@ class ArrestsController extends AdminController
                             ->readonly();
                     }
                 }
-/* 
+                /* 
                 if ($hasPendingSusps) {
 
                     $form->radio('use_same_court_information', "Do you want to use existing court information for this suspect?")

@@ -385,9 +385,9 @@ class NewCaseSuspectController extends AdminController
                     'Fined' => 'Fined',
                     'Cautioned and Released' => 'Cautioned and Released',
                     'At Large' => 'At Large',
-                ]);
+                ])->rules('required');
 
-                $form->textarea('not_arrested_remarks', 'Remarks');
+                $form->textarea('not_arrested_remarks', 'Remarks')->rules('required');
             })
             ->when('Yes', function ($form) {
 

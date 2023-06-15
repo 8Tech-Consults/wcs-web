@@ -870,9 +870,9 @@ class CaseSuspectController extends AdminController
                 $form->select('management_action', 'Action taken by management')->options([
                     'Fined' => 'Fined',
                     'Cautioned' => 'Cautioned',
-                ]);
+                ])->rules('required');
 
-                $form->textarea('not_arrested_remarks', 'Remarks');
+                $form->textarea('not_arrested_remarks', 'Remarks')->rules('required');
             })
             ->when(1, function ($form) {
 

@@ -42,7 +42,7 @@ class CourtsController extends AdminController
     protected function grid()
     {
         $statuses = [1, 2, 3];
- 
+
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
@@ -183,6 +183,31 @@ class CourtsController extends AdminController
             $f->like('court_file_number', 'Filter by court file number');
             $f->like('prosecutor', 'Filter by prosecutor');
             $f->like('magistrate_name', 'Filter by magistrate');
+
+
+            $f->equal('case_outcome', 'Filter by Specific Court Case Status')->select([
+                'Dismissed' => 'Dismissed',
+                'Withdrawn by DPP' => 'Withdrawn by DPP',
+                'Acquittal' => 'Acquittal',
+                'Convicted' => 'Convicted',
+            ]);
+
+            $f->equal('suspect_court_outcome', 'Filter by Court case status')->select([
+                'Remand' => 'Remand',
+                'Court Bail' => 'Court bail',
+                'Committal' => 'Committal',
+                'Hearing' => 'Hearing',
+                'On-going inquiries' => 'On-going inquiries',
+                'Remand and Hearing' => 'Remand and Hearing',
+                'Court Bail and Hearing' => 'Court Bail and Hearing',
+                'Remand and on-going inquiries' => 'Remand and on-going inquiries',
+                'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
+            ]);
+
+            $f->equal('suspect_appealed', 'Filter Suspect Appeal')->select([
+                'Yes' => 'Appealed',
+                'No' => 'Not Appealed'
+            ]);
         });
 
 
@@ -363,10 +388,10 @@ class CourtsController extends AdminController
 
         $pendingCase = Utils::get_edit_case();
         $ex = Utils::get_edit_suspect();
- 
-        if ($ex == null || $pendingCase == null ) {
-            die("Suspect or case not found."); 
-        }  
+
+        if ($ex == null || $pendingCase == null) {
+            die("Suspect or case not found.");
+        }
         if ($pendingCase == null) {
             Admin::script('window.location.replace("' . admin_url("cases") . '");');
             return 'Loading...';
@@ -384,7 +409,7 @@ class CourtsController extends AdminController
 
 
         $pendingCase = Utils::get_edit_case();
-        $ex = Utils::get_edit_suspect(); 
+        $ex = Utils::get_edit_suspect();
         if ($ex != null) {
             $pendingCase = CaseModel::find($ex->case_id);
         } else {
@@ -516,7 +541,6 @@ class CourtsController extends AdminController
                                         $form->text('prison', 'Prison name');
                                         $form->date('jail_release_date', 'Date released');
                                     });
-
                                 $form->radio('is_fined', __('Was suspect fined?'))
                                     ->options([
                                         'Yes' => 'Yes',

@@ -143,6 +143,11 @@ use App\Models\Utils;
                 ])
 
                 @include('components.detail-item', [
+                    't' => 'Arrest date',
+                    's' => Utils::my_date($s->arrest_date_time),
+                ])
+
+                @include('components.detail-item', [
                     't' => 'Managment action',
                     's' => $s->management_action,
                 ])
@@ -152,10 +157,7 @@ use App\Models\Utils;
                     's' => $s->not_arrested_remarks,
                 ])
 
-                @include('components.detail-item', [
-                    't' => 'Arrest date',
-                    's' => Utils::my_date($s->arrest_date_time),
-                ])
+
 
 
                 @include('components.detail-item', [

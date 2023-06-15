@@ -94,7 +94,7 @@ class AllSuspectController extends AdminController
                 'Yes' => 'Arrested',
             ]);
 
-            $f->equal('is_suspect_appear_in_court', 'Filter by court status')->select([
+            $f->equal('is_suspect_appear_in_court', '“Filter by Case status')->select([
                 'No' => 'Not in court',
                 "Yes" => 'In court',
             ]);

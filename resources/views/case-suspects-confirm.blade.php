@@ -10,7 +10,7 @@ $i = 0;
                         title="Edit this suspect's information">Edit</a></u></small>
 
             @if (count($case->suspects) > 1)
-                <small><u><a href="/new-confirm-case-models/{{ $case->id }}/edit?remove_suspect={{ $sus->id }}"
+                <small><u><a href="/new-confirm-case-models/{{ $case->id }}/edit?c={{ $sus->id }}"
                             class="text-danger" title="Remove this suspect from this case">Remove</a></u>
                 </small>
             @endif

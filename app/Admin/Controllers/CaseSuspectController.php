@@ -9,6 +9,7 @@ use App\Admin\Actions\CaseModel\CaseModelActionAddSuspect;
 use App\Admin\Actions\CaseModel\EditSuspect;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
@@ -179,10 +180,17 @@ class CaseSuspectController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
- 
 
+            $f->like('suspect_number', 'Filter Suspect Number'); 
 
+            $f->equal('ca_id', 'Filter C.A of arrest')->select(
+                ConservationArea::all()->pluck('name', 'id')
+            );
+            $f->equal('pa_id', 'Filter P.A of arrest')->select(
+                PA::all()->pluck('name_text', 'id')
+            );
 
+            $f->like('arrest_crb_number', 'Filter CRB number');
             $f->equal('country', 'Filter country of origin')->select(
                 Utils::COUNTRIES()
             );
@@ -230,11 +238,11 @@ class CaseSuspectController extends AdminController
             ]);
 
 
-            $f->equal('status', 'Filter by Court status')->select([
+            $f->equal('status', '“Filter by Case status')->select([
                 'On-going investigation' => 'On-going investigation',
                 'Closed' => 'Closed',
                 'Re-opened' => 'Re-opened',
-            ]); 
+            ]);
         });
 
 

@@ -54,14 +54,14 @@ use App\Models\Utils;
 
                 var chartData = {
                     labels: JSON.parse('<?php echo json_encode($labels); ?>'),
-                    datasets: [{
+                    datasets: [/* {
                         type: 'line',
                         label: 'Active cases',
                         borderColor: window.chartColors.red,
                         borderWidth: 2,
                         fill: false,
                         data: {{ json_encode($count_arrests) }}
-                    }, {
+                    }, */ {
                         type: 'bar',
                         label: 'Closed cases',
                         backgroundColor: window.chartColors.green,

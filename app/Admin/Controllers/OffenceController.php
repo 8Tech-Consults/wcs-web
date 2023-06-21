@@ -25,10 +25,7 @@ class OffenceController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Offence());
-
-        $grid->disableActions();
-        $grid->disableActions();
-
+ 
 
         $grid->column('id', __('Id'))->hide();
         $grid->column('name', __('Offence title'))->sortable();

@@ -211,7 +211,7 @@ if (isset($_SESSION['reset_message'])) {
             <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
                 <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 350px;">
 
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="65%">
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="30%">
                     </center>
                     <hr class="my-4">
                     <h2 class="h3 text-center">Wildlife Offenders Database</h2>
@@ -270,8 +270,8 @@ if (isset($_SESSION['reset_message'])) {
 
 
 
-                    <p class="text-center mt-4 mb-0"><b>Partners</b></p>
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
+                    <p class="text-center mt-1 mb-0"><b>Partners</b></p>
+                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="75%">
                     </center>
 
                 </div>

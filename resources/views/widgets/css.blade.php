@@ -1,5 +1,5 @@
 <?php
-$primt_color = '#3B561D';
+$primt_color = '#438003';
 ?><style>
     .sidebar {
         background-color: #FFFFFF;

@@ -830,25 +830,25 @@ class NewCaseSuspectController extends AdminController
                                     'Re-opened' => 'Re-opened',
                                 ])
                                 ->rules('required')
-                                ->when(1, function ($form) {
+                                ->when('On-going investigation', function ($form) {
                                     $form->select('police_action', 'Case outcome at police level')->options([
                                         'Police bond' => 'Police bond',
                                         'Skipped bond' => 'Skipped bond',
                                     ]);
                                 })
-                                ->when(2, function ($form) {
+                                ->when('Closed', function ($form) {
                                     $form->select('police_action', 'Case outcome at police level')->options([
                                         'Dismissed by state' => 'Dismissed by state',
                                         'Withdrawn by complainant' => 'Withdrawn by complainant',
                                     ]);
-                                    $form->date('police_action_date', 'Date');
+                                    $form->date('police_action_date', 'Date')->rules('required');
                                     $form->textarea('police_action_remarks', 'Remarks')->rules('required');
-                                })->when(3, function ($form) {
+                                })->when('Re-opened', function ($form) {
                                     $form->select('police_action', 'Case outcome at police level')->options([
                                         'Police bond' => 'Police bond',
                                         'Skipped bond' => 'Skipped bond',
                                     ]);
-                                    $form->date('police_action_date', 'Date');
+                                    $form->date('police_action_date', 'Date')->rules('required');
                                     $form->textarea('police_action_remarks', 'Remarks')->rules('required');
                                 });
                         })

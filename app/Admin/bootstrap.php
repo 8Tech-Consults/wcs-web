@@ -21,6 +21,7 @@
 use Encore\Admin\Facades\Admin;
 use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
+use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Court;
@@ -33,14 +34,20 @@ use Illuminate\Support\Facades\Auth;
 
 Encore\Admin\Form::forget(['map', 'editor']);
 
-/* $i = 1;
-foreach (CaseSuspect::all() as $key => $c) {
-   $c->photo = 'images/' . rand(1, 20) . '.jpg';
-$t = Carbon::now();
-$c->created_at = $t->subDays(rand(-10, 360));
-$c->updated_at = $c->created_at;  
-$c->save();
+$i = 1;
+/* $ans = Animal::all()->toArray();
 
+foreach (Exhibit::all() as $key => $c) {
+    shuffle($ans);
+    $c->wildlife_species = $ans[2]['id'];
+    $c->save();
+    continue;
+    $c->save();
+    $t = Carbon::now();
+    $c->created_at = $t->subDays(rand(-10, 360));
+    $c->updated_at = $c->created_at;
+
+    $c->photo = 'images/' . rand(1, 20) . '.jpg';
     continue;
     $cou = $c->get_photos();
     if ($cou > 10) {
@@ -82,8 +89,8 @@ $c->save();
     //    $c->save();  
     $i++;
 }
-die(); */
-
+die();
+ */
 $u = Auth::user();
 if ($u != null) {
 

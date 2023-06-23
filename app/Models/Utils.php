@@ -577,9 +577,9 @@ class Utils  extends Model
         } else if ($s->is_suspect_appear_in_court == 'Yes') {
             return 'In Court';
         } else if ($s->is_arrested  == 'Yes') {
-            return 'Arrested';
+            return 'At Police';
         } else {
-            return 'Not Arrested';
+            return 'Not At Police';
         }
     }
 

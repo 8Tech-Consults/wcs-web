@@ -1,6 +1,16 @@
 <?php
 use App\Models\Utils;
-?><div class="container bg-white p-1 p-md-5">
+?><style>
+    .my-table th {
+        border: 4px solid black !important;
+    }
+
+    .my-table td,
+    .my-table tr {
+        border: 4px solid black !important;
+    }
+</style>
+<div class="container bg-white p-1 p-md-5">
     <div class="d-md-flex justify-content-between">
         <div class="">
             <h2 class="m-0 p-0 text-primary h3"><b>Case details</b>
@@ -85,116 +95,20 @@ use App\Models\Utils;
     <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits</b></h3>
     <div class="row">
         <div class="col-12">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover my-table">
                 <thead class="bg-primary">
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Photos</th>
                         <th scope="col">Category</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">No. of Pieces</th>
+                        <th scope="col">Quantity (KGs) & No. of Pieces</th>
                         <th scope="col">Description</th>
                         {{--                         <th scope="col">Action</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($c->exhibits as $e)
-                        <?php
-                        $pics = $e->get_photos();
-                        ?>
-                        <tr>
-                            <th width="5%" scope="row">#{{ $e->id }}</th>
-                            <td width="25%">
-                                <?php
-                                $pics = $e->get_photos();
-                                ?>
-                                @if (count($pics) < 1)
-                                    <b>No photo.</b>
-                                @else
-                                    @foreach ($pics as $pic)
-                                        <a href="{{ $pic }}" target="_blank" title="Click to view full image"
-                                            rel="noopener noreferrer">
-                                            <img class="border img-fluid rounded p-1" width="45%" class="img-fluid"
-                                                src="{{ $pic }}"></a>
-                                    @endforeach
-                                @endif
-
-                            </td>
-
-                            <td>
-                                @include('components.detail-item', [
-                                    't' => 'Wildlife',
-                                    's' => $e->wildlife_pieces,
-                                ])
-
-
-
-                                @include('components.detail-item', [
-                                    't' => 'IMPLEMENT',
-                                    's' => $e->implement_pieces,
-                                ])
-                                @include('components.detail-item', [
-                                    't' => 'OTHERS',
-                                    's' => 'N/A',
-                                ])
-                            </td>
-
-                            <td>
-                                @include('components.detail-item', [
-                                    't' => 'Wildlife Species ',
-                                    's' => $e->get_species(),
-                                ])
-
-                                @include('components.detail-item', [
-                                    't' => 'Specimen',
-                                    's' => $e->specimen,
-                                ])
-
-                                @include('components.detail-item', [
-                                    't' => 'IMPLEMENT ',
-                                    's' => $e->get_implement(),
-                                ])
-                                @include('components.detail-item', [
-                                    't' => 'HAS OTHERS?',
-                                    's' => $e->type_other,
-                                ])
-                            </td>
-
-
-                            <td>
-                                @include('components.detail-item', [
-                                    't' => 'Wildlife',
-                                    's' =>  ($e->wildlife_quantity) ? $e->wildlife_quantity." KGs" : "-"  ,
-                                ])
-                                @include('components.detail-item', [
-                                    't' => 'IMPLEMENT',
-                                    's' => 'N/A',
-                                ])
-                                @include('components.detail-item', [
-                                    't' => 'OTHERS',
-                                    's' => 'N/A',
-                                ])
-                            </td>
-                            <td>
-                                @include('components.detail-item', [
-                                    't' => 'Wildlife?',
-                                    's' => $e->wildlife_description,
-                                ])
-                                @include('components.detail-item', [
-                                    't' => 'IMPLEMENT?',
-                                    's' => $e->implement_description,
-                                ])
-                                @include('components.detail-item', [
-                                    't' => 'OTHERS?',
-                                    's' => $e->others_description,
-                                ])
-                            </td>
-
-                            {{-- <td width="20%">
-                                <a class="text-primary" href="{{ admin_url() }}">See full details about this
-                                    exhibit</a>
-                            </td> --}}
-                        </tr>
+                        @include('components/exhibit-item', ['e' => $e])
                     @endforeach
                 </tbody>
             </table>

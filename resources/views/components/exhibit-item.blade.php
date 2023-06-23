@@ -2,7 +2,7 @@
 use App\Models\Utils;
 ?>
 <tr>
-    <th width="5%" scope="row" rowspan="3">#{{ $e->id }}</th>
+    {{-- <th width="5%" scope="row" rowspan="3">#{{ $e->id }}</th> --}}
     <td width="25%" rowspan="3">
         <?php
         $pics = $e->get_photos();

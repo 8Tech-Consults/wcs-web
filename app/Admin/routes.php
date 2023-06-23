@@ -31,6 +31,7 @@ Route::group([
     $router->resource('courts', CourtController::class);
     $router->resource('animals', AnimalController::class);
     $router->resource('implements', ImplementTypeController::class);
+    $router->resource('specimens', SpecimenController::class);
 
     $router->resource('new-case', NewCaseModelController::class);
     $router->resource('new-case-suspects', NewCaseSuspectController::class);

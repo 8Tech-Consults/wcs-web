@@ -6,7 +6,7 @@ use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
 use App\Models\ImplementType;
-use App\Models\Utils;
+use App\Models\Specimen;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -105,29 +105,30 @@ class AddExhibitCaseModelController extends AdminController
 
 
                 $form->select('specimen', 'Specimen')->options(
-                    array(
-                        'Skins' => 'Skins',
-                        'Meat' => 'Meat',
-                        'Live animal' => 'Live animal',
-                        'Eggs' => 'Eggs',
-                        'Molars' => 'Molars',
-                        'Jaws' => 'Jaws',
-                        'Spikes /Ruills' => 'Spikes /Ruills',
-                        'Hair' => 'Hair',
-                        'Bone' => 'Bone',
-                        'Bangle' => 'Bangle',
-                        'Chopsticks' => 'Chopsticks',
-                        'Rosary' => 'Rosary',
-                        'Necklace' => 'Necklace',
-                        'Belt' => 'Belt',
-                        'Handbag' => 'Handbag',
-                        'Keyholder' => 'Keyholder',
-                        'Sculpture' => 'Sculpture',
-                        'Beads' => 'Beads',
-                        'Powder' => 'Powder',
-                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)', 
-                        'Other' => 'Other',
-                    )
+                    Specimen::all()->pluck('name', 'name')
+                    // array(
+                    //     'Skins' => 'Skins',
+                    //     'Meat' => 'Meat',
+                    //     'Live animal' => 'Live animal',
+                    //     'Eggs' => 'Eggs',
+                    //     'Molars' => 'Molars',
+                    //     'Jaws' => 'Jaws',
+                    //     'Spikes /Ruills' => 'Spikes /Ruills',
+                    //     'Hair' => 'Hair',
+                    //     'Bone' => 'Bone',
+                    //     'Bangle' => 'Bangle',
+                    //     'Chopsticks' => 'Chopsticks',
+                    //     'Rosary' => 'Rosary',
+                    //     'Necklace' => 'Necklace',
+                    //     'Belt' => 'Belt',
+                    //     'Handbag' => 'Handbag',
+                    //     'Keyholder' => 'Keyholder',
+                    //     'Sculpture' => 'Sculpture',
+                    //     'Beads' => 'Beads',
+                    //     'Powder' => 'Powder',
+                    //     'Powder (Crushed ivory)' => 'Powder (Crushed ivory)', 
+                    //     'Other' => 'Other',
+                    // )
                 )->rules('required');
 
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));

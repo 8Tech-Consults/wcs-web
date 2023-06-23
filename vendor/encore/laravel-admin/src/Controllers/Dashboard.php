@@ -58,31 +58,41 @@ class Dashboard
             $max = new Carbon();
             $max->subMonths($i);
             $min->subMonths(($i + 1));
+
+            // Check for specimen exhibits
             $ivory = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where([
-                    'wildlife_species' => 2
-                ])
-                ->count();
-            $pangolin = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where([
-                    'wildlife_species' => 64
-                ])
-                ->count();
-            $rhino = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where([
-                    'wildlife_species' => 6
-                ])
-                ->count();
-            $parrot = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where([
-                    'wildlife_species' => 6
-                ])
-                ->count();
-            $data['data'][] = $ivory + $pangolin + $rhino + $parrot;
+                ->where('specimen','like', '%ivory%')->count();
+            
+            $pangolin_scales = Exhibit::whereBetween('created_at', [$min, $max])
+                ->where('specimen','like', '%pangolin scale%')->count();
+            
+            $hippo_teeth = Exhibit::whereBetween('created_at', [$min, $max])
+                ->where('specimen', 'like','%hippo teeth%')->count();
+
+            // $ivory = Exhibit::whereBetween('created_at', [$min, $max])
+            //     ->where([
+            //         'wildlife_species' => 2
+            //     ])
+            //     ->count();
+            // $pangolin = Exhibit::whereBetween('created_at', [$min, $max])
+            //     ->where([
+            //         'wildlife_species' => 64
+            //     ])
+            //     ->count();
+            // $rhino = Exhibit::whereBetween('created_at', [$min, $max])
+            //     ->where([
+            //         'wildlife_species' => 6
+            //     ])
+            //     ->count();
+            // $parrot = Exhibit::whereBetween('created_at', [$min, $max])
+            //     ->where([
+            //         'wildlife_species' => 6
+            //     ])
+            //     ->count();
+            $data['data'][] = $ivory + $pangolin_scales + $hippo_teeth;
             $data['ivory'][] = $ivory;
-            $data['pangolin'][] = $pangolin;
-            $data['rhino'][] = $rhino;
-            $data['parrot'][] = $parrot;
+            $data['pangolin_scales'][] = $pangolin_scales;
+            $data['hippo_teeth'][] = $hippo_teeth;
             $data['labels'][] = Utils::month($max);
         }
 

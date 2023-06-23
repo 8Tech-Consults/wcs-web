@@ -1,6 +1,7 @@
 <?php
 use App\Models\Utils;
-?><style>
+?>
+<style>
     .my-table th {
         border: 4px solid black !important;
     }
@@ -74,20 +75,34 @@ use App\Models\Utils;
                 @include('components.detail-item', ['t' => 'PA', 's' => '-'])
             @endif
 
+            @if ($c->is_offence_committed_in_pa == 1 || $c->is_offence_committed_in_pa == 'Yes')
+                @include('components.detail-item', ['t' => 'Location', 's' => $c->village])
+
+                {{-- Simple patch to remove districts location --}}
+                @php
+                    $c->district->name = 'N/A';
+                    $c->sub_county->name = 'N/A';
+                    $c->parish = 'N/A';
+                    $c->village = 'N/A';
+                @endphp
+            @endif
             @include('components.detail-item', ['t' => 'GPS Latitude', 's' => $c->latitude])
             @include('components.detail-item', ['t' => 'GPS Longitude', 's' => $c->longitude])
 
         </div>
-        <div class="col-md-6 border-left pl-2 pl-5">
-            @if ($c->district != null)
-                @include('components.detail-item', ['t' => 'Dsitrict', 's' => $c->district->name])
-            @endif
-            @if ($c->sub_county != null)
-                @include('components.detail-item', ['t' => 'Subcount', 's' => $c->sub_county->name])
-            @endif
-            @include('components.detail-item', ['t' => 'Parish', 's' => $c->parish])
-            @include('components.detail-item', ['t' => 'Village', 's' => $c->village])
-        </div>
+        @if ($c->is_offence_committed_in_pa != 1 || $c->is_offence_committed_in_pa != 'Yes')
+            <div class="col-md-6 border-left pl-2 pl-5">
+                @if ($c->district != null)
+                    @include('components.detail-item', ['t' => 'District', 's' => $c->district->name])
+                @endif
+                @if ($c->sub_county != null)
+                    @include('components.detail-item', ['t' => 'Subcount', 's' => $c->sub_county->name])
+                @endif
+                @include('components.detail-item', ['t' => 'Parish', 's' => $c->parish])
+                @include('components.detail-item', ['t' => 'Village', 's' => $c->village])
+            </div>
+
+        @endif
     </div>
 
 

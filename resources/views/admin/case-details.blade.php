@@ -98,7 +98,7 @@ use App\Models\Utils;
             <table class="table table-striped table-hover my-table">
                 <thead class="bg-primary">
                     <tr>
-                        <th scope="col">ID</th>
+                        {{-- <th scope="col">ID</th> --}}
                         <th scope="col">Photos</th>
                         <th scope="col">Category</th>
                         <th scope="col">Quantity (KGs) & No. of Pieces</th>

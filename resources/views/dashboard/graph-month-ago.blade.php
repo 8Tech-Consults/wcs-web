@@ -23,7 +23,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Species Of Interest - 12 months ago</b>
+            <b>Specimens Of Interest - 12 months ago</b>
         </h3>
         <div>
             <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
@@ -62,24 +62,17 @@ use App\Models\Utils;
                             data: {{ json_encode($ivory) }}
                         }, {
                             type: 'line',
-                            label: 'Pangolin',
+                            label: 'Pangolin Scale',
                             borderColor: window.chartColors.blue,
                             borderWidth: 3,
-                            data: {{ json_encode($pangolin) }}
+                            data: {{ json_encode($pangolin_scales) }}
                         },
                         {
                             type: 'line',
-                            label: 'Rhino',
+                            label: 'Hippo Teeth',
                             borderColor: window.chartColors.orange,
                             borderWidth: 3,
-                            data: {{ json_encode($rhino) }}
-                        },
-                        {
-                            type: 'line',
-                            label: 'Parrot',
-                            borderColor: window.chartColors.purple,
-                            borderWidth: 3,
-                            data: {{ json_encode($parrot) }}
+                            data: {{ json_encode($hippo_teeth) }}
                         },
                         {
                             type: 'bar',

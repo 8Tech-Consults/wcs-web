@@ -131,7 +131,7 @@ use App\Models\Utils;
                 <thead class="bg-primary">
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Comment by</th>
+                        <th scope="col">Comment</th>
                         <th scope="col">Comment by</th>
                     </tr>
                 </thead>

@@ -3,12 +3,12 @@ use App\Models\Utils;
 ?>
 <style>
     .my-table th {
-        border: 4px solid black !important;
+        border: 2px solid black !important;
     }
 
     .my-table td,
     .my-table tr {
-        border: 4px solid black !important;
+        border: 2px solid rgb(184, 203, 204) !important;
     }
 </style>
 <div class="container bg-white p-1 p-md-5">
@@ -115,6 +115,12 @@ use App\Models\Utils;
                     <p class="py-1 my-0 "><b class="text-uppercase">PA:</b>
                         {{ $s->case->pa->name_text }} </p>
 
+                    @if($s->case->is_offence_committed_in_pa == 'Yes' || $s->case->is_offence_committed_in_pa == '1')
+                    <p class="py-1 my-0 "><b class="text-uppercase">Location:</b>
+                        {{ $s->case->village }} </p>
+
+                    @else 
+
                     <p class="py-1 my-0 "><b class="text-uppercase">CASE district:</b>
                         {{ Utils::get('App\Models\Location', $s->case->district_id)->name_text }} </p>
 
@@ -122,7 +128,7 @@ use App\Models\Utils;
                     <p class="py-1 my-0 "><b class="text-uppercase">CASE Sub-county:</b>
                         {{ Utils::get('App\Models\Location', $s->case->sub_county_id)->name_text }} </p>
 
-
+                    @endif
                     <p class="py-1 my-0 "><b class="text-uppercase">Reporter:</b>
                         {{ $s->case->reportor->name }} </p>
 

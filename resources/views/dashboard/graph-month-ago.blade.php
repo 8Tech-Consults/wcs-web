@@ -23,7 +23,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Cases - {{ count($labels) }} days ago</b>
+            <b>Species Of Interest - 12 months ago</b>
         </h3>
         <div>
             <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">

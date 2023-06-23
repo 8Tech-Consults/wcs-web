@@ -51,12 +51,13 @@ class Dashboard
     {
 
         $data = [];
-        for ($i = 14; $i >= 0; $i--) {
+
+        //get for the last year per month
+        for ($i = 12; $i >= 0; $i--) {
             $min = new Carbon();
             $max = new Carbon();
-            $max->subDays($i);
-            $min->subDays(($i + 1));
-            $count = CaseSuspect::whereBetween('created_at', [$min, $max])->count();
+            $max->subMonths($i);
+            $min->subMonths(($i + 1));
             $ivory = Exhibit::whereBetween('created_at', [$min, $max])
                 ->where([
                     'wildlife_species' => 2
@@ -77,12 +78,12 @@ class Dashboard
                     'wildlife_species' => 6
                 ])
                 ->count();
-            $data['data'][] = $count;
+            $data['data'][] = $ivory + $pangolin + $rhino + $parrot;
             $data['ivory'][] = $ivory;
             $data['pangolin'][] = $pangolin;
             $data['rhino'][] = $rhino;
             $data['parrot'][] = $parrot;
-            $data['labels'][] = Utils::my_date($max);
+            $data['labels'][] = Utils::month($max);
         }
 
         return view('dashboard.graph-month-ago', $data);

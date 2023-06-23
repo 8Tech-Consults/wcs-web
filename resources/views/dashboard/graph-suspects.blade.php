@@ -23,7 +23,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Crimes Vs Actions</b>
+            <b>Suspects Vs Actions</b>
         </h3>
         <div>
             <a href="{{ url('/case-suspects') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
@@ -64,10 +64,10 @@ use App\Models\Utils;
                         datasets: [{
                             label: 'Number of Suspects',
                             borderColor: window.chartColors.red,
-                            backgroundColor: window.chartColors.red,
+                            backgroundColor: window.chartColors.red,    
                             data: JSON.parse('<?php echo json_encode($created_at); ?>'),
                         }, {
-                            label: 'At Police',
+                            label: 'In Court',
                             borderColor: window.chartColors.blue,
                             backgroundColor: window.chartColors.blue,
                             data: JSON.parse('<?php echo json_encode($is_suspects_arrested); ?>'),

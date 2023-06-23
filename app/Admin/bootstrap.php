@@ -21,19 +21,73 @@
 use Encore\Admin\Facades\Admin;
 use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
+use App\Models\CaseModel;
+use App\Models\CaseSuspect;
 use App\Models\Court;
+use App\Models\Exhibit;
 use App\Models\Utils;
+use Carbon\Carbon;
 use Encore\Admin\Form;
 use Illuminate\Support\Facades\Auth;
 
 
 Encore\Admin\Form::forget(['map', 'editor']);
 
+/* $i = 1;
+foreach (CaseSuspect::all() as $key => $c) {
+   $c->photo = 'images/' . rand(1, 20) . '.jpg';
+$t = Carbon::now();
+$c->created_at = $t->subDays(rand(-10, 360));
+$c->updated_at = $c->created_at;  
+$c->save();
+
+    continue;
+    $cou = $c->get_photos();
+    if ($cou > 10) {
+        if (true) {
+            $x = 0;
+            $new = [];
+            for ($j = 0; $j < 2; $j++) {
+                $_n = 'images/ex-' . rand(1, 17) . '.jpg';
+                $new[] = $_n;
+            }
+            $c->wildlife_attachments = $new;
+            $c->save();
+
+            $x = 0;
+            $new = [];
+            for ($j = 0; $j < 2; $j++) {
+                $_n = 'images/ex-' . rand(1, 17) . '.jpg';
+                $new[] = $_n;
+            }
+            $c->implement_attachments = $new;
+            $c->save();
+
+            $x = 0;
+            $new = [];
+            for ($j = 0; $j < 2; $j++) {
+                $_n = 'images/ex-' . rand(1, 17) . '.jpg';
+                $new[] = $_n;
+            }
+            $c->others_attachments = $new;
+            $c->save();
+
+            echo ($c->id . "<br>");
+        }
+        echo count($c->get_photos()) . ". => " . $c->title . " <br> ";
+    }
+    $t = Carbon::now();
+    $c->created_at = $t->subDays(rand(-10, 360));
+    $c->updated_at = $c->created_at;
+    //    $c->save();  
+    $i++;
+}
+die(); */
 
 $u = Auth::user();
 if ($u != null) {
 
-/*     if (isset($_GET['log_me_out'])) {
+    /*     if (isset($_GET['log_me_out'])) {
     } else {
         if (isset($_GET['resend_2f_code'])) {
             $u->send2FCode();
@@ -95,13 +149,13 @@ Form::init(function (Form $form) {
 
     $form->disableEditingCheck();
 
-   // $form->disableCreatingCheck();
+    // $form->disableCreatingCheck();
 
     $form->disableViewCheck();
     $form->disableReset();
 
     $form->tools(function (Form\Tools $tools) {
         $tools->disableDelete();
-        $tools->disableView(); 
+        $tools->disableView();
     });
-}); 
+});

@@ -27,6 +27,7 @@ class AnimalController extends AdminController
     {
 
         $grid = new Grid(new Animal());
+        $grid->quickSearch('name');
         $grid->disableBatchActions();
         $grid->disableFilter();
         $grid->disableExport();

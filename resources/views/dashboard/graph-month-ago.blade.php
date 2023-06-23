@@ -54,15 +54,33 @@ use App\Models\Utils;
 
                 var chartData = {
                     labels: JSON.parse('<?php echo json_encode($labels); ?>'),
-                    datasets: [
-                        /* {
-                                                type: 'line',
-                                                label: 'Active cases',
-                                                borderColor: window.chartColors.red,
-                                                borderWidth: 2,
-                                                fill: false,
-                                                data: {{ json_encode($count_arrests) }}
-                                            }, */
+                    datasets: [{
+                            type: 'line',
+                            label: 'Ivory',
+                            borderColor: window.chartColors.red,
+                            borderWidth: 3,
+                            data: {{ json_encode($ivory) }}
+                        }, {
+                            type: 'line',
+                            label: 'Pangolin',
+                            borderColor: window.chartColors.blue,
+                            borderWidth: 3,
+                            data: {{ json_encode($pangolin) }}
+                        },
+                        {
+                            type: 'line',
+                            label: 'Rhino',
+                            borderColor: window.chartColors.orange,
+                            borderWidth: 3,
+                            data: {{ json_encode($rhino) }}
+                        },
+                        {
+                            type: 'line',
+                            label: 'Parrot',
+                            borderColor: window.chartColors.purple,
+                            borderWidth: 3,
+                            data: {{ json_encode($parrot) }}
+                        },
                         {
                             type: 'bar',
                             label: 'Total Cases',
@@ -75,7 +93,6 @@ use App\Models\Utils;
 
                 var ctx = document.getElementById('bar-line').getContext('2d');
                 new Chart(ctx, {
-                    type: 'bar',
                     data: chartData,
                     options: {
                         responsive: true,

@@ -6,6 +6,7 @@ use App\Models\CaseComment;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
+use App\Models\Exhibit;
 use App\Models\PA;
 use App\Models\User;
 use App\Models\Utils;
@@ -56,13 +57,31 @@ class Dashboard
             $max->subDays($i);
             $min->subDays(($i + 1));
             $count = CaseSuspect::whereBetween('created_at', [$min, $max])->count();
-            $count_arrests = CaseSuspect::whereBetween('created_at', [$min, $max])
+            $ivory = Exhibit::whereBetween('created_at', [$min, $max])
                 ->where([
-                    'is_suspects_arrested' => 'Yes'
+                    'wildlife_species' => 2
+                ])
+                ->count();
+            $pangolin = Exhibit::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'wildlife_species' => 64
+                ])
+                ->count();
+            $rhino = Exhibit::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'wildlife_species' => 6
+                ])
+                ->count();
+            $parrot = Exhibit::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'wildlife_species' => 6
                 ])
                 ->count();
             $data['data'][] = $count;
-            $data['count_arrests'][] = $count_arrests;
+            $data['ivory'][] = $ivory;
+            $data['pangolin'][] = $pangolin;
+            $data['rhino'][] = $rhino;
+            $data['parrot'][] = $parrot;
             $data['labels'][] = Utils::my_date($max);
         }
 

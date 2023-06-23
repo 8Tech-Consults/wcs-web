@@ -88,7 +88,6 @@ class PaController extends AdminController
 
  
         $form->select('subcounty', __('Sub county'))
-            ->rules('required')
             ->help('Where this PA is located')
             ->options(Location::get_sub_counties_array());
 

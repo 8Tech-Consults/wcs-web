@@ -49,11 +49,11 @@ use App\Models\Utils;
 
                 window.chartColors = {
                     red: 'rgb(255, 99, 132)',
-                    orange: 'rgb(255, 159, 64)',
+                    purple: 'rgb(153, 102, 255)',
                     yellow: 'rgb(255, 205, 86)',
+                    orange: 'rgb(255, 159, 64)',
                     green: 'rgb(75, 192, 192)',
                     blue: 'rgb(54, 162, 235)',
-                    purple: 'rgb(153, 102, 255)',
                     grey: 'rgb(201, 203, 207)'
                 };
 
@@ -62,22 +62,21 @@ use App\Models\Utils;
                     data: {
                         labels: JSON.parse('<?php echo json_encode($labels); ?>'),
                         datasets: [{
-                                label: 'Number of Suspects',
-                                borderColor: window.chartColors.red,
-                                backgroundColor: window.chartColors.red,
-                                data: JSON.parse('<?php echo json_encode($created_at); ?>'),
-                            }, {
-                                label: 'Number of arrests',
-                                borderColor: window.chartColors.blue,
-                                backgroundColor: window.chartColors.blue,
-                                data: JSON.parse('<?php echo json_encode($is_suspects_arrested); ?>'),
-                            }, {
-                                label: 'Suspects convicted',
-                                borderColor: window.chartColors.green,
-                                backgroundColor: window.chartColors.green,
-                                data: JSON.parse('<?php echo json_encode($is_suspect_appear_in_court); ?>'),
-                            }, 
-                        ]
+                            label: 'Number of Suspects',
+                            borderColor: window.chartColors.red,
+                            backgroundColor: window.chartColors.red,
+                            data: JSON.parse('<?php echo json_encode($created_at); ?>'),
+                        }, {
+                            label: 'At Police',
+                            borderColor: window.chartColors.blue,
+                            backgroundColor: window.chartColors.blue,
+                            data: JSON.parse('<?php echo json_encode($is_suspects_arrested); ?>'),
+                        }, {
+                            label: 'Suspects Convicted',
+                            borderColor: window.chartColors.purple,
+                            backgroundColor: window.chartColors.purple,
+                            data: JSON.parse('<?php echo json_encode($is_suspect_appear_in_court); ?>'),
+                        }, ]
                     },
                     options: {
                         responsive: true,

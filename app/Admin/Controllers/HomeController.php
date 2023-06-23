@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
 
 
-/*         $done = [];
+        /*         $done = [];
         $sus = CaseSuspect::all();
         foreach ($sus as $key => $s) {
             $case = CaseModel::find($s->case_id);
@@ -148,13 +148,13 @@ class HomeController extends Controller
 
         $content->row(function (Row $row) {
             $row->column(4, function (Column $column) {
-                $column->append(Dashboard::month_ago());
+                $column->append(Dashboard::graph_top_districts());
             });
             $row->column(4, function (Column $column) {
                 $column->append(Dashboard::graph_suspects());
             });
             $row->column(4, function (Column $column) {
-                $column->append(Dashboard::graph_top_districts());
+                $column->append(Dashboard::month_ago());
             });
         });
 

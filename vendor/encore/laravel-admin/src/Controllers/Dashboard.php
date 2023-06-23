@@ -58,7 +58,7 @@ class Dashboard
             $count = CaseSuspect::whereBetween('created_at', [$min, $max])->count();
             $count_arrests = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
-                    'is_suspects_arrested' => 1
+                    'is_suspects_arrested' => 'Yes'
                 ])
                 ->count();
             $data['data'][] = $count;
@@ -71,8 +71,6 @@ class Dashboard
 
     public static function graph_suspects()
     {
-
-
 
 
         for ($i = 12; $i >= 0; $i--) {
@@ -89,21 +87,19 @@ class Dashboard
                 ->count();
             $is_suspect_appear_in_court = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
-                    'is_suspect_appear_in_court' => 1
+                    'is_suspect_appear_in_court' => 'Yes'
                 ])
                 ->count();
 
-
-
             $is_jailed = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
-                    'is_jailed' => 1
+                    'court_status' => 'Concluded'
                 ])
                 ->count();
 
             $is_fined = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
-                    'is_fined' => 1
+                    'is_fined' => 'Yes'
                 ])
                 ->count();
 

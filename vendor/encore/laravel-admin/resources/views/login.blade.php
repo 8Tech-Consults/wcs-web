@@ -139,24 +139,24 @@ if (isset($_SESSION['reset_message'])) {
         }
 
         .my-btn-primary {
-            background-color: #277F4F;
+            background-color: #417c04;
             box-shadow: #2e8d5989 0px 2px 5px;
         }
 
         .btn-link {
-            color: #277F4F;
+            color: #417c04;
         }
 
         .my-btn-primary:hover {
-            color: #13502f;
+            color: #417c04;
         }
 
         .btn-link:hover {
-            color: #13502f;
+            color: #417c04;
         }
 
         .text-primary {
-            color: #13502f !important;
+            color: #417c04 !important;
         }
     </style>
 

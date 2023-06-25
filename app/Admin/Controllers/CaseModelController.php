@@ -55,8 +55,8 @@ class CaseModelController extends AdminController
         if (isset($_GET['add_exhibit_to_case_id'])) {
             $pendingCase = CaseModel::find($_GET['add_exhibit_to_case_id']);
             if ($pendingCase != null) {
+                session(['pending_case_id' => $pendingCase->id]);
                 $x = new Exhibit();
-                $x->case_id =  $pendingCase->id;
                 $x->reported_by =  Auth::user()->id;
                 $x->save();
                 Admin::script('window.location.replace("' . admin_url("add-exhibit/{$x->id}/edit") . '");');

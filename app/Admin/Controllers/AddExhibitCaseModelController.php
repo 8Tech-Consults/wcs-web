@@ -66,7 +66,7 @@ class AddExhibitCaseModelController extends AdminController
         $pendingCase = null;
         $ex = Exhibit::find($arr[2]);
         if ($ex != null) {
-            $pendingCase = CaseModel::find($ex->case_id);
+            $pendingCase = CaseModel::find(session('pending_case_id'));
         } else {
             die("Exhibit not found.");
         }
@@ -78,7 +78,7 @@ class AddExhibitCaseModelController extends AdminController
         $form = new Form(new Exhibit());
         $form->disableEditingCheck();
 
-        $form->hidden('case_id', 'Suspect photo')->default($pendingCase->id)->value($pendingCase->id);
+        $form->hidden('case_id')->default(0);
         $form->display('ADDING EXHIBIT TO CASE')->default($pendingCase->case_number);
         $form->divider();
 
@@ -106,29 +106,6 @@ class AddExhibitCaseModelController extends AdminController
 
                 $form->select('specimen', 'Specimen')->options(
                     Specimen::all()->pluck('name', 'name')
-                    // array(
-                    //     'Skins' => 'Skins',
-                    //     'Meat' => 'Meat',
-                    //     'Live animal' => 'Live animal',
-                    //     'Eggs' => 'Eggs',
-                    //     'Molars' => 'Molars',
-                    //     'Jaws' => 'Jaws',
-                    //     'Spikes /Ruills' => 'Spikes /Ruills',
-                    //     'Hair' => 'Hair',
-                    //     'Bone' => 'Bone',
-                    //     'Bangle' => 'Bangle',
-                    //     'Chopsticks' => 'Chopsticks',
-                    //     'Rosary' => 'Rosary',
-                    //     'Necklace' => 'Necklace',
-                    //     'Belt' => 'Belt',
-                    //     'Handbag' => 'Handbag',
-                    //     'Keyholder' => 'Keyholder',
-                    //     'Sculpture' => 'Sculpture',
-                    //     'Beads' => 'Beads',
-                    //     'Powder' => 'Powder',
-                    //     'Powder (Crushed ivory)' => 'Powder (Crushed ivory)', 
-                    //     'Other' => 'Other',
-                    // )
                 )->rules('required');
 
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
@@ -171,7 +148,15 @@ class AddExhibitCaseModelController extends AdminController
                 $form->divider();
             });
 
+        $form->saving(function (Form $form) {
+            $form->case_id = session('pending_case_id');
+            session()->forget('pending_case_id');
+        });
 
+        $form->saved( function (Form $form) {
+        return redirect(admin_url("cases/".$form->case_id));
+        });
+        
         return $form;
     }
 }

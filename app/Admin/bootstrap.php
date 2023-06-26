@@ -31,7 +31,11 @@ use Carbon\Carbon;
 use Encore\Admin\Form;
 use Illuminate\Support\Facades\Auth;
 
-
+// foreach (CaseSuspect::all() as $key => $suspect) {
+//     $suspect->is_convicted = ['Yes','No'][rand(0, 1)];
+//     $suspect->save();
+// }
+// die();
 Encore\Admin\Form::forget(['map', 'editor']);
 
 $i = 1;

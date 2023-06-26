@@ -18,4 +18,9 @@ class ConservationArea extends Model
             }
         });
     }
+
+    public function cases()
+    {
+        return $this->hasMany(CaseModel::class, 'pa_id');
+    }
 }

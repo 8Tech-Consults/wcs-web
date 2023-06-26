@@ -7,7 +7,7 @@ use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\CaseSuspectsComment;
 use App\Models\Exhibit;
-use App\Models\PA;
+use App\Models\ConservationArea;
 use App\Models\User;
 use App\Models\Utils;
 use Carbon\Carbon;
@@ -102,6 +102,9 @@ class Dashboard
     public static function graph_suspects()
     {
 
+        // Loop through CASESUSPECTS and toogle is_convicted randomly
+  
+
 
         for ($i = 12; $i >= 0; $i--) {
             $min = new Carbon();
@@ -119,8 +122,10 @@ class Dashboard
                 ->where([
                     'is_suspect_appear_in_court' => 'Yes'
                 ])
+                ->orWhere([
+                    'is_suspect_appear_in_court' => 1
+                ])
                 ->count();
-
             $is_jailed = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
                     'court_status' => 'Concluded'
@@ -133,6 +138,18 @@ class Dashboard
                 ])
                 ->count();
 
+            
+            $is_convicted = CaseSuspect::whereBetween('created_at', [$min, $max])
+                ->where([
+                    'is_convicted' => 'Yes'
+                ])
+                ->orWhere([
+                    'is_convicted' => 1
+                ])
+                ->count();
+            error_log("Convicted:   " .$is_convicted);
+
+            $data['is_convicted'][] = $is_convicted;
             $data['created_at'][] = $created_at;
             $data['is_suspects_arrested'][] = $is_suspects_arrested;
             $data['is_suspect_appear_in_court'][] = $is_suspect_appear_in_court;
@@ -149,25 +166,25 @@ class Dashboard
     {
 
         $tot = 0;
-        foreach (PA::all() as $key => $pa) {
-            $tot += count($pa->cases);
+        foreach (ConservationArea::all() as $key => $ca) {
+            $tot += count($ca->cases);
         }
 
 
         $data['labels'] = [];
         $data['count'] = [];
 
-        foreach (PA::all() as $key => $pa) {
-            $label = substr($pa->name, 0, 10);
-            if (strlen($pa->name) > 15) {
+        foreach (ConservationArea::all() as $key => $ca) {
+            $label = substr($ca->name, 0, 10);
+            if (strlen($ca->name) > 15) {
                 $label .= "...";
             }
 
             if ($tot > 0) {
-                $per = (int) ((count($pa->cases) / $tot) * 100);
+                $per = (int) ((count($ca->cases) / $tot) * 100);
                 $label .= " ($per%)";
             }
-            $data['count'][] = count($pa->cases);
+            $data['count'][] = count($ca->cases);
             $data['labels'][] = $label;
         }
 

@@ -70,12 +70,12 @@ use App\Models\Utils;
                             label: 'In Court',
                             borderColor: window.chartColors.blue,
                             backgroundColor: window.chartColors.blue,
-                            data: JSON.parse('<?php echo json_encode($is_suspects_arrested); ?>'),
+                            data: JSON.parse('<?php echo json_encode($is_suspect_appear_in_court); ?>'),
                         }, {
                             label: 'Convicted',
                             borderColor: window.chartColors.purple,
                             backgroundColor: window.chartColors.purple,
-                            data: JSON.parse('<?php echo json_encode($is_suspect_appear_in_court); ?>'),
+                            data: JSON.parse('<?php echo json_encode($is_convicted); ?>'),
                         }, ]
                     },
                     options: {

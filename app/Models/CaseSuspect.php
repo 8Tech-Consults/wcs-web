@@ -60,6 +60,9 @@ class CaseSuspect extends Model
 
     public function otherCasese()
     {
+        if ($this->unique_id == null || strlen($this->unique_id) < 2) {
+            return collect();
+        }
         return CaseSuspect::where('unique_id', $this->unique_id)->where('id', '!=', $this->id)->get();
     }
     public static function my_update($m)

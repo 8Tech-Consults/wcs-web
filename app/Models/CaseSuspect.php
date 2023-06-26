@@ -49,15 +49,19 @@ class CaseSuspect extends Model
             }
         });
         self::updating(function ($m) {
-           
+
             $m = CaseSuspect::my_update($m);
             if ($m->case_submitted == 1 || $m->case_submitted == '1') {
                 $m->case_submitted = '1';
-            } 
+            }
             return $m;
         });
     }
 
+    public function otherCasese()
+    {
+        return CaseSuspect::where('unique_id', $this->unique_id)->where('id', '!=', $this->id)->get();
+    }
     public static function my_update($m)
     {
         $m->district_id = 1;
@@ -259,7 +263,7 @@ class CaseSuspect extends Model
         if ($sub == null) {
             $this->district_id = 0;
             $this->save();
-        } 
+        }
         return $this->belongsTo(Location::class, 'district_id');
     }
     function court()
@@ -286,7 +290,7 @@ class CaseSuspect extends Model
         if ($sub == null) {
             $this->sub_county_id = 0;
             $this->save();
-        } 
+        }
         return $this->belongsTo(Location::class, 'sub_county_id');
     }
     public function getNameAttribute()
@@ -302,7 +306,7 @@ class CaseSuspect extends Model
         if ($sub == null) {
             $this->arrest_district_id = 0;
             $this->save();
-        } 
+        }
 
         return $this->belongsTo(Location::class, 'arrest_district_id');
     }

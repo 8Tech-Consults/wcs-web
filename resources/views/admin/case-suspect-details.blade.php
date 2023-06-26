@@ -115,19 +115,16 @@ use App\Models\Utils;
                     <p class="py-1 my-0 "><b class="text-uppercase">PA:</b>
                         {{ $s->case->pa->name_text }} </p>
 
-                    @if($s->case->is_offence_committed_in_pa == 'Yes' || $s->case->is_offence_committed_in_pa == '1')
-                    <p class="py-1 my-0 "><b class="text-uppercase">Location:</b>
-                        {{ $s->case->village }} </p>
-
-                    @else 
-
-                    <p class="py-1 my-0 "><b class="text-uppercase">CASE district:</b>
-                        {{ Utils::get('App\Models\Location', $s->case->district_id)->name_text }} </p>
+                    @if ($s->case->is_offence_committed_in_pa == 'Yes' || $s->case->is_offence_committed_in_pa == '1')
+                        <p class="py-1 my-0 "><b class="text-uppercase">Location:</b>
+                            {{ $s->case->village }} </p>
+                    @else
+                        <p class="py-1 my-0 "><b class="text-uppercase">CASE district:</b>
+                            {{ Utils::get('App\Models\Location', $s->case->district_id)->name_text }} </p>
 
 
-                    <p class="py-1 my-0 "><b class="text-uppercase">CASE Sub-county:</b>
-                        {{ Utils::get('App\Models\Location', $s->case->sub_county_id)->name_text }} </p>
-
+                        <p class="py-1 my-0 "><b class="text-uppercase">CASE Sub-county:</b>
+                            {{ Utils::get('App\Models\Location', $s->case->sub_county_id)->name_text }} </p>
                     @endif
                     <p class="py-1 my-0 "><b class="text-uppercase">Reporter:</b>
                         {{ $s->case->reportor->name }} </p>
@@ -137,6 +134,28 @@ use App\Models\Utils;
             </div>
         </div>
     </div>
+
+    @php
+        $otherCases = $s->otherCasese();
+    @endphp
+    <hr class="mt-4 mb-2 border-primary pb-0 mt-md-5 mb-md-5">
+    <h3 class="text-uppercase h4 p-0 m-0 text-center"><b>Other cases associated with suspect</b></h3>
+    <hr class="m-0 pt-2 mt-2 mb-3">
+    @if ($otherCases->count() == 0)
+        <div class="alert alert-info">
+            <p class="text-center">No other cases associated with this suspect</p>
+        </div>
+    @else
+        <ul>
+            @foreach ($otherCases as $_item)
+                <li><b>{{ $_item->case->title }}</b> - {{ $_item->case->case_number }}
+                    - <b><a target="_blank" href="{{ admin_url('cases/' . $_item->case->id) }}"><span
+                                class="text-primary" title="View This Case Details">VIEW THIS CASE DETAILS</span></a></b>
+                </li>
+            @endforeach
+        </ul>
+    @endif
+
 
     <hr class="mt-4 mb-2 border-primary pb-0 mt-md-5 mb-md-5">
     <h3 class="text-uppercase h4 p-0 m-0 text-center"><b>Offences Committed</b></h3>

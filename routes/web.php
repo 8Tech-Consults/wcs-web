@@ -36,6 +36,9 @@ Route::get('/login', function () {
 Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");
+Route::get('/mobile', function () {
+  return redirect(url('uwa-v1.apk'));
+})->name("gen");
 
 Route::get('/register', function () {
   die("register");

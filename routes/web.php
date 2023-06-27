@@ -38,10 +38,10 @@ Route::get('/gen', function () {
 })->name("gen");
 Route::get('/mobile', function () {
   return redirect(url('uwa-v1.apk'));
-})->name("gen");
+})->name("mobile");
 Route::get('/desktop', function () {
   return redirect(url('uwa-v1.exe'));
-})->name("gen");
+})->name("desktop");
 
 Route::get('/register', function () {
   die("register");

@@ -149,8 +149,9 @@ use App\Models\Utils;
         <ul>
             @foreach ($otherCases as $_item)
                 <li><b>{{ $_item->case->title }}</b> - {{ $_item->case->case_number }}
-                    - <b><a target="_blank" href="{{ admin_url('cases/' . $_item->case->id) }}"><span
-                                class="text-primary" title="View This Case Details">VIEW THIS CASE DETAILS</span></a></b>
+                    - <b><a target="_blank" href="{{ admin_url('case-suspects/' . $_item->id) }}"><span
+                                class="text-primary" title="View This Case Details">VIEW THIS CASE
+                                DETAILS</span></a></b>
                 </li>
             @endforeach
         </ul>

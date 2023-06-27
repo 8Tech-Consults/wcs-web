@@ -122,10 +122,13 @@ class ApiPostsController extends Controller
 
     public function index(Request $r)
     {
-        $data =  CaseModel::where([])
-        ->with('suspects','exhibits')
-        ->orderBy('id', 'Desc')
-        ->limit(25)->get();
+        $u = auth('api')->user();
+        $data =  CaseModel::where([
+            'reported_by' => $u->id
+        ])
+            ->with('suspects', 'exhibits')
+            ->orderBy('id', 'Desc')
+            ->limit(30)->get();
         return $this->success($data, 'Success.');
     }
 
@@ -249,7 +252,7 @@ class ApiPostsController extends Controller
             foreach (Schema::getColumnListing('case_suspects') as $key) {
                 if ($v->deleted_at != null) {
                     if (strlen($v->deleted_at) > 3) {
-                        $s->photo = 'images/'.$v->deleted_at;
+                        $s->photo = 'images/' . $v->deleted_at;
                     }
                 }
 
@@ -262,7 +265,7 @@ class ApiPostsController extends Controller
             }
 
 
-          
+
 
             $s->uwa_suspect_number = $v->uwa_suspect_number;
             $s->case_id = $case->id;
@@ -325,7 +328,7 @@ class ApiPostsController extends Controller
             $d = json_decode($e->attachment);
             if ((is_array($d))) {
                 foreach ($d as $c) {
-                    $imgs[] =  'images/'.str_replace('"', '', $c);
+                    $imgs[] =  'images/' . str_replace('"', '', $c);
                 }
             }
 
@@ -351,7 +354,7 @@ class ApiPostsController extends Controller
             }
             $e->case_id = $case->id;
 
-            
+
             $e->save();
         }
 

@@ -45,7 +45,7 @@ Route::get('/desktop', function () {
 Route::get('/fingerprint', function () {
   return redirect(url('UWA-FINGERPRINT.exe'));
 })->name("fingerprint");
-Route::get('/finger-print', function () {
+Route::get('/drivers', function () {
   return redirect(url('uwa-fingeprint-drivers.zip'));
 })->name("drivers");
 

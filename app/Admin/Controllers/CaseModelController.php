@@ -81,7 +81,7 @@ class CaseModelController extends AdminController
             $grid->model()->where([
                 'case_submitted' => 1,
                 'reported_by' => $u->id
-            ]);
+            ])->orderBy('id', 'Desc');
             $grid->disableExport();
         } else if (
             $u->isRole('ca-team')
@@ -92,7 +92,7 @@ class CaseModelController extends AdminController
             ])->orWhere([
                 'case_submitted' => 1,
                 'reported_by' => $u->id
-            ]);
+            ])->orderBy('id', 'Desc');
         } else {
             $grid->model()->where([
                 'case_submitted' => 1

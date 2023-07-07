@@ -6,6 +6,7 @@ use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
 use App\Models\ImplementType;
+use App\Models\Specimen;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -149,29 +150,7 @@ class NewExhibitsCaseModelController extends AdminController
 
 
                 $form->select('specimen', 'Specimen')->options(
-                    array(
-                        'Skins' => 'Skins',
-                        'Meat' => 'Meat',
-                        'Live animal' => 'Live animal',
-                        'Eggs' => 'Eggs',
-                        'Molars' => 'Molars',
-                        'Jaws' => 'Jaws',
-                        'Spikes /Ruills' => 'Spikes /Ruills',
-                        'Hair' => 'Hair',
-                        'Bone' => 'Bone',
-                        'Bangle' => 'Bangle',
-                        'Chopsticks' => 'Chopsticks',
-                        'Rosary' => 'Rosary',
-                        'Necklace' => 'Necklace',
-                        'Belt' => 'Belt',
-                        'Handbag' => 'Handbag',
-                        'Keyholder' => 'Keyholder',
-                        'Sculpture' => 'Sculpture',
-                        'Beads' => 'Beads',
-                        'Powder' => 'Powder',
-                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
-                        'Other' => 'Other',
-                    )
+                   Specimen::pluck('name','name')
                 )->rules('required');
 
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
@@ -220,6 +199,11 @@ class NewExhibitsCaseModelController extends AdminController
                 'No' => 'No',
             ])->required();
 
+        
+        // if saving add nothing is added skip to submit //ie no no no
+        $form->saved(function (Form $form) {
+            Exhibit::find($form->model()->id)->delete(); //remove the unnecessary exhibit
+        });  
 
         return $form;
     }

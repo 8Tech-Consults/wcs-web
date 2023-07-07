@@ -161,7 +161,7 @@ class ArrestsController extends AdminController
                 '!=',
                 'Yes'
             ) */
-            ->orderBy('id', 'Desc');
+            ->orderBy('updated_at', 'Desc');
 
         $u = Auth::user();
         if ($u->isRole('ca-agent')) {
@@ -469,7 +469,7 @@ class ArrestsController extends AdminController
                                 }
                             }
 
-                            $form->date('arrest_date_time', 'Arrest date and time');
+                            $form->date('arrest_date_time', 'Arrest date and time')->rules('required');
 
                             $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                                 ->options([
@@ -525,7 +525,7 @@ class ArrestsController extends AdminController
                                 });
 
                             if ($csb == null) {
-                                $form->text('arrest_crb_number', 'Police CRB number')->rules('required');
+                                $form->text('arrest_crb_number', 'Police CRB number');
                             } else {
                                 $form->text('arrest_crb_number', 'Police CRB number')
                                     ->rules('required')
@@ -543,7 +543,6 @@ class ArrestsController extends AdminController
                                     ->readonly();
                             }
                         })
-                        ->rules('required')
                         ->when('Yes', function ($form) {
                             $supects = [];
                             $pendingCase = Utils::get_edit_case();
@@ -564,6 +563,7 @@ class ArrestsController extends AdminController
                                 ->options($supects)
                                 ->rules('required');
                         })
+                        ->default('No')
                         ->rules('required');
                 } else {
 

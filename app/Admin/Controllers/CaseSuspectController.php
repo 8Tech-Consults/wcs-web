@@ -13,6 +13,7 @@ use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\SuspectCourtStatus;
 use App\Models\User;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
@@ -246,8 +247,6 @@ class CaseSuspectController extends AdminController
         });
 
 
-
-
         $grid->quickSearch('first_name')->placeholder('Search by first name..');
 
         $grid->column('case_id', __('Case number'))
@@ -351,9 +350,6 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
         $grid->column('age', __('D.O.B'))
-            ->display(function ($x) {
-                return Utils::my_date($x);
-            })
             ->hide()
             ->sortable();
         $grid->column('phone_number', __('Phone number'))->hide();
@@ -419,7 +415,12 @@ class CaseSuspectController extends AdminController
         $grid->column('arrest_date_time', 'Arrest date')
             ->hide()
             ->display(function ($d) {
-                return Utils::my_date($d);
+                if ($d == null) {
+                    return '-';
+                }else {
+                    return Utils::my_date($d);
+                }
+                // return Utils::my_date($d);
             });
         $grid->column('arrest_in_pa', __('Arrest in P.A'))
             ->display(function ($x) {
@@ -503,7 +504,6 @@ class CaseSuspectController extends AdminController
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();
         $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
-        $grid->column('court_file_status', 'Court file status')->hide()->sortable();
         $grid->column('case_outcome', 'Specific court case status')->hide()->sortable();
 
 
@@ -928,7 +928,6 @@ class CaseSuspectController extends AdminController
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                     'Canine Unit' => 'The Canine Unit',
                     'WCU' => 'WCU',
-                    'NRCN' => 'NRCN',
                     'LEU' => 'LEU',
                 ]);
 
@@ -953,6 +952,8 @@ class CaseSuspectController extends AdminController
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Police bond' => 'Police bond',
                                     'Skipped bond' => 'Skipped bond',
+                                    'Under police custody' => 'Under police custody',
+                                    'Escaped from colice custody' => 'Escaped from police custody',
                                 ]);
                             })
                             ->when(2, function ($form) {
@@ -966,6 +967,8 @@ class CaseSuspectController extends AdminController
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Police bond' => 'Police bond',
                                     'Skipped bond' => 'Skipped bond',
+                                    'Under police custody' => 'Under police custody',
+                                    'Escaped from colice custody' => 'Escaped from police custody',
                                 ]);
                                 $form->date('police_action_date', 'Date');
                                 $form->textarea('police_action_remarks', 'Remarks');
@@ -1060,18 +1063,11 @@ class CaseSuspectController extends AdminController
                                     });
                             })
                             ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
-
-
-                                $form->radio('suspect_court_outcome', 'Suspect court case status')->options([
-                                    'Remand' => 'Remand',
-                                    'Court Bail' => 'Court bail',
-                                ]);
-
-                                $form->radio('court_file_status', 'Court file status')->options([
-                                    'Perusal' => 'Perusal',
-                                    'Further investigation' => 'Further investigation',
-                                ]);
-                            });
+                                $form->radio('suspect_court_outcome', 'Suspect court case status')->options(
+                                    SuspectCourtStatus::pluck('name','name')
+                                );
+                            })
+                            ->rules('required');
                     });
             });
 

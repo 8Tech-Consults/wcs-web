@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Controllers;
 
+use App\Admin\Controllers\ConservationAreaController;
 use App\Models\ConservationArea;
 use App\Models\Enterprise;
 use App\Models\Location;
@@ -198,8 +199,8 @@ Edit Edit
 
         $form->select('pa_id', __('Duty station'))
             ->rules('required')
-            ->help('Protected area where  user is assigned')
-            ->options(PA::all()->pluck('name_text', 'id'));
+            ->help('Conservation area where  user is assigned')
+            ->options(ConservationArea::pluck('name', 'id'));
 
  
 

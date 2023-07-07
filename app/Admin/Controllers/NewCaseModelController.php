@@ -7,6 +7,7 @@ use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\DetectionMethod;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -198,12 +199,13 @@ class NewCaseModelController extends AdminController
             $form->html('<a class="btn btn-danger" href="' . admin_url("new-case-suspects/create") . '" >SKIP TO SUSPECTS</a>', 'SKIP');
         }
 
-        $form->text('title', __('Case title'))
-            ->help("Describe this case in summary")
+        $form->text('title', __('Case title:  Uganda Vs '))
+            ->help("Enter suspects names here")
+            ->placeholder("Enter suspects names here")
             ->rules('required');
+            
         $form->textarea('offence_description', __('Case description'))
-            ->help("Describe this case in details")
-            ->rules('required');
+            ->help("Describe this case in details");
 
         $form->date('case_date', 'Date when opened')
             ->required()
@@ -247,22 +249,15 @@ class NewCaseModelController extends AdminController
             ->default(1);
 
         $form->select('detection_method', __('Detection method'))
-            ->options([
-                'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
-                'Contacted by security agencies' => 'Contacted by security agencies',
-                'House visit based on intelligence' => 'House visit based on intelligence',
-                'Intelligence led patrol' => 'Intelligence led patrol',
-                'Observed during non-duty activities' => 'Observed during non-duty activities',
-                'Routine patrol by rangers' => 'Routine patrol by rangers',
-                'Routine security check' => 'Routine security check',
-                'Investigation' => 'Investigation',
-                'Risk profiling' => 'Risk profiling',
-                'Random selection' => 'Random selection'
-            ])
+            ->options(
+                DetectionMethod::pluck('name', 'name'))
             ->rules('required');
 
-
-
+            $form->saving(function (Form $form) {
+                if($form->isCreating()){
+                    $form->title = "Uganda Vs " . $form->title;
+                }
+            });
 
         return $form;
     }

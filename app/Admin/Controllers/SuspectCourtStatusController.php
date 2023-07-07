@@ -2,21 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Specimen;
+use App\Models\SuspectCourtStatus;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
-use Encore\Admin\Form\Field\Year;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class SpecimenController extends AdminController
+class SuspectCourtStatusController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Specimen';
+    protected $title = 'Suspect CourtStatus';
 
     /**
      * Make a grid builder.
@@ -25,13 +24,13 @@ class SpecimenController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Specimen());
+        $grid = new Grid(new SuspectCourtStatus());
+
         $grid->disableBatchActions();
         $grid->disableFilter();
-        $grid->quickSearch('name')->placeholder('Search specimen');
+        $grid->quickSearch('name')->placeholder('Search Suspect Court Status');
 
-        $grid->column('name', __('Name'))->sortable();
-        // $grid->column('updated_at', __('Updated at'))->format('Y-m-d')->sortable();
+        $grid->column('name', __('Name'));
 
         return $grid;
     }
@@ -44,8 +43,9 @@ class SpecimenController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Specimen::findOrFail($id));
+        $show = new Show(SuspectCourtStatus::findOrFail($id));
 
+        $show->field('id', __('Id'));
         $show->field('name', __('Name'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
@@ -60,7 +60,7 @@ class SpecimenController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Specimen());
+        $form = new Form(new SuspectCourtStatus());
 
         $form->text('name', __('Name'));
 

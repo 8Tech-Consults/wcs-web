@@ -10,6 +10,7 @@ use App\Models\CaseSuspect;
 use App\Models\Court;
 use App\Models\Location;
 use App\Models\PA;
+use App\Models\SuspectCourtStatus;
 use App\Models\User;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
@@ -171,12 +172,14 @@ class CourtsController extends AdminController
             );
 
             $f->equal('case_id', 'Filter by offence')->select(function ($id) {
+
                 $a = CaseModel::find($id);
                 if ($a) {
-                    return [$a->id => "#" . $a->id . " - " . $a->title];
+                    return [$a->id => "#" . $a->id . " - " . $a->tie];
                 }
             })
                 ->ajax($ajax_url);
+            // $f->like('')
 
             $f->between('court_date', 'Filter by arrest date')->date();
             $f->like('court_name', 'Filter by court name');
@@ -192,17 +195,9 @@ class CourtsController extends AdminController
                 'Convicted' => 'Convicted',
             ]);
 
-            $f->equal('suspect_court_outcome', 'Filter by Court case status')->select([
-                'Remand' => 'Remand',
-                'Court Bail' => 'Court bail',
-                'Committal' => 'Committal',
-                'Hearing' => 'Hearing',
-                'On-going inquiries' => 'On-going inquiries',
-                'Remand and Hearing' => 'Remand and Hearing',
-                'Court Bail and Hearing' => 'Court Bail and Hearing',
-                'Remand and on-going inquiries' => 'Remand and on-going inquiries',
-                'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
-            ]);
+            $f->equal('suspect_court_outcome', 'Filter by Court case status')->select(
+                SuspectCourtStatus::pluck('name', 'name')
+            );
 
             $f->equal('suspect_appealed', 'Filter Suspect Appeal')->select([
                 'Yes' => 'Appealed',
@@ -242,7 +237,6 @@ class CourtsController extends AdminController
         $grid->column('magistrate_name')->sortable();
         $grid->column('court_status', 'Court case status')->sortable();
         $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
-        $grid->column('court_file_status', 'Court file status')->hide()->sortable();
         $grid->column('case_outcome', 'Specific court case status')->hide()->sortable();
 
 
@@ -454,7 +448,10 @@ class CourtsController extends AdminController
                         $form->select('police_action', 'Case outcome at police level')->options([
                             'Police bond' => 'Police bond',
                             'Skipped bond' => 'Skipped bond',
-                        ]);
+                            'Under police custody' => 'Under police custody',
+                            'Escaped from colice custody' => 'Escaped from police custody',
+                        ])
+                        ->rules('required');
                     })
                     ->when('Closed', function ($form) {
                         $form->select('police_action', 'Case outcome at police level')->options([
@@ -467,6 +464,8 @@ class CourtsController extends AdminController
                         $form->select('police_action', 'Case outcome at police level')->options([
                             'Police bond' => 'Police bond',
                             'Skipped bond' => 'Skipped bond',
+                            'Under police custody' => 'Under police custody',
+                            'Escaped from colice custody' => 'Escaped from police custody',
                         ]);
                         $form->date('police_action_date', 'Date');
                         $form->textarea('police_action_remarks', 'Remarks');
@@ -483,15 +482,16 @@ class CourtsController extends AdminController
                 }
 
                 if ($courtFileNumber == null) {
-                    $form->text('court_file_number', 'Court file number');
+                    $form->text('court_file_number', 'Court file number')->rules('required');
                 } else {
                     $form->text('court_file_number', 'Court file number')
                         ->default($courtFileNumber)
                         ->value($courtFileNumber)
-                        ->readonly();
+                        ->readonly()
+                        ->rules('required');
                 }
 
-                $form->date('court_date', 'Court Date of first appearance');
+                $form->date('court_date', 'Court Date of first appearance')->rules('required');
                 $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                 $form->select('court_name', 'Select Court')->options($courts)
                     ->when(1, function ($form) {
@@ -596,24 +596,13 @@ class CourtsController extends AdminController
                     ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
 
-                        $form->select('suspect_court_outcome', 'Suspect court case status')->options([
-                            'Remand' => 'Remand',
-                            'Court Bail' => 'Court bail',
-                            'Committal' => 'Committal',
-                            'Hearing' => 'Hearing',
-                            'On-going inquiries' => 'On-going inquiries',
-                            'Remand and Hearing' => 'Remand and Hearing',
-                            'Court Bail and Hearing' => 'Court Bail and Hearing',
-                            'Remand and on-going inquiries' => 'Remand and on-going inquiries',
-                            'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
-                        ]);
-
-                        $form->radio('court_file_status', 'Court file status')->options([
-                            'Perusal' => 'Perusal',
-                            'Further investigation' => 'Further investigation',
-                        ]);
-                    });
-            });
+                        $form->select('suspect_court_outcome', 'Suspect court case status')->options(
+                            SuspectCourtStatus::pluck('name','name')
+                        )->rules('required');
+                    })
+                    ->rules('required');
+            })
+            ->rules('required');
 
         return $form;
     }

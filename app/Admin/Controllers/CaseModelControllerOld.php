@@ -394,6 +394,7 @@ class CaseModelController extends AdminController
                             1 => 'Yes (Use this arrest information for all asuspects)',
                             0 => 'No (Don\'t Use this arrest information for all asuspects)',
                         ])
+                        ->default(0)
                         ->rules('required');
 
 
@@ -472,6 +473,7 @@ class CaseModelController extends AdminController
                             1 => 'Yes (Use this court information for all asuspects)',
                             0 => 'No (Don\'t Use this court information for all asuspects)',
                         ])
+                        ->default(0)
                         ->rules('required');
 
 

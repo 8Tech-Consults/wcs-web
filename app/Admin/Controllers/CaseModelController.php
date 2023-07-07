@@ -9,6 +9,7 @@ use App\Admin\Actions\CaseModel\CaseModelAddComment;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
+use App\Models\DetectionMethod;
 use App\Models\Exhibit;
 use App\Models\Location;
 use App\Models\Offence;
@@ -386,22 +387,9 @@ class CaseModelController extends AdminController
             ->default(1);
 
         $form->select('detection_method', __('Detection method'))
-            ->options([
-                'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
-                'Contacted by security agencies' => 'Contacted by security agencies',
-                'House visit based on intelligence' => 'House visit based on intelligence',
-                'Intelligence led patrol' => 'Intelligence led patrol',
-                'Observed during non-duty activities' => 'Observed during non-duty activities',
-                'Routine patrol by rangers' => 'Routine patrol by rangers',
-                'Routine security check' => 'Routine security check',
-                'Investigation' => 'Investigation',
-                'Risk profiling' => 'Risk profiling',
-                'Random selection' => 'Random selection'
-            ])
+            ->options(
+                DetectionMethod::pluck('name', 'name'))
             ->rules('required');
-
-
-
 
         return $form;
     }

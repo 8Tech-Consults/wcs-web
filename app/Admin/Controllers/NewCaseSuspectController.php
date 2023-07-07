@@ -9,6 +9,7 @@ use App\Models\Court;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\SuspectCourtStatus;
 use App\Models\User;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
@@ -288,7 +289,7 @@ class NewCaseSuspectController extends AdminController
             'Male' => 'Male',
             'Female' => 'Female',
         ])->rules('required');
-        $form->date('age', 'Date of birth');
+        $form->text('age', 'Suspect\'s Age')->rules('int|min:1|max:200');
         $form->text('phone_number', 'Phone number');
 
         $form->radio('type_of_id', 'Suspect Type of Identification Card')
@@ -379,7 +380,6 @@ class NewCaseSuspectController extends AdminController
                 'Yes' => 'Yes',
                 'No' => 'No',
             ])
-            ->rules('required')
             ->when('No', function ($form) {
                 $form->select('management_action', 'Action taken by management')->options([
                     'Fined' => 'Fined',
@@ -387,7 +387,7 @@ class NewCaseSuspectController extends AdminController
                     'At Large' => 'At Large',
                 ])->rules('required');
 
-                $form->textarea('not_arrested_remarks', 'Remarks')->rules('required');
+                $form->textarea('not_arrested_remarks', 'Remarks');
             })
             ->when('Yes', function ($form) {
 
@@ -423,7 +423,8 @@ class NewCaseSuspectController extends AdminController
                                 }
                             }
 
-                            $form->date('arrest_date_time', 'Arrest date and time');
+                            $form->date('arrest_date_time', 'Arrest date and time')
+                                ->rules('required');
 
                             $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                                 ->options([
@@ -496,7 +497,6 @@ class NewCaseSuspectController extends AdminController
                                     ->readonly();
                             }
                         })
-                        ->rules('required')
                         ->when('Yes', function ($form) {
                             $supects = [];
                             $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -517,6 +517,7 @@ class NewCaseSuspectController extends AdminController
                                 ->options($supects)
                                 ->rules('required');
                         })
+                        ->default('No')
                         ->rules('required');
                 } else {
 
@@ -632,27 +633,33 @@ class NewCaseSuspectController extends AdminController
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
-                                            ]);
+                                                'Under police custody' => 'Under police custody',
+                                                'Escaped from colice custody' => 'Escaped from police custody',
+                                            ])
+                                            ->rules('required');
                                         })
                                         ->when('Closed', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Dismissed by state' => 'Dismissed by state',
                                                 'Withdrawn by complainant' => 'Withdrawn by complainant',
-                                            ]);
-                                            $form->date('police_action_date', 'Date')->rules('required');
-                                            $form->textarea('police_action_remarks', 'Remarks')->rules('required');
+                                            ])
+                                            ->rules('required');
+                                            $form->date('police_action_date', 'Date');
+                                            $form->textarea('police_action_remarks', 'Remarks');
                                         })->when('Re-opened', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
-                                            ]);
+                                                'Under Police Custody' => 'Under Police Custody',
+                                                'Escaped from Police Custody' => 'Escaped from Police Custody',
+                                            ])
+                                            ->rules("required");
+                                            
                                             $form->date('police_action_date', 'Date')->rules('required');
-                                            $form->textarea('police_action_remarks', 'Remarks')->rules('required');
+                                            $form->textarea('police_action_remarks', 'Remarks');
                                         });
                                 })
                                 ->when('Yes', function ($form) {
-
-
 
                                     $form->divider('Court information');
 
@@ -663,7 +670,8 @@ class NewCaseSuspectController extends AdminController
                                     }
 
                                     if ($courtFileNumber == null) {
-                                        $form->text('court_file_number', 'Court file number');
+                                        $form->text('court_file_number', 'Court file number')
+                                        ->rules("required");
                                     } else {
                                         $form->text('court_file_number', 'Court file number')
                                             ->default($courtFileNumber)
@@ -672,7 +680,8 @@ class NewCaseSuspectController extends AdminController
                                     }
 
 
-                                    $form->date('court_date', 'Court Date of first appearance');
+                                    $form->date('court_date', 'Court Date of first appearance')
+                                        ->rules('required');
 
                                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                                     $form->select('court_name', 'Select Court')->options($courts)
@@ -681,23 +690,6 @@ class NewCaseSuspectController extends AdminController
                                                 ->rules('required');
                                         })
                                         ->rules('required');
-
-
-                                    /*   $form->select('prosecutor', 'Lead prosecutor')
-                                        ->options(function ($id) {
-                                            $a = User::find($id);
-                                            if ($a) {
-                                                return [$a->id => "#" . $a->id . " - " . $a->name];
-                                            }
-                                        })
-                                        ->ajax(url(
-                                            '/api/ajax?'
-                                                . "&search_by_1=name"
-                                                . "&search_by_2=id"
-                                                . "&model=User"
-                                        ))->rules('required');
- */
-
                                     $form->text('prosecutor', 'Lead prosecutor');
                                     $form->text('magistrate_name', 'Magistrate Name');
 
@@ -755,7 +747,7 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->text('cautioned_remarks', 'Enter caution remarks')->rules('required');
+                                                            $form->text('cautioned_remarks', 'Enter caution remarks');
                                                         });
 
                                                     $form->radio('suspect_appealed', __('Did the suspect appeal?'))
@@ -781,24 +773,13 @@ class NewCaseSuspectController extends AdminController
                                         ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
 
-                                            $form->select('suspect_court_outcome', 'Suspect court case status')->options([
-                                                'Remand' => 'Remand',
-                                                'Court Bail' => 'Court bail',
-                                                'Committal' => 'Committal',
-                                                'Hearing' => 'Hearing',
-                                                'On-going inquiries' => 'On-going inquiries',
-                                                'Remand and Hearing' => 'Remand and Hearing',
-                                                'Court Bail and Hearing' => 'Court Bail and Hearing',
-                                                'Remand and on-going inquiries' => 'Remand and on-going inquiries',
-                                                'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
-                                            ]);
+                                            $form->select('suspect_court_outcome', 'Suspect court case status')->options(SuspectCourtStatus::pluck('name','name'))
+                                            ->rules('required');
 
-                                            $form->radio('court_file_status', 'Court file status')->options([
-                                                'Perusal' => 'Perusal',
-                                                'Further investigation' => 'Further investigation',
-                                            ]);
-                                        });
-                                });
+                                        })
+                                        ->rules('required');
+                                })
+                                ->rules('required');
                         })->when('Yes', function ($form) {
                             $supects = [];
                             $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -814,7 +795,8 @@ class NewCaseSuspectController extends AdminController
                             $form->select('use_same_court_information_id', 'Select suspect')
                                 ->options($supects)
                                 ->rules('required');
-                        });
+                        })
+                        ->default('No');
                 } else {
                     $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                         ->options([
@@ -834,6 +816,8 @@ class NewCaseSuspectController extends AdminController
                                     $form->select('police_action', 'Case outcome at police level')->options([
                                         'Police bond' => 'Police bond',
                                         'Skipped bond' => 'Skipped bond',
+                                        'Under police custody' => 'Under police custody',
+                                        'Escaped from colice custody' => 'Escaped from police custody',
                                     ]);
                                 })
                                 ->when('Closed', function ($form) {
@@ -842,14 +826,16 @@ class NewCaseSuspectController extends AdminController
                                         'Withdrawn by complainant' => 'Withdrawn by complainant',
                                     ]);
                                     $form->date('police_action_date', 'Date')->rules('required');
-                                    $form->textarea('police_action_remarks', 'Remarks')->rules('required');
+                                    $form->textarea('police_action_remarks', 'Remarks');
                                 })->when('Re-opened', function ($form) {
                                     $form->select('police_action', 'Case outcome at police level')->options([
                                         'Police bond' => 'Police bond',
                                         'Skipped bond' => 'Skipped bond',
+                                        'Under police custody' => 'Under police custody',
+                                        'Escaped from colice custody' => 'Escaped from police custody',
                                     ]);
                                     $form->date('police_action_date', 'Date')->rules('required');
-                                    $form->textarea('police_action_remarks', 'Remarks')->rules('required');
+                                    $form->textarea('police_action_remarks', 'Remarks');
                                 });
                         })
                         ->when('Yes', function ($form) {
@@ -952,7 +938,7 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->text('cautioned_remarks', 'Enter caution remarks')->rules('required');
+                                                    $form->text('cautioned_remarks', 'Enter caution remarks');
                                                 });
 
                                             $form->radio('suspect_appealed', __('Did the suspect appeal?'))
@@ -974,42 +960,22 @@ class NewCaseSuspectController extends AdminController
 
                                                     $form->textarea('suspect_appeal_remarks', 'Remarks');
                                                 });
-                                        });
+                                        })
+                                        ->rules('required');
                                 })
                                 ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
+                                    $form->select('suspect_court_outcome', 'Suspect court case status')->options(
+                                        SuspectCourtStatus::pluck('name', 'name')
+                                    )
+                                    ->rules('required');
 
-                                    $form->select('suspect_court_outcome', 'Suspect court case status')->options([
-                                        'Remand' => 'Remand',
-                                        'Court Bail' => 'Court bail',
-                                        'Committal' => 'Committal',
-                                        'Hearing' => 'Hearing',
-                                        'On-going inquiries' => 'On-going inquiries',
-                                        'Remand and Hearing' => 'Remand and Hearing',
-                                        'Court Bail and Hearing' => 'Court Bail and Hearing',
-                                        'Remand and on-going inquiries' => 'Remand and on-going inquiries',
-                                        'Court Bail and On-going Inquiries' => 'Court Bail and On-going Inquiries',
-                                    ]);
-
-                                    $form->radio('court_file_status', 'Court file status')->options([
-                                        'Perusal' => 'Perusal',
-                                        'Further investigation' => 'Further investigation',
-                                    ]);
-                                });
+                                })
+                                ->rules('required');
                         });
                 }
-            });
-
-
-
-
-
-
-
-
-
-
-
+            })
+            ->rules('required');
 
 
         if ($pendingCase->user_adding_suspect_id != Auth::user()->id) {
@@ -1019,9 +985,13 @@ class NewCaseSuspectController extends AdminController
                 ->options([
                     'Yes' => 'Yes',
                     'No' => 'No',
-                ]);
+                ])
+                ->default('No');
         }
 
+        $form->saved( function (Form $form) {
+            return redirect(admin_url("cases"));
+        });
 
         return $form;
     }

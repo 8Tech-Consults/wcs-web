@@ -1,10 +1,7 @@
-<?php
-$i = 0;
-?><div style="font-size: 1.8rem">
+<div style="font-size: 1.8rem">
     @foreach ($case->exhibits as $sus)
-        <?php $i++; ?>
         <div class="">
-            Exhibit <b>{{ $i }}.</b>
+            Exhibit <b>{{ $loop->iteration }}.</b>
             {{--  {{ $sus->exhibit_catgory }} - {{ $sus->description }} , {{ $sus->quantity }}
             Exhibit --}}
 

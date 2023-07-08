@@ -208,7 +208,6 @@ class NewCaseModelController extends AdminController
             ->help("Describe this case in details");
 
         $form->date('case_date', 'Date when opened')
-            ->required()
             ->rules('required');
 
         $form->text('officer_in_charge', 'Complainant')->rules('required');

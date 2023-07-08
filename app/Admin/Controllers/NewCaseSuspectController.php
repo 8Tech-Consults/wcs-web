@@ -990,7 +990,11 @@ class NewCaseSuspectController extends AdminController
         }
 
         $form->saved( function (Form $form) {
-            return redirect(admin_url("cases"));
+            if ($form->add_more_suspects == 'No') {
+                return redirect(admin_url("new-exhibits-case-models/create"));
+            }else {
+                return redirect(admin_url("cases"));
+            }
         });
 
         return $form;

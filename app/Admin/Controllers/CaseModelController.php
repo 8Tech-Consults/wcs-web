@@ -347,7 +347,6 @@ class CaseModelController extends AdminController
             ->rules('required');
 
         $form->date('case_date', 'Date when opened')
-            ->required()
             ->rules('required');
 
         $form->text('officer_in_charge', 'Complainant')->rules('required');

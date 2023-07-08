@@ -72,7 +72,7 @@ class AnimalController extends AdminController
     {
         $form = new Form(new Animal());
 
-        $form->text('name', __('Name'))->required();
+        $form->text('name', __('Name'))->rules('required');
         $form->textarea('details', __('Details'));
 
 

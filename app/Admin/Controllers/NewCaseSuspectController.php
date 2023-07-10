@@ -698,7 +698,7 @@ class NewCaseSuspectController extends AdminController
                                                 'Convicted' => 'Convicted',
                                             ])
                                                 ->when('Convicted', function ($form) {
-                                                    $form->radio('is_jailed', __('Was suspect jailed?'))
+                                                    $form->radio('is_jailed', __('Was accused jailed?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
                                                             'No' => 'No',
@@ -710,7 +710,7 @@ class NewCaseSuspectController extends AdminController
                                                             $form->date('jail_release_date', 'Release Date');
                                                         });
 
-                                                    $form->radio('is_fined', __('Was suspect fined?'))
+                                                    $form->radio('is_fined', __('Was accused fined?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
                                                             'No' => 'No',
@@ -719,7 +719,7 @@ class NewCaseSuspectController extends AdminController
                                                             $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                                         });
 
-                                                    $form->radio('community_service', __('Was the suspect offered community service?'))
+                                                    $form->radio('community_service', __('Was the accused offered community service?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
                                                             'No' => 'No',
@@ -732,7 +732,7 @@ class NewCaseSuspectController extends AdminController
                                                         });
 
 
-                                                    $form->radio('cautioned', __('Was suspect cautioned?'))
+                                                    $form->radio('cautioned', __('Was accused cautioned?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
                                                             'No' => 'No',
@@ -741,13 +741,13 @@ class NewCaseSuspectController extends AdminController
                                                             $form->text('cautioned_remarks', 'Enter caution remarks');
                                                         });
 
-                                                    $form->radio('suspect_appealed', __('Did the suspect appeal?'))
+                                                    $form->radio('suspect_appealed', __('Did the accused appeal?'))
                                                         ->options([
                                                             'Yes' => 'Yes',
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->date('suspect_appealed_date', 'Suspect appeal Date');
+                                                            $form->date('suspect_appealed_date', 'Accused appeal Date');
                                                             $form->text('suspect_appealed_court_name', 'Appellate court');
                                                             $form->text('suspect_appealed_court_file', 'Appeal court file number');
                                                             $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
@@ -764,7 +764,7 @@ class NewCaseSuspectController extends AdminController
                                         ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
 
-                                            $form->select('suspect_court_outcome', 'Suspect court case status')->options(SuspectCourtStatus::pluck('name','name'))
+                                            $form->select('suspect_court_outcome', 'Accused court case status')->options(SuspectCourtStatus::pluck('name','name'))
                                             ->rules('required');
 
                                         })
@@ -889,7 +889,7 @@ class NewCaseSuspectController extends AdminController
                                         'Convicted' => 'Convicted',
                                     ])
                                         ->when('Convicted', function ($form) {
-                                            $form->radio('is_jailed', __('Was suspect jailed?'))
+                                            $form->radio('is_jailed', __('Was accused jailed?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
@@ -901,7 +901,7 @@ class NewCaseSuspectController extends AdminController
                                                     $form->date('jail_release_date', 'Date released');
                                                 });
 
-                                            $form->radio('is_fined', __('Was suspect fined?'))
+                                            $form->radio('is_fined', __('Was accused fined?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
@@ -910,7 +910,7 @@ class NewCaseSuspectController extends AdminController
                                                     $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                                                 });
 
-                                            $form->radio('community_service', __('Was the suspect offered community service?'))
+                                            $form->radio('community_service', __('Was the accused offered community service?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
@@ -923,7 +923,7 @@ class NewCaseSuspectController extends AdminController
                                                 });
 
 
-                                            $form->radio('cautioned', __('Was suspect cautioned?'))
+                                            $form->radio('cautioned', __('Was accused cautioned?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
@@ -932,13 +932,13 @@ class NewCaseSuspectController extends AdminController
                                                     $form->text('cautioned_remarks', 'Enter caution remarks');
                                                 });
 
-                                            $form->radio('suspect_appealed', __('Did the suspect appeal?'))
+                                            $form->radio('suspect_appealed', __('Did the accused appeal?'))
                                                 ->options([
                                                     'Yes' => 'Yes',
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('suspect_appealed_date', 'Suspect appeal Date');
+                                                    $form->date('suspect_appealed_date', 'Accused appeal Date');
                                                     $form->text('suspect_appealed_court_name', 'Appellate court');
                                                     $form->text('suspect_appealed_court_file', 'Appeal court file number');
                                                     $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
@@ -956,7 +956,7 @@ class NewCaseSuspectController extends AdminController
                                 })
                                 ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
 
-                                    $form->select('suspect_court_outcome', 'Suspect court case status')->options(
+                                    $form->select('suspect_court_outcome', 'Accused court case status')->options(
                                         SuspectCourtStatus::pluck('name', 'name')
                                     )
                                     ->rules('required');

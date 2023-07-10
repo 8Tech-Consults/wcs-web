@@ -3,25 +3,19 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\CaseModel\EditCourtCase;
-use App\Admin\Actions\CaseModel\ViewCase;
 use App\Admin\Actions\CaseModel\ViewSuspect;
 use App\Admin\Actions\CaseModel\CourtCaseUpdate;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\Court;
-use App\Models\Location;
-use App\Models\PA;
+use App\Models\Offence;
 use App\Models\SuspectCourtStatus;
-use App\Models\User;
 use App\Models\Utils;
-use Dflydev\DotAccessData\Util;
-use Encore\Admin\Auth\Database\Administrator;
+
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Show;
-use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 
 class CourtsController extends AdminController
@@ -152,7 +146,8 @@ class CourtsController extends AdminController
             ])->orWhere([
                 'reported_by' => $u->id
             ]);
-        }
+        }        
+        
 
         $grid->filter(function ($f) {
             // Remove the default id filter
@@ -171,16 +166,14 @@ class CourtsController extends AdminController
                     . "&query_parent=0"
                     . "&model=Location"
             );
-
-            $f->equal('case_id', 'Filter by offence')->select(function ($id) {
-
-                $a = CaseModel::find($id);
-                if ($a) {
-                    return [$a->id => "#" . $a->id . " - " . $a->tie];
-                }
-            })
-                ->ajax($ajax_url);
-            // $f->like('')
+            $f->where(function ($query) {
+                $query->whereHas('offences', function ($query) {
+                    $query->where('name', 'like', "%{$this->input}%");
+                });
+            
+            }, 'Filter by Offence')->select(
+                Offence::pluck('name', 'name')
+            );     
 
             $f->between('court_date', 'Filter by arrest date')->date();
             $f->like('court_name', 'Filter by court name');

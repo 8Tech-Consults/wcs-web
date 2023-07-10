@@ -11,7 +11,6 @@ class CourtCaseUpdate extends RowAction
 
     public function handle(Model $model)
     {
-        // $model ...
         session(['court_case_action' => 'update'] );
         return $this->response()->redirect(admin_url("/court-cases/{$model->id}/edit"));
     }

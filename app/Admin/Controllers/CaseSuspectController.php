@@ -245,6 +245,14 @@ class CaseSuspectController extends AdminController
                 'Closed' => 'Closed',
                 'Re-opened' => 'Re-opened',
             ]);
+            $f->where(function ($query) {
+                $query->whereHas('offences', function ($query) {
+                    $query->where('name', 'like', "%{$this->input}%");
+                });
+            
+            }, 'Filter by Offence')->select(
+                Offence::pluck('name', 'name')
+            );   
         });
 
 

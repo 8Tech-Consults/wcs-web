@@ -2,44 +2,35 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Animal;
-use App\Models\Court;
+use App\Models\SuspectCourtStatus;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class AnimalController extends AdminController
+class SuspectCourtStatusController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Protected Species'; 
+    protected $title = 'Suspect CourtStatus';
 
     /**
-     * Make a grid builder. 
-     * 
+     * Make a grid builder.
+     *
      * @return Grid
      */
     protected function grid()
     {
+        $grid = new Grid(new SuspectCourtStatus());
 
-        $grid = new Grid(new Animal());
-        $grid->quickSearch('name');
         $grid->disableBatchActions();
         $grid->disableFilter();
-        $grid->disableExport();
-        $grid->column('id', __('S/n'))->width(50)->sortable();
-        $grid->column('name', __('Name'))->sortable();
-        $grid->column('details', __('Details'));
+        $grid->quickSearch('name')->placeholder('Search Suspect Court Status');
 
-
-        $grid->actions(function ($actions) {
-            $actions->disableDelete();
-        });
-
+        $grid->column('name', __('Name'));
 
         return $grid;
     }
@@ -52,13 +43,12 @@ class AnimalController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Animal::findOrFail($id));
+        $show = new Show(SuspectCourtStatus::findOrFail($id));
 
         $show->field('id', __('Id'));
+        $show->field('name', __('Name'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
-        $show->field('name', __('Name'));
-        $show->field('details', __('Details'));
 
         return $show;
     }
@@ -70,12 +60,9 @@ class AnimalController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Animal());
+        $form = new Form(new SuspectCourtStatus());
 
-        $form->text('name', __('Name'))->rules('required');
-        $form->textarea('details', __('Details'));
-
-
+        $form->text('name', __('Name'));
 
         return $form;
     }

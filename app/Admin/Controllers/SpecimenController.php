@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\Specimen;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
+use Encore\Admin\Form\Field\Year;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
@@ -25,9 +26,12 @@ class SpecimenController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Specimen());
+        $grid->disableBatchActions();
+        $grid->disableFilter();
+        $grid->quickSearch('name')->placeholder('Search specimen');
 
-        $grid->column('name', __('Name'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('name', __('Name'))->sortable();
+        // $grid->column('updated_at', __('Updated at'))->format('Y-m-d')->sortable();
 
         return $grid;
     }

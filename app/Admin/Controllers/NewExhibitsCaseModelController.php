@@ -6,6 +6,7 @@ use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
 use App\Models\ImplementType;
+use App\Models\Specimen;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -39,7 +40,7 @@ class NewExhibitsCaseModelController extends AdminController
                     $_sus->delete();
                 }
             }
-        } 
+        }
 
 
         $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -149,37 +150,17 @@ class NewExhibitsCaseModelController extends AdminController
 
 
                 $form->select('specimen', 'Specimen')->options(
-                    array(
-                        'Skins' => 'Skins',
-                        'Meat' => 'Meat',
-                        'Live animal' => 'Live animal',
-                        'Eggs' => 'Eggs',
-                        'Molars' => 'Molars',
-                        'Jaws' => 'Jaws',
-                        'Spikes /Ruills' => 'Spikes /Ruills',
-                        'Hair' => 'Hair',
-                        'Bone' => 'Bone',
-                        'Bangle' => 'Bangle',
-                        'Chopsticks' => 'Chopsticks',
-                        'Rosary' => 'Rosary',
-                        'Necklace' => 'Necklace',
-                        'Belt' => 'Belt',
-                        'Handbag' => 'Handbag',
-                        'Keyholder' => 'Keyholder',
-                        'Sculpture' => 'Sculpture',
-                        'Beads' => 'Beads',
-                        'Powder' => 'Powder',
-                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
-                        'Other' => 'Other',
-                    )
+                    Specimen::pluck('name', 'name')
                 )->rules('required');
 
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->decimal('wildlife_pieces', __('Number of pieces'));
-                $form->text('wildlife_description', __('Description')); 
+                $form->text('wildlife_description', __('Description'));
                 $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
                 $form->divider();
-            });
+            })
+            ->rules('required')
+            ->default('No');
         $form->radio('type_implement', __('Exibit type Implement?'))
             ->options([
                 'Yes' => 'Yes',
@@ -200,7 +181,9 @@ class NewExhibitsCaseModelController extends AdminController
                 $form->text('implement_description', __('Description'));
                 $form->multipleFile('implement_attachments', __('Implements exhibit(s) attachments files or photos'));
                 $form->divider();
-            });
+            })
+            ->rules('required')
+            ->default('No');
 
         $form->radio('type_other', __('Other exhibit types?'))
             ->options([
@@ -212,7 +195,9 @@ class NewExhibitsCaseModelController extends AdminController
                 $form->text('others_description', __('Description for others'));
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
-            });
+            })
+            ->rules('required')
+            ->default('No');
 
         $form->radio('add_another_exhibit', __('Do you want to add another exhibit to this case?'))
             ->options([
@@ -220,6 +205,25 @@ class NewExhibitsCaseModelController extends AdminController
                 'No' => 'No',
             ])->required();
 
+
+        // if saving add nothing is added skip to submit //ie no no no
+        $form->saved(function (Form $form) {
+            if ($form->type_other == 'No' && $form->type_implement == 'No' && $form->type_wildlife == 'No') {
+                Exhibit::find($form->model()->id)->delete(); //remove the unnecessary exhibit
+            }
+            // if($form->add_another_exhibit == 'No'){
+            //     Admin::script('window.location.replace("' . admin_url("new-confirm-case-models/{$form->case_id}/edit") . '");');
+            //     return 'Loading...';
+            // }else {
+            //     Admin::script('window.location.replace("' . admin_url("new-exhibits-case-models/create") . '");');
+            //     return 'Loading...';
+            // }
+            if ($form->add_another_exhibit == 'No') {
+                return redirect(admin_url("new-confirm-case-models/{$form->case_id}/edit"));
+            } else {
+                return redirect(admin_url("new-exhibits-case-models/create"));
+            }
+        });
 
         return $form;
     }

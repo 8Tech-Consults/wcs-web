@@ -154,7 +154,7 @@ class AddExhibitCaseModelController extends AdminController
         });
 
         $form->saved( function (Form $form) {
-        return redirect(admin_url("cases/".$form->case_id));
+        return redirect(admin_url("cases"));
         });
         
         return $form;

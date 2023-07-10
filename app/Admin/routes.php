@@ -42,4 +42,7 @@ Route::group([
     $router->resource('gens', GenController::class);   
 
     $router->get('forms/settings', 'FormController@settings');
+    $router->resource('suspect-court-statuses', SuspectCourtStatusController::class);
+    $router->resource('detection-methods', DetectionMethodController::class);
+    $router->resource('arresting-agencies', ArrestingAgencyController::class);
 });

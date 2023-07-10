@@ -7,6 +7,7 @@ use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\DetectionMethod;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
@@ -150,15 +151,48 @@ class NewCaseModelController extends AdminController
      */
     protected function form()
     {
+        $form = new Form(new CaseModel());
+
         if (isset($_GET['refresh_page'])) {
             $r = (int)($_GET['refresh_page']);
             if ($r == 1) {
                 Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
                 return 'Loading...';
             }
-        }
+        
+        }else {
+            Admin::css('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css');
+            Admin::js('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js');
+            
+            if( $form->isCreating() ) {
+                //Check that the form has no error messages
+                // if($error->isEmpty()) {
+                    Admin::script("
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'To avoid double entry, please check if suspect(s) has already been reported.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            allowOutsideClick: false,
+                            buttonsStyling: false,
+                            confirmButtonText: 'Yes, check',
+                            cancelButtonText: 'No, Procceed',
+                            customClass: {
+                                confirmButton: 'btn fw-bold btn-active-light-primary',
+                                cancelButton: 'btn fw-bold btn-danger ml-5',
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                window.location.replace('/case-suspects');
+                                return 'Loading...';
+                            }
+                        })
+                    ");
+                // }
 
-        $form = new Form(new CaseModel());
+            }
+
+        }
 
         $form->saved(function (Form $form) {
             $pendingCase = Utils::hasPendingCase(Auth::user());
@@ -198,16 +232,16 @@ class NewCaseModelController extends AdminController
             $form->html('<a class="btn btn-danger" href="' . admin_url("new-case-suspects/create") . '" >SKIP TO SUSPECTS</a>', 'SKIP');
         }
 
-        $form->text('title', __('Case title'))
-            ->help("Describe this case in summary")
+        $form->text('title', __('Case title:  Uganda Vs '))
+            ->help("Enter suspects names here")
+            ->placeholder("Enter suspects names here")
             ->rules('required');
+            
         $form->textarea('offence_description', __('Case description'))
-            ->help("Describe this case in details")
-            ->rules('required');
+            ->help("Describe this case in details");
 
         $form->date('case_date', 'Date when opened')
-            ->required()
-            ->rules('required');
+            ->rules('required|before_or_equal:today');
 
         $form->text('officer_in_charge', 'Complainant')->rules('required');
 
@@ -247,22 +281,15 @@ class NewCaseModelController extends AdminController
             ->default(1);
 
         $form->select('detection_method', __('Detection method'))
-            ->options([
-                'Ambush patrol based on Intelligence' => 'Ambush patrol based on Intelligence',
-                'Contacted by security agencies' => 'Contacted by security agencies',
-                'House visit based on intelligence' => 'House visit based on intelligence',
-                'Intelligence led patrol' => 'Intelligence led patrol',
-                'Observed during non-duty activities' => 'Observed during non-duty activities',
-                'Routine patrol by rangers' => 'Routine patrol by rangers',
-                'Routine security check' => 'Routine security check',
-                'Investigation' => 'Investigation',
-                'Risk profiling' => 'Risk profiling',
-                'Random selection' => 'Random selection'
-            ])
+            ->options(
+                DetectionMethod::pluck('name', 'name'))
             ->rules('required');
 
-
-
+            $form->saving(function (Form $form) {
+                if($form->isCreating()){
+                    $form->title = "Uganda Vs " . $form->title;
+                }
+            });
 
         return $form;
     }

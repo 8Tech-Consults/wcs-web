@@ -23,9 +23,6 @@ use App\Models\Utils;
                     BACK
                     TO ALL SUSPECTS</a>
             @endisset
-            <a href="{{ url('case-suspects/' . $s->id . '/edit') }}" class="btn btn-warning btn-sm"><i
-                    class="fa fa-edit"></i>
-                EDIT</a>
             <a href="#" onclick="window.print();return false;" class="btn btn-primary btn-sm"><i
                     class="fa fa-print"></i> PRINT</a>
         </div>
@@ -48,7 +45,7 @@ use App\Models\Utils;
             @include('components.detail-item', ['t' => 'sex', 's' => $s->sex])
             @include('components.detail-item', [
                 't' => 'Date of birth',
-                's' => Utils::my_date($s->age),
+                's' => $s->age,
             ])
             @include('components.detail-item', ['t' => 'Phone number', 's' => $s->phone_number])
             @include('components.detail-item', [
@@ -185,19 +182,6 @@ use App\Models\Utils;
                 ])
 
                 @include('components.detail-item', [
-                    't' => 'Managment action',
-                    's' => $s->management_action,
-                ])
-
-                @include('components.detail-item', [
-                    't' => 'Managment remarks',
-                    's' => $s->not_arrested_remarks,
-                ])
-
-
-
-
-                @include('components.detail-item', [
                     't' => 'Arrest in P.A',
                     's' => $s->arrest_in_pa,
                 ])
@@ -269,14 +253,16 @@ use App\Models\Utils;
             't' => 'Has suspect been handed over to police?',
             's' => $s->is_suspects_arrested,
         ])
-        @include('components.detail-item', [
-            't' => 'Action taken by management',
-            's' => $s->management_action,
-        ])
-        @include('components.detail-item', [
-            't' => 'Remarks by management',
-            's' => $s->not_arrested_remarks,
-        ])
+        @if($s->is_suspects_arrested == 'No')
+            @include('components.detail-item', [
+                't' => 'Action taken by management',
+                's' => $s->management_action,
+            ])
+            @include('components.detail-item', [
+                't' => 'Remarks by management',
+                's' => $s->not_arrested_remarks,
+            ])
+        @endif
     @endif
 
 
@@ -325,10 +311,7 @@ use App\Models\Utils;
                     't' => 'Suspect court status',
                     's' => $s->suspect_court_outcome,
                 ])
-                @include('components.detail-item', [
-                    't' => 'Court file status',
-                    's' => $s->court_file_status,
-                ])
+          
                 @include('components.detail-item', [
                     't' => 'Specific court case status',
                     's' => $s->case_outcome,

@@ -228,7 +228,7 @@ if (isset($_SESSION['reset_message'])) {
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                         <div class="position-relative mb-4">
-                            <label for="email" class="form-label fs-base">Username</label>
+                            <label for="email" class="form-label fs-base">Email</label>
                             <input type="text" id="email" class="form-control form-control-lg"
                                 placeholder="{{ trans('admin.username') }}" name="username"
                                 value="{{ old('username') }}" required>

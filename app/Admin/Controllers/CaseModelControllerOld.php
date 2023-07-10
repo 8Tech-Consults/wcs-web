@@ -394,6 +394,7 @@ class CaseModelController extends AdminController
                             1 => 'Yes (Use this arrest information for all asuspects)',
                             0 => 'No (Don\'t Use this arrest information for all asuspects)',
                         ])
+                        ->default(0)
                         ->rules('required');
 
 
@@ -443,7 +444,6 @@ class CaseModelController extends AdminController
                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                         'Canine Unit' => 'The Canine Unit',
                         'WCU' => 'WCU',
-                        'NRCN' => 'NRCN',
                         'LEU' => 'LEU',
                     ]);
 
@@ -472,6 +472,7 @@ class CaseModelController extends AdminController
                             1 => 'Yes (Use this court information for all asuspects)',
                             0 => 'No (Don\'t Use this court information for all asuspects)',
                         ])
+                        ->default(0)
                         ->rules('required');
 
 

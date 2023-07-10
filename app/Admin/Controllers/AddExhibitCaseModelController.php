@@ -154,7 +154,10 @@ class AddExhibitCaseModelController extends AdminController
         });
 
         $form->saved( function (Form $form) {
-        return redirect(admin_url("cases"));
+            if ($form->type_other == 'No' && $form->type_implement == 'No' && $form->type_wildlife == 'No') {
+                Exhibit::find($form->model()->id)->delete(); //remove the unnecessary exhibit
+            }
+            return redirect(admin_url("cases"));
         });
         
         return $form;

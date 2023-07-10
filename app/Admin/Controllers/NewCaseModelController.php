@@ -151,15 +151,45 @@ class NewCaseModelController extends AdminController
      */
     protected function form()
     {
+        $form = new Form(new CaseModel());
+
         if (isset($_GET['refresh_page'])) {
             $r = (int)($_GET['refresh_page']);
             if ($r == 1) {
                 Admin::script('window.location.replace("' . admin_url('new-case/create') . '");');
                 return 'Loading...';
             }
+        
+        }else {
+            Admin::css('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css');
+            Admin::js('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js');
+            
+            if( $form->isCreating() ) {
+                Admin::script("
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'To avoid double entry, please check if suspect(s) has already been reported.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    allowOutsideClick: false,
+                    buttonsStyling: false,
+                    confirmButtonText: 'Yes, check',
+                    cancelButtonText: 'No, Procceed',
+                    customClass: {
+                        confirmButton: 'btn fw-bold btn-active-light-primary',
+                        cancelButton: 'btn fw-bold btn-danger ml-5',
+                    }
+                }).then(function (result) {
+                    if (result.value) {
+                        window.location.replace('/case-suspects');
+                        return 'Loading...';
+                    }
+                })
+                ");
+            }
+
         }
 
-        $form = new Form(new CaseModel());
 
         $form->saved(function (Form $form) {
             $pendingCase = Utils::hasPendingCase(Auth::user());

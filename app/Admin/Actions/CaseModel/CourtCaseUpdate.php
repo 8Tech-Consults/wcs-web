@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourtCaseUpdate extends RowAction
 {
-    public $name = 'update';
+    public $name = 'Update';
 
     public function handle(Model $model)
     {
         // $model ...
-
-        return $this->response()->success('Success message.')->refresh();
+        session(['court_case_action' => 'update'] );
+        return $this->response()->redirect(admin_url("/court-cases/{$model->id}/edit"));
     }
 
 }

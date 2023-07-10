@@ -190,7 +190,6 @@ class NewCaseModelController extends AdminController
 
         }
 
-
         $form->saved(function (Form $form) {
             $pendingCase = Utils::hasPendingCase(Auth::user());
             if ($pendingCase != null) {

@@ -165,27 +165,31 @@ class NewCaseModelController extends AdminController
             Admin::js('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js');
             
             if( $form->isCreating() ) {
-                Admin::script("
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'To avoid double entry, please check if suspect(s) has already been reported.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    allowOutsideClick: false,
-                    buttonsStyling: false,
-                    confirmButtonText: 'Yes, check',
-                    cancelButtonText: 'No, Procceed',
-                    customClass: {
-                        confirmButton: 'btn fw-bold btn-active-light-primary',
-                        cancelButton: 'btn fw-bold btn-danger ml-5',
-                    }
-                }).then(function (result) {
-                    if (result.value) {
-                        window.location.replace('/case-suspects');
-                        return 'Loading...';
-                    }
-                })
-                ");
+                //Check that the form has no error messages
+                // if($error->isEmpty()) {
+                    Admin::script("
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'To avoid double entry, please check if suspect(s) has already been reported.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            allowOutsideClick: false,
+                            buttonsStyling: false,
+                            confirmButtonText: 'Yes, check',
+                            cancelButtonText: 'No, Procceed',
+                            customClass: {
+                                confirmButton: 'btn fw-bold btn-active-light-primary',
+                                cancelButton: 'btn fw-bold btn-danger ml-5',
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                window.location.replace('/case-suspects');
+                                return 'Loading...';
+                            }
+                        })
+                    ");
+                // }
+
             }
 
         }
@@ -237,7 +241,7 @@ class NewCaseModelController extends AdminController
             ->help("Describe this case in details");
 
         $form->date('case_date', 'Date when opened')
-            ->rules('required');
+            ->rules('required|before_or_equal:today');
 
         $form->text('officer_in_charge', 'Complainant')->rules('required');
 

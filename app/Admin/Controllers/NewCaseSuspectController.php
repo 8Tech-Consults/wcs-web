@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\ArrestingAgency;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
@@ -457,26 +458,17 @@ class NewCaseSuspectController extends AdminController
 
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
-                            $form->select('arrest_agency', 'Arresting agency')->options([
-                                'UWA' => 'UWA',
-                                'UPDF' => 'UPDF',
-                                'UPF' => 'UPF',
-                                'ESO' => 'ESO',
-                                'ISO' => 'ISO',
-                                'URA' => 'URA',
-                                'DCIC' => 'DCIC',
-                                'INTERPOL' => 'INTERPOL',
-                                'UCAA' => 'UCAA',
-                                'Other' => 'Other',
-                            ])
-                                ->when('UWA', function ($form) {
-                                    $form->select('arrest_uwa_unit', 'UWA Unit')->options([
-                                        'Canine Unit' => 'The Canine Unit',
-                                        'WCU' => 'WCU',
-                                        'NRCN' => 'NRCN',
-                                        'LEU' => 'LEU',
-                                    ]);
-                                });
+                            $form->select('arrest_agency', 'Arresting agency')->options(
+                                ArrestingAgency::pluck('name','name')
+                            )
+                            ->when('UWA', function ($form) {
+                                $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+                                    'Canine Unit' => 'The Canine Unit',
+                                    'WCU' => 'WCU',
+                                    'LEU' => 'LEU',
+                                ]);
+                            });
+                            // $form->
 
                             if ($csb == null) {
                                 $form->text('arrest_crb_number', 'Police CRB number');
@@ -570,7 +562,6 @@ class NewCaseSuspectController extends AdminController
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                                 'Canine Unit' => 'The Canine Unit',
                                 'WCU' => 'WCU',
-                                'NRCN' => 'NRCN',
                                 'LEU' => 'LEU',
                             ]);
                         });

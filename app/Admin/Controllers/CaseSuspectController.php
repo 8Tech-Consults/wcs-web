@@ -245,6 +245,14 @@ class CaseSuspectController extends AdminController
                 'Closed' => 'Closed',
                 'Re-opened' => 'Re-opened',
             ]);
+            $f->where(function ($query) {
+                $query->whereHas('offences', function ($query) {
+                    $query->where('name', 'like', "%{$this->input}%");
+                });
+            
+            }, 'Filter by Offence')->select(
+                Offence::pluck('name', 'name')
+            );   
         });
 
 
@@ -1020,6 +1028,7 @@ class CaseSuspectController extends AdminController
                             ->options([
                                 'On-going investigation' => 'On-going investigation',
                                 'On-going prosecution' => 'On-going prosecution',
+                                    'Reinstated'=>'Reinstated',
                                 'Closed' => 'Closed',
                             ])->when('Closed', function ($form) {
 
@@ -1080,7 +1089,7 @@ class CaseSuspectController extends AdminController
                                         $form->text('cautioned_remarks', 'Enter caution remarks');
                                     });
                             })
-                            ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
+                            ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
                                 $form->radio('suspect_court_outcome', 'Suspect court case status')->options(
                                     SuspectCourtStatus::pluck('name','name')
                                 );

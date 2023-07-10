@@ -430,6 +430,7 @@ class CourtsController extends AdminController
             $form->radio('court_status', __('Court case status'))
             ->options([
                 'On-going prosecution' => 'On-going prosecution',
+                                    'Reinstated'=>'Reinstated',
                 'Concluded' => 'Concluded',
             ])->when('Concluded', function ($form) {
 
@@ -503,7 +504,7 @@ class CourtsController extends AdminController
                             });
                     });
             })
-            ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
+            ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
 
 
                 $form->select('suspect_court_outcome', 'Accused court case status')->options(
@@ -601,6 +602,7 @@ class CourtsController extends AdminController
                     $form->radio('court_status', __('Court case status'))
                         ->options([
                             'On-going prosecution' => 'On-going prosecution',
+                                    'Reinstated'=>'Reinstated',
                             'Concluded' => 'Concluded',
                         ])->when('Concluded', function ($form) {
 
@@ -674,7 +676,7 @@ class CourtsController extends AdminController
                                         });
                                 });
                         })
-                        ->when('in', ['On-going investigation', 'On-going prosecution'], function ($form) {
+                        ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
 
 
                             $form->select('suspect_court_outcome', 'Accused court case status')->options(

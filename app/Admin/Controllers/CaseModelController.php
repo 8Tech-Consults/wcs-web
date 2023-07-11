@@ -78,28 +78,28 @@ class CaseModelController extends AdminController
 
 
         $u = Auth::user();
-        if ($u->isRole('ca-agent')) {
-            $grid->model()->where([
-                'case_submitted' => 1,
-                'reported_by' => $u->id
-            ])->orderBy('id', 'Desc');
-            $grid->disableExport();
-        } else if (
-            $u->isRole('ca-team')
-        ) {
-            $grid->model()->where([
-                'case_submitted' => 1,
-                'ca_id' => $u->ca_id
-            ])->orWhere([
-                'case_submitted' => 1,
-                'reported_by' => $u->id
-            ])->orderBy('id', 'Desc');
-        } else {
-            $grid->model()->where([
-                'case_submitted' => 1
-            ])->orderBy('id', 'Desc');
-        }
-
+        // if ($u->isRole('ca-agent')) {
+        //     $grid->model()->where([
+        //         'case_submitted' => 1,
+        //         'reported_by' => $u->id
+        //     ])->orderBy('id', 'Desc');
+        //     $grid->disableExport();
+        // } else if (
+        //     $u->isRole('ca-team')
+        // ) {
+        //     $grid->model()->orderBy('updated_at', 'Desc');
+        //     $grid->model()->where([
+        //         'case_submitted' => 1,
+        //         'ca_id' => $u->ca_id
+        //     ])->orWhere([
+        //         'case_submitted' => 1,
+        //         'reported_by' => $u->id
+        //     ])->orderBy('id', 'Desc');
+        // } else {
+        //     $grid->model()->where([
+        //         'case_submitted' => 1
+        //     ])->orderBy('updated_at', 'Desc');
+        // }
         //if($u->isRole('admin'))
 
 
@@ -122,7 +122,9 @@ class CaseModelController extends AdminController
 
             $f->disableIdFilter();
             $f->between('created_at', 'Filter by date')->date();
-            $f->equal('reported_by', "Filter by complainant")
+            $f->equal('officer_in_charge', "Filter by complainant");
+
+            $f->equal('reported_by', "Filter by reported by")
                 ->select(Administrator::all()->pluck('name', 'id'));
 
 
@@ -170,16 +172,20 @@ class CaseModelController extends AdminController
             $actions->disableEdit();
 
             $actions->disableDelete();
-            $actions->add(new CaseModelActionAddSuspect);
-            $actions->add(new CaseModelActionAddExhibit);
-            $actions->add(new CaseModelAddComment);
-            if (
-                Auth::user()->isRole('hq-team-leaders') ||
-                Auth::user()->isRole('ca-team')
-            ) {
-            } else {
+     
+            if (Auth::user()->isRole('hq-team-leaders')) {
                 $actions->add(new CaseModelActionEditCase);
+                $actions->add(new CaseModelActionAddSuspect);
+                $actions->add(new CaseModelActionAddExhibit);
+                $actions->add(new CaseModelAddComment);
             }
+            if(Auth::user()->isRole('ca-team') && Auth::user()->ca_id == $actions->row->ca_id) {
+                $actions->add(new CaseModelActionEditCase);
+                $actions->add(new CaseModelActionAddSuspect);
+                $actions->add(new CaseModelActionAddExhibit);
+                $actions->add(new CaseModelAddComment);
+            }
+
         });
 
 

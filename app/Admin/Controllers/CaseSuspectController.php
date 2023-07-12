@@ -14,6 +14,7 @@ use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
 use App\Models\SuspectCourtStatus;
+use App\Models\ArrestingAgency;
 use App\Models\User;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
@@ -183,7 +184,7 @@ class CaseSuspectController extends AdminController
             })
                 ->ajax($ajax_url);
 
-            $f->like('suspect_number', 'Filter Suspect Number'); 
+            $f->like('suspect_number', 'Filter Suspect Number');
 
             $f->equal('ca_id', 'Filter C.A of arrest')->select(
                 ConservationArea::all()->pluck('name', 'id')
@@ -249,30 +250,28 @@ class CaseSuspectController extends AdminController
                 $query->whereHas('offences', function ($query) {
                     $query->where('name', 'like', "%{$this->input}%");
                 });
-            
             }, 'Filter by Offence')->select(
                 Offence::pluck('name', 'name')
-            );   
+            );
         });
 
 
-        // $grid->quickSearch('first_name')->placeholder('Search by first name..');
         $grid->quickSearch(function ($model, $query) {
             $model->where(DB::raw("CONCAT(first_name, ' ',middle_name,' ', last_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(middle_name,' ',first_name,' ', last_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(first_name,' ', last_name, ' ', middle_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(last_name,' ', first_name, ' ', middle_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(last_name,' ', middle_name, ' ', first_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(middle_name,' ', last_name, ' ', first_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(first_name,' ', middle_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(first_name,' ', last_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(last_name,' ', first_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(last_name,' ', middle_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(middle_name,' ', first_name)"), 'like', "%{$query}%")
-            ->orWhere(DB::raw("CONCAT(middle_name,' ', last_name)"), 'like', "%{$query}%")
-            ->orWhere('middle_name', 'like', "%{$query}%")
-            ->orWhere('first_name', 'like', "%{$query}%")
-            ->orWhere('last_name', 'like', "%{$query}%");
+                ->orWhere(DB::raw("CONCAT(middle_name,' ',first_name,' ', last_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(first_name,' ', last_name, ' ', middle_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(last_name,' ', first_name, ' ', middle_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(last_name,' ', middle_name, ' ', first_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(middle_name,' ', last_name, ' ', first_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(first_name,' ', middle_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(first_name,' ', last_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(last_name,' ', first_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(last_name,' ', middle_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(middle_name,' ', first_name)"), 'like', "%{$query}%")
+                ->orWhere(DB::raw("CONCAT(middle_name,' ', last_name)"), 'like', "%{$query}%")
+                ->orWhere('middle_name', 'like', "%{$query}%")
+                ->orWhere('first_name', 'like', "%{$query}%")
+                ->orWhere('last_name', 'like', "%{$query}%");
         })->placeholder('Search by suspect\'s names');
 
         $grid->column('case_id', __('Case number'))
@@ -443,7 +442,7 @@ class CaseSuspectController extends AdminController
             ->display(function ($d) {
                 if ($d == null) {
                     return '-';
-                }else {
+                } else {
                     return Utils::my_date($d);
                 }
                 // return Utils::my_date($d);
@@ -690,8 +689,18 @@ class CaseSuspectController extends AdminController
     {
 
         $s = CaseSuspect::findOrFail($id);
+        $other_arrest_agencies = '-';
+
+        foreach ($s->other_arrest_agencies as $key => $value) {
+            if ($key == count($s->other_arrest_agencies) - 1) {
+                $other_arrest_agencies .= $value;
+            } else {
+                $other_arrest_agencies .= $value . ', ';
+            }
+        }
         return view('admin.case-suspect-details', [
-            's' => $s
+            's' => $s,
+            'other_arrest_agencies' => $other_arrest_agencies
         ]);
 
         $show = new Show(CaseSuspect::findOrFail($id));
@@ -940,22 +949,17 @@ class CaseSuspectController extends AdminController
 
                 $form->text('arrest_first_police_station', 'Police station of Arrest');
                 $form->text('arrest_current_police_station', 'Current police station');
-                $form->select('arrest_agency', 'Arresting agency')->options([
-                    'UWA' => 'UWA',
-                    'UPDF' => 'UPDF',
-                    'UPF' => 'UPF',
-                    'ESO' => 'ESO',
-                    'ISO' => 'ISO',
-                    'URA' => 'URA',
-                    'DCIC' => 'DCIC',
-                    'INTERPOL' => 'INTERPOL',
-                    'UCAA' => 'UCAA',
-                ]);
+                $form->select('arrest_agency', 'Arresting agency')->options(
+                    ArrestingAgency::pluck('name', 'name')
+                );
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                     'Canine Unit' => 'The Canine Unit',
                     'WCU' => 'WCU',
                     'LEU' => 'LEU',
                 ]);
+                $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
+                    ArrestingAgency::pluck('name', 'name')
+                );
 
                 $form->text('arrest_crb_number', 'Police CRB number');
                 $form->text('police_sd_number', 'Police SD number');
@@ -1028,7 +1032,7 @@ class CaseSuspectController extends AdminController
                             ->options([
                                 'On-going investigation' => 'On-going investigation',
                                 'On-going prosecution' => 'On-going prosecution',
-                                    'Reinstated'=>'Reinstated',
+                                'Reinstated' => 'Reinstated',
                                 'Closed' => 'Closed',
                             ])->when('Closed', function ($form) {
 
@@ -1091,7 +1095,7 @@ class CaseSuspectController extends AdminController
                             })
                             ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
                                 $form->radio('suspect_court_outcome', 'Suspect court case status')->options(
-                                    SuspectCourtStatus::pluck('name','name')
+                                    SuspectCourtStatus::pluck('name', 'name')
                                 );
                             })
                             ->rules('required');

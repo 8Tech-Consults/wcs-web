@@ -231,6 +231,11 @@ use App\Models\Utils;
                     't' => 'Arrest agency',
                     's' => $s->arrest_agency,
                 ])
+                
+                @include('components.detail-item', [
+                    't' => 'Other Arrest agencies',
+                    's' => $other_arrest_agencies,
+                ])
                 @include('components.detail-item', [
                     't' => 'UWA Arrest unit',
                     's' => $s->arrest_uwa_unit,

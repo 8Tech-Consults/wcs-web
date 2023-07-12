@@ -128,6 +128,19 @@ class CaseSuspect extends Model
 
         return $m;
     }
+    
+    public function getOtherArrestAgenciesAttribute($value)
+    {
+        if ($value == null) {
+            return [];
+        }
+        return json_decode($value);
+    }
+
+    public function setOtherArrestAgenciesAttribute($value)
+    {
+        $this->attributes['other_arrest_agencies'] = json_encode($value);
+    }
 
     function getPhotoUrlAttribute()
     {

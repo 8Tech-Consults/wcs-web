@@ -11,6 +11,7 @@ class AddCourte extends RowAction
 
     public function handle(Model $model)
     {
+        session()->forget('court_case_action');
         return $this->response()->redirect(admin_url("/court-cases/{$model->id}/edit"));
     }
 }

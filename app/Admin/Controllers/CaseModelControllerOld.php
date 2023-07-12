@@ -463,7 +463,8 @@ class CaseModelController extends AdminController
                         ])
                         ->when(1, function ($form) {
                             $form->date('created_at', 'Court date');
-                        });
+                        })
+                        ->rules('required');
 
                     $form->divider('Court information');
 

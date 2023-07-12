@@ -1095,7 +1095,8 @@ class CaseSuspectController extends AdminController
                                 );
                             })
                             ->rules('required');
-                    });
+                    })
+                    ->rules('required');
             });
 
 

@@ -965,7 +965,8 @@ class NewCaseSuspectController extends AdminController
 
                                 })
                                 ->rules('required');
-                        });
+                        })
+                        ->rules('required');
                 }
             })
             ->rules('required');

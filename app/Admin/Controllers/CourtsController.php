@@ -351,8 +351,10 @@ class CourtsController extends AdminController
             $actions->disableView();
             $actions->disableEdit();
             $actions->add(new ViewSuspect);
+            if($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated'){
+                $actions->add(new CourtCaseUpdate);
+            }
             $actions->add(new EditCourtCase);
-            $actions->add(new CourtCaseupdate);
 
             $actions->disableDelete();
         });

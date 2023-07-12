@@ -398,7 +398,7 @@ class CaseModelController extends AdminController
                         ->rules('required');
 
 
-                    $form->datetime('arrest_date_time', 'Arrest date and time');
+                    $form->datetime('arrest_date_time', 'Arrest date and time')->rules('required');
 
                     $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                         ->options([
@@ -463,7 +463,8 @@ class CaseModelController extends AdminController
                         ])
                         ->when(1, function ($form) {
                             $form->date('created_at', 'Court date');
-                        });
+                        })
+                        ->rules('required');
 
                     $form->divider('Court information');
 

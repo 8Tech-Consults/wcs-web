@@ -514,7 +514,7 @@ class NewCaseSuspectController extends AdminController
                 } else {
 
 
-                    $form->date('arrest_date_time', 'Arrest date and time');
+                    $form->date('arrest_date_time', 'Arrest date and time')->rules('required');
 
                     $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                         ->options([
@@ -965,7 +965,8 @@ class NewCaseSuspectController extends AdminController
 
                                 })
                                 ->rules('required');
-                        });
+                        })
+                        ->rules('required');
                 }
             })
             ->rules('required');

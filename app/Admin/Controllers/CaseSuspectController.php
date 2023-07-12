@@ -911,7 +911,7 @@ class CaseSuspectController extends AdminController
             ->when(1, function ($form) {
 
                 $form->divider('Arrest information');
-                $form->datetime('arrest_date_time', 'Arrest date and time');
+                $form->datetime('arrest_date_time', 'Arrest date and time')->rules('required');
 
                 $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                     ->options([

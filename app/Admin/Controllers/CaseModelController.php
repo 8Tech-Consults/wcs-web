@@ -101,7 +101,8 @@ class CaseModelController extends AdminController
         //     ])->orderBy('updated_at', 'Desc');
         // }
         //if($u->isRole('admin'))
-
+        
+        $grid->model()->orderBy('updated_at', 'DESC');
 
         $grid->export(function ($export) {
 

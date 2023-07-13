@@ -10,15 +10,25 @@
             | {{ $header }}
         @endif
     </title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="UWA - Wildlife offenders database">
+    <meta name="keywords" content="UWA - Wildlife offenders database">
+    <meta name="author" content="8Technologies">
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link rel="icon" type="image/png" href="{{ url('public/assets/images/logo.png') }}" />
-    <link rel="icon" type="image/png" href="{{ url('public/assets/logo.png') }}" />
-
-    @if (!is_null($favicon = Admin::favicon()))
-        <link rel="shortcut icon" href="{{ $favicon }}">
-    @endif
+    <!-- Favicon and Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url('') }}/assets/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url('') }}/assets/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url('') }}/assets/logo.png">
+    <link rel="manifest" href="{{ url('') }}/assets/public/favicon/site.webmanifest">
+    <link rel="mask-icon" href="{{ url('') }}/assets/logo.png" color="#6366f1">
+    <link rel="shortcut icon" href="{{ url('') }}/assets/logo.png">
+    <meta name="msapplication-TileColor" content="#080032">
+    <meta name="msapplication-config" content="{{ url('') }}/assets/public/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 
     {!! Admin::css() !!}
 

@@ -160,38 +160,6 @@ class NewCaseModelController extends AdminController
                 return 'Loading...';
             }
         
-        }else {
-            Admin::css('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css');
-            Admin::js('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js');
-            
-            if( $form->isCreating() ) {
-                //Check that the form has no error messages
-                // if($error->isEmpty()) {
-                    Admin::script("
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: 'To avoid double entry, please check if suspect(s) has already been reported.',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            allowOutsideClick: false,
-                            buttonsStyling: false,
-                            confirmButtonText: 'Yes, check',
-                            cancelButtonText: 'No, Procceed',
-                            customClass: {
-                                confirmButton: 'btn fw-bold btn-active-light-primary',
-                                cancelButton: 'btn fw-bold btn-danger ml-5',
-                            }
-                        }).then(function (result) {
-                            if (result.value) {
-                                window.location.replace('/case-suspects');
-                                return 'Loading...';
-                            }
-                        })
-                    ");
-                // }
-
-            }
-
         }
 
         $form->saved(function (Form $form) {
@@ -211,6 +179,31 @@ class NewCaseModelController extends AdminController
                     Admin::script('window.location.replace("' . admin_url('new-case-suspects/create') . '");');
                     return 'Loading...';
                 }
+            }else {
+                Admin::css('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css');
+                Admin::js('https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js');
+                
+                Admin::script("
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'To avoid double entry, please check if suspect(s) has already been reported.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        allowOutsideClick: false,
+                        buttonsStyling: false,
+                        confirmButtonText: 'Yes, check',
+                        cancelButtonText: 'No, Proceed',
+                        customClass: {
+                            confirmButton: 'btn fw-bold btn-active-light-primary',
+                            cancelButton: 'btn fw-bold btn-danger ml-5',
+                        }
+                    }).then(function (result) {
+                        if (result.value) {
+                            window.location.replace('/case-suspects');
+                            return 'Loading...';
+                        }
+                    })
+                ");
             }
         }
 

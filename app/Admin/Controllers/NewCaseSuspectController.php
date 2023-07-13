@@ -290,7 +290,7 @@ class NewCaseSuspectController extends AdminController
             'Male' => 'Male',
             'Female' => 'Female',
         ])->rules('required');
-        $form->text('age', 'Suspect\'s Age')->rules('int|min:1|max:200');
+        $form->text('age', 'Suspect\'s Age')->help("How old is the suspect?")->rules('int|min:1|max:200');
         $form->text('phone_number', 'Phone number');
 
         $form->radio('type_of_id', 'Suspect Type of Identification Card')
@@ -983,6 +983,12 @@ class NewCaseSuspectController extends AdminController
             } else {
                 return redirect(admin_url("cases"));
             }
+        });
+        $form->saving( function ( Form $form) {
+            if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No' && $form->suspect_appealed == 'No') {
+                throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected under convicted: Jailed, Fined, Community service, Cautioned, Appealed']]);
+            }
+
         });
 
         return $form;

@@ -57,7 +57,7 @@ use App\Models\Utils;
 
 
 <script>
-    $(function () {
+    $(function() {
 
         function randomScalingFactor() {
             return Math.floor(Math.random() * 100);
@@ -106,7 +106,7 @@ use App\Models\Utils;
                         display: true,
                         title: {
                             display: true,
-                            text: 'Month'
+                            text: 'Month - Year'
                         }
                     },
                     y: {
@@ -114,7 +114,7 @@ use App\Models\Utils;
                         display: true,
                         title: {
                             display: true,
-                            text: 'Value'
+                            text: 'Number of Suspects'
                         }
                     }
                 }
@@ -126,8 +126,12 @@ use App\Models\Utils;
 
         // Export as JPEG (White Background)
         var exportJpegBtn = document.getElementById('exportJpegBtn');
-        exportJpegBtn.addEventListener('click', function () {
+        exportJpegBtn.addEventListener('click', function() {
             var canvas = document.getElementById('line-stacked');
+            var context = canvas.getContext('2d');
+            context.globalCompositeOperation = 'destination-over';
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, canvas.width, canvas.height);
             var image = canvas.toDataURL('image/jpeg', 1.0)
                 .replace('image/jpeg', 'image/octet-stream');
             var link = document.createElement('a');
@@ -138,7 +142,7 @@ use App\Models\Utils;
 
         // Export as CSV
         var exportCsvBtn = document.getElementById('exportCsvBtn');
-        exportCsvBtn.addEventListener('click', function () {
+        exportCsvBtn.addEventListener('click', function() {
             var labels = <?php echo json_encode($labels); ?>;
             var createdData = <?php echo json_encode($created_at); ?>;
             var courtData = <?php echo json_encode($is_suspect_appear_in_court); ?>;
@@ -147,7 +151,8 @@ use App\Models\Utils;
             var csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Month,Number of Suspects,In Court,Convicted\n";
             for (var i = 0; i < labels.length; i++) {
-                var row = labels[i] + ',' + createdData[i] + ',' + courtData[i] + ',' + convictedData[i];
+                var row = labels[i] + ',' + createdData[i] + ',' + courtData[i] + ',' + convictedData[
+                i];
                 csvContent += row + "\r\n";
             }
 

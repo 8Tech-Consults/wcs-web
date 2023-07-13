@@ -337,7 +337,7 @@ class CaseSuspectController extends AdminController
                 }
                 return $this->case->ca->name;
             })->hide();
-
+            
         $grid->column('gps', __('GPS'))
             ->display(function ($x) {
                 return $this->case->latitude . "," . $this->case->longitude;
@@ -850,7 +850,7 @@ class CaseSuspectController extends AdminController
             'Male' => 'Male',
             'Female' => 'Female',
         ])->rules('required');
-        $form->date('age', 'Date of birth')->rules('required');
+        $form->text('age', 'Suspect\'s Age')->help("How old is the suspect?")->rules('nullable|int|min:1|max:200');
         $form->mobile('phone_number')->options(['mask' => '999 9999 9999']);
         $form->text('national_id_number');
         $form->text('occuptaion', 'Occupation');

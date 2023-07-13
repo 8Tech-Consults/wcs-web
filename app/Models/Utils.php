@@ -572,34 +572,35 @@ class Utils  extends Model
 
     public static function tell_suspect_status($s)
     {
-        if ($s->court_status != null && strlen($s->court_status) > 2) {
+        if($s->court_status == null){
+            if($s->is_suspects_arrested == 'Yes'){
+                return 'At Police';
+            }else{
+                return 'Not At Police';
+            }
+        }
+        else {
             return $s->court_status;
-        } else if ($s->is_suspect_appear_in_court == 'Yes') {
-            return 'In Court';
-        } else if ($s->is_arrested  == 'Yes') {
-            return 'At Police';
-        } else {
-            return 'Not At Police';
         }
     }
 
     public static function tell_suspect_status_color($s)
     {
-        if ($s->court_status != null && strlen($s->court_status) > 2) {
-            return 'success';
-        } else if ($s->is_suspect_appear_in_court == 'Yes') {
-            return 'info';
-        } else if ($s->is_arrested  == 'Yes') {
-            return 'warning';
-        } else {
-            return 'danger';
+        if($s->court_status == null){
+            if($s->is_suspects_arrested == 'Yes'){
+                return 'warning';
+            }else{
+                return 'info';
+            }
         }
-
-        if ($s->is_arrested) {
-        } else if ($s->is_suspect_appear_in_court) {
-        } else if ($s->is_jailed) {
-        } else {
-            return 'Pending';
+        else {
+            if($s->court_status == 'Concluded') {
+                return 'danger';
+            }else if($s->court_status == 'On-going prosecution') {
+                return 'success';
+            }else {
+                return 'primary';
+            }
         }
     }
 

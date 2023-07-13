@@ -132,7 +132,7 @@ class CourtsController extends AdminController
                 'is_suspect_appear_in_court' => 1
             ])->orwhere([
                 'is_suspect_appear_in_court' => 'Yes'
-            ])->orderBy('id', 'Desc');
+            ])->orderBy('updated_at', 'Desc');
 
         $u = Auth::user();
         if ($u->isRole('ca-agent')) {
@@ -200,8 +200,6 @@ class CourtsController extends AdminController
             ]);
         });
 
-
-        $grid->model()->orderBy('id', 'Desc');
         $grid->quickSearch(function ($model, $query) {
             $model->where(DB::raw("CONCAT(first_name, ' ',middle_name,' ', last_name)"), 'like', "%{$query}%")
                 ->orWhere(DB::raw("CONCAT(middle_name,' ',first_name,' ', last_name)"), 'like', "%{$query}%")
@@ -716,8 +714,8 @@ class CourtsController extends AdminController
         });
         $form->saving( function ( Form $form) {
             if(session('court_case_action') == 'update'){
-                if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No' && $form->suspect_appealed == 'No') {
-                    throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected under convicted: Jailed, Fined, Community service, Cautioned, Appealed']]);
+                if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
+                    throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned']]);
                 }
             }
 

@@ -20,11 +20,10 @@ class Dashboard
 
     public static function suspects()
     {
-        $suspects = CaseSuspect::where([])
-            ->orderBy('id', 'Desc')->limit(6)->get();
+        $suspects = CaseSuspect::orderBy('updated_at', 'Desc')->limit(6)->get();
 
         return view('dashboard.suspects', [
-            'items' => $suspects
+            'suspects' => $suspects
         ]);
     }
 
@@ -115,6 +114,9 @@ class Dashboard
 
             $is_suspects_arrested = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
+                    'is_suspects_arrested' => 'Yes'
+                ])
+                ->orWhere([
                     'is_suspects_arrested' => 1
                 ])
                 ->count();
@@ -166,7 +168,7 @@ class Dashboard
     {
 
         $tot = 0;
-        foreach (ConservationArea::all() as $key => $ca) {
+        foreach (ConservationArea::where('name','!=','UWA')->get() as $key => $ca) {
             $tot += count($ca->cases);
         }
 
@@ -174,7 +176,7 @@ class Dashboard
         $data['labels'] = [];
         $data['count'] = [];
 
-        foreach (ConservationArea::all() as $key => $ca) {
+        foreach (ConservationArea::where('name','!=','UWA')->get() as $key => $ca) {
             $label = substr($ca->name, 0, 10);
             if (strlen($ca->name) > 15) {
                 $label .= "...";
@@ -191,7 +193,8 @@ class Dashboard
 
         return view('dashboard.graph-top-districts', [
             'labels' => $data['labels'],
-            'count' => $data['count']
+            'count' => $data['count'],
+            'totalCases' => $tot
         ]);
     }
 

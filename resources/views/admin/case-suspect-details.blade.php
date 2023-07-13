@@ -313,7 +313,7 @@ use App\Models\Utils;
                     's' => $s->court_status,
                 ])
                 @include('components.detail-item', [
-                    't' => 'Suspect court status',
+                    't' => 'Accused court status',
                     's' => $s->suspect_court_outcome,
                 ])
           
@@ -371,7 +371,7 @@ use App\Models\Utils;
                 ])
 
                 @include('components.detail-item', [
-                    't' => 'Suspect appealed',
+                    't' => 'Accused appealed',
                     's' => $s->suspect_appealed == '1' || $s->suspect_appealed == 'Yes' ? 'Yes' : 'No',
                 ])
                 @include('components.detail-item', [

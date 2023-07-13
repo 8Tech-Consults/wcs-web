@@ -43,14 +43,14 @@ use App\Models\Utils;
                 </thead>
                 <tbody>
 
-                    @foreach ($items as $i)
+                    @foreach ($suspects as $suspect)
                         <tr>
 
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="symbol"
                                         style="width: 55px; height: 60px;
-                                    background-image: url({{ $i->photo_url }});
+                                    background-image: url({{ $suspect->photo_url }});
                                     background-position: center;
                                     background-size: cover;
                                     border-radius: 8px;
@@ -58,29 +58,29 @@ use App\Models\Utils;
                                     </div>
                                     <div class="d-flex justify-content-start flex-column pl-3">
                                         <a href="#" style="color: black; font-weight: 600;"
-                                            class="text-dark fw-bolder text-hover-primary fs-6">{{ $i->name }}</a>
+                                            class="text-dark fw-bolder text-hover-primary fs-6">{{ $suspect->name }}</a>
                                         <span
-                                            class="text-muted fw-bold text-muted d-block fs-7">{{ $i->sex }}</span>
+                                            class="text-muted fw-bold text-muted d-block fs-7">{{ $suspect->sex }}</span>
                                         <span class="text-muted fw-bold text-muted d-block fs-7">
                                             <b class="p-0 m-0 small text-dark">COUNTRY:</b>
-                                            {{ Str::of($i->country)->limit(10) }}
+                                            {{ Str::of($suspect->country)->limit(10) }}
                                         </span>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 <b class="text-dark fw-bold  d-block fs-7"
-                                    style="color: black">{{ Str::of($i->case->title)->limit(35) }}</b>
-                                <span class="fw-bold text-primary d-block fs-7">{{ $i->case->created_at }}</span>
+                                    style="color: black">{{ Str::of($suspect->case->title)->limit(35) }}</b>
+                                <span class="fw-bold text-primary d-block fs-7">{{ $suspect->case->updated_at }}</span>
                             </td>
                             <td class="text-end">
-                                <span class="badge bg-{{ Utils::tell_suspect_status_color($i) }}">
-                                    {{ Utils::tell_suspect_status($i) ?? '-' }}
+                                <span class="badge bg-{{ Utils::tell_suspect_status_color($suspect) }}">
+                                    {{ Utils::tell_suspect_status($suspect) ?? '-' }}
                                 </span>
                             </td>
                             <td>
                                 <div class=" justify-content-end text-right ">
-                                    <a href="{{ url("/case-suspects/{$i->id}") }}" title="View"
+                                    <a href="{{ url("/case-suspects/{$suspect->id}") }}" title="View"
                                         class="btn btn-icon btn-bg-light  text-dark  me-1 p-0 px-2 m-0"
                                         style="font-size: 16px;">
 
@@ -89,7 +89,7 @@ use App\Models\Utils;
                                         <span>View</span>
                                         <!--end::Svg Icon-->
                                     </a><br>
-                                    <a href="{{ url("/case-suspects/{$i->id}") }}/edit" title="View"
+                                    <a href="{{ url("/case-suspects/{$suspect->id}") }}/edit" title="View"
                                         class="btn btn-icon btn-bg-light text-primary   me-1 p-0 px-2 m-0"
                                         style="font-size: 16px;">
 

@@ -107,6 +107,10 @@ use App\Models\Utils;
                 var exportSpecimenJpegBtn = document.getElementById('exportSpecimenJpegBtn');
                 exportSpecimenJpegBtn.addEventListener('click', function () {
                     var canvas = document.getElementById('bar-line');
+                    var context = canvas.getContext('2d');
+                    context.globalCompositeOperation = 'destination-over';
+                    context.fillStyle = 'white';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
                     var image = canvas.toDataURL('image/jpeg', 1.0)
                         .replace('image/jpeg', 'image/octet-stream');
                     var link = document.createElement('a');

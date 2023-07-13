@@ -717,7 +717,7 @@ class CourtsController extends AdminController
         $form->saving( function ( Form $form) {
             if(session('court_case_action') == 'update'){
                 if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No' && $form->suspect_appealed == 'No') {
-                    throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected: Jailed, Fined, Community service, Cautioned, Appealed']]);
+                    throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected under convicted: Jailed, Fined, Community service, Cautioned, Appealed']]);
                 }
             }
 

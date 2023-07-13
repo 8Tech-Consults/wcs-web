@@ -101,7 +101,7 @@ class CaseModelController extends AdminController
         //     ])->orderBy('updated_at', 'Desc');
         // }
         //if($u->isRole('admin'))
-        
+
         $grid->model()->orderBy('updated_at', 'DESC');
 
         $grid->export(function ($export) {
@@ -173,20 +173,27 @@ class CaseModelController extends AdminController
             $actions->disableEdit();
 
             $actions->disableDelete();
-     
-            if (Auth::user()->isRole('hq-team-leaders')) {
-                $actions->add(new CaseModelActionEditCase);
-                $actions->add(new CaseModelActionAddSuspect);
-                $actions->add(new CaseModelActionAddExhibit);
-                $actions->add(new CaseModelAddComment);
-            }
-            if(Auth::user()->isRole('ca-team') && Auth::user()->ca_id == $actions->row->ca_id) {
-                $actions->add(new CaseModelActionEditCase);
-                $actions->add(new CaseModelActionAddSuspect);
-                $actions->add(new CaseModelActionAddExhibit);
-                $actions->add(new CaseModelAddComment);
-            }
 
+            // if (Auth::user()->isRole('hq-team-leaders')) {
+            //     $actions->add(new CaseModelActionEditCase);
+            //     $actions->add(new CaseModelActionAddSuspect);
+            //     $actions->add(new CaseModelActionAddExhibit);
+            //     $actions->add(new CaseModelAddComment);
+
+            // }else
+            if (Auth::user()->isRole('ca-team') || Auth::user()->isRole('ca-agent')) {
+                if (Auth::user()->ca_id == $actions->row->ca_id) {
+                    $actions->add(new CaseModelActionEditCase);
+                    $actions->add(new CaseModelActionAddSuspect);
+                    $actions->add(new CaseModelActionAddExhibit);
+                    $actions->add(new CaseModelAddComment);
+                }
+            } else {
+                $actions->add(new CaseModelActionEditCase);
+                $actions->add(new CaseModelActionAddSuspect);
+                $actions->add(new CaseModelActionAddExhibit);
+                $actions->add(new CaseModelAddComment);
+            }
         });
 
 
@@ -394,7 +401,8 @@ class CaseModelController extends AdminController
 
         $form->select('detection_method', __('Detection method'))
             ->options(
-                DetectionMethod::pluck('name', 'name'))
+                DetectionMethod::pluck('name', 'name')
+            )
             ->rules('required');
 
         return $form;

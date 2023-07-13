@@ -145,6 +145,7 @@ class HomeController extends Controller
             ->title('Online Wildlife Offenders Database - Dashboard')
             ->description('Hello ' . Auth::user()->name . "!");
 
+        Admin::js('https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js'); //Used in graphs
 
 
         $content->row(function (Row $row) {

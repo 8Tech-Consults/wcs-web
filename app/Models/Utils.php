@@ -572,7 +572,7 @@ class Utils  extends Model
 
     public static function tell_suspect_status($s)
     {
-        if($s->court_status == null){
+        if($s->is_suspect_appear_in_court == null || $s->is_suspect_appear_in_court == 'No'){
             if($s->is_suspects_arrested == 'Yes'){
                 return 'At Police';
             }else{
@@ -586,7 +586,7 @@ class Utils  extends Model
 
     public static function tell_suspect_status_color($s)
     {
-        if($s->court_status == null){
+        if($s->is_suspect_appear_in_court == null || $s->is_suspect_appear_in_court == 'No'){
             if($s->is_suspects_arrested == 'Yes'){
                 return 'warning';
             }else{

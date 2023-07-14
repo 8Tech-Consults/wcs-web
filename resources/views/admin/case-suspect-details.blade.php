@@ -312,10 +312,12 @@ use App\Models\Utils;
                     't' => 'Court case status',
                     's' => $s->court_status,
                 ])
-                @include('components.detail-item', [
-                    't' => 'Accused court status',
-                    's' => $s->suspect_court_outcome,
-                ])
+                @if($s->court_status != 'Concluded') 
+                    @include('components.detail-item', [
+                        't' => 'Accused court status',
+                        's' => $s->suspect_court_outcome,
+                    ])                
+                @endif
           
                 @include('components.detail-item', [
                     't' => 'Specific court case status',

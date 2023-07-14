@@ -36,7 +36,7 @@ use App\Models\Utils;
                 <thead>
                     <tr class="fw-bolder text-muted">
                         <th class="min-w-200px">Suspect</th>
-                        <th class="min-w-150px">Crime</th>
+                        <th class="min-w-150px">Case Title</th>
                         <th class="min-w-150px">Status</th>
                         <th class="text-right">Actions</th>
                     </tr>

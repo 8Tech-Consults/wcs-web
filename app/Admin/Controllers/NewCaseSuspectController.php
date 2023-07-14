@@ -124,6 +124,7 @@ class NewCaseSuspectController extends AdminController
         $grid->column('suspect_number', __('Suspect number'));
         $grid->column('arrest_in_pa', __('Arrest in pa'));
         $grid->column('pa_id', __('Pa id'));
+        // $grid->column('arrest_location', __('Arrest location'));
         $grid->column('management_action', __('Management action'));
         $grid->column('community_service', __('Community service'));
         $grid->column('reported_by', __('Reported by'));
@@ -186,6 +187,7 @@ class NewCaseSuspectController extends AdminController
         $show->field('arrest_sub_county_id', __('Arrest sub county id'));
         $show->field('arrest_parish', __('Arrest parish'));
         $show->field('arrest_village', __('Arrest village'));
+        // $show->field('arrest_location', __('Arrest location'));
         $show->field('arrest_latitude', __('Arrest latitude'));
         $show->field('arrest_longitude', __('Arrest longitude'));
         $show->field('arrest_first_police_station', __('Arrest first police station'));
@@ -983,7 +985,7 @@ class NewCaseSuspectController extends AdminController
         });
         $form->saving( function ( Form $form) {
             $errors = [];
-            if($form->court_status == '' || $form->court_status == null) {
+            if( $form->is_suspect_appear_in_court == 'Yes' && ($form->court_status == '' || $form->court_status == null)) {
                 $errors['court_status'] = ['Court case status is required'];
             }
 

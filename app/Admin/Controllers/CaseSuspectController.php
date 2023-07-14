@@ -472,6 +472,7 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
+        $grid->column('arrest_location')->hide()->sortable();
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;

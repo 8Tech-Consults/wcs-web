@@ -756,8 +756,7 @@ class NewCaseSuspectController extends AdminController
                                                         });
                                                 });
                                         })
-                                        ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
-
+                                        ->when('in', ['On-going prosecution', 'Reinstated'], function ($form) {
 
                                             $form->select('suspect_court_outcome', 'Accused court case status')->options(SuspectCourtStatus::pluck('name', 'name'))
                                                 ->rules('required');
@@ -983,9 +982,19 @@ class NewCaseSuspectController extends AdminController
             }
         });
         $form->saving( function ( Form $form) {
-            if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
-                throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned']]);
+            $errors = [];
+            if($form->court_status == '' || $form->court_status == null) {
+                $errors['court_status'] = ['Court case status is required'];
             }
+
+            if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
+                $errors['case_outcome'] = ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned'];
+            }
+
+            if(count($errors) > 0) {
+                throw \Illuminate\Validation\ValidationException::withMessages($errors);
+            }
+
 
         });
 

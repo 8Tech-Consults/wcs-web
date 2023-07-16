@@ -340,7 +340,7 @@ class NewCaseSuspectController extends AdminController
         $hasPendingSusps = false;
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
-            if ($pendingCase->suspects->count() > 0) {
+            if ($pendingCase->suspects()->count() > 0) {
                 $hasPendingSusps = true;
             }
         }
@@ -364,7 +364,7 @@ class NewCaseSuspectController extends AdminController
                     $supects = [];
                     $pendingCase = Utils::hasPendingCase(Auth::user());
                     if ($pendingCase != null) {
-                        if ($pendingCase->suspects->count() > 0) {
+                        if ($pendingCase->suspects()->count() > 0) {
                             foreach ($pendingCase->suspects as $sus) {
                                 $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
                             }

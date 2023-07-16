@@ -750,7 +750,7 @@ class CaseSuspectController extends AdminController
         $show->field('arrest_longitude', __('Arrest longitude'));
         $show->field('arrest_first_police_station', __('Arrest first police station'));
         $show->field('arrest_current_police_station', __('Arrest current police station'));
-        $show->field('arrest_agency', __('Arresting agency'));
+        $show->field('arrest_agency', __('Lead Arresting agency'));
         $show->field('arrest_uwa_unit', __('Arrest uwa unit'));
         $show->field('arrest_detection_method', __('Arrest detection method'));
         $show->field('arrest_uwa_number', __('Arrest uwa number'));
@@ -964,7 +964,7 @@ class CaseSuspectController extends AdminController
 
                 $form->text('arrest_first_police_station', 'Police station of Arrest');
                 $form->text('arrest_current_police_station', 'Current police station');
-                $form->select('arrest_agency', 'Arresting agency')->options(
+                $form->select('arrest_agency', 'Lead Arresting agency')->options(
                     ArrestingAgency::pluck('name', 'name')
                 );
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([

@@ -535,7 +535,7 @@ class ArrestsController extends AdminController
 
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
-                            $form->select('arrest_agency', 'Arresting agency')->options(
+                            $form->select('arrest_agency', 'Lead Arresting agency')->options(
                                 ArrestingAgency::pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
@@ -626,7 +626,7 @@ class ArrestsController extends AdminController
 
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
-                    $form->select('arrest_agency', 'Arresting agency')->options(
+                    $form->select('arrest_agency', 'Lead Arresting agency')->options(
                         ArrestingAgency::pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {

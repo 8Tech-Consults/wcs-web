@@ -298,6 +298,7 @@ class ArrestsController extends AdminController
                 return $this->arrestCa->name;
             })
             ->sortable();
+        // $grid->column('arrest_location', 'Arrest location')->hide()->sortable();
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -322,7 +323,7 @@ class ArrestsController extends AdminController
             return $x;
         })->sortable();
         $grid->column('arrest_current_police_station', 'Current police station')->hide()->sortable();
-        $grid->column('arrest_agency', 'Arrest agency')->display(function ($x) {
+        $grid->column('arrest_agency', 'Lead Arrest agency')->display(function ($x) {
             if ($x == null || strlen($x) < 2) {
                 return '-';
             }
@@ -334,7 +335,7 @@ class ArrestsController extends AdminController
             }
             return $x;
         })->sortable();
-        $grid->column('other_arrest_agencies')->display(function ($array) {
+        $grid->column('other_arrest_agencies', 'Other Arrest Agencies')->display(function ($array) {
             if (count($array) < 1) {
                 return '-';
             }
@@ -534,7 +535,7 @@ class ArrestsController extends AdminController
 
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
-                            $form->select('arrest_agency', 'Arresting agency')->options(
+                            $form->select('arrest_agency', 'Lead Arresting agency')->options(
                                 ArrestingAgency::pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
@@ -625,7 +626,7 @@ class ArrestsController extends AdminController
 
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
-                    $form->select('arrest_agency', 'Arresting agency')->options(
+                    $form->select('arrest_agency', 'Lead Arresting agency')->options(
                         ArrestingAgency::pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {

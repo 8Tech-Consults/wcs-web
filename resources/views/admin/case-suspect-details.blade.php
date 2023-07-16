@@ -228,7 +228,7 @@ use App\Models\Utils;
                     's' => $s->arrest_current_police_station,
                 ])
                 @include('components.detail-item', [
-                    't' => 'Arrest agency',
+                    't' => 'Lead Arrest agency',
                     's' => $s->arrest_agency,
                 ])
                 

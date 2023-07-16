@@ -492,8 +492,23 @@ class CaseSuspectController extends AdminController
         $grid->column('arrest_longitude', 'Arrest GPS longitude')->hide()->sortable();
         $grid->column('arrest_first_police_station', 'First police station')->hide()->sortable();
         $grid->column('arrest_current_police_station', 'Current police station')->hide()->sortable();
-        $grid->column('arrest_agency', 'Arrest agency')->hide()->sortable();
+        $grid->column('arrest_agency', 'Lead Arrest agency')->hide()->sortable();
         $grid->column('arrest_uwa_unit')->hide()->sortable();
+        $grid->column('other_arrest_agencies', 'Other Arrest Agencies')->display(function ($array) {
+            if (count($array) < 1) {
+                return '-';
+            }
+            $str = '';
+
+            foreach ($array as $key => $value) {
+                if ($key == count($array) - 1) {
+                    $str .= $value;
+                } else {
+                    $str .= $value . ', ';
+                }
+            }
+            return $str;
+        })->hide()->sortable(); 
         $grid->column('arrest_crb_number')->hide()->sortable();
         $grid->column('police_sd_number')->hide()->sortable();
         $grid->column('is_suspect_appear_in_court', __('Appeared Court'))

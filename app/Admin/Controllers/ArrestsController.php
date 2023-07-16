@@ -298,6 +298,7 @@ class ArrestsController extends AdminController
                 return $this->arrestCa->name;
             })
             ->sortable();
+        $grid->column('arrest_location', 'Arrest location')->hide()->sortable();
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -322,7 +323,7 @@ class ArrestsController extends AdminController
             return $x;
         })->sortable();
         $grid->column('arrest_current_police_station', 'Current police station')->hide()->sortable();
-        $grid->column('arrest_agency', 'Arrest agency')->display(function ($x) {
+        $grid->column('arrest_agency', 'Lead Arrest agency')->display(function ($x) {
             if ($x == null || strlen($x) < 2) {
                 return '-';
             }
@@ -334,7 +335,7 @@ class ArrestsController extends AdminController
             }
             return $x;
         })->sortable();
-        $grid->column('other_arrest_agencies')->display(function ($array) {
+        $grid->column('other_arrest_agencies', 'Other Arrest Agencies')->display(function ($array) {
             if (count($array) < 1) {
                 return '-';
             }
@@ -514,7 +515,7 @@ class ArrestsController extends AdminController
                                         ->options(PA::where('id', '!=', 1)->get()
 
                                             ->pluck('name_text', 'id'));
-                                    $form->text('arrest_village', 'Enter arrest location');
+                                    $form->text('arrest_location', 'Enter arrest location');
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -605,7 +606,7 @@ class ArrestsController extends AdminController
                                 ->options(PA::where('id', '!=', 1)->get()
 
                                     ->pluck('name_text', 'id'));
-                            $form->text('arrest_village', 'Enter arrest location');
+                            $form->text('arrest_location', 'Enter arrest location');
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))

@@ -258,8 +258,6 @@ class CaseSuspect extends Model
         $this->police_action = $org->police_action;
         $this->police_action_date = $org->police_action_date;
         $this->police_action_remarks = $org->police_action_remarks;
-        $this->court_file_status = $org->court_file_status;
-        $this->court_status = $org->court_status;
         $this->use_same_arrest_information_coped = 'Yes';
         $this->use_same_arrest_information = 'Yes';
         $this->save();

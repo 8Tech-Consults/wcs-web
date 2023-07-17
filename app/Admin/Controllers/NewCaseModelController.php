@@ -262,7 +262,7 @@ class NewCaseModelController extends AdminController
                     ->rules('required')
                     ->options(PA::where('id', '!=', 1)->get()
                         ->pluck('name_text', 'id'));
-                $form->text('location', 'Enter location');
+                $form->text('village', 'Enter location');
             });
 
 

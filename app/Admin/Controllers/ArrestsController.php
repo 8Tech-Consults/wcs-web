@@ -298,7 +298,12 @@ class ArrestsController extends AdminController
                 return $this->arrestCa->name;
             })
             ->sortable();
-        $grid->column('arrest_location', 'Arrest location')->hide()->sortable();
+        $grid->column('arrest_location', 'Arrest Location')->display( function () {
+            if($this->arrest_in_pa == 'Yes') {
+                return $this->arrest_village;
+            }
+            return '-';
+        })->hide()->sortable();
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -313,7 +318,12 @@ class ArrestsController extends AdminController
             ->sortable();
 
         $grid->column('arrest_parish')->hide()->sortable();
-        $grid->column('arrest_village')->hide()->sortable();
+        $grid->column('arrest_village')->display( function () {
+            if($this->arrest_in_pa == 'Yes') {
+                return '-';
+            }
+            return $this->arrest_village;
+        })->hide()->sortable();
         $grid->column('arrest_latitude', 'Arrest GPS latitude')->hide()->sortable();
         $grid->column('arrest_longitude', 'Arrest GPS longitude')->hide()->sortable();
         $grid->column('arrest_first_police_station', 'First police station')->display(function ($x) {

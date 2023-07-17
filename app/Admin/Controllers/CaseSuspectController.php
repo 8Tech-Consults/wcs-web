@@ -15,6 +15,7 @@ use App\Models\Offence;
 use App\Models\PA;
 use App\Models\SuspectCourtStatus;
 use App\Models\ArrestingAgency;
+use App\Models\Court;
 use App\Models\User;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
@@ -337,6 +338,33 @@ class CaseSuspectController extends AdminController
                 }
                 return $this->case->ca->name;
             })->hide();
+
+        $grid->column('case_location', 'Location')->display( function () {
+            if($this->is_offence_committed_in_pa == 'Yes') {
+                return $this->case->village;
+            }
+            return '-';
+        })->hide()->sortable();
+
+        $grid->column('case_district', 'District')->display( function () {
+            return $this->case->district->name;
+        })->hide()->sortable();
+
+        $grid->column('case_subcounty', 'Sub-county')->display( function () {
+            return $this->case->sub_county->name;
+        })->hide()->sortable();
+
+        $grid->column('case_parish', 'Parish')->display( function () {
+            return $this->case->parish;
+        })->hide()->sortable();
+
+        $grid->column('case_village', 'Village')->display( function () {
+            if($this->is_offence_committed_in_pa == 'Yes') {
+                return '-';
+            }
+            return $this->case->village;
+
+        })->hide()->sortable();
             
         $grid->column('gps', __('GPS'))
             ->display(function ($x) {
@@ -472,6 +500,16 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
+
+        $grid->column('arrest_location', 'Arrest Location')
+            ->display(function ($x) {
+                if($this->arrest_in_pa == 'Yes') {
+                    return $this->arrest_village;
+                }
+                return '-';
+            })
+            ->hide()
+            ->sortable();
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -487,7 +525,12 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
         $grid->column('arrest_parish')->hide()->sortable();
-        $grid->column('arrest_village')->hide()->sortable();
+        $grid->column('arrest_village')->display(function ($x) {
+            if($this->arrest_in_pa == 'Yes') {
+                return '-';
+            }
+            return $this->arrest_village;
+        })->hide()->sortable();
         $grid->column('arrest_latitude', 'Arrest GPS latitude')->hide()->sortable();
         $grid->column('arrest_longitude', 'Arrest GPS longitude')->hide()->sortable();
         $grid->column('arrest_first_police_station', 'First police station')->hide()->sortable();
@@ -539,7 +582,10 @@ class CaseSuspectController extends AdminController
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-        $grid->column('court_name')->hide()->sortable();
+        $grid->column('court_name')->display(function() {
+            if($this->court_name != null)
+                return $this->court->name;
+        })->hide()->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();

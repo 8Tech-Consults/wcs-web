@@ -47,7 +47,7 @@ class CaseModel extends Model
         });
         self::creating(function ($m) {
 
-            $m->district_id = 1;
+            $m->district_id = 0;
             $m->has_exhibits = 0;
 
             if ($m->sub_county_id != null) {

@@ -25,9 +25,9 @@ Route::get('/2fauth', [MainController::class, 'two_f_auth'])->name("two_f_auth")
 Route::POST("do-change-password", [MainController::class, "doChangePassword"]);
 Route::get('/logout', function () {
   return redirect(admin_url('auth/logout?log_me_out=1'));
-  header('Location: ' . admin_url('auth/logout')); 
+  header('Location: ' . admin_url('auth/logout'));
   Auth::logout();
-  return redirect('/login'); 
+  return redirect('/login');
 });
 Route::get('/login', function () {
   die("login");
@@ -36,6 +36,18 @@ Route::get('/login', function () {
 Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");
+Route::get('/mobile', function () {
+  return redirect(url('uwa-v1.apk'));
+})->name("mobile");
+Route::get('/desktop', function () {
+  return redirect(url('uwa-v1.exe'));
+})->name("desktop");
+Route::get('/fingerprint', function () {
+  return redirect(url('UWA-FINGERPRINT.exe'));
+})->name("fingerprint");
+Route::get('/drivers', function () {
+  return redirect(url('uwa-fingeprint-drivers.zip'));
+})->name("drivers");
 
 Route::get('/register', function () {
   die("register");

@@ -304,6 +304,7 @@ class ArrestsController extends AdminController
             }
             return '-';
         })->hide()->sortable();
+
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -525,7 +526,7 @@ class ArrestsController extends AdminController
                                         ->options(PA::where('id', '!=', 1)->get()
 
                                             ->pluck('name_text', 'id'));
-                                    $form->text('arrest_location', 'Enter arrest location');
+                                    $form->text('arrest_village', 'Enter arrest location');
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -616,7 +617,7 @@ class ArrestsController extends AdminController
                                 ->options(PA::where('id', '!=', 1)->get()
 
                                     ->pluck('name_text', 'id'));
-                            $form->text('arrest_location', 'Enter arrest location');
+                            $form->text('arrest_village', 'Enter arrest location');
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))

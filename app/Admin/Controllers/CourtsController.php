@@ -310,7 +310,14 @@ class CourtsController extends AdminController
         })->sortable();
         $grid->column('community_service')->hide()->sortable();
         $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
-
+        $grid->column('cautioned')->display(function ($x) {
+            if ($x == null || strlen($x) < 1) {
+                return "-";
+            }
+            return $x;
+        })->hide()->sortable();
+        
+        $grid->column('cautioned_remarks', 'Caution remarks')->hide()->sortable();
 
         $grid->column('suspect_appealed', 'Accused appealed')
             ->using([

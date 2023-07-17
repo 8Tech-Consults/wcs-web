@@ -641,7 +641,8 @@ class CaseSuspectController extends AdminController
         $grid->column('community_service')->hide()->sortable();
         $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
 
-
+        $grid->column('cautioned')->hide()->sortable();
+        $grid->column('cautioned_remarks')->hide()->sortable();
         $grid->column('suspect_appealed', 'Suspect appealed')
             ->using([
                 1 => 'Yes',

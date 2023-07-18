@@ -329,7 +329,7 @@ class CaseSuspectController extends AdminController
             })->hide();
 
         $grid->column('case_location', 'Location')->display( function () {
-            if($this->is_offence_committed_in_pa == 'Yes') {
+            if($this->case->is_offence_committed_in_pa == 'Yes') {
                 return $this->case->village;
             }
             return '-';
@@ -348,7 +348,7 @@ class CaseSuspectController extends AdminController
         })->hide()->sortable();
 
         $grid->column('case_village', 'Village')->display( function () {
-            if($this->is_offence_committed_in_pa == 'Yes') {
+            if($this->case->is_offence_committed_in_pa == 'Yes') {
                 return '-';
             }
             return $this->case->village;

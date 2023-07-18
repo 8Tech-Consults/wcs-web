@@ -228,7 +228,7 @@ use App\Models\Utils;
                     's' => $s->arrest_current_police_station,
                 ])
                 @include('components.detail-item', [
-                    't' => 'Arrest agency',
+                    't' => 'Lead Arrest agency',
                     's' => $s->arrest_agency,
                 ])
                 
@@ -309,6 +309,10 @@ use App\Models\Utils;
                     's' => $s->prosecutor,
                 ])
                 @include('components.detail-item', [
+                    't' => 'Court Magistrate',
+                    's' => $s->magistrate_name,
+                ])
+                @include('components.detail-item', [
                     't' => 'Court case status',
                     's' => $s->court_status,
                 ])
@@ -370,6 +374,16 @@ use App\Models\Utils;
                 @include('components.detail-item', [
                     't' => 'Community service Duration (in hours)',
                     's' => $s->community_service_duration,
+                ])
+
+                @include('components.detail-item', [
+                    't' => 'Cautioned',
+                    's' => $s->cautioned == '1' || $s->cautioned == 'Yes' ? 'Yes' : 'No',
+                ])
+
+                @include('components.detail-item', [
+                    't' => 'Cautioned remarks',
+                    's' => $s->cautioned_remarks,
                 ])
 
                 @include('components.detail-item', [

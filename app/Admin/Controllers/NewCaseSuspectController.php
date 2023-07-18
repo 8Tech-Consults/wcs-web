@@ -99,7 +99,7 @@ class NewCaseSuspectController extends AdminController
         $grid->column('arrest_longitude', __('Arrest longitude'));
         $grid->column('arrest_first_police_station', __('Arrest first police station'));
         $grid->column('arrest_current_police_station', __('Arrest current police station'));
-        $grid->column('arrest_agency', __('Arrest agency'));
+        $grid->column('arrest_agency', __('Lead Arrest agency'));
         $grid->column('arrest_uwa_unit', __('Arrest uwa unit'));
         $grid->column('arrest_detection_method', __('Arrest detection method'));
         $grid->column('arrest_uwa_number', __('Arrest uwa number'));
@@ -192,7 +192,7 @@ class NewCaseSuspectController extends AdminController
         $show->field('arrest_longitude', __('Arrest longitude'));
         $show->field('arrest_first_police_station', __('Arrest first police station'));
         $show->field('arrest_current_police_station', __('Arrest current police station'));
-        $show->field('arrest_agency', __('Arrest agency'));
+        $show->field('arrest_agency', __('Lead Arrest agency'));
         $show->field('arrest_uwa_unit', __('Arrest uwa unit'));
         $show->field('arrest_detection_method', __('Arrest detection method'));
         $show->field('arrest_uwa_number', __('Arrest uwa number'));
@@ -340,7 +340,7 @@ class NewCaseSuspectController extends AdminController
         $hasPendingSusps = false;
         $pendingCase = Utils::hasPendingCase(Auth::user());
         if ($pendingCase != null) {
-            if ($pendingCase->suspects->count() > 0) {
+            if ($pendingCase->suspects()->count() > 0) {
                 $hasPendingSusps = true;
             }
         }
@@ -364,7 +364,7 @@ class NewCaseSuspectController extends AdminController
                     $supects = [];
                     $pendingCase = Utils::hasPendingCase(Auth::user());
                     if ($pendingCase != null) {
-                        if ($pendingCase->suspects->count() > 0) {
+                        if ($pendingCase->suspects()->count() > 0) {
                             foreach ($pendingCase->suspects as $sus) {
                                 $supects[$sus->id] = $sus->uwa_suspect_number . " - " . $sus->name;
                             }
@@ -459,7 +459,7 @@ class NewCaseSuspectController extends AdminController
 
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
-                            $form->select('arrest_agency', 'Arresting agency')->options(
+                            $form->select('arrest_agency', 'Lead Arresting agency')->options(
                                 ArrestingAgency::pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
@@ -548,7 +548,7 @@ class NewCaseSuspectController extends AdminController
 
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
-                    $form->select('arrest_agency', 'Arresting agency')->options(
+                    $form->select('arrest_agency', 'Lead Arresting agency')->options(
                         ArrestingAgency::pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {

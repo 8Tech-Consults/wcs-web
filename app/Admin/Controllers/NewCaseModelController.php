@@ -79,6 +79,7 @@ class NewCaseModelController extends AdminController
         $grid->column('offence_description', __('Offence description'));
         $grid->column('is_offence_committed_in_pa', __('Is offence committed in pa'));
         $grid->column('pa_id', __('Pa id'));
+        $grid->column('location', __('Location'));
         $grid->column('has_exhibits', __('Has exhibits'));
         $grid->column('status', __('Status'));
         $grid->column('title', __('Title'));
@@ -129,6 +130,7 @@ class NewCaseModelController extends AdminController
         $show->field('offence_description', __('Offence description'));
         $show->field('is_offence_committed_in_pa', __('Is offence committed in pa'));
         $show->field('pa_id', __('Pa id'));
+        $show->field('location', __('Location'));
         $show->field('has_exhibits', __('Has exhibits'));
         $show->field('status', __('Status'));
         $show->field('title', __('Title'));

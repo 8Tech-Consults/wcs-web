@@ -15,6 +15,7 @@ use App\Models\Offence;
 use App\Models\PA;
 use App\Models\SuspectCourtStatus;
 use App\Models\ArrestingAgency;
+use App\Models\Court;
 use App\Models\User;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
@@ -337,6 +338,33 @@ class CaseSuspectController extends AdminController
                 }
                 return $this->case->ca->name;
             })->hide();
+
+        $grid->column('case_location', 'Location')->display( function () {
+            if($this->is_offence_committed_in_pa == 'Yes') {
+                return $this->case->village;
+            }
+            return '-';
+        })->hide()->sortable();
+
+        $grid->column('case_district', 'District')->display( function () {
+            return $this->case->district->name;
+        })->hide()->sortable();
+
+        $grid->column('case_subcounty', 'Sub-county')->display( function () {
+            return $this->case->sub_county->name;
+        })->hide()->sortable();
+
+        $grid->column('case_parish', 'Parish')->display( function () {
+            return $this->case->parish;
+        })->hide()->sortable();
+
+        $grid->column('case_village', 'Village')->display( function () {
+            if($this->is_offence_committed_in_pa == 'Yes') {
+                return '-';
+            }
+            return $this->case->village;
+
+        })->hide()->sortable();
             
         $grid->column('gps', __('GPS'))
             ->display(function ($x) {
@@ -472,6 +500,16 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
+
+        $grid->column('arrest_location', 'Arrest Location')
+            ->display(function ($x) {
+                if($this->arrest_in_pa == 'Yes') {
+                    return $this->arrest_village;
+                }
+                return '-';
+            })
+            ->hide()
+            ->sortable();
         $grid->column('arrest_district_id', __('District'))
             ->display(function ($x) {
                 return Utils::get('App\Models\Location', $this->arrest_district_id)->name_text;
@@ -487,13 +525,33 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
         $grid->column('arrest_parish')->hide()->sortable();
-        $grid->column('arrest_village')->hide()->sortable();
+        $grid->column('arrest_village')->display(function ($x) {
+            if($this->arrest_in_pa == 'Yes') {
+                return '-';
+            }
+            return $this->arrest_village;
+        })->hide()->sortable();
         $grid->column('arrest_latitude', 'Arrest GPS latitude')->hide()->sortable();
         $grid->column('arrest_longitude', 'Arrest GPS longitude')->hide()->sortable();
         $grid->column('arrest_first_police_station', 'First police station')->hide()->sortable();
         $grid->column('arrest_current_police_station', 'Current police station')->hide()->sortable();
-        $grid->column('arrest_agency', 'Arrest agency')->hide()->sortable();
+        $grid->column('arrest_agency', 'Lead Arrest agency')->hide()->sortable();
         $grid->column('arrest_uwa_unit')->hide()->sortable();
+        $grid->column('other_arrest_agencies', 'Other Arrest Agencies')->display(function ($array) {
+            if (count($array) < 1) {
+                return '-';
+            }
+            $str = '';
+
+            foreach ($array as $key => $value) {
+                if ($key == count($array) - 1) {
+                    $str .= $value;
+                } else {
+                    $str .= $value . ', ';
+                }
+            }
+            return $str;
+        })->hide()->sortable(); 
         $grid->column('arrest_crb_number')->hide()->sortable();
         $grid->column('police_sd_number')->hide()->sortable();
         $grid->column('is_suspect_appear_in_court', __('Appeared Court'))
@@ -524,7 +582,10 @@ class CaseSuspectController extends AdminController
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-        $grid->column('court_name')->hide()->sortable();
+        $grid->column('court_name')->display(function() {
+            if($this->court_name != null)
+                return $this->court->name;
+        })->hide()->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();
@@ -580,7 +641,8 @@ class CaseSuspectController extends AdminController
         $grid->column('community_service')->hide()->sortable();
         $grid->column('community_service_duration', 'Duration (in hours)')->hide()->sortable();
 
-
+        $grid->column('cautioned')->hide()->sortable();
+        $grid->column('cautioned_remarks')->hide()->sortable();
         $grid->column('suspect_appealed', 'Suspect appealed')
             ->using([
                 1 => 'Yes',
@@ -735,7 +797,7 @@ class CaseSuspectController extends AdminController
         $show->field('arrest_longitude', __('Arrest longitude'));
         $show->field('arrest_first_police_station', __('Arrest first police station'));
         $show->field('arrest_current_police_station', __('Arrest current police station'));
-        $show->field('arrest_agency', __('Arresting agency'));
+        $show->field('arrest_agency', __('Lead Arresting agency'));
         $show->field('arrest_uwa_unit', __('Arrest uwa unit'));
         $show->field('arrest_detection_method', __('Arrest detection method'));
         $show->field('arrest_uwa_number', __('Arrest uwa number'));
@@ -949,7 +1011,7 @@ class CaseSuspectController extends AdminController
 
                 $form->text('arrest_first_police_station', 'Police station of Arrest');
                 $form->text('arrest_current_police_station', 'Current police station');
-                $form->select('arrest_agency', 'Arresting agency')->options(
+                $form->select('arrest_agency', 'Lead Arresting agency')->options(
                     ArrestingAgency::pluck('name', 'name')
                 );
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([

@@ -102,7 +102,7 @@ class CaseModelController extends AdminController
         // }
         //if($u->isRole('admin'))
 
-        $grid->model()->orderBy('updated_at', 'DESC');
+        $grid->model()->whereHas('suspects')->orderBy('updated_at', 'DESC');
 
         $grid->export(function ($export) {
 

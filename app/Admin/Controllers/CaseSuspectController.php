@@ -309,24 +309,13 @@ class CaseSuspectController extends AdminController
 
         $grid->column('is_offence_committed_in_pa', __('In P.A'))
             ->display(function ($x) {
-                if (
-                    $this->case->pa_id == 1
-                ) {
-                    return 'No';
-                } else {
-                    return 'Yes';
-                }
+                return $this->case->is_offence_committed_in_pa;
             })->hide();
 
         $grid->column('case_pa_id', __('P.A of case'))
             ->display(function ($x) {
-                return $this->arrestPa->name;
-
-                if ($this->case->is_offence_committed_in_pa != 1) {
+                if ($this->case->is_offence_committed_in_pa == 'No') {
                     return "-";
-                }
-                if ($this->case->pa == null) {
-                    return  '-';
                 }
                 return $this->case->pa->name;
             })->hide();
@@ -1032,15 +1021,14 @@ class CaseSuspectController extends AdminController
                         'Yes' => 'Yes',
                         'No' => 'No',
                     ])
-                    ->when(0, function ($form) {
+                    ->when('No', function ($form) {
                         $form->radio('status', __('Case status'))
                             ->options([
                                 'On-going investigation' => 'On-going investigation',
                                 'Closed' => 'Closed',
                                 'Re-opened' => 'Re-opened',
                             ])
-                            ->rules('required')
-                            ->when(1, function ($form) {
+                            ->when('On-going investigation', function ($form) {
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Police bond' => 'Police bond',
                                     'Skipped bond' => 'Skipped bond',
@@ -1048,14 +1036,14 @@ class CaseSuspectController extends AdminController
                                     'Escaped from colice custody' => 'Escaped from police custody',
                                 ]);
                             })
-                            ->when(2, function ($form) {
+                            ->when('Closed', function ($form) {
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Dismissed by state' => 'Dismissed by state',
                                     'Withdrawn by complainant' => 'Withdrawn by complainant',
                                 ]);
                                 $form->date('police_action_date', 'Date');
                                 $form->textarea('police_action_remarks', 'Remarks');
-                            })->when(3, function ($form) {
+                            })->when('Re-opened', function ($form) {
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Police bond' => 'Police bond',
                                     'Skipped bond' => 'Skipped bond',
@@ -1064,9 +1052,11 @@ class CaseSuspectController extends AdminController
                                 ]);
                                 $form->date('police_action_date', 'Date');
                                 $form->textarea('police_action_remarks', 'Remarks');
-                            });
+                            })
+                            ->rules('required');
+
                     })
-                    ->when(1, function ($form) {
+                    ->when('Yes', function ($form) {
 
                         $form->divider('Court information');
                         $form->text('court_file_number', 'Court file number');

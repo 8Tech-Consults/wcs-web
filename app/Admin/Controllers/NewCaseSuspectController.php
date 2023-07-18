@@ -615,7 +615,6 @@ class NewCaseSuspectController extends AdminController
                                             'Closed' => 'Closed',
                                             'Re-opened' => 'Re-opened',
                                         ])
-                                        ->rules('required')
                                         ->when('On-going investigation', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
@@ -644,7 +643,8 @@ class NewCaseSuspectController extends AdminController
 
                                             $form->date('police_action_date', 'Date')->rules('required');
                                             $form->textarea('police_action_remarks', 'Remarks');
-                                        });
+                                        })
+                                        ->rules('required');
                                 })
                                 ->when('Yes', function ($form) {
 

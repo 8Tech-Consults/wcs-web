@@ -131,16 +131,16 @@ class ArrestsController extends AdminController
             // $export->only(['column3', 'column4' ...]);
 
             $export->originalValue(['suspects_count', 'exhibit_count']);
-            $export->column('status', function ($value, $original) {
+            // $export->column('status', function ($value, $original) {
 
-                if ($value == 0) {
-                    return 'Pending';
-                } else if ($value == 1) {
-                    return 'Active';
-                } {
-                }
-                return 'Closed';
-            });
+            //     if ($value == 0) {
+            //         return 'Pending';
+            //     } else if ($value == 1) {
+            //         return 'Active';
+            //     } {
+            //     }
+            //     return 'Closed';
+            // });
         });
 
 
@@ -378,7 +378,12 @@ class ArrestsController extends AdminController
                 'Yes' => 'success',
                 1 => 'success',
             ], 'danger')->sortable();
-        $grid->column('status', 'Case status')->hide()->sortable();
+        $grid->column('status', 'Case status')->display(function($form) {
+            if($this->status == null) {
+                return '-';
+            }
+            return $this->status;
+        })->hide()->sortable();
         $grid->column('police_action', __('Police action'))->hide();
         /*         $grid->column('case_outcome', 'Case ouctome at Police level')->hide()->sortable(); */
         $grid->column('police_action_date', __('Police action date'))->hide();

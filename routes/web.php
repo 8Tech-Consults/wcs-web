@@ -48,6 +48,12 @@ Route::get('/fingerprint', function () {
 Route::get('/drivers', function () {
   return redirect(url('uwa-fingeprint-drivers.zip'));
 })->name("drivers");
+Route::get('/user-manual-mobile', function () {
+  return redirect(url('OWODAT-Mobile-App-User-Manual.pdf'));
+});
+Route::get('/user-manual-web', function () {
+  return redirect(url('OWODAT-Web-Systeem-User-Manual.pdf'));
+});
 
 Route::get('/register', function () {
   die("register");

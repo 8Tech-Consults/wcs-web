@@ -472,7 +472,7 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
-        $grid->column('ca_id', 'C.A')
+        $grid->column('ca_id', 'C.A of Arrest')
             ->display(function ($x) {
                 if ($this->arrestCa == null) {
                     return '-';

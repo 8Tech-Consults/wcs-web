@@ -67,7 +67,7 @@ class CaseSuspect extends Model
     }
     public static function my_update($m)
     {
-        $m->district_id = 1;
+        $m->district_id = 0;
 
         if ($m->sub_county_id != null) {
             $sub = Location::find($m->sub_county_id);

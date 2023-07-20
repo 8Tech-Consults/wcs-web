@@ -468,7 +468,7 @@ class CaseSuspectController extends AdminController
             ->hide();
         $grid->column('ca_id', 'C.A of Arrest')
             ->display(function ($x) {
-                return $this->arrestCa->name;
+                return $this->arrestPa->ca->name;
             })
             ->sortable()
             ->hide();

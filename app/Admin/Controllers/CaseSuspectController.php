@@ -314,17 +314,11 @@ class CaseSuspectController extends AdminController
 
         $grid->column('case_pa_id', __('P.A of case'))
             ->display(function ($x) {
-                if ($this->case->is_offence_committed_in_pa == 'No') {
-                    return "-";
-                }
                 return $this->case->pa->name;
             })->hide();
 
         $grid->column('case_ca_id', __('C.A of case'))
             ->display(function ($x) {
-                if ($this->case->ca == null) {
-                    return  '-';
-                }
                 return $this->case->ca->name;
             })->hide();
 
@@ -474,9 +468,6 @@ class CaseSuspectController extends AdminController
             ->hide();
         $grid->column('ca_id', 'C.A of Arrest')
             ->display(function ($x) {
-                if ($this->arrestCa == null) {
-                    return '-';
-                }
                 return $this->arrestCa->name;
             })
             ->sortable()

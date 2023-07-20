@@ -320,7 +320,7 @@ class CaseSuspectController extends AdminController
                 return $this->case->pa->name;
             })->hide();
 
-        $grid->column('ca_id', __('C.A'))
+        $grid->column('case_ca_id', __('C.A of case'))
             ->display(function ($x) {
                 if ($this->case->ca == null) {
                     return  '-';
@@ -355,12 +355,12 @@ class CaseSuspectController extends AdminController
 
         })->hide()->sortable();
             
-        $grid->column('gps', __('GPS'))
+        $grid->column('case_gps', __('GPS'))
             ->display(function ($x) {
                 return $this->case->latitude . "," . $this->case->longitude;
             })->hide();
 
-        $grid->column('detection_method', __('Detection method'))
+        $grid->column('case_detection_method', __('Detection method'))
             ->display(function ($x) {
                 return $this->case->detection_method;
             })->hide();
@@ -397,14 +397,6 @@ class CaseSuspectController extends AdminController
         $grid->column('phone_number', __('Phone number'))->hide();
         $grid->column('type_of_id', __('ID Type'))->hide();
         $grid->column('national_id_number', __('ID Number'))->hide();
-        $grid->column('ca_id', __('CA'))
-            ->display(function () {
-                if ($this->ca == null) {
-                    return  "-";
-                }
-                return $this->ca->name;
-            })
-            ->sortable();
         $grid->column('occuptaion', __('Occupation'))->hide();
         $grid->column('country', __('Nationality'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {

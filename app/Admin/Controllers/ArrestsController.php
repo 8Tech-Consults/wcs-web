@@ -552,7 +552,7 @@ class ArrestsController extends AdminController
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
                             $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                                ArrestingAgency::pluck('name', 'name')
+                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
                                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -562,7 +562,7 @@ class ArrestsController extends AdminController
                                     ]);
                                 });
                             $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                                ArrestingAgency::pluck('name', 'name')
+                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
                             );
 
                             if ($csb == null) {
@@ -643,7 +643,7 @@ class ArrestsController extends AdminController
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                        ArrestingAgency::pluck('name', 'name')
+                        ArrestingAgency::orderBy('id')->pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -653,7 +653,7 @@ class ArrestsController extends AdminController
                             ]);
                         });
                     $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                        ArrestingAgency::pluck('name', 'name')
+                        ArrestingAgency::orderBy('id')->pluck('name', 'name')
                     );
 
 

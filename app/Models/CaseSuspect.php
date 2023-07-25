@@ -93,6 +93,15 @@ class CaseSuspect extends Model
         $m->uwa_suspect_number = $m->suspect_number;
         $m->arrest_uwa_number = $m->suspect_number;
 
+        //Reset the following fields if suspect appeared in court
+        if ($m->is_suspect_appear_in_court == 'Yes')
+        {
+            $m->police_action = null;
+            $m->police_action_date = null;
+            $m->police_action_remarks = null;
+            $m->status = null;
+        }
+
         if (
             $m->is_suspects_arrested == 1 ||
             $m->is_suspects_arrested == 'Yes' ||
@@ -100,7 +109,7 @@ class CaseSuspect extends Model
         ) {
             $m->is_suspects_arrested = 'Yes';
         } else {
-            $m->is_suspect_appear_in_court = 'No';
+            $m->is_suspect_appear_in_court = 'No';  //TODO: look into what this does
             $m->is_suspects_arrested == 'No';
         }
 
@@ -252,6 +261,7 @@ class CaseSuspect extends Model
         $this->arrest_current_police_station = $org->arrest_current_police_station;
         $this->arrest_agency = $org->arrest_agency;
         $this->arrest_uwa_unit = $org->arrest_uwa_unit;
+        $this->other_arrest_agencies = $org->other_arrest_agencies;
         $this->arrest_detection_method = $org->arrest_detection_method;
         $this->arrest_uwa_number = $org->arrest_uwa_number;
         $this->arrest_crb_number = $org->arrest_crb_number;

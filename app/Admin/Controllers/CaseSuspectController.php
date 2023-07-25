@@ -385,7 +385,7 @@ class CaseSuspectController extends AdminController
             ])
             ->sortable();
 
-        $grid->column('age', __('D.O.B'))
+        $grid->column('age', __('Age (years)'))
             ->hide()
             ->sortable();
         $grid->column('phone_number', __('Phone number'))->hide();

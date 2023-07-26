@@ -242,12 +242,10 @@ class NewCaseModelController extends AdminController
 
 
         $form->radio('is_offence_committed_in_pa', __('Did the case take place in a PA?'))
-            ->rules('required')
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',
             ])
-            ->default(null)
             ->when('No', function (Form $form) {
 
 
@@ -257,14 +255,15 @@ class NewCaseModelController extends AdminController
 
                 $form->text('parish', __('Parish'));
                 $form->text('village', __('Village'));
-            })->when('Yes', function (Form $form) {
+            })
+            ->when('Yes', function (Form $form) {
                 $form->select('pa_id', __('Select PA'))
                     ->rules('required')
                     ->options(PA::where('id', '!=', 1)->get()
                         ->pluck('name_text', 'id'));
                 $form->text('village', 'Enter location');
-            });
-
+            })
+            ->rules('required');
 
         $form->text('latitude', 'Case scene GPS - latitude');
         $form->text('longitude', 'Case scene GPS - longitude');

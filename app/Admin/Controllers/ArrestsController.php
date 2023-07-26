@@ -131,16 +131,16 @@ class ArrestsController extends AdminController
             // $export->only(['column3', 'column4' ...]);
 
             $export->originalValue(['suspects_count', 'exhibit_count']);
-            $export->column('status', function ($value, $original) {
+            // $export->column('status', function ($value, $original) {
 
-                if ($value == 0) {
-                    return 'Pending';
-                } else if ($value == 1) {
-                    return 'Active';
-                } {
-                }
-                return 'Closed';
-            });
+            //     if ($value == 0) {
+            //         return 'Pending';
+            //     } else if ($value == 1) {
+            //         return 'Active';
+            //     } {
+            //     }
+            //     return 'Closed';
+            // });
         });
 
 
@@ -378,7 +378,12 @@ class ArrestsController extends AdminController
                 'Yes' => 'success',
                 1 => 'success',
             ], 'danger')->sortable();
-        $grid->column('status', 'Case status')->hide()->sortable();
+        $grid->column('status', 'Case status')->display(function($form) {
+            if($this->status == null) {
+                return '-';
+            }
+            return $this->status;
+        })->hide()->sortable();
         $grid->column('police_action', __('Police action'))->hide();
         /*         $grid->column('case_outcome', 'Case ouctome at Police level')->hide()->sortable(); */
         $grid->column('police_action_date', __('Police action date'))->hide();
@@ -547,7 +552,7 @@ class ArrestsController extends AdminController
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
                             $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                                ArrestingAgency::pluck('name', 'name')
+                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
                                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -557,7 +562,7 @@ class ArrestsController extends AdminController
                                     ]);
                                 });
                             $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                                ArrestingAgency::pluck('name', 'name')
+                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
                             );
 
                             if ($csb == null) {
@@ -638,7 +643,7 @@ class ArrestsController extends AdminController
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                        ArrestingAgency::pluck('name', 'name')
+                        ArrestingAgency::orderBy('id')->pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -648,7 +653,7 @@ class ArrestsController extends AdminController
                             ]);
                         });
                     $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                        ArrestingAgency::pluck('name', 'name')
+                        ArrestingAgency::orderBy('id')->pluck('name', 'name')
                     );
 
 

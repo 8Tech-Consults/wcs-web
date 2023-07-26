@@ -309,38 +309,21 @@ class CaseSuspectController extends AdminController
 
         $grid->column('is_offence_committed_in_pa', __('In P.A'))
             ->display(function ($x) {
-                if (
-                    $this->case->pa_id == 1
-                ) {
-                    return 'No';
-                } else {
-                    return 'Yes';
-                }
+                return $this->case->is_offence_committed_in_pa;
             })->hide();
 
         $grid->column('case_pa_id', __('P.A of case'))
             ->display(function ($x) {
-                return $this->arrestPa->name;
-
-                if ($this->case->is_offence_committed_in_pa != 1) {
-                    return "-";
-                }
-                if ($this->case->pa == null) {
-                    return  '-';
-                }
                 return $this->case->pa->name;
             })->hide();
 
-        $grid->column('ca_id', __('C.A'))
+        $grid->column('case_ca_id', __('C.A of case'))
             ->display(function ($x) {
-                if ($this->case->ca == null) {
-                    return  '-';
-                }
                 return $this->case->ca->name;
             })->hide();
 
         $grid->column('case_location', 'Location')->display( function () {
-            if($this->is_offence_committed_in_pa == 'Yes') {
+            if($this->case->is_offence_committed_in_pa == 'Yes') {
                 return $this->case->village;
             }
             return '-';
@@ -359,19 +342,19 @@ class CaseSuspectController extends AdminController
         })->hide()->sortable();
 
         $grid->column('case_village', 'Village')->display( function () {
-            if($this->is_offence_committed_in_pa == 'Yes') {
+            if($this->case->is_offence_committed_in_pa == 'Yes') {
                 return '-';
             }
             return $this->case->village;
 
         })->hide()->sortable();
             
-        $grid->column('gps', __('GPS'))
+        $grid->column('case_gps', __('GPS'))
             ->display(function ($x) {
                 return $this->case->latitude . "," . $this->case->longitude;
             })->hide();
 
-        $grid->column('detection_method', __('Detection method'))
+        $grid->column('case_detection_method', __('Detection method'))
             ->display(function ($x) {
                 return $this->case->detection_method;
             })->hide();
@@ -402,20 +385,12 @@ class CaseSuspectController extends AdminController
             ])
             ->sortable();
 
-        $grid->column('age', __('D.O.B'))
+        $grid->column('age', __('Age (years)'))
             ->hide()
             ->sortable();
         $grid->column('phone_number', __('Phone number'))->hide();
         $grid->column('type_of_id', __('ID Type'))->hide();
         $grid->column('national_id_number', __('ID Number'))->hide();
-        $grid->column('ca_id', __('CA'))
-            ->display(function () {
-                if ($this->ca == null) {
-                    return  "-";
-                }
-                return $this->ca->name;
-            })
-            ->sortable();
         $grid->column('occuptaion', __('Occupation'))->hide();
         $grid->column('country', __('Nationality'))->sortable();
         $grid->column('district_id', __('District'))->display(function () {
@@ -491,12 +466,9 @@ class CaseSuspectController extends AdminController
             })
             ->sortable()
             ->hide();
-        $grid->column('ca_id', 'C.A')
+        $grid->column('ca_id', 'C.A of Arrest')
             ->display(function ($x) {
-                if ($this->arrestCa == null) {
-                    return '-';
-                }
-                return $this->arrestCa->name;
+                return $this->arrestPa->ca->name;
             })
             ->sortable()
             ->hide();
@@ -1012,7 +984,7 @@ class CaseSuspectController extends AdminController
                 $form->text('arrest_first_police_station', 'Police station of Arrest');
                 $form->text('arrest_current_police_station', 'Current police station');
                 $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                    ArrestingAgency::pluck('name', 'name')
+                    ArrestingAgency::orderBy('id')->pluck('name', 'name')
                 );
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                     'Canine Unit' => 'The Canine Unit',
@@ -1020,7 +992,7 @@ class CaseSuspectController extends AdminController
                     'LEU' => 'LEU',
                 ]);
                 $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                    ArrestingAgency::pluck('name', 'name')
+                    ArrestingAgency::orderBy('id')->pluck('name', 'name')
                 );
 
                 $form->text('arrest_crb_number', 'Police CRB number');
@@ -1032,15 +1004,14 @@ class CaseSuspectController extends AdminController
                         'Yes' => 'Yes',
                         'No' => 'No',
                     ])
-                    ->when(0, function ($form) {
+                    ->when('No', function ($form) {
                         $form->radio('status', __('Case status'))
                             ->options([
                                 'On-going investigation' => 'On-going investigation',
                                 'Closed' => 'Closed',
                                 'Re-opened' => 'Re-opened',
                             ])
-                            ->rules('required')
-                            ->when(1, function ($form) {
+                            ->when('On-going investigation', function ($form) {
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Police bond' => 'Police bond',
                                     'Skipped bond' => 'Skipped bond',
@@ -1048,14 +1019,14 @@ class CaseSuspectController extends AdminController
                                     'Escaped from colice custody' => 'Escaped from police custody',
                                 ]);
                             })
-                            ->when(2, function ($form) {
+                            ->when('Closed', function ($form) {
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Dismissed by state' => 'Dismissed by state',
                                     'Withdrawn by complainant' => 'Withdrawn by complainant',
                                 ]);
                                 $form->date('police_action_date', 'Date');
                                 $form->textarea('police_action_remarks', 'Remarks');
-                            })->when(3, function ($form) {
+                            })->when('Re-opened', function ($form) {
                                 $form->select('police_action', 'Case outcome at police level')->options([
                                     'Police bond' => 'Police bond',
                                     'Skipped bond' => 'Skipped bond',
@@ -1064,9 +1035,11 @@ class CaseSuspectController extends AdminController
                                 ]);
                                 $form->date('police_action_date', 'Date');
                                 $form->textarea('police_action_remarks', 'Remarks');
-                            });
+                            })
+                            ->rules('required');
+
                     })
-                    ->when(1, function ($form) {
+                    ->when('Yes', function ($form) {
 
                         $form->divider('Court information');
                         $form->text('court_file_number', 'Court file number');

@@ -86,6 +86,7 @@ class CaseModel extends Model
             ) {
                 $m->is_offence_committed_in_pa = 'Yes';
                 $m->ca_id = $pa->ca_id;
+                $m->district_id = 0; //Default district is 0
             } else {
                 $m->is_offence_committed_in_pa = 'No';
                 $m->pa_id = 1;
@@ -96,7 +97,6 @@ class CaseModel extends Model
                 $m->is_offence_committed_in_pa = 'No';
             }
 
-            $m->district_id = 1;
             if ($m->sub_county_id != null) {
                 $sub = Location::find($m->sub_county_id);
                 if ($sub != null) {

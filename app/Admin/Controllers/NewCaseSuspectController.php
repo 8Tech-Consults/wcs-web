@@ -460,7 +460,7 @@ class NewCaseSuspectController extends AdminController
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
                             $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                                ArrestingAgency::pluck('name', 'name')
+                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
                                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -470,7 +470,7 @@ class NewCaseSuspectController extends AdminController
                                     ]);
                                 });
                             $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                                ArrestingAgency::pluck('name', 'name')
+                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
                             );
 
                             if ($csb == null) {
@@ -549,7 +549,7 @@ class NewCaseSuspectController extends AdminController
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                        ArrestingAgency::pluck('name', 'name')
+                        ArrestingAgency::orderBy('id')->pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -615,7 +615,6 @@ class NewCaseSuspectController extends AdminController
                                             'Closed' => 'Closed',
                                             'Re-opened' => 'Re-opened',
                                         ])
-                                        ->rules('required')
                                         ->when('On-going investigation', function ($form) {
                                             $form->select('police_action', 'Case outcome at police level')->options([
                                                 'Police bond' => 'Police bond',
@@ -644,7 +643,8 @@ class NewCaseSuspectController extends AdminController
 
                                             $form->date('police_action_date', 'Date')->rules('required');
                                             $form->textarea('police_action_remarks', 'Remarks');
-                                        });
+                                        })
+                                        ->rules('required');
                                 })
                                 ->when('Yes', function ($form) {
 

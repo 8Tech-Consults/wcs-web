@@ -9,6 +9,7 @@ use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
 use App\Models\Court;
+use App\Models\DetectionMethod;
 use App\Models\Enterprise;
 use App\Models\Exhibit;
 use App\Models\Image;
@@ -160,6 +161,11 @@ class ApiPostsController extends Controller
     {
         $data =  Offence::where([])->get();
         return $this->success($data, 'Offences');
+    }
+    public function detection_methods(Request $r)
+    {
+        $data =  DetectionMethod::where([])->get();
+        return $this->success($data, 'detection_methods');
     }
 
     public function courts(Request $r)

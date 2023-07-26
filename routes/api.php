@@ -71,7 +71,6 @@ Route::group(['middleware' => 'api'], function ($router) {
 
 Route::get("cases", [ApiPostsController::class, 'index']);
 Route::get("offences", [ApiPostsController::class, 'offences']);
-Route::get("detection-methods", [ApiPostsController::class, 'detection_methods']);
 Route::get("courts", [ApiPostsController::class, 'courts']);
 Route::get("protected-areas", [ApiPostsController::class, 'protected_areas']);
 Route::get("animals", [ApiPostsController::class, 'animals']);

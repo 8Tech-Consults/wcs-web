@@ -37,10 +37,10 @@ Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");
 Route::get('/mobile', function () {
-  return redirect(url('uwa-v2.apk'));
+  return redirect(url('uwa-v3.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
-  return redirect(url('uwa-v2.exe'));
+  return redirect(url('uwa-v3.exe'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
   return redirect(url('UWA-FINGERPRINT.exe'));

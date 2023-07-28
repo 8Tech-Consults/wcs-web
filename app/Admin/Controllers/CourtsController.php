@@ -475,7 +475,8 @@ class CourtsController extends AdminController
                                 $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                 $form->text('prison', 'Prison name');
                                 $form->date('jail_release_date', 'Date released');
-                            });
+                            })
+                            ->default('No');
                         $form->radio('is_fined', __('Was Accused fined?'))
                             ->options([
                                 'Yes' => 'Yes',
@@ -483,7 +484,8 @@ class CourtsController extends AdminController
                             ])
                             ->when('Yes', function ($form) {
                                 $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-                            });
+                            })
+                            ->default('No');
 
                         $form->radio('community_service', __('Was the Accused offered community service?'))
                             ->options([
@@ -495,7 +497,8 @@ class CourtsController extends AdminController
                                     'community_service_duration',
                                     'Community service duration (in Hours)'
                                 );
-                            });
+                            })
+                            ->default('No');
 
 
                         $form->radio('cautioned', __('Was Accused cautioned?'))
@@ -505,7 +508,8 @@ class CourtsController extends AdminController
                             ])
                             ->when('Yes', function ($form) {
                                 $form->text('cautioned_remarks', 'Enter caution remarks');
-                            });
+                            })
+                            ->default('No');
 
                         $form->radio('suspect_appealed', __('Did the Accused appeal?'))
                             ->options([
@@ -647,7 +651,8 @@ class CourtsController extends AdminController
                                             $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                             $form->text('prison', 'Prison name');
                                             $form->date('jail_release_date', 'Date released');
-                                        });
+                                        })
+                                        ->default('No');
                                     $form->radio('is_fined', __('Was Accused fined?'))
                                         ->options([
                                             'Yes' => 'Yes',
@@ -655,7 +660,8 @@ class CourtsController extends AdminController
                                         ])
                                         ->when('Yes', function ($form) {
                                             $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-                                        });
+                                        })
+                                        ->default('No');
 
                                     $form->radio('community_service', __('Was the Accused offered community service?'))
                                         ->options([
@@ -667,8 +673,8 @@ class CourtsController extends AdminController
                                                 'community_service_duration',
                                                 'Community service duration (in Hours)'
                                             );
-                                        });
-
+                                        })
+                                        ->default('No');
 
                                     $form->radio('cautioned', __('Was Accused cautioned?'))
                                         ->options([
@@ -677,7 +683,8 @@ class CourtsController extends AdminController
                                         ])
                                         ->when('Yes', function ($form) {
                                             $form->text('cautioned_remarks', 'Enter caution remarks');
-                                        });
+                                        })
+                                        ->default('No');
 
                                     $form->radio('suspect_appealed', __('Did the Accused appeal?'))
                                         ->options([

@@ -460,7 +460,7 @@ class NewCaseSuspectController extends AdminController
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
                             $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
+                                ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
                                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -470,7 +470,7 @@ class NewCaseSuspectController extends AdminController
                                     ]);
                                 });
                             $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                                ArrestingAgency::orderBy('id')->pluck('name', 'name')
+                                ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
                             );
 
                             if ($csb == null) {
@@ -549,7 +549,7 @@ class NewCaseSuspectController extends AdminController
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                        ArrestingAgency::orderBy('id')->pluck('name', 'name')
+                        ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -559,7 +559,7 @@ class NewCaseSuspectController extends AdminController
                             ]);
                         });
                     $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                        ArrestingAgency::pluck('name', 'name')
+                        ArrestingAgency::orderBy('name','Desc')->pluck('name','name')
                     );
 
 
@@ -705,7 +705,8 @@ class NewCaseSuspectController extends AdminController
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                             $form->text('prison', 'Prison name');
                                                             $form->date('jail_release_date', 'Release Date');
-                                                        });
+                                                        })
+                                                        ->default('No');
 
                                                     $form->radio('is_fined', __('Was accused fined?'))
                                                         ->options([
@@ -714,7 +715,8 @@ class NewCaseSuspectController extends AdminController
                                                         ])
                                                         ->when('Yes', function ($form) {
                                                             $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-                                                        });
+                                                        })
+                                                        ->default('No');
 
                                                     $form->radio('community_service', __('Was the accused offered community service?'))
                                                         ->options([
@@ -726,7 +728,8 @@ class NewCaseSuspectController extends AdminController
                                                                 'community_service_duration',
                                                                 'Community service duration (in Hours)'
                                                             );
-                                                        });
+                                                        })
+                                                        ->default('No');
 
 
                                                     $form->radio('cautioned', __('Was accused cautioned?'))
@@ -736,7 +739,8 @@ class NewCaseSuspectController extends AdminController
                                                         ])
                                                         ->when('Yes', function ($form) {
                                                             $form->text('cautioned_remarks', 'Enter caution remarks');
-                                                        });
+                                                        })
+                                                        ->default('No');
 
                                                     $form->radio('suspect_appealed', __('Did the accused appeal?'))
                                                         ->options([
@@ -895,7 +899,8 @@ class NewCaseSuspectController extends AdminController
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                     $form->text('prison', 'Prison name');
                                                     $form->date('jail_release_date', 'Date released');
-                                                });
+                                                })
+                                                ->default('No');
 
                                             $form->radio('is_fined', __('Was accused fined?'))
                                                 ->options([
@@ -904,7 +909,8 @@ class NewCaseSuspectController extends AdminController
                                                 ])
                                                 ->when('Yes', function ($form) {
                                                     $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-                                                });
+                                                })
+                                                ->default('No');
 
                                             $form->radio('community_service', __('Was the accused offered community service?'))
                                                 ->options([
@@ -916,7 +922,8 @@ class NewCaseSuspectController extends AdminController
                                                         'community_service_duration',
                                                         'Community service duration (in Hours)'
                                                     );
-                                                });
+                                                })
+                                                ->default('No');
 
 
                                             $form->radio('cautioned', __('Was accused cautioned?'))
@@ -926,7 +933,8 @@ class NewCaseSuspectController extends AdminController
                                                 ])
                                                 ->when('Yes', function ($form) {
                                                     $form->text('cautioned_remarks', 'Enter caution remarks');
-                                                });
+                                                })
+                                                ->default('No');
 
                                             $form->radio('suspect_appealed', __('Did the accused appeal?'))
                                                 ->options([

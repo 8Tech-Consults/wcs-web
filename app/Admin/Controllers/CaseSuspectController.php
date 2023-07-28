@@ -984,7 +984,7 @@ class CaseSuspectController extends AdminController
                 $form->text('arrest_first_police_station', 'Police station of Arrest');
                 $form->text('arrest_current_police_station', 'Current police station');
                 $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                    ArrestingAgency::orderBy('id')->pluck('name', 'name')
+                    ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
                 );
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                     'Canine Unit' => 'The Canine Unit',
@@ -992,7 +992,7 @@ class CaseSuspectController extends AdminController
                     'LEU' => 'LEU',
                 ]);
                 $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                    ArrestingAgency::orderBy('id')->pluck('name', 'name')
+                    ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
                 );
 
                 $form->text('arrest_crb_number', 'Police CRB number');

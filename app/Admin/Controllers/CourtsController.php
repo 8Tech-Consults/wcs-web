@@ -26,7 +26,7 @@ class CourtsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Court cases';
+    protected $title = 'Court Information';
 
     /**
      * Make a grid builder.

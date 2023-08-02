@@ -140,7 +140,7 @@ class CaseSuspect extends Model
     
     public function getOtherArrestAgenciesAttribute($value)
     {
-        if ($value == null) {
+        if ($value == null || $value == "") {
             return [];
         }
         return json_decode($value);

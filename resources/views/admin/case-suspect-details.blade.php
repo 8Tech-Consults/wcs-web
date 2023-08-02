@@ -194,6 +194,23 @@ use App\Models\Utils;
                     't' => 'C.A',
                     's' => $s->arrestCa->name,
                 ])
+
+                @if($s->arrest_in_pa == 'Yes' || $s->arrest_in_pa == '1')    
+                    @include('components.detail-item', [
+                        't' => 'Arrest Location',
+                        's' => $s->arrest_village,
+                    ])
+                    @php
+                        $s->arrest_village ='- ';
+                    @endphp
+
+                @else 
+                    @include('components.detail-item', [
+                        't' => 'Arrest Location',
+                        's' => '-',
+                    ])
+                @endif
+
                 @include('components.detail-item', [
                     't' => 'District',
                     's' => Utils::get('App\Models\Location', $s->arrest_district_id)->name,
@@ -209,7 +226,7 @@ use App\Models\Utils;
 
             </div>
             <div class="col-md-6 border-left pl-2 pl-5">
-
+                    
                 @include('components.detail-item', [
                     't' => 'Arrest village',
                     's' => $s->arrest_village,

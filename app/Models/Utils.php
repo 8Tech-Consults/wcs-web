@@ -536,7 +536,7 @@ class Utils  extends Model
 
     public static function my_date($t)
     {
-        $c = Carbon::parse($t);
+        $c = Carbon::parse($t, config('app.timezone'));  //Use the system timezone
         if ($t == null) {
             return $t;
         }

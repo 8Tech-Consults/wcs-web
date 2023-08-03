@@ -536,7 +536,9 @@ class Utils  extends Model
 
     public static function my_date($t)
     {
-        $c = Carbon::parse($t, 'Africa/Kampala');  //Use the system timezone
+        $c = Carbon::parse($t);
+        $c->setTimezone(config('app.timezone'));
+
         if ($t == null) {
             return $t;
         }
@@ -545,7 +547,9 @@ class Utils  extends Model
 
     public static function month($t)
     {
-        $c = Carbon::parse($t, 'Africa/Kampala');  //Use the system timezone
+        $c = Carbon::parse($t);
+        $c->setTimezone(config('app.timezone'));
+
         if ($t == null) {
             return $t;
         }
@@ -554,7 +558,9 @@ class Utils  extends Model
 
     public static function my_time_ago($t)
     {
-        $c = Carbon::parse($t, 'Africa/Kampala');  //Use the system timezone
+        $c = Carbon::parse($t);
+        $c->setTimezone(config('app.timezone'));
+
         if ($t == null) {
             return $t;
         }
@@ -564,7 +570,7 @@ class Utils  extends Model
     public static function my_date_time($t)
     {
         $c = Carbon::parse($t);
-        $c->setTimezone('Africa/Kampala');
+        $c->setTimezone(config('app.timezone'));
         if ($t == null) {
             return $t;
         }

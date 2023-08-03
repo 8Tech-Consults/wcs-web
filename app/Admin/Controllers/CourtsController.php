@@ -727,11 +727,11 @@ class CourtsController extends AdminController
             session()->forget('court_case_action');
         });
         $form->saving( function ( Form $form) {
-            if(session('court_case_action') == 'update'){
-                if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
+            // if(session('court_case_action') == 'update'){
+                if($form->case_outcome == 'Convicted' && $form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
                     throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned']]);
                 }
-            }
+            // }
 
         });
 

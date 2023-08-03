@@ -61,7 +61,7 @@ use App\Models\Utils;
                 };
 
                 var chartData = {
-                    labels: JSON.parse('<?php echo json_encode($labels); ?>'),
+                    labels: @json($labels),
                     datasets: [{
                         type: 'line',
                         label: 'Ivory',

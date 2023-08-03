@@ -71,3 +71,12 @@ Route::post('/2f-auth-code', function (Request $t) {
   $acc->save();
   return redirect(admin_url());
 });
+
+
+Route::get('optimize', function () {
+  \Artisan::call('cache:clear');
+  \Artisan::call('view:clear');
+  \Artisan::call('config:clear');
+  \Artisan::call('config:cache');
+  return "done";
+});

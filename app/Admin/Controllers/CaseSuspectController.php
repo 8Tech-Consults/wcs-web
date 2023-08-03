@@ -322,33 +322,32 @@ class CaseSuspectController extends AdminController
                 return $this->case->ca->name;
             })->hide();
 
-        $grid->column('case_location', 'Location')->display( function () {
-            if($this->case->is_offence_committed_in_pa == 'Yes') {
+        $grid->column('case_location', 'Location')->display(function () {
+            if ($this->case->is_offence_committed_in_pa == 'Yes') {
                 return $this->case->village;
             }
             return '-';
         })->hide()->sortable();
 
-        $grid->column('case_district', 'District')->display( function () {
+        $grid->column('case_district', 'District')->display(function () {
             return $this->case->district->name;
         })->hide()->sortable();
 
-        $grid->column('case_subcounty', 'Sub-county')->display( function () {
+        $grid->column('case_subcounty', 'Sub-county')->display(function () {
             return $this->case->sub_county->name;
         })->hide()->sortable();
 
-        $grid->column('case_parish', 'Parish')->display( function () {
+        $grid->column('case_parish', 'Parish')->display(function () {
             return $this->case->parish;
         })->hide()->sortable();
 
-        $grid->column('case_village', 'Village')->display( function () {
-            if($this->case->is_offence_committed_in_pa == 'Yes') {
+        $grid->column('case_village', 'Village')->display(function () {
+            if ($this->case->is_offence_committed_in_pa == 'Yes') {
                 return '-';
             }
             return $this->case->village;
-
         })->hide()->sortable();
-            
+
         $grid->column('case_gps', __('GPS'))
             ->display(function ($x) {
                 return $this->case->latitude . "," . $this->case->longitude;
@@ -475,7 +474,7 @@ class CaseSuspectController extends AdminController
 
         $grid->column('arrest_location', 'Arrest Location')
             ->display(function ($x) {
-                if($this->arrest_in_pa == 'Yes') {
+                if ($this->arrest_in_pa == 'Yes') {
                     return $this->arrest_village;
                 }
                 return '-';
@@ -498,7 +497,7 @@ class CaseSuspectController extends AdminController
 
         $grid->column('arrest_parish')->hide()->sortable();
         $grid->column('arrest_village')->display(function ($x) {
-            if($this->arrest_in_pa == 'Yes') {
+            if ($this->arrest_in_pa == 'Yes') {
                 return '-';
             }
             return $this->arrest_village;
@@ -510,20 +509,24 @@ class CaseSuspectController extends AdminController
         $grid->column('arrest_agency', 'Lead Arrest agency')->hide()->sortable();
         $grid->column('arrest_uwa_unit')->hide()->sortable();
         $grid->column('other_arrest_agencies', 'Other Arrest Agencies')->display(function ($array) {
-            if (count($array) < 1) {
+            try {
+                if (count($array) < 1) {
+                    return '-';
+                }
+                $str = '';
+
+                foreach ($array as $key => $value) {
+                    if ($key == count($array) - 1) {
+                        $str .= $value;
+                    } else {
+                        $str .= $value . ', ';
+                    }
+                }
+                return $str;
+            } catch (\Throwable $e) {
                 return '-';
             }
-            $str = '';
-
-            foreach ($array as $key => $value) {
-                if ($key == count($array) - 1) {
-                    $str .= $value;
-                } else {
-                    $str .= $value . ', ';
-                }
-            }
-            return $str;
-        })->hide()->sortable(); 
+        })->hide()->sortable();
         $grid->column('arrest_crb_number')->hide()->sortable();
         $grid->column('police_sd_number')->hide()->sortable();
         $grid->column('is_suspect_appear_in_court', __('Appeared Court'))
@@ -554,8 +557,8 @@ class CaseSuspectController extends AdminController
             ->display(function ($d) {
                 return Utils::my_date($d);
             });
-        $grid->column('court_name')->display(function() {
-            if($this->court_name != null)
+        $grid->column('court_name')->display(function () {
+            if ($this->court_name != null)
                 return $this->court->name;
         })->hide()->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
@@ -984,7 +987,7 @@ class CaseSuspectController extends AdminController
                 $form->text('arrest_first_police_station', 'Police station of Arrest');
                 $form->text('arrest_current_police_station', 'Current police station');
                 $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                    ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
+                    ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
                 );
                 $form->select('arrest_uwa_unit', 'UWA Unit')->options([
                     'Canine Unit' => 'The Canine Unit',
@@ -992,7 +995,7 @@ class CaseSuspectController extends AdminController
                     'LEU' => 'LEU',
                 ]);
                 $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                    ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
+                    ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
                 );
 
                 $form->text('arrest_crb_number', 'Police CRB number');
@@ -1037,7 +1040,6 @@ class CaseSuspectController extends AdminController
                                 $form->textarea('police_action_remarks', 'Remarks');
                             })
                             ->rules('required');
-
                     })
                     ->when('Yes', function ($form) {
 

@@ -290,8 +290,8 @@ class CaseSuspectController extends AdminController
 
         $grid->column('created_at', __('Date'))
             ->display(function ($x) {
-                return $x->format('d M, Y - h:m a');
-                // return Utils::my_date_time($x);
+                // return $x->format('d M, Y - h:m a');
+                return Utils::my_date_time($x);
             })
             ->sortable();
 

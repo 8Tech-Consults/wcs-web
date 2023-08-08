@@ -25,6 +25,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Error;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -258,6 +259,8 @@ class CaseSuspectController extends AdminController
 
 
         $grid->quickSearch(function ($model, $query) {
+            $query = trim($query);
+            error_log($query);
             $model->where(DB::raw("CONCAT(first_name, ' ',middle_name,' ', last_name)"), 'like', "%{$query}%")
                 ->orWhere(DB::raw("CONCAT(middle_name,' ',first_name,' ', last_name)"), 'like', "%{$query}%")
                 ->orWhere(DB::raw("CONCAT(first_name,' ', last_name, ' ', middle_name)"), 'like', "%{$query}%")
@@ -558,8 +561,9 @@ class CaseSuspectController extends AdminController
                 return Utils::my_date($d);
             });
         $grid->column('court_name')->display(function () {
-            if ($this->court_name != null)
-                return $this->court->name;
+            if ($this->court_name != null && $this->court_name != '') {
+                return $this->court ? $this->court->name : $this->court_name;
+            }
         })->hide()->sortable();
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();

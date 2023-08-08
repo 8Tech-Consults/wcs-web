@@ -44,7 +44,7 @@ use App\Models\Utils;
             ])
             @include('components.detail-item', ['t' => 'sex', 's' => $s->sex])
             @include('components.detail-item', [
-                't' => 'Date of birth',
+                't' => 'Age',
                 's' => $s->age,
             ])
             @include('components.detail-item', ['t' => 'Phone number', 's' => $s->phone_number])

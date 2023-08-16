@@ -4460,7 +4460,10 @@
             "version": "7.2.3",
             "version_normalized": "7.2.3.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "source": {
                 "type": "git",
                 "url": "https://github.com/namshi/jose.git",
@@ -4529,6 +4532,7 @@
         },
         {
             "name": "nesbot/carbon",
+<<<<<<< HEAD
             "version": "2.62.1",
             "version_normalized": "2.62.1.0",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
@@ -4600,6 +4604,8 @@
         },
         {
             "name": "nesbot/carbon",
+=======
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "version": "2.69.0",
             "version_normalized": "2.69.0.0",
             "source": {
@@ -9689,7 +9695,10 @@
             "version": "v1.20.0",
             "version_normalized": "1.20.0.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php56.git",
@@ -9758,6 +9767,7 @@
         },
         {
             "name": "symfony/polyfill-php72",
+<<<<<<< HEAD
             "version": "v1.26.0",
             "version_normalized": "1.26.0.0",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
@@ -9829,6 +9839,8 @@
         },
         {
             "name": "symfony/polyfill-php72",
+=======
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "version": "v1.27.0",
             "version_normalized": "1.27.0.0",
             "source": {
@@ -10959,6 +10971,7 @@
             "version": "dev-develop",
             "version_normalized": "dev-develop",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             "source": {
                 "type": "git",
@@ -11050,6 +11063,8 @@
             "version": "v5.4.1",
             "version_normalized": "5.4.1.0",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",

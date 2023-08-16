@@ -5,10 +5,14 @@
         "This file is @generated automatically"
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "a8a379d7496c951a81115bd6d242c949",
 =======
     "content-hash": "084570d2fcb7462441e08550ef3ce5b1",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+    "content-hash": "a8a379d7496c951a81115bd6d242c949",
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -3479,6 +3483,7 @@
                 }
             ],
             "time": "2023-02-06T13:44:46+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "namshi/jose",
@@ -3553,6 +3558,12 @@
             "name": "nesbot/carbon",
             "version": "2.62.1",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+        },
+        {
+            "name": "namshi/jose",
+            "version": "7.2.3",
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "source": {
                 "type": "git",
                 "url": "https://github.com/namshi/jose.git",
@@ -6902,6 +6913,7 @@
                 }
             ],
             "time": "2022-11-03T14:55:06+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "symfony/polyfill-php56",
@@ -6977,6 +6989,12 @@
             "name": "symfony/polyfill-php72",
             "version": "v1.26.0",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+        },
+        {
+            "name": "symfony/polyfill-php56",
+            "version": "v1.20.0",
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php56.git",
@@ -8004,6 +8022,7 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
             },
             "time": "2023-01-03T09:29:04+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "tymon/jwt-auth",
@@ -8097,6 +8116,12 @@
             "name": "vlucas/phpdotenv",
             "version": "v5.4.1",
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+        },
+        {
+            "name": "tymon/jwt-auth",
+            "version": "dev-develop",
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",

@@ -23,10 +23,14 @@
         "spatie/laravel-image-optimizer": "^1.6",
         "stefangabos/zebra_image": "dev-master",
 <<<<<<< HEAD
+<<<<<<< HEAD
         "tymon/jwt-auth": "^1.0@dev"
 =======
         "tymon/jwt-auth": "^1.0"
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+        "tymon/jwt-auth": "^1.0@dev"
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

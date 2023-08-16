@@ -5,12 +5,17 @@
 $issues = array();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 if (!(PHP_VERSION_ID >= 80200)) {
     $issues[] = 'Your Composer dependencies require a PHP version ">= 8.2.0". You are running ' . PHP_VERSION . '.';
 =======
 if (!(PHP_VERSION_ID >= 80100)) {
     $issues[] = 'Your Composer dependencies require a PHP version ">= 8.1.0". You are running ' . PHP_VERSION . '.';
 >>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
+=======
+if (!(PHP_VERSION_ID >= 80200)) {
+    $issues[] = 'Your Composer dependencies require a PHP version ">= 8.2.0". You are running ' . PHP_VERSION . '.';
+>>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
 }
 
 if ($issues) {

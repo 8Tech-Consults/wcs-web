@@ -12,7 +12,7 @@ class CaseModel extends Model
     use HasFactory;
     use SoftDeletes;
 
-/* 
+
     public static function boot()
     {
         parent::boot();
@@ -107,7 +107,7 @@ class CaseModel extends Model
             return $m;
         });
     }
- */
+
     static function created_suspectes($case)
     {
         if ($case == null) {
@@ -404,5 +404,5 @@ class CaseModel extends Model
         return "";
     }
 
-//    protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo', 'suspects_count', 'exhibit_count'];
+    protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo', 'suspects_count', 'exhibit_count'];
 }

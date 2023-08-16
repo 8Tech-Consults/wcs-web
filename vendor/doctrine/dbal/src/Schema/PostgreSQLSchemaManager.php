@@ -58,9 +58,18 @@ class PostgreSQLSchemaManager extends AbstractSchemaManager
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Use {@see introspectTable()} instead.
      */
     public function listTableDetails($name)
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5595',
+            '%s is deprecated. Use introspectTable() instead.',
+            __METHOD__,
+        );
+
         return $this->doListTableDetails($name);
     }
 
@@ -209,7 +218,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
@@ -255,7 +264,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function _getPortableViewDefinition($view)
     {
@@ -263,7 +272,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function _getPortableTableDefinition($table)
     {
@@ -277,7 +286,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @link http://ezcomponents.org/docs/api/trunk/DatabaseSchema/ezcDbSchemaPgsqlReader.html
      */
@@ -316,7 +325,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function _getPortableDatabaseDefinition($database)
     {
@@ -324,7 +333,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @deprecated Use {@see listSchemaNames()} instead.
      */
@@ -341,7 +350,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function _getPortableSequenceDefinition($sequence)
     {
@@ -355,7 +364,7 @@ SQL,
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
@@ -632,15 +641,23 @@ SQL;
             (SELECT pg_description.description
                 FROM pg_description WHERE pg_description.objoid = c.oid AND a.attnum = pg_description.objsubid
             ) AS comment
-            FROM pg_attribute a, pg_class c, pg_type t, pg_namespace n
+            FROM pg_attribute a
+                INNER JOIN pg_class c
+                    ON c.oid = a.attrelid
+                INNER JOIN pg_type t
+                    ON t.oid = a.atttypid
+                INNER JOIN pg_namespace n
+                    ON n.oid = c.relnamespace
+                LEFT JOIN pg_depend d
+                    ON d.objid = c.oid
+                        AND d.deptype = 'e'
+                        AND d.classid = (SELECT oid FROM pg_class WHERE relname = 'pg_class')
 SQL;
 
         $conditions = array_merge([
             'a.attnum > 0',
-            'a.attrelid = c.oid',
-            'a.atttypid = t.oid',
-            'n.oid = c.relnamespace',
             "c.relkind = 'r'",
+            'd.refobjid IS NULL',
         ], $this->buildQueryConditions($tableName));
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions) . ' ORDER BY a.attnum';
@@ -737,22 +754,20 @@ SQL;
     private function buildQueryConditions($tableName): array
     {
         $conditions = [];
-        $schemaName = null;
 
         if ($tableName !== null) {
             if (strpos($tableName, '.') !== false) {
                 [$schemaName, $tableName] = explode('.', $tableName);
+                $conditions[]             = 'n.nspname = ' . $this->_platform->quoteStringLiteral($schemaName);
+            } else {
+                $conditions[] = 'n.nspname = ANY(current_schemas(false))';
             }
 
             $identifier   = new Identifier($tableName);
             $conditions[] = 'c.relname = ' . $this->_platform->quoteStringLiteral($identifier->getName());
         }
 
-        if ($schemaName !== null) {
-            $conditions[] = 'n.nspname = ' . $this->_platform->quoteStringLiteral($schemaName);
-        } else {
-            $conditions[] = "n.nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')";
-        }
+        $conditions[] = "n.nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')";
 
         return $conditions;
     }

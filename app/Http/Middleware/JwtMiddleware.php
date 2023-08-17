@@ -20,6 +20,9 @@ class JwtMiddleware extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
+        if(!$request->expectsJson()){
+            return $next($request);
+        }
 
         //$request->headers->set('Authorization', $headers['authorization']);// set header in request
         try {

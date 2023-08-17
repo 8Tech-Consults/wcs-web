@@ -18,11 +18,23 @@ class JwtMiddleware extends BaseMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
+    protected $except = [
+        'login',
+        'register',
+        'min/login',
+    ];
+
     public function handle($request, Closure $next)
     {
         if(!$request->expectsJson()){
             return $next($request);
         }
+        
+
+        var_dump($_SERVER['REQUEST_URI']);
+        die();
+
+
 
         //$request->headers->set('Authorization', $headers['authorization']);// set header in request
         try {

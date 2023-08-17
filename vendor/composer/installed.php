@@ -2,16 +2,8 @@
     'root' => array(
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-<<<<<<< HEAD
-<<<<<<< HEAD
+        'version' => 'dev-main', 
         'reference' => '6422f63cd49d7e175401450267c342f4926fbd13',
-=======
-        'reference' => 'c2ac10b1a82ce427e68cb30cfd5521d558636d97',
->>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
-=======
-        'reference' => '6422f63cd49d7e175401450267c342f4926fbd13',
->>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -549,15 +541,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-<<<<<<< HEAD
-<<<<<<< HEAD
             'reference' => '6422f63cd49d7e175401450267c342f4926fbd13',
-=======
-            'reference' => 'c2ac10b1a82ce427e68cb30cfd5521d558636d97',
->>>>>>> parent of 47fc940 (composer require tymon/jwt-auth)
-=======
-            'reference' => '6422f63cd49d7e175401450267c342f4926fbd13',
->>>>>>> 88faf93e738d1fae77dd22754b00d1ca630f8693
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

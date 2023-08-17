@@ -31,10 +31,10 @@ class ApiPostsController extends Controller
 
     use ApiResponser;
 
-    public function __construct()
+/*     public function __construct()
     {
         $this->middleware('auth:api');
-    }
+    } */
 
     public function update_profile(Request $r)
     {

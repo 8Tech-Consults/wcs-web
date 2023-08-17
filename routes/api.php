@@ -8,7 +8,7 @@ use App\Models\TempData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('test',function (){
+Route::get('test', function () {
     $data['name'] = 'Muhindo Mubaraka';
     $data['sex'] = 'Male';
     $data['country'] = 'Uganda';
@@ -16,7 +16,7 @@ Route::get('test',function (){
     die(json_encode($data));
 });
 
-Route::get('test-2',function (){
+Route::get('test-2', function () {
     $data['name'] = 'Muhindo Mubaraka';
     $data['sex'] = 'Male';
     $data['country'] = 'Uganda';
@@ -70,12 +70,14 @@ Route::group(['middleware' => 'api'], function ($router) {
 });
 
 Route::get("cases", [ApiPostsController::class, 'index']);
-Route::get("offences", [ApiPostsController::class, 'offences']);
+Route::group(['middleware' => 'api'], function ($router) {
+    Route::get("offences", [ApiPostsController::class, 'offences']);
+});
 Route::get("detection-methods", [ApiPostsController::class, 'detection_methods']);
 Route::get("courts", [ApiPostsController::class, 'courts']);
 Route::get("protected-areas", [ApiPostsController::class, 'protected_areas']);
 Route::get("animals", [ApiPostsController::class, 'animals']);
-Route::get("implements", [ApiPostsController::class, 'implements']); 
+Route::get("implements", [ApiPostsController::class, 'implements']);
 Route::get("conservation-areas", [ApiPostsController::class, 'conservation_areas']);
 Route::get('process-pending-images', [ApiPostsController::class, 'process_pending_images']);
 

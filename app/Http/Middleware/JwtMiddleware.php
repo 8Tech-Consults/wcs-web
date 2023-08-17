@@ -22,7 +22,7 @@ class JwtMiddleware extends BaseMiddleware
     {
         $headers = getallheaders(); //get header
         //$request->headers->set('Authorization', $headers['authorization']);// set header in request
-        var_dump($headers);
+        var_dump($_SERVER);
         die(); 
         try {
             $headers = apache_request_headers(); //get header

@@ -67,12 +67,10 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post("cases", [ApiPostsController::class, 'create_post']);
     Route::post("update-profile", [ApiPostsController::class, 'update_profile']);
     Route::post("password-change", [ApiPostsController::class, 'password_change']);
+    Route::get("offences", [ApiPostsController::class, 'offences']);
 });
 
 Route::get("cases", [ApiPostsController::class, 'index']);
-Route::group(['middleware' => 'api'], function ($router) {
-    Route::get("offences", [ApiPostsController::class, 'offences']);
-});
 Route::get("detection-methods", [ApiPostsController::class, 'detection_methods']);
 Route::get("courts", [ApiPostsController::class, 'courts']);
 Route::get("protected-areas", [ApiPostsController::class, 'protected_areas']);

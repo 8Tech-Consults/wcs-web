@@ -21,6 +21,9 @@ class JwtMiddleware extends BaseMiddleware
     public function handle($request, Closure $next)
     {
         try {
+            $headers = apache_request_headers(); //get header
+            $request->headers->set('Authorization', $headers['authorization']);// set header in request
+
             $user = FacadesJWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){

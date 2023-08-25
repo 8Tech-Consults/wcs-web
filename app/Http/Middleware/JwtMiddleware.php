@@ -39,6 +39,10 @@ class JwtMiddleware extends BaseMiddleware
             return $next($request);
         }
 
+        // If request starts with api then we will check for token
+        if (!$request->is('api/*')) {
+            return $next($request);
+        }
 
         //$request->headers->set('Authorization', $headers['authorization']);// set header in request
         try {

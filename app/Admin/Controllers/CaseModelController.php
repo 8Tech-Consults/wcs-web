@@ -186,13 +186,15 @@ class CaseModelController extends AdminController
                     $actions->add(new CaseModelActionAddSuspect);
                     $actions->add(new CaseModelActionAddExhibit);
                     $actions->add(new CaseModelAddComment);
-                    $actions->add(new CaseModelActionEditCase);
                 }
             } else {
                 $actions->add(new CaseModelActionAddSuspect);
                 $actions->add(new CaseModelActionAddExhibit);
                 $actions->add(new CaseModelAddComment);
-                $actions->add(new CaseModelActionEditCase);
+                // Disable edit for secretaries and prosecutors
+                if (!Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
+                    $actions->add(new CaseModelActionEditCase);
+                }
             }
         });
 

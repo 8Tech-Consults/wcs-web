@@ -660,14 +660,6 @@ class CaseSuspectController extends AdminController
                 return $this->case->reportor->name;
             })->hide()
             ->sortable();
-        $grid->actions(function ($actions) {
-            if (
-                (!Auth::user()->isRole('admin'))
-            ) {
-                $actions->disableEdit();
-                $actions->disableDelete();
-            }
-        });
 
 
         /*     $grid->column('action', __('Actions'))->display(function () {
@@ -691,12 +683,6 @@ class CaseSuspectController extends AdminController
 
         $grid->actions(function ($actions) {
             $actions->disableEdit();
-            if (
-                Auth::user()->isRole('hq-team-leaders') ||
-                Auth::user()->isRole('ca-team')
-            ) {
-            }
-
             $actions->disableDelete();
 
             if (
@@ -714,7 +700,12 @@ class CaseSuspectController extends AdminController
                 }
             }
 
-            $actions->add(new EditSuspect);
+            // If the user is not a secretary, a CA agent, CA team lead and secretary, then they can edit the suspect
+            if (
+                !Auth::user()->isRole('ca-agent') && !Auth::user()->isRole('ca-team') && !Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
+                $actions->add(new EditSuspect);
+            }
+
         });
 
         return $grid;

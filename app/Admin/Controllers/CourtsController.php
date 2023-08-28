@@ -147,8 +147,8 @@ class CourtsController extends AdminController
             ])->orWhere([
                 'reported_by' => $u->id
             ]);
-        }        
-        
+        }
+
 
         $grid->filter(function ($f) {
             // Remove the default id filter
@@ -171,10 +171,9 @@ class CourtsController extends AdminController
                 $query->whereHas('offences', function ($query) {
                     $query->where('name', 'like', "%{$this->input}%");
                 });
-            
             }, 'Filter by Offence')->select(
                 Offence::pluck('name', 'name')
-            );     
+            );
 
             $f->between('court_date', 'Filter by arrest date')->date();
             $f->like('court_name', 'Filter by court name');
@@ -316,7 +315,7 @@ class CourtsController extends AdminController
             }
             return $x;
         })->hide()->sortable();
-        
+
         $grid->column('cautioned_remarks', 'Caution remarks')->hide()->sortable();
 
         $grid->column('suspect_appealed', 'Accused appealed')
@@ -365,20 +364,20 @@ class CourtsController extends AdminController
                 return $this->case->reportor->name;
             })->hide()
             ->sortable();
+
         $grid->actions(function ($actions) {
-            if (
-                (!Auth::user()->isRole('admin'))
-            ) {
-            }
             $actions->disableView();
             $actions->disableEdit();
+            $actions->disableDelete();
             $actions->add(new ViewSuspect);
-            if($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated'){
+            if ($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated') {
                 $actions->add(new CourtCaseUpdate);
             }
-            $actions->add(new EditCourtCase);
-
-            $actions->disableDelete();
+            // If the user is not a secretary, a CA agent, CA team lead and secretary, then they can edit the court case
+            if (
+                !Auth::user()->isRole('ca-agent') && !Auth::user()->isRole('ca-team') && !Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
+                $actions->add(new EditCourtCase);
+            }
         });
 
 
@@ -452,94 +451,94 @@ class CourtsController extends AdminController
         if (session('court_case_action') == 'update') {
             $form->hidden('is_suspect_appear_in_court')->default('Yes');
             $form->radio('court_status', __('Court case status'))
-            ->options([
-                'On-going prosecution' => 'On-going prosecution',
-                                    'Reinstated'=>'Reinstated',
-                'Concluded' => 'Concluded',
-            ])->when('Concluded', function ($form) {
+                ->options([
+                    'On-going prosecution' => 'On-going prosecution',
+                    'Reinstated' => 'Reinstated',
+                    'Concluded' => 'Concluded',
+                ])->when('Concluded', function ($form) {
 
-                $form->radio('case_outcome', 'Specific court case status')->options([
-                    'Dismissed' => 'Dismissed',
-                    'Withdrawn by DPP' => 'Withdrawn by DPP',
-                    'Acquittal' => 'Acquittal',
-                    'Convicted' => 'Convicted',
-                ])
-                    ->when('Convicted', function ($form) {
-                        $form->radio('is_jailed', __('Was Accused jailed?'))
-                            ->options([
-                                "Yes" => 'Yes',
-                                "No" => 'No',
-                            ])
-                            ->when('Yes', function ($form) {
-                                $form->date('jail_date', 'Jail date');
-                                $form->decimal('jail_period', 'Jail period')->help("(In months)");
-                                $form->text('prison', 'Prison name');
-                                $form->date('jail_release_date', 'Date released');
-                            })
-                            ->default('No');
-                        $form->radio('is_fined', __('Was Accused fined?'))
-                            ->options([
-                                'Yes' => 'Yes',
-                                'No' => 'No',
-                            ])
-                            ->when('Yes', function ($form) {
-                                $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-                            })
-                            ->default('No');
+                    $form->radio('case_outcome', 'Specific court case status')->options([
+                        'Dismissed' => 'Dismissed',
+                        'Withdrawn by DPP' => 'Withdrawn by DPP',
+                        'Acquittal' => 'Acquittal',
+                        'Convicted' => 'Convicted',
+                    ])
+                        ->when('Convicted', function ($form) {
+                            $form->radio('is_jailed', __('Was Accused jailed?'))
+                                ->options([
+                                    "Yes" => 'Yes',
+                                    "No" => 'No',
+                                ])
+                                ->when('Yes', function ($form) {
+                                    $form->date('jail_date', 'Jail date');
+                                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                    $form->text('prison', 'Prison name');
+                                    $form->date('jail_release_date', 'Date released');
+                                })
+                                ->default('No');
+                            $form->radio('is_fined', __('Was Accused fined?'))
+                                ->options([
+                                    'Yes' => 'Yes',
+                                    'No' => 'No',
+                                ])
+                                ->when('Yes', function ($form) {
+                                    $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                                })
+                                ->default('No');
 
-                        $form->radio('community_service', __('Was the Accused offered community service?'))
-                            ->options([
-                                'Yes' => 'Yes',
-                                'No' => 'No',
-                            ])
-                            ->when('Yes', function ($form) {
-                                $form->decimal(
-                                    'community_service_duration',
-                                    'Community service duration (in Hours)'
-                                );
-                            })
-                            ->default('No');
-
-
-                        $form->radio('cautioned', __('Was Accused cautioned?'))
-                            ->options([
-                                'Yes' => 'Yes',
-                                'No' => 'No',
-                            ])
-                            ->when('Yes', function ($form) {
-                                $form->text('cautioned_remarks', 'Enter caution remarks');
-                            })
-                            ->default('No');
-
-                        $form->radio('suspect_appealed', __('Did the Accused appeal?'))
-                            ->options([
-                                'Yes' => 'Yes',
-                                'No' => 'No',
-                            ])
-                            ->when('Yes', function ($form) {
-                                $form->date('suspect_appealed_date', 'Accused appeal Date');
-                                $form->text('suspect_appealed_court_name', 'Appellate court');
-                                $form->text('suspect_appealed_court_file', 'Appeal court file number');
-                                $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
-                                    ->options([
-                                        'Upheld' => 'Upheld',
-                                        'Quashed and acquitted' => 'Quashed and acquitted',
-                                        'Quashed and retrial ordered' => 'Quashed and retrial ordered',
-                                        'On-going' => 'On-going',
-                                    ]);
-
-                                $form->textarea('suspect_appeal_remarks', 'Remarks');
-                            });
-                    });
-            })
-            ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
+                            $form->radio('community_service', __('Was the Accused offered community service?'))
+                                ->options([
+                                    'Yes' => 'Yes',
+                                    'No' => 'No',
+                                ])
+                                ->when('Yes', function ($form) {
+                                    $form->decimal(
+                                        'community_service_duration',
+                                        'Community service duration (in Hours)'
+                                    );
+                                })
+                                ->default('No');
 
 
-                $form->select('suspect_court_outcome', 'Accused court case status')->options(
-                    SuspectCourtStatus::pluck('name', 'name')
-                )->rules('required');
-            })
-            ->rules('required');
+                            $form->radio('cautioned', __('Was Accused cautioned?'))
+                                ->options([
+                                    'Yes' => 'Yes',
+                                    'No' => 'No',
+                                ])
+                                ->when('Yes', function ($form) {
+                                    $form->text('cautioned_remarks', 'Enter caution remarks');
+                                })
+                                ->default('No');
+
+                            $form->radio('suspect_appealed', __('Did the Accused appeal?'))
+                                ->options([
+                                    'Yes' => 'Yes',
+                                    'No' => 'No',
+                                ])
+                                ->when('Yes', function ($form) {
+                                    $form->date('suspect_appealed_date', 'Accused appeal Date');
+                                    $form->text('suspect_appealed_court_name', 'Appellate court');
+                                    $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                    $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
+                                        ->options([
+                                            'Upheld' => 'Upheld',
+                                            'Quashed and acquitted' => 'Quashed and acquitted',
+                                            'Quashed and retrial ordered' => 'Quashed and retrial ordered',
+                                            'On-going' => 'On-going',
+                                        ]);
+
+                                    $form->textarea('suspect_appeal_remarks', 'Remarks');
+                                });
+                        });
+                })
+                ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
+
+
+                    $form->select('suspect_court_outcome', 'Accused court case status')->options(
+                        SuspectCourtStatus::pluck('name', 'name')
+                    )->rules('required');
+                })
+                ->rules('required');
         } else {
             $form->radio('is_suspect_appear_in_court', __('Has this Accused appeared in court?'))
                 ->options([
@@ -630,7 +629,7 @@ class CourtsController extends AdminController
                     $form->radio('court_status', __('Court case status'))
                         ->options([
                             'On-going prosecution' => 'On-going prosecution',
-                                    'Reinstated'=>'Reinstated',
+                            'Reinstated' => 'Reinstated',
                             'Concluded' => 'Concluded',
                         ])->when('Concluded', function ($form) {
 
@@ -720,17 +719,16 @@ class CourtsController extends AdminController
         }
 
         $form->submitted(function (Form $form) {
-
         });
 
-        $form->saved( function (Form $form) {
+        $form->saved(function (Form $form) {
             session()->forget('court_case_action');
         });
-        $form->saving( function ( Form $form) {
+        $form->saving(function (Form $form) {
             // if(session('court_case_action') == 'update'){
-                if($form->case_outcome == 'Convicted' && $form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
-                    throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned']]);
-                }
+            if ($form->case_outcome == 'Convicted' && $form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
+                throw \Illuminate\Validation\ValidationException::withMessages(['case_outcome' => ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned']]);
+            }
             // }
 
         });

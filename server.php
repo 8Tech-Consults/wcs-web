@@ -1,17 +1,5 @@
 <?php
-$headers = getallheaders();
 
-// Set the Content-Type header to specify that the response will be JSON
-header('Content-Type: application/json');
-
-// Prepare a response array with the headers
-$response = [
-    'headers' => $headers,
-];
-
-// Encode the response array as JSON and output it
-echo json_encode($response);
-die();
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

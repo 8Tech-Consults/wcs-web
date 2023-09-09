@@ -48,8 +48,21 @@ class JwtMiddleware extends BaseMiddleware
         try {
             //$headers = apache_request_headers(); //get header
             $headers = getallheaders(); //get header
-            $request->headers->set('Authorization', $headers['Authorizations']); // set header in request
-            $request->headers->set('authorization', $headers['Authorizations']); // set header in request
+
+            $Authorization = "";
+            if (isset($headers['Authorization']) && $headers['Authorization'] != "") {
+                $Authorization = $headers['Authorization'];
+            } else if (isset($headers['authorization']) && $headers['authorization'] != "") {
+                $Authorization = $headers['authorization'];
+            } else if (isset($headers['Authorizations']) && $headers['Authorizations'] != "") {
+                $Authorization = $headers['Authorizations'];
+            } else if (isset($headers['authorizations']) && $headers['authorizations'] != "") {
+                $Authorization = $headers['authorizations'];
+            }
+
+
+            $request->headers->set('Authorization', $Authorization); // set header in request
+            $request->headers->set('authorization', $Authorization); // set header in request
 
             $user = FacadesJWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {

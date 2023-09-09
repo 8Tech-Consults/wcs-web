@@ -40,7 +40,7 @@ Route::get('/mobile', function () {
   return redirect(url('uwa-v6.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
-  return redirect(url('uwa-v5.exe'));
+  return redirect(url('uwa-v6.exe'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
   return redirect(url('UWA-FINGERPRINT.exe'));

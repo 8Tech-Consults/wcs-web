@@ -11,7 +11,7 @@ use App\Models\Court;
 use App\Models\Offence;
 use App\Models\SuspectCourtStatus;
 use App\Models\Utils;
-
+use App\Rules\AfterDateInDatabase;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -602,8 +602,12 @@ class CourtsController extends AdminController
                             ->readonly()
                             ->rules('required');
                     }
-
-                    $form->date('court_date', 'Court Date of first appearance')->rules('required');
+                    // dd($form->model()->getKey());
+                    $form->date('court_date', 'Court Date of first appearance')->rules(
+                        function (Form $form) {
+                            return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                        });
+                        
                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                     $form->select('court_name', 'Select Court')->options($courts)
                         ->when(1, function ($form) {

@@ -19,6 +19,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\AfterDateInDatabase;
 
 class NewCaseSuspectController extends AdminController
 {
@@ -668,7 +669,10 @@ class NewCaseSuspectController extends AdminController
 
 
                                     $form->date('court_date', 'Court Date of first appearance')
-                                        ->rules('required');
+                                        ->rules(
+                                            function (Form $form) {
+                                                return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                                            });
 
                                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                                     $form->select('court_name', 'Select Court')->options($courts)
@@ -849,7 +853,12 @@ class NewCaseSuspectController extends AdminController
                                     ->readonly();
                             }
 
-                            $form->date('court_date', 'Court Date of first appearance');
+                            $form->date('court_date', 'Court Date of first appearance')
+                                ->rules(
+                                    function (Form $form) {
+                                        return ['nullable', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                                    });
+
                             $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
 
                             $form->select('court_name', 'Select Court')->options($courts)

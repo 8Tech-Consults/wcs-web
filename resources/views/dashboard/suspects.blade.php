@@ -88,17 +88,7 @@ use App\Models\Utils;
 
                                         <span>View</span>
                                         <!--end::Svg Icon-->
-                                    </a><br>
-                                    <a href="{{ url("/case-suspects/{$suspect->id}") }}/edit" title="View"
-                                        class="btn btn-icon btn-bg-light text-primary   me-1 p-0 px-2 m-0"
-                                        style="font-size: 16px;">
-
-                                        <i class="fa fa-edit"></i>
-
-                                        <span class="ml-2">Edit</span>
                                     </a>
-
-
                                 </div>
                             </td>
                         </tr>

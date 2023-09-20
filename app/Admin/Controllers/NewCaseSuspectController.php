@@ -706,7 +706,7 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->date('jail_date', 'Jail date');
+                                                            $form->date('jail_date', 'Jail date')->rules('after:court_date');
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                             $form->text('prison', 'Prison name');
                                                             $form->date('jail_release_date', 'Release Date');
@@ -908,7 +908,7 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('jail_date', 'Jail date');
+                                                    $form->date('jail_date', 'Jail date')->rules('after:court_date');
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                     $form->text('prison', 'Prison name');
                                                     $form->date('jail_release_date', 'Date released');

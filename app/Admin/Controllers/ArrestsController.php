@@ -23,6 +23,7 @@ use Encore\Admin\Show;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Rules\AfterDateInDatabase;
 
 class ArrestsController extends AdminController
 {
@@ -521,7 +522,8 @@ class ArrestsController extends AdminController
                                 }
                             }
 
-                            $form->date('arrest_date_time', 'Arrest date and time')->rules('required');
+                            $form->date('arrest_date_time', 'Arrest date and time')
+                                ->rules(['required', new AfterDateInDatabase('case_models', $pendingCase->id, 'case_date')]);
 
                             $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                                 ->options([
@@ -612,7 +614,8 @@ class ArrestsController extends AdminController
                 } else {
 
 
-                    $form->date('arrest_date_time', 'Arrest date and time')->rules('required');
+                    $form->date('arrest_date_time', 'Arrest date and time')
+                        ->rules(['required', new AfterDateInDatabase('case_models', $pendingCase->id, 'case_date')]);
 
                     $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                         ->options([

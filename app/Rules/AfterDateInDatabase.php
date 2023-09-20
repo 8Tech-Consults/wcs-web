@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AfterDateInDatabase implements Rule
 {
@@ -34,6 +35,6 @@ class AfterDateInDatabase implements Rule
 
     public function message()
     {
-        return "$this->attribute must be after or equal to the $this->column.";
+        return Str::replace('_',' ',$this->attribute)." must be after or equal to the ".Str::replace('_',' ',$this->column);
     }
 }

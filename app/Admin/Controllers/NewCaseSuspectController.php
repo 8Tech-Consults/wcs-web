@@ -428,7 +428,7 @@ class NewCaseSuspectController extends AdminController
                             }
 
                             $form->date('arrest_date_time', 'Arrest date and time')
-                                ->rules('required');
+                                ->rules(['required', new AfterDateInDatabase('case_models', $pendingCase->id, 'case_date')]);
 
                             $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                                 ->options([
@@ -518,7 +518,8 @@ class NewCaseSuspectController extends AdminController
                 } else {
 
 
-                    $form->date('arrest_date_time', 'Arrest date and time')->rules('required');
+                    $form->date('arrest_date_time', 'Arrest date and time')
+                        ->rules(['required', new AfterDateInDatabase('case_models', $pendingCase->id, 'case_date')]);
 
                     $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
                         ->options([

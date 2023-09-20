@@ -935,205 +935,206 @@ class CaseSuspectController extends AdminController
         }); */
 
 
-        $form->radio('is_suspects_arrested', "Has suspect been handed over to police?")
-            ->options([
-                'Yes' => 'Yes',
-                'No' => 'No',
-            ])
-            ->rules('required')
-            ->when(0, function ($form) {
-                $form->select('management_action', 'Action taken by management')->options([
-                    'Fined' => 'Fined',
-                    'Cautioned' => 'Cautioned',
-                ])->rules('required');
+        // $form->radio('is_suspects_arrested', "Has suspect been handed over to police?")
+        //     ->options([
+        //         'Yes' => 'Yes',
+        //         'No' => 'No',
+        //     ])
+        //     ->when('No', function ($form) {
+        //         $form->select('management_action', 'Action taken by management')->options([
+        //             'Fined' => 'Fined',
+        //             'Cautioned' => 'Cautioned',
+        //         ])->rules('required');
 
-                $form->textarea('not_arrested_remarks', 'Remarks')->rules('required');
-            })
-            ->when(1, function ($form) {
+        //         $form->textarea('not_arrested_remarks', 'Remarks')->rules('required');
+        //     })
+        //     ->when('Yes', function ($form) {
 
-                $form->divider('Arrest information');
-                $form->datetime('arrest_date_time', 'Arrest date and time')->rules('required');
+        //         $form->divider('Arrest information');
+        //         $form->datetime('arrest_date_time', 'Arrest date and time')->rules('required');
 
-                $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
-                    ->options([
-                        'Yes' => 'Yes',
-                        'No' => 'No',
-                    ])
-                    ->when('Yes', function ($form) {
-                        $form->select('pa_id', __('Select PA'))
-                            ->options(PA::all()->pluck('name_text', 'id'));
-                    })
-                    ->when('No', function ($form) {
-                        $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                            ->rules('int|required')
-                            ->help('Where this suspect was arrested')
-                            ->options(Location::get_sub_counties_array());
-
-
-                        $form->text('arrest_parish', 'Parish of Arrest');
-                        $form->text('arrest_village', 'Arrest village');
-                    })
-                    ->rules('required');
+        //         $form->radio('arrest_in_pa', "Was suspect arrested within a P.A")
+        //             ->options([
+        //                 'Yes' => 'Yes',
+        //                 'No' => 'No',
+        //             ])
+        //             ->when('Yes', function ($form) {
+        //                 $form->select('pa_id', __('Select PA'))
+        //                     ->options(PA::all()->pluck('name_text', 'id'));
+        //             })
+        //             ->when('No', function ($form) {
+        //                 $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
+        //                     ->rules('int|required')
+        //                     ->help('Where this suspect was arrested')
+        //                     ->options(Location::get_sub_counties_array());
 
 
-                $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
-                $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
-
-                $form->text('arrest_first_police_station', 'Police station of Arrest');
-                $form->text('arrest_current_police_station', 'Current police station');
-                $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                    ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
-                );
-                $form->select('arrest_uwa_unit', 'UWA Unit')->options([
-                    'Canine Unit' => 'The Canine Unit',
-                    'WCU' => 'WCU',
-                    'LEU' => 'LEU',
-                ]);
-                $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                    ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
-                );
-
-                $form->text('arrest_crb_number', 'Police CRB number');
-                $form->text('police_sd_number', 'Police SD number');
+        //                 $form->text('arrest_parish', 'Parish of Arrest');
+        //                 $form->text('arrest_village', 'Arrest village');
+        //             })
+        //             ->rules('required');
 
 
-                $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
-                    ->options([
-                        'Yes' => 'Yes',
-                        'No' => 'No',
-                    ])
-                    ->when('No', function ($form) {
-                        $form->radio('status', __('Case status'))
-                            ->options([
-                                'On-going investigation' => 'On-going investigation',
-                                'Closed' => 'Closed',
-                                'Re-opened' => 'Re-opened',
-                            ])
-                            ->when('On-going investigation', function ($form) {
-                                $form->select('police_action', 'Case outcome at police level')->options([
-                                    'Police bond' => 'Police bond',
-                                    'Skipped bond' => 'Skipped bond',
-                                    'Under police custody' => 'Under police custody',
-                                    'Escaped from colice custody' => 'Escaped from police custody',
-                                ]);
-                            })
-                            ->when('Closed', function ($form) {
-                                $form->select('police_action', 'Case outcome at police level')->options([
-                                    'Dismissed by state' => 'Dismissed by state',
-                                    'Withdrawn by complainant' => 'Withdrawn by complainant',
-                                ]);
-                                $form->date('police_action_date', 'Date');
-                                $form->textarea('police_action_remarks', 'Remarks');
-                            })->when('Re-opened', function ($form) {
-                                $form->select('police_action', 'Case outcome at police level')->options([
-                                    'Police bond' => 'Police bond',
-                                    'Skipped bond' => 'Skipped bond',
-                                    'Under police custody' => 'Under police custody',
-                                    'Escaped from colice custody' => 'Escaped from police custody',
-                                ]);
-                                $form->date('police_action_date', 'Date');
-                                $form->textarea('police_action_remarks', 'Remarks');
-                            })
-                            ->rules('required');
-                    })
-                    ->when('Yes', function ($form) {
+        //         $form->text('arrest_latitude', 'Arrest GPS - latitude')->help('e.g  41.40338');
+        //         $form->text('arrest_longitude', 'Arrest GPS - longitude')->help('e.g  2.17403');
 
-                        $form->divider('Court information');
-                        $form->text('court_file_number', 'Court file number');
-                        $form->date('court_date', 'Court date');
-                        $form->text('court_name', 'Court Name');
+        //         $form->text('arrest_first_police_station', 'Police station of Arrest');
+        //         $form->text('arrest_current_police_station', 'Current police station');
+        //         $form->select('arrest_agency', 'Lead Arresting agency')->options(
+        //             ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
+        //         );
+        //         $form->select('arrest_uwa_unit', 'UWA Unit')->options([
+        //             'Canine Unit' => 'The Canine Unit',
+        //             'WCU' => 'WCU',
+        //             'LEU' => 'LEU',
+        //         ]);
+        //         $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
+        //             ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
+        //         );
+
+        //         $form->text('arrest_crb_number', 'Police CRB number');
+        //         $form->text('police_sd_number', 'Police SD number');
 
 
-                        /* $form->select('prosecutor', 'Lead prosecutor')
-                            ->options(function ($id) {
-                                $a = User::find($id);
-                                if ($a) {
-                                    return [$a->id => "#" . $a->id . " - " . $a->name];
-                                }
-                            })
-                            ->ajax(url(
-                                '/api/ajax?'
-                                    . "&search_by_1=name"
-                                    . "&search_by_2=id"
-                                    . "&model=User"
-                            ))->rules('required'); */
-                        $form->text('prosecutor', 'Lead prosecutor');
-                        $form->text('magistrate_name', 'Magistrate Name');
+        //         $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+        //             ->options([
+        //                 'Yes' => 'Yes',
+        //                 'No' => 'No',
+        //             ])
+        //             ->when('No', function ($form) {
+        //                 $form->radio('status', __('Case status'))
+        //                     ->options([
+        //                         'On-going investigation' => 'On-going investigation',
+        //                         'Closed' => 'Closed',
+        //                         'Re-opened' => 'Re-opened',
+        //                     ])
+        //                     ->when('On-going investigation', function ($form) {
+        //                         $form->select('police_action', 'Case outcome at police level')->options([
+        //                             'Police bond' => 'Police bond',
+        //                             'Skipped bond' => 'Skipped bond',
+        //                             'Under police custody' => 'Under police custody',
+        //                             'Escaped from colice custody' => 'Escaped from police custody',
+        //                         ]);
+        //                     })
+        //                     ->when('Closed', function ($form) {
+        //                         $form->select('police_action', 'Case outcome at police level')->options([
+        //                             'Dismissed by state' => 'Dismissed by state',
+        //                             'Withdrawn by complainant' => 'Withdrawn by complainant',
+        //                         ]);
+        //                         $form->date('police_action_date', 'Date');
+        //                         $form->textarea('police_action_remarks', 'Remarks');
+        //                     })->when('Re-opened', function ($form) {
+        //                         $form->select('police_action', 'Case outcome at police level')->options([
+        //                             'Police bond' => 'Police bond',
+        //                             'Skipped bond' => 'Skipped bond',
+        //                             'Under police custody' => 'Under police custody',
+        //                             'Escaped from colice custody' => 'Escaped from police custody',
+        //                         ]);
+        //                         $form->date('police_action_date', 'Date');
+        //                         $form->textarea('police_action_remarks', 'Remarks');
+        //                     })
+        //                     ->rules('required');
+        //             })
+        //             ->when('Yes', function ($form) {
 
-                        $form->radio('court_status', __('Court case status'))
-                            ->options([
-                                'On-going investigation' => 'On-going investigation',
-                                'On-going prosecution' => 'On-going prosecution',
-                                'Reinstated' => 'Reinstated',
-                                'Closed' => 'Closed',
-                            ])->when('Closed', function ($form) {
-
-                                $form->radio('case_outcome', 'Specific court case status')->options([
-                                    'Dismissed' => 'Dismissed',
-                                    'Convicted' => 'Convicted',
-                                ])
-                                    ->when('Convicted', function ($form) {
-                                        $form->radio('is_jailed', __('Was suspect jailed?'))
-                                            ->options([
-                                                1 => 'Yes',
-                                                0 => 'No',
-                                            ])
-                                            ->when(1, function ($form) {
-                                                $form->date('jail_date', 'Jail date');
-                                                $form->decimal('jail_period', 'Jail period')->help("(In months)");
-                                                $form->text('prison', 'Prison name');
-                                                $form->date('jail_release_date', 'Date released');
-                                            });
-
-                                        $form->radio('is_fined', __('Was suspect fined?'))
-                                            ->options([
-                                                'Yes' => 'Yes',
-                                                'No' => 'No',
-                                            ])
-                                            ->when('Yes', function ($form) {
-                                                $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-                                            });
-
-                                        $form->radio('community_service', __('Was suspect issued a community service?'))
-                                            ->options([
-                                                'Yes' => 'Yes',
-                                                'No' => 'No',
-                                            ])
-                                            ->when(1, function ($form) {
-                                                $form->date('created_at', 'Court date');
-                                            });
-
-                                        $form->radio('suspect_appealed', __('Did the suspect appeal?'))
-                                            ->options([
-                                                'Yes' => 'Yes',
-                                                'No' => 'No',
-                                            ])
-                                            ->when('Yes', function ($form) {
-                                                $form->date('suspect_appealed_date', 'Suspect appeal date');
-                                                $form->text('suspect_appealed_court_name', 'Court of appeal');
-                                                $form->text('suspect_appealed_court_file', 'Appeal court file number');
-                                            });
-                                    });
+        //                 $form->divider('Court information');
+        //                 $form->text('court_file_number', 'Court file number');
+        //                 $form->date('court_date', 'Court date');
+        //                 $form->text('court_name', 'Court Name');
 
 
-                                $form->radio('cautioned', __('Was suspect cautioned?'))
-                                    ->options([
-                                        'Yes' => 'Yes',
-                                        'No' => 'No',
-                                    ])
-                                    ->when('Yes', function ($form) {
-                                        $form->text('cautioned_remarks', 'Enter caution remarks');
-                                    });
-                            })
-                            ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
-                                $form->radio('suspect_court_outcome', 'Suspect court case status')->options(
-                                    SuspectCourtStatus::pluck('name', 'name')
-                                );
-                            })
-                            ->rules('required');
-                    })
-                    ->rules('required');
-            });
+        //                 /* $form->select('prosecutor', 'Lead prosecutor')
+        //                     ->options(function ($id) {
+        //                         $a = User::find($id);
+        //                         if ($a) {
+        //                             return [$a->id => "#" . $a->id . " - " . $a->name];
+        //                         }
+        //                     })
+        //                     ->ajax(url(
+        //                         '/api/ajax?'
+        //                             . "&search_by_1=name"
+        //                             . "&search_by_2=id"
+        //                             . "&model=User"
+        //                     ))->rules('required'); */
+        //                 $form->text('prosecutor', 'Lead prosecutor');
+        //                 $form->text('magistrate_name', 'Magistrate Name');
+
+        //                 $form->radio('court_status', __('Court case status'))
+        //                     ->options([
+        //                         'On-going investigation' => 'On-going investigation',
+        //                         'On-going prosecution' => 'On-going prosecution',
+        //                         'Reinstated' => 'Reinstated',
+        //                         'Closed' => 'Closed',
+        //                     ])->when('Closed', function ($form) {
+
+        //                         $form->radio('case_outcome', 'Specific court case status')->options([
+        //                             'Dismissed' => 'Dismissed',
+        //                             'Convicted' => 'Convicted',
+        //                         ])
+        //                             ->when('Convicted', function ($form) {
+        //                                 $form->radio('is_jailed', __('Was suspect jailed?'))
+        //                                     ->options([
+        //                                         1 => 'Yes',
+        //                                         0 => 'No',
+        //                                     ])
+        //                                     ->when(1, function ($form) {
+        //                                         $form->date('jail_date', 'Jail date');
+        //                                         $form->decimal('jail_period', 'Jail period')->help("(In months)");
+        //                                         $form->text('prison', 'Prison name');
+        //                                         $form->date('jail_release_date', 'Date released');
+        //                                     });
+
+        //                                 $form->radio('is_fined', __('Was suspect fined?'))
+        //                                     ->options([
+        //                                         'Yes' => 'Yes',
+        //                                         'No' => 'No',
+        //                                     ])
+        //                                     ->when('Yes', function ($form) {
+        //                                         $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+        //                                     });
+
+        //                                 $form->radio('community_service', __('Was suspect issued a community service?'))
+        //                                     ->options([
+        //                                         'Yes' => 'Yes',
+        //                                         'No' => 'No',
+        //                                     ])
+        //                                     ->when(1, function ($form) {
+        //                                         $form->date('created_at', 'Court date');
+        //                                     });
+
+        //                                 $form->radio('suspect_appealed', __('Did the suspect appeal?'))
+        //                                     ->options([
+        //                                         'Yes' => 'Yes',
+        //                                         'No' => 'No',
+        //                                     ])
+        //                                     ->when('Yes', function ($form) {
+        //                                         $form->date('suspect_appealed_date', 'Suspect appeal date');
+        //                                         $form->text('suspect_appealed_court_name', 'Court of appeal');
+        //                                         $form->text('suspect_appealed_court_file', 'Appeal court file number');
+        //                                     });
+        //                             });
+
+
+        //                         $form->radio('cautioned', __('Was suspect cautioned?'))
+        //                             ->options([
+        //                                 'Yes' => 'Yes',
+        //                                 'No' => 'No',
+        //                             ])
+        //                             ->when('Yes', function ($form) {
+        //                                 $form->text('cautioned_remarks', 'Enter caution remarks');
+        //                             });
+        //                     })
+        //                     ->when('in', ['On-going investigation', 'On-going prosecution', 'Reinstated'], function ($form) {
+        //                         $form->radio('suspect_court_outcome', 'Suspect court case status')->options(
+        //                             SuspectCourtStatus::pluck('name', 'name')
+        //                         );
+        //                     })
+        //                     ->rules('required');
+        //             })
+        //             ->rules('required');
+        //     })
+        //     ->rules('required');
+
 
 
         return $form;

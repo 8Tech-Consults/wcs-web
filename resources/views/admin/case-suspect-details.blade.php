@@ -344,6 +344,12 @@ use App\Models\Utils;
                     't' => 'Specific court case status',
                     's' => $s->case_outcome,
                 ])
+                
+                @includeWhen(in_array($s->case_outcome, ['Dismissed', 'Withdrawn by DPP', 'Acquittal']), 'components.detail-item', [
+                    't' => 'Specific court case status remarks',
+                    's' => $s->case_outcome_remarks,
+                ])
+
                 @include('components.detail-item', [
                     't' => 'Jailed',
                     's' => $s->is_jailed == '1' || $s->is_jailed == 'Yes' ? 'Yes' : 'No',

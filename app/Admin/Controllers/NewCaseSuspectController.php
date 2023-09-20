@@ -766,7 +766,7 @@ class NewCaseSuspectController extends AdminController
                                                         });
                                                 })
                                                 ->when('in', ['Dismissed', 'Withdrawn by DPP', 'Acquittal'], function ($form) {
-                                                    $form->textarea('case_outcome_remarks', 'Remarks');
+                                                    $form->textarea('case_outcome_remarks', 'Remarks')->rules('required');
                                                 });
                                         })
                                         ->when('in', ['On-going prosecution', 'Reinstated'], function ($form) {
@@ -969,7 +969,7 @@ class NewCaseSuspectController extends AdminController
                                                 });
                                         })
                                         ->when('in', ['Dismissed', 'Withdrawn by DPP', 'Acquittal'], function ($form) {
-                                            $form->textarea('case_outcome_remarks', 'Remarks');
+                                            $form->textarea('case_outcome_remarks', 'Remarks')->rules('required');
                                         })
                                         ->rules('required');
                                 })

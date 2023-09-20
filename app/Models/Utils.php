@@ -61,35 +61,11 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
+        return true;
         ini_set('memory_limit', '-1');
 
 
-        /*      foreach (CaseSuspect::all() as $key => $c) {
-            $c->arrest_latitude = '0.00000';
-            $c->arrest_longitude = '0.00000';
-            $c->save();
-            echo ($c->arrest_in_pa . "<hr>");
-        }
-        die("");  
- 
-        $case = CaseSuspect::find(2777);
-        $case->arrest_latitude = '0.0000000';
-        $case->arrest_longitude = '0.0000000';
-        $case->save();
-        dd($case->arrest_in_pa);  */
-        /*
-        $faker = Faker::create();
-        foreach (CaseModel::all() as $key => $v) {
-            $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
-            $v->updated_at = $faker->dateTimeBetween('-13 month', '+1 month');
-            $v->save();
-        }
-
-        foreach (CaseSuspect::all() as $key => $v) {
-            $v->created_at = $faker->dateTimeBetween('-13 month', '+1 month');
-            $v->updated_at = $faker->dateTimeBetween('-13 month', '+1 month');
-            $v->save();
-        } */
+    
 
 
         $sus = CaseSuspect::where('suspect_number', 'like', '%//%')->get();
@@ -141,27 +117,7 @@ class Utils  extends Model
         $cases = CaseModel::where([
             'case_number' => null
         ])->get();
-
-        /*    foreach ($cases as $key => $case) {
-
-            $pa = PA::find($case->pa_id);
-            if (
-                $pa != null
-            ) {
-                $case->is_offence_committed_in_pa = 'Yes';
-                $case->ca_id = $pa->ca_id;
-                $case->save();
-            } else {
-                $case->is_offence_committed_in_pa = 'No';
-                $case->pa_id = 1;
-                $case->ca_id = 1;
-                $case->save();
-            }
-
-            $case->case_number = Utils::getCaseNumber($case);
-            $case->save();
-        } */
-
+ 
         foreach (CaseSuspect::where([
             'suspect_number' => null
         ])->get() as $key => $suspect) {

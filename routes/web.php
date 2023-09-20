@@ -36,6 +36,7 @@ Route::get('/logout', function () {
 
 Route::get('transfer-data', function () {
   $_suspects = DB::connection('db2')->table('suspects')->get();
+  ini_set('max_execution_time', '-1');
   foreach ($_suspects as $key => $_old) {
     $id_old = $_old->id;
     $case = CaseModel::where(['id_old' => $id_old])->first();
@@ -98,7 +99,7 @@ Route::get('transfer-data', function () {
     $sus->save();
 
     echo ($sus->id . ". " . $sus->first_name . " " . $sus->last_name . "<br>");
-  
+
 
     continue;
     /*   

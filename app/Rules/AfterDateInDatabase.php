@@ -25,7 +25,7 @@ class AfterDateInDatabase implements Rule
         $this->attribute = $attribute;
         $existingDate = DB::table($this->table)
             ->where('id', $this->row)
-            ->where($this->column, '<', $value)
+            ->where($this->column, '<=', $value)
             ->count();
 
             error_log("Validation: $this->row ".$existingDate);

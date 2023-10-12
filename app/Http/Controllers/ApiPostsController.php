@@ -263,7 +263,7 @@ class ApiPostsController extends Controller
                 }
 
                 if ($key == 'updated_at') {
-                    if ($v->deleted_at != null) {
+                    if ($v->updated_at != null) {
                         $s->other_arrest_agencies = $v->$key;
                     }
                 }

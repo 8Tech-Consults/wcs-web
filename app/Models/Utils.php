@@ -294,8 +294,8 @@ class Utils  extends Model
     public static function docs_root($params = array())
     {
         $r = $_SERVER['DOCUMENT_ROOT'] . "";
-        $r = str_replace('/public', "", $r);
-        $r = $r . "/public";
+        //$r = str_replace('/public', "", $r);
+        //$r = $r . "/public";
         return $r;
     }
 

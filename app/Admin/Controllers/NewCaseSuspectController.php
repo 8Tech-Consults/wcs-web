@@ -670,10 +670,11 @@ class NewCaseSuspectController extends AdminController
 
 
                                     $form->date('court_date', 'Court Date of first appearance')
-                                        ->rules(
-                                            function (Form $form) {
-                                                return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
-                                            });
+                                            ->rules('required|after_or_equal:arrest_date_time');
+                                        // ->rules('re'
+                                        //     function (Form $form) {
+                                        //         return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                                        //     });
 
                                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                                     $form->select('court_name', 'Select Court')->options($courts)
@@ -706,7 +707,7 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->date('jail_date', 'Jail date')->rules('after:court_date');
+                                                            $form->date('jail_date', 'Jail date')->rules('after_or_equal:court_date');
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                             $form->text('prison', 'Prison name');
                                                             $form->date('jail_release_date', 'Release Date');
@@ -855,10 +856,11 @@ class NewCaseSuspectController extends AdminController
                             }
 
                             $form->date('court_date', 'Court Date of first appearance')
-                                ->rules(
-                                    function (Form $form) {
-                                        return ['nullable', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
-                                    });
+                                ->rules('required|after_or_equal:arrest_date_time');
+                                // ->rules(
+                                //     function (Form $form) {
+                                //         return ['nullable', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                                //     });
 
                             $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
 
@@ -908,7 +910,7 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('jail_date', 'Jail date')->rules('after:court_date');
+                                                    $form->date('jail_date', 'Jail date')->rules('after_or_equal:court_date');
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                     $form->text('prison', 'Prison name');
                                                     $form->date('jail_release_date', 'Date released');

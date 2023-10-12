@@ -295,7 +295,7 @@ class Utils  extends Model
     {
         $r = $_SERVER['DOCUMENT_ROOT'] . "";
         //$r = str_replace('/public', "", $r);
-        //$r = $r . "/public";
+        $r = $r . "/public";
         return $r;
     }
 

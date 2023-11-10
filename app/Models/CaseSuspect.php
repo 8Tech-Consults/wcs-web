@@ -153,6 +153,7 @@ class CaseSuspect extends Model
 
     function getPhotoUrlAttribute()
     {
+        if($this->photo == '' || $this->photo == null) return url('public/storage/no_image.png');
         return url('public/storage/' . $this->photo);
     }
 

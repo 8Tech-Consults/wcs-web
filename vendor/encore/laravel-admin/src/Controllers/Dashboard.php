@@ -20,7 +20,7 @@ class Dashboard
 
     public static function suspects()
     {
-        $suspects = CaseSuspect::orderBy('updated_at', 'Desc')->limit(6)->get();
+        $suspects = CaseSuspect::orderBy('created_at', 'DESC')->orderBy('updated_at', 'DESC')->limit(6)->get();
 
         return view('dashboard.suspects', [
             'suspects' => $suspects

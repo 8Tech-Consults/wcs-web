@@ -183,19 +183,26 @@ class CaseModel extends Model
     }
     function get_suspect_number($s)
     {
-        $suspects = CaseSuspect::where(['case_id' => $this->id])->orderby('id', 'asc')->get();
+        $suspects = CaseSuspect::where(['case_id' => $this->id])->count();
 
-        $sus_num = "";
-        foreach ($suspects as $key => $sus) {
-            $sus_num = $this->case_number;
-            $_key = ($key + 1);
-            $sus_num = "{$this->case_number}/{$_key}";
-            $sus_num = str_replace('//', '/', $sus_num);
-            if ($sus->id == $s->id) {
-                break;
-            }
-        }
+        $sus_num = $suspects + 1;
+        $sus_num = "{$this->case_number}/{$sus_num}";
+        $sus_num = str_replace('//', '/', $sus_num);
+
         return $sus_num;
+
+        //BELOW WAS FAILING IF NEW CASE
+        // $sus_num = "";
+        // foreach ($suspects as $key => $sus) {
+        //     $sus_num = $this->case_number;
+        //     $_key = ($key + 1);
+        //     $sus_num = "{$this->case_number}/{$_key}";
+        //     $sus_num = str_replace('//', '/', $sus_num);
+        //     if ($sus->id == $s->id) {
+        //         break;
+        //     }
+        // }
+        // return $sus_num;
     }
 
     function pa()

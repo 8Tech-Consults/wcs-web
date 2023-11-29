@@ -143,7 +143,12 @@ class CaseSuspect extends Model
         if ($value == null || $value == "") {
             return [];
         }
-        return json_decode($value);
+        $value = json_decode($value);
+        // if the value is a string then convert it to an array
+        if (is_string($value)) {
+            $value = explode(',', $value);
+        }
+        return $value;
     }
 
     public function setOtherArrestAgenciesAttribute($value)

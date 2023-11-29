@@ -530,7 +530,7 @@ class Utils  extends Model
         if ($t == null) {
             return $t;
         }
-        return $c->format('d M, Y - h:m a');
+        return $c->format('d M, Y - h:i a');
     }
 
     public static function tell_suspect_status($s)

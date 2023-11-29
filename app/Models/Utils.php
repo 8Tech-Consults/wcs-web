@@ -61,12 +61,6 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
-        return true;
-        ini_set('memory_limit', '-1');
-
-
-    
-
 
         $sus = CaseSuspect::where('suspect_number', 'like', '%//%')->get();
         foreach ($sus as $key => $sus) {

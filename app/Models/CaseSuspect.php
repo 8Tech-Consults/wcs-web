@@ -50,7 +50,7 @@ class CaseSuspect extends Model
         });
         self::updating(function ($m) {
 
-            $m = CaseSuspect::my_update($m);
+            $m = CaseSuspect::my_update($m, true);
             if ($m->case_submitted == 1 || $m->case_submitted == '1') {
                 $m->case_submitted = '1';
             }
@@ -65,7 +65,7 @@ class CaseSuspect extends Model
         }
         return CaseSuspect::where('unique_id', $this->unique_id)->where('id', '!=', $this->id)->get();
     }
-    public static function my_update($m)
+    public static function my_update($m, $updating = false)
     {
         $m->district_id = 0;
 
@@ -82,16 +82,17 @@ class CaseSuspect extends Model
                 $m->arrest_district_id = $sub->parent;
             }
         }
-
-        $case = CaseModel::find($m->case_id);
-        if ($case != null) {
-            $m->suspect_number = $case->get_suspect_number($m);
-        } else {
-            throw new Exception("Suspect case not found.", 1);
+        if(!$updating) {
+            $case = CaseModel::find($m->case_id);
+            if ($case != null) {
+                $m->suspect_number = $case->get_suspect_number($m);
+            } else {
+                throw new Exception("Suspect case not found.", 1);
+            }
+    
+            $m->uwa_suspect_number = $m->suspect_number;
+            $m->arrest_uwa_number = $m->suspect_number;
         }
-
-        $m->uwa_suspect_number = $m->suspect_number;
-        $m->arrest_uwa_number = $m->suspect_number;
 
         //Reset the following fields if suspect appeared in court
         if ($m->is_suspect_appear_in_court == 'Yes')
@@ -143,7 +144,12 @@ class CaseSuspect extends Model
         if ($value == null || $value == "") {
             return [];
         }
-        return json_decode($value);
+        $value = json_decode($value);
+        // if the value is a string then convert it to an array
+        if (is_string($value)) {
+            $value = explode(',', $value);
+        }
+        return $value;
     }
 
     public function setOtherArrestAgenciesAttribute($value)

@@ -19,8 +19,13 @@ class ConservationArea extends Model
         });
     }
 
+    public function pa()
+    {
+        return $this->hasMany(PA::class, 'ca_id');
+    }
+
     public function cases()
     {
-        return $this->hasMany(CaseModel::class, 'pa_id');
+        return $this->hasManyThrough(CaseModel::class, PA::class, 'ca_id', 'pa_id');
     }
 }

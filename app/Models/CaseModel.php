@@ -11,6 +11,7 @@ class CaseModel extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
 
 
     public static function boot()
@@ -217,13 +218,9 @@ class CaseModel extends Model
     }
     function ca()
     {
-        $ca =  ConservationArea::find($this->ca_id);
-        if ($ca == null) {
-            $this->ca_id = 1;
-            $this->pa_id = 1;
-            $this->save();
-        }
-        return $this->belongsTo(ConservationArea::class, 'ca_id');
+        return $this->belongsToThrough(ConservationArea::class, PA::class, null, '', [
+            ConservationArea::class => 'ca_id'
+        ]);
     }
 
     function reportor()

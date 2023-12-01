@@ -183,7 +183,7 @@ class CaseModelController extends AdminController
 
             // }else
             if (Auth::user()->isRole('ca-team') || Auth::user()->isRole('ca-agent')) {
-                if (Auth::user()->ca_id == $actions->row->ca_id) {
+                if (Auth::user()->ca->id == $actions->row->ca_id) {
                     $actions->add(new CaseModelActionAddSuspect);
                     $actions->add(new CaseModelActionAddExhibit);
                     $actions->add(new CaseModelAddComment);

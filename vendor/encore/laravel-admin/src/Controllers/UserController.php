@@ -80,22 +80,11 @@ Edit Edit
 
         $grid->column('phone_number_1', 'Phone number');
 
-        $grid->column('ca_id', __('CA'))
-        ->display(function () {
-            if ($this->ca == null) {
-                return  "-";
-            }
+        $grid->column('ca', 'Conservation area')->display(function () {
             return $this->ca->name;
-        })
-        ->sortable();
-        $grid->column('pa_id', __('Duty station'))
-        ->display(function () {
-            if ($this->pa == null) {
-                return  "-";
-            }
-            return $this->pa->name;
-        })
-        ->sortable();
+        })->sortable();
+
+        $grid->pa()->name('Duty station')->sortable();
         
         $grid->column('phone_number_2', 'Phone number 2')->hide();
         $grid->column('date_of_birth', 'D.O.B')->display(function ($f) {
@@ -200,7 +189,7 @@ Edit Edit
         $form->select('pa_id', __('Duty station'))
             ->rules('required')
             ->help('Conservation area where  user is assigned')
-            ->options(ConservationArea::pluck('name', 'id'));
+            ->options(PA::pluck('name', 'id'));
 
  
 

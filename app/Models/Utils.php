@@ -121,6 +121,12 @@ class Utils  extends Model
                 $suspect->save();
             }
         }
+
+        //Fix users with missing ca_id for mobile compatibility
+        foreach(User::whereNull('ca_id')->get() as $user) {
+            $user->ca_id = $user->pa?->ca?->id;
+            $user->save();
+        }
     }
 
     public static function copyOffencesCourtInfo()

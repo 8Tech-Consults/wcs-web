@@ -85,6 +85,22 @@ class FingerPrintController extends Controller
         die(json_encode($my_files));
     }
 
+    public function fingers_to_download_v2(Request $r)
+    {
+        $destination = Utils::docs_root() . '/storage/images/';
+        $files = array_diff(scandir($destination), array('.', '..'));
+        $my_files = [];
+        foreach ($files as $key => $f) {
+            $ext = pathinfo($f, PATHINFO_EXTENSION);
+            if ($ext != 'bmp') {
+                continue;
+            }
+            $my_files[] = $f;
+        }
+
+        return $this->success($my_files, 'success');
+    }
+
     public function min_suspects(Request $r)
     {
         $suss = [];
@@ -148,7 +164,7 @@ class FingerPrintController extends Controller
             return $this->error('Email address is required.');
         }
         $phone_number = $r->phone_number;
- 
+
         if ($r->password == null) {
             return $this->error('Password is required.');
         }

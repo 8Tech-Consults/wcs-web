@@ -41,7 +41,7 @@ class SuspectLinkController extends AdminController
         $grid->disableCreateButton();
         $grid->disableExport();
 
-        $grid->orderBy('id', 'desc');
+        $grid->model()->orderBy('id', 'desc');
         $grid->column('created_at', __('Date'))
             ->display(function ($created_at) {
                 return date('d-m-Y', strtotime($created_at));

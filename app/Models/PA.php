@@ -30,11 +30,11 @@ class PA extends Model
 
     public function ca()
     {
-        $ca = ConservationArea::find($this->ca_id);
-        if($ca == null){
-            $this->ca_id = 1;
-            $this->save();  
-        }
+        // $ca = ConservationArea::find($this->ca_id);
+        // if($ca == null){
+        //     $this->ca_id = 1;
+        //     $this->save();  
+        // }
         return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
 

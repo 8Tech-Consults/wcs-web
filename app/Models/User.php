@@ -10,7 +10,7 @@ class User extends Administrator
 {
     protected $table = 'admin_users';
     use HasFactory; 
-    use \Znck\Eloquent\Traits\BelongsToThrough;
+    // use \Znck\Eloquent\Traits\BelongsToThrough;
 
 
     function pa()
@@ -20,9 +20,7 @@ class User extends Administrator
 
     function ca()
     {
-        return $this->belongsToThrough(ConservationArea::class, PA::class, null, '', [
-            ConservationArea::class => 'ca_id'
-        ]);
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
     
 }

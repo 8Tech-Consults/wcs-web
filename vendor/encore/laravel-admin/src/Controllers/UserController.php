@@ -80,13 +80,9 @@ Edit Edit
 
         $grid->column('phone_number_1', 'Phone number');
 
-        $grid->column('ca', 'Conservation area')->display(function () {
-            return $this->ca?->name ?? '-';
-        })->sortable();
-
-        $grid->column('pa', 'Duty station')->display(function () {
-            return $this->pa?->name ?? '-';
-        })->sortable();
+        $grid->ca()->name('C.A')->sortable();
+   
+        $grid->pa()->name('Duty station')->sortable();
         
         $grid->column('phone_number_2', 'Phone number 2')->hide();
         $grid->column('date_of_birth', 'D.O.B')->display(function ($f) {
@@ -190,8 +186,8 @@ Edit Edit
 
         $form->select('pa_id', __('Duty station'))
             ->rules('required')
-            ->help('Conservation area where  user is assigned')
-            ->options(PA::pluck('name', 'id'));
+            ->help('PA where  user is assigned')
+            ->options(PA::pluck('name', 'id')); 
 
  
 

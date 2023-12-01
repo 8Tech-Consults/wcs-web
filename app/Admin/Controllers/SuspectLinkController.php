@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\CaseModel;
+use App\Models\CaseSuspect;
 use App\Models\SuspectLink;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -15,7 +17,7 @@ class SuspectLinkController extends AdminController
      *
      * @var string
      */
-    protected $title = 'SuspectLink';
+    protected $title = 'Repeated Offenders';
 
     /**
      * Make a grid builder.
@@ -26,13 +28,63 @@ class SuspectLinkController extends AdminController
     {
         $grid = new Grid(new SuspectLink());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('suspect_id_1', __('Suspect id 1'));
-        $grid->column('suspect_id_2', __('Suspect id 2'));
-        $grid->column('case_id_1', __('Case id 1'));
-        $grid->column('case_id_2', __('Case id 2'));
+        //filter
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->like('suspect_id_1', 'Suspect ID #1');
+            $filter->like('suspect_id_2', 'Suspect ID #2');
+            $filter->like('case_id_1', 'Case ID #1');
+            $filter->like('case_id_2', 'Case ID #2');
+        });
+
+        $grid->disableBatchActions();
+        $grid->disableCreateButton();
+        $grid->disableExport();
+
+        $grid->orderBy('id', 'desc');
+        $grid->column('created_at', __('Date'))
+            ->display(function ($created_at) {
+                return date('d-m-Y', strtotime($created_at));
+            })
+            ->sortable();
+        $grid->column('suspect_id_1', __('Suspect #1'))
+            ->display(function ($suspect_id_1) {
+                $suspect = CaseSuspect::find($suspect_id_1);
+                if ($suspect == null) {
+                    return "Suspect not found";
+                }
+                return $suspect->first_name . " " . $suspect->last_name;
+            })
+            ->sortable();
+        $grid->column('suspect_id_2', __('Suspect #2'))
+            ->display(function ($suspect_id_2) {
+                $suspect = CaseSuspect::find($suspect_id_2);
+                if ($suspect == null) {
+                    return "Suspect not found";
+                }
+                return $suspect->first_name . " " . $suspect->last_name;
+            })
+            ->sortable();
+
+        $grid->column('case_id_1', __('Case #1'))
+            ->display(function ($case_id_1) {
+                $case = CaseModel::find($case_id_1);
+                if ($case == null) {
+                    return "Case not found";
+                }
+                return $case->case_number;
+            })
+            ->sortable();
+
+        $grid->column('case_id_2', __('Case #2'))
+            ->display(function ($case_id_2) {
+                $case = CaseModel::find($case_id_2);
+                if ($case == null) {
+                    return "Case not found";
+                }
+                return $case->case_number;
+            })
+            ->sortable();
 
         return $grid;
     }

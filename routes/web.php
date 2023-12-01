@@ -262,7 +262,7 @@ Route::get('/desktop', function () {
   return redirect(url('uwa-v11.exe'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
-  return redirect(url('UWA-FINGERPRINT.exe'));
+  return redirect(url('uwa-fingerprint-v2.zip'));
 })->name("fingerprint");
 Route::get('/drivers', function () {
   return redirect(url('uwa-fingeprint-drivers.zip'));

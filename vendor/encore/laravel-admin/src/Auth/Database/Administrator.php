@@ -244,10 +244,13 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
         }
     }
 
-
-    
     function pa()
     {
         return $this->belongsTo(PA::class, 'pa_id');
+    }
+
+    function ca()
+    {
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
     }
 }

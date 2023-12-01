@@ -80,7 +80,7 @@ Edit Edit
 
         $grid->column('phone_number_1', 'Phone number');
 
-        $grid->ca()->name('C.A')->sortable();
+        $grid->ca()->name("C.A")->sortable();
    
         $grid->pa()->name('Duty station')->sortable();
         

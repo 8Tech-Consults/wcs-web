@@ -81,7 +81,7 @@ Edit Edit
         $grid->column('phone_number_1', 'Phone number');
 
         $grid->column('ca', 'Conservation area')->display(function () {
-            return $this->ca->name;
+            return $this->ca?->name ?? '-';
         })->sortable();
 
         $grid->pa()->name('Duty station')->sortable();

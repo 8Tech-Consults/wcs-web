@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CaseSuspect;
+use App\Models\SuspectLink;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -38,34 +39,27 @@ class FingerPrintController extends Controller
             die("Suspect 2 not found.");
         }
 
-        $unique_id_1 = $suspect_1->unique_id;
-        $unique_id_2 = $suspect_1->unique_id;
-
-        $unique_id = "";
-        if ($unique_id_1 != null && strlen($unique_id_1) > 2) {
-            if ($unique_id_1 == $unique_id_2) {
-                die("Suspects already linked");
-            }
-            $unique_id = $unique_id_1;
+        $instance_1 = SuspectLink::where(['suspect_id_1' => $id_1, 'suspect_id_2' => $id_2])->first();
+        if ($instance_1 != null) {
+            die("Suspects already linked");
+        }
+        $instance_2 = SuspectLink::where(['suspect_id_1' => $id_2, 'suspect_id_2' => $id_1])->first();
+        if ($instance_2 != null) {
+            die("Suspects already linked");
         }
 
-        if (strlen($unique_id) < 2) {
-            if ($unique_id_2 != null && strlen($unique_id_2) > 2) {
-                if ($unique_id_1 == $unique_id_2) {
-                    die("Suspects already linked");
-                }
-                $unique_id = $unique_id_2;
-            }
+        $link = new SuspectLink();
+        $link->suspect_id_1 = $suspect_1->id;
+        $link->suspect_id_2 = $suspect_2->id;
+        $link->case_id_1 = $suspect_1->case_id;
+        $link->case_id_2 = $suspect_2->case_id;
+        
+        try {
+            $link->save();
+        } catch (\Exception $e) {
+            die("Something went wrong. $e");
         }
 
-        if (strlen($unique_id) < 2) {
-            $unique_id = time() . "" . rand(10000, 1000000);
-        }
-
-        $suspect_1->unique_id = $unique_id;
-        $suspect_2->unique_id = $unique_id;
-        $suspect_2->save();
-        $suspect_1->save();
         die("SUCCESSFULLY LINKED!");
     }
 

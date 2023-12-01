@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuspectCourtStatusesTable extends Migration
+class CreateSuspectLinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateSuspectCourtStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('suspect_court_statuses', function (Blueprint $table) {
+        Schema::create('suspect_links', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->timestamps();
+            $table->integer("suspect_id_1");
+            $table->integer("suspect_id_2");
+            $table->integer("case_id_1");
+            $table->integer("case_id_2");
         });
     }
 
@@ -27,6 +30,6 @@ class CreateSuspectCourtStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suspect_court_statuses');
+        Schema::dropIfExists('suspect_links');
     }
 }

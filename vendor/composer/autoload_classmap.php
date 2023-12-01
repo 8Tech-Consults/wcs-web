@@ -122,6 +122,7 @@ return array(
     'App\\Models\\Specimen' => $baseDir . '/app/Models/Specimen.php',
     'App\\Models\\SuspectCourtStatus' => $baseDir . '/app/Models/SuspectCourtStatus.php',
     'App\\Models\\SuspectHasOffence' => $baseDir . '/app/Models/SuspectHasOffence.php',
+    'App\\Models\\SuspectLink' => $baseDir . '/app/Models/SuspectLink.php',
     'App\\Models\\TempData' => $baseDir . '/app/Models/TempData.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Models\\Utils' => $baseDir . '/app/Models/Utils.php',

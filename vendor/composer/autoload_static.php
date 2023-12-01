@@ -833,6 +833,7 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Models\\Specimen' => __DIR__ . '/../..' . '/app/Models/Specimen.php',
         'App\\Models\\SuspectCourtStatus' => __DIR__ . '/../..' . '/app/Models/SuspectCourtStatus.php',
         'App\\Models\\SuspectHasOffence' => __DIR__ . '/../..' . '/app/Models/SuspectHasOffence.php',
+        'App\\Models\\SuspectLink' => __DIR__ . '/../..' . '/app/Models/SuspectLink.php',
         'App\\Models\\TempData' => __DIR__ . '/../..' . '/app/Models/TempData.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\Utils' => __DIR__ . '/../..' . '/app/Models/Utils.php',

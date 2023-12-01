@@ -760,6 +760,7 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Admin\\Controllers\\SecretariesController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SecretariesController.php',
         'App\\Admin\\Controllers\\SpecimenController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SpecimenController.php',
         'App\\Admin\\Controllers\\SuspectCourtStatusController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SuspectCourtStatusController.php',
+        'App\\Admin\\Controllers\\SuspectLinkController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SuspectLinkController.php',
         'App\\Admin\\Extensions\\Column\\FloatBar' => __DIR__ . '/../..' . '/app/Admin/Extensions/Column/FloatBar.php',
         'App\\Admin\\Extensions\\Column\\OpenMap' => __DIR__ . '/../..' . '/app/Admin/Extensions/Column/OpenMap.php',
         'App\\Admin\\Extensions\\Column\\UrlWrapper' => __DIR__ . '/../..' . '/app/Admin/Extensions/Column/UrlWrapper.php',

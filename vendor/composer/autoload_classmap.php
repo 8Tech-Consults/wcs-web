@@ -49,6 +49,7 @@ return array(
     'App\\Admin\\Controllers\\SecretariesController' => $baseDir . '/app/Admin/Controllers/SecretariesController.php',
     'App\\Admin\\Controllers\\SpecimenController' => $baseDir . '/app/Admin/Controllers/SpecimenController.php',
     'App\\Admin\\Controllers\\SuspectCourtStatusController' => $baseDir . '/app/Admin/Controllers/SuspectCourtStatusController.php',
+    'App\\Admin\\Controllers\\SuspectLinkController' => $baseDir . '/app/Admin/Controllers/SuspectLinkController.php',
     'App\\Admin\\Extensions\\Column\\FloatBar' => $baseDir . '/app/Admin/Extensions/Column/FloatBar.php',
     'App\\Admin\\Extensions\\Column\\OpenMap' => $baseDir . '/app/Admin/Extensions/Column/OpenMap.php',
     'App\\Admin\\Extensions\\Column\\UrlWrapper' => $baseDir . '/app/Admin/Extensions/Column/UrlWrapper.php',

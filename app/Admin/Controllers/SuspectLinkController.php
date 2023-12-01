@@ -40,6 +40,7 @@ class SuspectLinkController extends AdminController
         $grid->disableBatchActions();
         $grid->disableCreateButton();
         $grid->disableExport();
+        $grid->disableActions();
 
         $grid->model()->orderBy('id', 'desc');
         $grid->column('created_at', __('Date'))
@@ -48,12 +49,14 @@ class SuspectLinkController extends AdminController
             })
             ->sortable();
         $grid->column('suspect_id_1', __('Suspect #1'))
-            ->display(function ($suspect_id_1) {
-                $suspect = CaseSuspect::find($suspect_id_1);
+            ->display(function ($suspect_id_2) {
+                $suspect = CaseSuspect::find($suspect_id_2);
                 if ($suspect == null) {
                     return "Suspect not found";
                 }
-                return $suspect->first_name . " " . $suspect->last_name;
+                $name =  $suspect->first_name . " " . $suspect->last_name;
+                $view_text = "<a title=\"View Suspect\" href='" . admin_url('case-suspects/' . $suspect_id_2) . "' target='_blank'><b>$name</b></a>";
+                return $view_text;
             })
             ->sortable();
         $grid->column('suspect_id_2', __('Suspect #2'))
@@ -62,7 +65,9 @@ class SuspectLinkController extends AdminController
                 if ($suspect == null) {
                     return "Suspect not found";
                 }
-                return $suspect->first_name . " " . $suspect->last_name;
+                $name =  $suspect->first_name . " " . $suspect->last_name;
+                $view_text = "<a title=\"View Suspect\" href='" . admin_url('case-suspects/' . $suspect_id_2) . "' target='_blank'><b>$name</b></a>";
+                return $view_text;
             })
             ->sortable();
 
@@ -72,7 +77,9 @@ class SuspectLinkController extends AdminController
                 if ($case == null) {
                     return "Case not found";
                 }
-                return $case->case_number;
+                //do the same for case
+                $view_text = "<a title=\"View Case\" href='" . admin_url('cases/' . $case_id_1) . "' target='_blank'><b>$case->case_number</b></a>";
+                return $view_text;
             })
             ->sortable();
 
@@ -82,7 +89,8 @@ class SuspectLinkController extends AdminController
                 if ($case == null) {
                     return "Case not found";
                 }
-                return $case->case_number;
+                //do the same for case
+                $view_text = "<a title=\"View Case\" href='" . admin_url('cases/' . $case_id_2) . "' target='_blank'><b>$case->case_number</b></a>";
             })
             ->sortable();
 
@@ -119,10 +127,10 @@ class SuspectLinkController extends AdminController
     {
         $form = new Form(new SuspectLink());
 
-        $form->number('suspect_id_1', __('Suspect id 1'));
-        $form->number('suspect_id_2', __('Suspect id 2'));
-        $form->number('case_id_1', __('Case id 1'));
-        $form->number('case_id_2', __('Case id 2'));
+        $form->text('suspect_id_1', __('Suspect id 1'));
+        $form->text('suspect_id_2', __('Suspect id 2'));
+        $form->text('case_id_1', __('Case id 1'));
+        $form->text('case_id_2', __('Case id 2'));
 
         return $form;
     }

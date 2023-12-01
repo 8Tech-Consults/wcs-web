@@ -60,10 +60,17 @@ class CaseSuspect extends Model
 
     public function otherCasese()
     {
-        if ($this->unique_id == null || strlen($this->unique_id) < 2) {
-            return collect();
+        $instance_1 = SuspectLink::where(['suspect_id_1' => $this->id])->get();
+        $instance_2 = SuspectLink::where(['suspect_id_2' => $this->id])->get();
+        $ids = [];
+        foreach ($instance_1 as $key => $value) {
+            $ids[] = $value->suspect_id_2;
         }
-        return CaseSuspect::where('unique_id', $this->unique_id)->where('id', '!=', $this->id)->get();
+        foreach ($instance_2 as $key => $value) {
+            $ids[] = $value->suspect_id_1;
+        }
+        return CaseSuspect::whereIn('id', $ids)->get();
+        
     }
     public static function my_update($m, $updating = false)
     {

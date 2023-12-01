@@ -112,8 +112,8 @@ if ($u != null) {
             die();
         }
     } */
-}
-Utils::system_boot($u);
+} 
+//Utils::system_boot($u);
 
 
 /* Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {

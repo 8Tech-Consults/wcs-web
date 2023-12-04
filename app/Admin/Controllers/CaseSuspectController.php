@@ -69,20 +69,6 @@ class CaseSuspectController extends AdminController
 
 
         $u = Auth::user();
-        if ($u->isRole('ca-agent')) {
-            $grid->model()->where([
-                'reported_by' => $u->id
-            ]);
-            $grid->disableExport();
-        } else if (
-            $u->isRole('ca-team')
-        ) {
-            $grid->model()->where([
-                'ca_id' => $u->ca_id
-            ])->orWhere([
-                'reported_by' => $u->id
-            ]);
-        }
 
 
 
@@ -680,32 +666,55 @@ class CaseSuspectController extends AdminController
             return $view_link . $edit_link;
         }); */
 
-
         $grid->actions(function ($actions) {
+            $user = Auth::user();
+
             $actions->disableEdit();
             $actions->disableDelete();
+            if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
 
-            if (
-                !($actions->row->is_suspects_arrested == 'Yes' ||
-                    $actions->row->is_suspects_arrested == '1')
-            ) {
-                $actions->add(new AddArrest);
-            } else {
 
                 if (
-                    !($actions->row->is_suspect_appear_in_court == 'Yes' ||
-                        $actions->row->is_suspect_appear_in_court == '1')
+                    !($actions->row->is_suspects_arrested == 'Yes' ||
+                        $actions->row->is_suspects_arrested == '1')
                 ) {
-                    $actions->add(new AddCourte);
+                    if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('director')) {
+                        if (!$user->isRole('hq-manager') && !$user->isRole('director')) {
+                            if ($user->isRole('admin')) {
+                                $actions->add(new AddArrest);
+                            } else {
+                                if ($actions->row->reported_by == $user->id) {
+                                    $actions->add(new AddArrest);
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                    if (
+                        !($actions->row->is_suspect_appear_in_court == 'Yes' ||
+                            $actions->row->is_suspect_appear_in_court == '1')
+                    ) {
+                        if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('director')) {
+                            $actions->add(new AddCourte);
+                        } else {
+                            if ($actions->row->reported_by == $user->id) {
+                                $actions->add(new AddCourte);
+                            }
+                        }
+                    }
+                }
+                //Give dit rights to only admin and ca-manager of that ca
+                if ($user->isRole('admin') || $user->isRole('ca-manager')) {
+                    if ($user->isRole('ca-manager')) {
+                        if ($user->ca_id == $actions->row->ca_id) {
+                            $actions->add(new EditSuspect);
+                        }
+                    } else {
+                        $actions->add(new EditSuspect);
+                    }
                 }
             }
-
-            // If the user is not a secretary, a CA agent, CA team lead and secretary, then they can edit the suspect
-            if (
-                !Auth::user()->isRole('ca-agent') && !Auth::user()->isRole('ca-team') && !Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
-                $actions->add(new EditSuspect);
-            }
-
         });
 
         return $grid;

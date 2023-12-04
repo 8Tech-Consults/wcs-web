@@ -90,24 +90,6 @@ class ExhibitController extends AdminController
         });
 
 
- 
-        $u = Auth::user();
-        if ($u->isRole('ca-agent')) {
-            $grid->model()->where([
-                'reported_by' => $u->id
-            ]);
-            $grid->disableExport();
-        } else if (
-            $u->isRole('ca-team')
-
-        ) {
-            $grid->model()->where([
-                'ca_id' => $u->ca_id
-            ])->orWhere([
-                'reported_by' => $u->id
-            ]);
-        }
-
         $grid->model()
             ->orderBy('id', 'Desc');
 
@@ -147,14 +129,21 @@ class ExhibitController extends AdminController
         $grid->column('others_description', __('Description for others'));
 
         $grid->actions(function ($actions) {
-            if (
-                (!Auth::user()->isRole('admin'))
-            ) {
-            }
+            $user = Auth::user();
+        
             $actions->disableEdit();
-            $actions->add(new EditExhibit);
-
             $actions->disableDelete();
+
+            if ($user->isRole('admin') || $user->isRole('ca-manager')) {
+                if ($user->isRole('ca-manager')) {
+                    if ($user->ca_id == $actions->row->ca_id) {
+                        $actions->add(new EditExhibit);
+                    }
+                } else {
+                    $actions->add(new EditExhibit);
+                }
+            }    
+
         });
 
 

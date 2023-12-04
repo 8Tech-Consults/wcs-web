@@ -251,7 +251,7 @@ MAGISTRATE*
 Route::get('/login', function () {
   die("login");
 })->name("login");
-
+        
 Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");

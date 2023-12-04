@@ -134,22 +134,6 @@ class CourtsController extends AdminController
                 'is_suspect_appear_in_court' => 'Yes'
             ])->orderBy('updated_at', 'Desc');
 
-        $u = Auth::user();
-        if ($u->isRole('ca-agent')) {
-            $grid->model()->where([
-                'reported_by' => $u->id
-            ]);
-        } else if (
-            $u->isRole('ca-team')
-        ) {
-            $grid->model()->where([
-                'ca_id' => $u->ca_id
-            ])->orWhere([
-                'reported_by' => $u->id
-            ]);
-        }
-
-
         $grid->filter(function ($f) {
             // Remove the default id filter
             $f->disableIdFilter();
@@ -366,17 +350,32 @@ class CourtsController extends AdminController
             ->sortable();
 
         $grid->actions(function ($actions) {
+            $user = Auth::user();
             $actions->disableView();
             $actions->disableEdit();
             $actions->disableDelete();
             $actions->add(new ViewSuspect);
-            if ($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated') {
-                $actions->add(new CourtCaseUpdate);
-            }
-            // If the user is not a secretary, a CA agent, CA team lead and secretary, then they can edit the court case
-            if (
-                !Auth::user()->isRole('ca-agent') && !Auth::user()->isRole('ca-team') && !Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
-                $actions->add(new EditCourtCase);
+            if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
+
+                if ($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated') {
+                    if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('director')) {
+                        $actions->add(new CourtCaseUpdate);
+                    } else {
+                        if ($actions->row->reported_by == $user->id) {
+                            $actions->add(new CourtCaseUpdate);
+                        }
+                    }
+                }
+                //Give dit rights to only admin and ca-manager of that ca
+                if ($user->isRole('admin') || $user->isRole('ca-manager')) {
+                    if ($user->isRole('ca-manager')) {
+                        if ($user->ca_id == $actions->row->ca_id) {
+                            $actions->add(new EditCourtCase);
+                        }
+                    } else {
+                        $actions->add(new EditCourtCase);
+                    }
+                }
             }
         });
 
@@ -472,7 +471,7 @@ class CourtsController extends AdminController
                                 ->when('Yes', function ($form) {
                                     $form->date('jail_date', 'Jail date')->rules(
                                         function (Form $form) {
-                                            return [new AfterDateInDatabase('case_suspects',$form->model()->id , 'court_date')];
+                                            return [new AfterDateInDatabase('case_suspects', $form->model()->id, 'court_date')];
                                         }
                                     );
                                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
@@ -609,9 +608,10 @@ class CourtsController extends AdminController
                     // dd($form->model()->getKey());
                     $form->date('court_date', 'Court Date of first appearance')->rules(
                         function (Form $form) {
-                            return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
-                        });
-                        
+                            return ['required', new AfterDateInDatabase('case_suspects', $form->model()->id, 'arrest_date_time')];
+                        }
+                    );
+
                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                     $form->select('court_name', 'Select Court')->options($courts)
                         ->when(1, function ($form) {

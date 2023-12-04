@@ -77,30 +77,6 @@ class CaseModelController extends AdminController
         $grid->disableCreateButton();
 
 
-        $u = Auth::user();
-        // if ($u->isRole('ca-agent')) {
-        //     $grid->model()->where([
-        //         'case_submitted' => 1,
-        //         'reported_by' => $u->id
-        //     ])->orderBy('id', 'Desc');
-        //     $grid->disableExport();
-        // } else if (
-        //     $u->isRole('ca-team')
-        // ) {
-        //     $grid->model()->orderBy('updated_at', 'Desc');
-        //     $grid->model()->where([
-        //         'case_submitted' => 1,
-        //         'ca_id' => $u->ca_id
-        //     ])->orWhere([
-        //         'case_submitted' => 1,
-        //         'reported_by' => $u->id
-        //     ])->orderBy('id', 'Desc');
-        // } else {
-        //     $grid->model()->where([
-        //         'case_submitted' => 1
-        //     ])->orderBy('updated_at', 'Desc');
-        // }
-        //if($u->isRole('admin'))
 
         // $grid->model()->whereHas('suspects')->orderBy('updated_at', 'DESC'); //TODO("Slowing the query, find a better way")
         $grid->model()->orderBy('updated_at', 'DESC');
@@ -182,19 +158,39 @@ class CaseModelController extends AdminController
             //     $actions->add(new CaseModelAddComment);
 
             // }else
-            if (Auth::user()->isRole('ca-team') || Auth::user()->isRole('ca-agent')) {
-                if (Auth::user()->ca->id == $actions->row->ca_id) {
-                    $actions->add(new CaseModelActionAddSuspect);
-                    $actions->add(new CaseModelActionAddExhibit);
+            // if (Auth::user()->isRole('ca-team') || Auth::user()->isRole('ca-agent')) {
+            //     if (Auth::user()->ca->id == $actions->row->ca_id) {
+            //         $actions->add(new CaseModelActionAddSuspect);
+            //         $actions->add(new CaseModelActionAddExhibit);
+            //         $actions->add(new CaseModelAddComment);
+            //     }
+            // } else {
+            //     $actions->add(new CaseModelActionAddSuspect);
+            //     $actions->add(new CaseModelActionAddExhibit);
+            //     $actions->add(new CaseModelAddComment);
+            //     // Disable edit for secretaries and prosecutors
+            //     if (!Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
+            //         $actions->add(new CaseModelActionEditCase);
+            //     }
+            // }
+            $user = Auth::user();
+            if($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')){
+                if(!$user->isRole('hq-manager') && !$user->isRole('director')){
+                    if($user->isRole('admin')){
+                        $actions->add(new CaseModelActionAddSuspect);
+                        $actions->add(new CaseModelActionEditCase);
+                        $actions->add(new CaseModelActionAddExhibit);
+                        $actions->add(new CaseModelAddComment);
+                    }else {
+                        if($actions->row->reported_by == $user->id){
+                            $actions->add(new CaseModelActionAddSuspect);
+                            // $actions->add(new CaseModelActionEditCase);
+                            $actions->add(new CaseModelActionAddExhibit);
+                            $actions->add(new CaseModelAddComment);
+                        }
+                    }
+                }else { // HQ manager and director
                     $actions->add(new CaseModelAddComment);
-                }
-            } else {
-                $actions->add(new CaseModelActionAddSuspect);
-                $actions->add(new CaseModelActionAddExhibit);
-                $actions->add(new CaseModelAddComment);
-                // Disable edit for secretaries and prosecutors
-                if (!Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
-                    $actions->add(new CaseModelActionEditCase);
                 }
             }
         });

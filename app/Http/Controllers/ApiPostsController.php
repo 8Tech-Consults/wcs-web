@@ -16,6 +16,7 @@ use App\Models\Image;
 use App\Models\ImplementType;
 use App\Models\Offence;
 use App\Models\PA;
+use App\Models\Specimen;
 use App\Models\SuspectHasOffence;
 use App\Models\Utils;
 use App\Traits\ApiResponser;
@@ -31,7 +32,7 @@ class ApiPostsController extends Controller
 
     use ApiResponser;
 
-/*     public function __construct()
+    /*     public function __construct()
     {
         $this->middleware('auth:api');
     } */
@@ -142,6 +143,12 @@ class ApiPostsController extends Controller
     public function animals(Request $r)
     {
         $data =  Animal::where([])->get();
+        return $this->success($data, 'Animals.');
+    }
+
+    public function specimens(Request $r)
+    {
+        $data =  Specimen::where([])->get();
         return $this->success($data, 'Animals.');
     }
 

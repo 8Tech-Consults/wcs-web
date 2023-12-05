@@ -76,6 +76,7 @@ Route::get("detection-methods", [ApiPostsController::class, 'detection_methods']
 Route::get("courts", [ApiPostsController::class, 'courts']);
 Route::get("protected-areas", [ApiPostsController::class, 'protected_areas']);
 Route::get("animals", [ApiPostsController::class, 'animals']);
+Route::get("specimens", [ApiPostsController::class, 'specimens']);
 Route::get("implements", [ApiPostsController::class, 'implements']);
 Route::get("conservation-areas", [ApiPostsController::class, 'conservation_areas']);
 Route::get('process-pending-images', [ApiPostsController::class, 'process_pending_images']);

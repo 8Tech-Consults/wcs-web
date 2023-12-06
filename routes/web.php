@@ -259,10 +259,10 @@ Route::get('/mobile', function () {
   return redirect(url('uwa-v12.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
-  return redirect(url('uwa-desktop.zip'));
+  return redirect(url('uwa-desktop-v3.zip'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
-  return redirect(url('uwa-fingerprint-v3.zip'));
+  return redirect(url('uwa-fingerprint-v2.zip'));
 })->name("fingerprint");
 Route::get('/drivers', function () {
   return redirect(url('uwa-fingeprint-drivers.zip'));

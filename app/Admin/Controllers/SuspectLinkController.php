@@ -17,7 +17,7 @@ class SuspectLinkController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Repeated Offenders';
+    protected $title = 'Repeat Offenders';
 
     /**
      * Make a grid builder.

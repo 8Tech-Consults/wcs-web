@@ -113,7 +113,11 @@ if ($u != null) {
         }
     } */
 } 
-//Utils::system_boot($u); //DO NOT REMOVE THIS LINE
+try {
+    //Utils::system_boot($u); //DO NOT REMOVE THIS LINE
+} catch (\Throwable $th) {
+    //throw $th;
+}
 
 
 /* Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {

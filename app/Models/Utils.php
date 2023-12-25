@@ -68,7 +68,7 @@ class Utils  extends Model
             $sus->save();
         }
 
-
+        
 
         Utils::copyPendingArrestInfo();
         Utils::copyPendingCourtInfo();

@@ -16,6 +16,9 @@ php artisan make:migration create_animals_table
 php artisan make:migration create_implement_types_table
 php artisan make:migration create_gens_table
 
+php artisan make:migration add_created_by_ca_id_to_case_suspects --table=case_suspects
+
+
 
 php artisan make:model SuspectLink -m
 php artisan make:model Gen

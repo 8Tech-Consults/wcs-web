@@ -76,6 +76,11 @@ class CaseModel extends Model
                 $m->is_offence_committed_in_pa = 'No';
             }
 
+            $by = User::find($m->reported_by);
+            if ($by == null) {
+                throw new \Exception("Created by is not a user.");
+            }
+            $m->created_by_ca_id = $by->ca_id;  
 
             return $m;
         });

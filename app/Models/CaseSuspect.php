@@ -32,6 +32,12 @@ class CaseSuspect extends Model
             }
             $m = CaseSuspect::my_update($m);
 
+            $by = User::find($m->reported_by);
+            if ($by == null) {
+                throw new \Exception("Created by is not a user.");
+            }
+            $m->created_by_ca_id = $by->ca_id;
+
             return $m;
         });
         self::created(function ($m) {
@@ -70,7 +76,6 @@ class CaseSuspect extends Model
             $ids[] = $value->suspect_id_1;
         }
         return CaseSuspect::whereIn('id', $ids)->get();
-        
     }
     public static function my_update($m, $updating = false)
     {
@@ -89,21 +94,20 @@ class CaseSuspect extends Model
                 $m->arrest_district_id = $sub->parent;
             }
         }
-        if(!$updating) {
+        if (!$updating) {
             $case = CaseModel::find($m->case_id);
             if ($case != null) {
                 $m->suspect_number = $case->get_suspect_number($m);
             } else {
                 throw new Exception("Suspect case not found.", 1);
             }
-    
+
             $m->uwa_suspect_number = $m->suspect_number;
             $m->arrest_uwa_number = $m->suspect_number;
         }
 
         //Reset the following fields if suspect appeared in court
-        if ($m->is_suspect_appear_in_court == 'Yes')
-        {
+        if ($m->is_suspect_appear_in_court == 'Yes') {
             $m->police_action = null;
             $m->police_action_date = null;
             $m->police_action_remarks = null;
@@ -145,7 +149,7 @@ class CaseSuspect extends Model
 
         return $m;
     }
-    
+
     public function getOtherArrestAgenciesAttribute($value)
     {
         if ($value == null || $value == "") {
@@ -166,7 +170,7 @@ class CaseSuspect extends Model
 
     function getPhotoUrlAttribute()
     {
-        if($this->photo == '' || $this->photo == null) return url('public/storage/no_image.png');
+        if ($this->photo == '' || $this->photo == null) return url('public/storage/no_image.png');
         return url('public/storage/' . $this->photo);
     }
 

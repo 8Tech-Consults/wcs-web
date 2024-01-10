@@ -538,7 +538,7 @@ class Utils  extends Model
             die("cases file not found.");
             return;
         }
-
+ 
 
         //read from file and loop 
         $i = 0;
@@ -600,6 +600,8 @@ class Utils  extends Model
                     $ex->type_wildlife = 'Yes';
                 }
                 $ex->wildlife_pieces = trim($data[5]);
+                $ex->case_id = $case->id;
+                $ex->reported_by = 1;
                 $ex->save();
 
 
@@ -630,6 +632,8 @@ class Utils  extends Model
                     $ex->implement_name  > 0 ||
                     $ex->wildlife_species  > 0
                 ) {
+                    $ex->case_id = $case->id;
+                    $ex->reported_by = 1;
                     $ex->save();
                 }
 

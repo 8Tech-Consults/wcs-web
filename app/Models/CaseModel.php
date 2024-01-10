@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CaseModel extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use \Znck\Eloquent\Traits\BelongsToThrough;
 
 
@@ -64,12 +63,20 @@ class CaseModel extends Model
             if (
                 $pa != null
             ) {
-                $m->is_offence_committed_in_pa = 'Yes';
-                $m->ca_id = $pa->ca_id;
+                if ($pa->id != 1) {
+                    $m->is_offence_committed_in_pa = 'Yes';
+                } else {
+                    $m->is_offence_committed_in_pa = 'No';
+                }
+                if ($m->ca_id == null || (int)($m->ca_id) < 2) {
+                    $m->ca_id = $pa->ca_id;
+                }
             } else {
                 $m->is_offence_committed_in_pa = 'No';
                 $m->pa_id = 1;
-                $m->ca_id = 1;
+                if ($m->ca_id == null || (int)($m->ca_id) < 2) {
+                    $m->ca_id = 1;
+                }
             }
 
             if ($m->pa_id == 1) {
@@ -80,7 +87,7 @@ class CaseModel extends Model
             if ($by == null) {
                 throw new \Exception("Created by is not a user.");
             }
-            $m->created_by_ca_id = $by->ca_id;  
+            $m->created_by_ca_id = $by->ca_id;
 
             return $m;
         });
@@ -91,12 +98,16 @@ class CaseModel extends Model
                 $pa != null
             ) {
                 $m->is_offence_committed_in_pa = 'Yes';
-                $m->ca_id = $pa->ca_id;
+                if ($m->ca_id == null || (int)($m->ca_id) < 2) {
+                    $m->ca_id = $pa->ca_id;
+                } 
                 $m->district_id = 0; //Default district is 0
             } else {
                 $m->is_offence_committed_in_pa = 'No';
                 $m->pa_id = 1;
-                $m->ca_id = 1;
+                if ($m->ca_id == null || (int)($m->ca_id) < 2) {
+                    $m->ca_id = $pa->ca_id;
+                }
             }
 
             if ($m->pa_id == 1) {

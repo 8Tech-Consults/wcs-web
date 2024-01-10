@@ -130,7 +130,7 @@ class Comment extends Model
 
 class User extends Model
 {
-    use SoftDeletes;
+    
 }
 ```
 

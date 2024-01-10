@@ -29,12 +29,14 @@ class PaController extends AdminController
     {
         $grid = new Grid(new PA());
 
+
         $grid->disableBatchActions();
         $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Protected area'));
         $grid->column('ca_id', __('C.A'))->display(function(){ 
             return $this->ca->name;
         })->sortable();
+        return $grid;
 
         
         $grid->column('Cases', __('Cases'))

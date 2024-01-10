@@ -60,13 +60,13 @@ class Dashboard
 
             // Check for specimen exhibits
             $ivory = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where('specimen','like', '%ivory%')->count();
-            
+                ->where('specimen', 'like', '%ivory%')->count();
+
             $pangolin_scales = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where('specimen','like', '%pangolin scale%')->count();
-            
+                ->where('specimen', 'like', '%pangolin scale%')->count();
+
             $hippo_teeth = Exhibit::whereBetween('created_at', [$min, $max])
-                ->where('specimen', 'like','%hippo teeth%')->count();
+                ->where('specimen', 'like', '%hippo teeth%')->count();
 
             // $ivory = Exhibit::whereBetween('created_at', [$min, $max])
             //     ->where([
@@ -102,7 +102,7 @@ class Dashboard
     {
 
         // Loop through CASESUSPECTS and toogle is_convicted randomly
-  
+
 
 
         for ($i = 12; $i >= 0; $i--) {
@@ -140,7 +140,7 @@ class Dashboard
                 ])
                 ->count();
 
-            
+
             $is_convicted = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
                     'is_convicted' => 'Yes'
@@ -149,7 +149,7 @@ class Dashboard
                     'is_convicted' => 1
                 ])
                 ->count();
-            error_log("Convicted:   " .$is_convicted);
+            error_log("Convicted:   " . $is_convicted);
 
             $data['is_convicted'][] = $is_convicted;
             $data['created_at'][] = $created_at;
@@ -166,31 +166,25 @@ class Dashboard
 
     public static function graph_top_districts()
     {
-
-        $tot = 0;
-        foreach (ConservationArea::where('name','!=','UWA')->get() as $key => $ca) {
-            $tot += count($ca->cases);
-        }
-
+        $tot = CaseModel::count();
 
         $data['labels'] = [];
         $data['count'] = [];
 
-        foreach (ConservationArea::where('name','!=','UWA')->get() as $key => $ca) {
+        foreach (ConservationArea::where('name', '!=', 'UWA')->get() as $key => $ca) {
             $label = substr($ca->name, 0, 10);
             if (strlen($ca->name) > 15) {
                 $label .= "...";
             }
 
             if ($tot > 0) {
-                $per = (int) ((count($ca->cases) / $tot) * 100);
+                $cases_count  = CaseModel::where('ca_id', $ca->id)->count();
+                $per = (int) (($cases_count / $tot) * 100);
                 $label .= " ($per%)";
             }
-            $data['count'][] = count($ca->cases);
+            $data['count'][] = $cases_count;
             $data['labels'][] = $label;
         }
-
-
         return view('dashboard.graph-top-districts', [
             'labels' => $data['labels'],
             'count' => $data['count'],

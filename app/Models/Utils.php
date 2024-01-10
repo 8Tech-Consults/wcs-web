@@ -21,6 +21,7 @@ class Utils  extends Model
 
     public static function getCaseNumber($case)
     {
+
         /* foreach (PA::all() as $key => $pa) {
             $pa->short_name = strtoupper(substr($pa->name,0,4));
             $pa->save(); 
@@ -32,31 +33,58 @@ class Utils  extends Model
 
         $case_number = "UWA";
         $pa_found = false;
-        if (
-            $case->is_offence_committed_in_pa == 1 ||
-            $case->is_offence_committed_in_pa == 'Yes'
-        ) {
-            $pa = PA::find($case->pa_id);
-            if ($pa != null) {
-                $case_number .= "/{$pa->ca->name}";
-                $pa_found = true;
+        $pa = PA::find($case->pa_id);
+        if ($pa != null) {
+            $case_number .= "/{$pa->ca->name}";
+            $pa_found = true;
+            if ($pa->id > 1) {
+                $case->is_offence_committed_in_pa == 'Yes';
+            } else {
+                $case->is_offence_committed_in_pa == 'No';
             }
-        } else {
-            $pa = PA::find(1);
-            if ($pa != null) {
-                $case_number .= "/{$pa->ca->name}";
-                $pa_found = true;
+            if ($pa->id == 1) {
+                $ca = ConservationArea::find($case->ca_id);
+                if ($ca != null) {
+                    if ($ca->id != 1) {
+                        $case_number = "UWA/{$ca->name}";
+                    }
+                }
             }
         }
 
 
+
+        /* if (
+            $case->is_offence_committed_in_pa == 1 ||
+            $case->is_offence_committed_in_pa == 'Yes'
+            ) {
+                $pa = PA::find($case->pa_id);
+                if ($pa != null) {
+                    $case_number .= "/{$pa->ca->name}";
+                    $pa_found = true;
+                }
+            } else {
+                $pa = PA::find(1);
+                if ($pa != null) {
+                    $case_number .= "/{$pa->ca->name}";
+                    $pa_found = true;
+                }
+            }
+            */
         if (!$pa_found) {
             $case_number = "/-";
         }
-        $case_number .= "/" . date('Y');
+
+        $date = Carbon::now();
+        try {
+            $date = Carbon::parse($case->created_at);
+        } catch (\Throwable $th) {
+            $date = Carbon::now();
+        }
+
+        $case_number .= "/" . $date->format('Y');
         $case_number .= "/" . $case->id;
         $case_number = strtoupper($case_number);
-
         return $case_number;
     }
 
@@ -106,17 +134,22 @@ class Utils  extends Model
                 $case = CaseModel::where('title', $title)->first();
                 if ($case != null) {
                     $same_names[] = $title;
-                    continue;
+                    //continue;
+                } else {
+                    $case = new CaseModel();
                 }
-                $case = new CaseModel();
                 $case->created_at = Carbon::parse($data[0]);
                 $case->reported_by = $u->id;
                 $case->title = $title;
                 $ca_text = trim($data[4]);
                 $ca = ConservationArea::where('name', $ca_text)->first();
-                if ($ca == null) {
-                    die("No CA found with name $ca_text");
+                if ($ca_text == 'NAPA') {
+                    $ca = ConservationArea::find(1);
                 }
+                if ($ca == null) {
+                    $ca = ConservationArea::find(1);
+                }
+
                 $case->ca_id = $ca->id;
                 $case->conservation_area_id = $ca->id;
                 //$case->case_number = Utils::getCaseNumber($case);
@@ -154,9 +187,12 @@ class Utils  extends Model
             return;
         }
 
+
         //read from file and loop 
         $i = 0;
+        $x = 0;
         $isFirst = false;
+        $case_not_found = [];
         if (($handle = fopen($csv, "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 10000000, ",")) !== FALSE) {
                 if (!$isFirst) {
@@ -168,116 +204,781 @@ class Utils  extends Model
                 if (!isset($data[$key])) {
                     die("No data found in column $key");
                 }
-                /* 
-  0 => "Year"
-  1 => "UWA Number"
-  2 => "Case number"
-  3 => "Suspect number"
-  4 => "Date"
-  5 => "Case title"
-  6 => "C.A of case"
-  7 => "Complainant"
-  8 => "In P.A"
-  9 => "P.A of case"
-  10 => "C.A of case"
-  11 => "Location"
-  12 => "District"
-  13 => "Sub-county"
-  14 => "Parish"
-  15 => "Village"
-  16 => "GPS"
-  17 => "Detection method"
-  18 => "Suspect First Name "
-  19 => "Suspect Last Name"
-  20 => "Sex"
-  21 => "Age (years)"
-  22 => "Phone number"
-  23 => "ID Type"
-  24 => "ID Number"
-  25 => "Occupation"
-  26 => "Nationality"
-  27 => "District"
-  28 => "Sub County"
-  29 => "Parish"
-  30 => "Village"
-  31 => "Ethnicity"
-  32 => "Offence 1"
-  33 => "Offence 2"
-  34 => "Offence 3"
-  35 => "Offence 4"
-  36 => "At Police"
-  37 => "Managment action"
-  38 => "Managment remarks"
-  39 => "Arrest date"
-  40 => "Arrest in P.A"
-  41 => "P.A of Arrest"
-  42 => "C.A of Arrest"
-  43 => "Arrest Location"
-  44 => "District"
-  45 => "Sub-county"
-  46 => "Arrest parish"
-  47 => "Arrest village"
-  48 => "Arrest GPS latitude"
-  49 => "Arrest GPS longitude"
-  50 => "First police station"
-  51 => "Current police station"
-  52 => "Lead Arrest agency"
-  53 => "Arrest uwa unit"
-  54 => "Other Arrest Agencies 1"
-  55 => "Other Arrest Agencies 2"
-  56 => "Other Arrest Agencies 3"
-  57 => "Arrest crb number"
-  58 => "Police sd number"
-  59 => "Appeared Court"
-  60 => "Case status"
-  61 => "Police action"
-  62 => "Police action date"
-  63 => "Police remarks"
-  64 => "Court file number"
-  65 => "Court date"
-  66 => "Court name"
-  67 => "Lead prosecutor"
-  68 => "Magistrate name"
-  69 => "Court case status"
-  70 => "Accused court status"
-  71 => "Specific court case status"
-  72 => "Remarks"
-  73 => "Jailed"
-  74 => "Jail date"
-  75 => "Jail period"
-  76 => "Prison"
-  77 => "Date release"
-  78 => "Suspect fined"
-  79 => "Fined amount"
-  80 => "Community service"
-  81 => "Duration (in hours)"
-  82 => "Cautioned"
-  83 => "Cautioned remarks"
-  84 => "Suspect appealed"
-  85 => "Appeal date"
-  86 => "Appellate court name"
-  87 => "Appeal court file number"
-  88 => "Appeal outcome"
-  89 => "Appeal remarks"
-  90 => ""
-*/
-                dd($data);
 
-                $i++;
+                $old_supect_number = trim($data[1]);
+                if (strlen($old_supect_number) < 2) {
+                    //$case_not_found[] = $old_supect_number;
+                    //continue;
+                    //die("No suspect number found in column 1");
+                }
+
+                $case_title = trim($data[5]);
+                if (strlen($case_title) < 3) {
+                    $no_names[] = $data;
+                    echo "<hr><pre>";
+                    print_r($data);
+                    echo "<hr></pre>";
+                    echo ("FAILED No case title found in column 5 ==> $case_title");
+                    continue;
+                }
+
+                $case = CaseModel::where('title', $case_title)->first();
+                if ($case == null) {
+                    die("No case found with title $case_title");
+                }
+
+                $x++;
+                if ($x > 100000) {
+                    break;
+                }
+
+                $first_name = trim($data[18]);
+                $last_name = trim($data[19]);
+                $old_suspect = CaseSuspect::where([
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'case_id' => $case->id,
+                ])->first();
+
+                $isEdit = false;
+                if ($old_suspect != null) {
+                    $sus = $old_suspect;
+                    //echo " Found : {$sus->first_name} {$sus->last_name}";
+                    continue;
+                } else {
+                    $sus = new CaseSuspect();
+                }
+                echo "<br>$x. ";
+                echo " NEW : {$first_name} {$last_name}";
+
+
+                $ca_text = trim($data[6]);
+                $ca = ConservationArea::where('name', $ca_text)->first();
+                if ($ca == null) {
+                    $ca = ConservationArea::find(1);
+                }
+                $pa = PA::where('name', trim($data[9]))->first();
+                if ($pa == null) {
+                    $pa = PA::find(1);
+                    //die("No PA found with name " . trim($data[8]));
+                }
+
+
+                $sus->old_supect_number = $old_supect_number;
+                $sus->case_id = $case->id;
+                $sus->created_at = $case->created_at;
+                $sus->pa_id = $pa->id;
+                $sus->ca_id = $pa->ca_id;
+                $sus->created_by_ca_id = $pa->ca_id;
+                //$sus->officer_in_charge = trim($data[7]);
+                $sus->arrest_village = trim($data[11]);
+                $sus->arrest_village = trim($data[11]);
+                $sus->arrest_parish = trim($data[11]);
+                $sus->parish = trim($data[11]);
+                $sus->village = trim($data[11]);
+                $district = Location::where('name', trim($data[12]))->first();
+                if ($district != null) {
+                    $sus->arrest_district_id = $district->id;
+                    $sus->district_id = $district->id;
+                }
+                $sub_county = Location::where('name', trim($data[13]))->first();
+                if ($sub_county != null) {
+                    $sus->arrest_sub_county_id = $sub_county->id;
+                    $sus->sub_county_id = $sub_county->id;
+                }
+
+                $prish_text = trim($data[14]);
+                if ($prish_text != null && strlen($prish_text) > 3) {
+                    $sus->parish = $prish_text;
+                }
+                $vil_text = trim($data[15]);
+                if ($vil_text != null && strlen($vil_text) > 3) {
+                    $sus->village = $vil_text;
+                }
+                $sus->arrest_detection_method = trim($data[17]);
+                $sus->first_name = trim($data[18]);
+                $sus->last_name = trim($data[19]);
+                $sus->sex = trim($data[20]);
+                if ($sus->sex != 'Male' && $sus->sex != 'Female') {
+                    $sus->sex = 'Male';
+                }
+                $sus->age = trim($data[21]);
+                $sus->phone_number = trim($data[22]);
+                $sus->type_of_id = trim($data[23]);
+                $sus->national_id_number = trim($data[24]);
+                $sus->occuptaion = trim($data[25]);
+                $sus->country = trim($data[26]);
+                $district = Location::where('name', trim($data[27]))->first();
+                if ($district != null) {
+                    $sus->arrest_district_id = $district->id;
+                    $sus->district_id = $district->id;
+                }
+
+
+                $sub_county = Location::where('name', trim($data[28]))->first();
+                if ($sub_county != null) {
+                    $sus->arrest_sub_county_id = $sub_county->id;
+                    $sus->sub_county_id = $sub_county->id;
+                }
+
+                $vil_text = trim($data[29]);
+                if ($vil_text != null && strlen($vil_text) > 3) {
+                    $sus->parish = $vil_text;
+                }
+                $village = trim($data[30]);
+                if ($village != null && strlen($vil_text) > 3) {
+                    $sus->village = $village;
+                }
+                $sus->ethnicity = trim($data[31]);
+
+                $offences = [];
+                $offences[] = trim($data[32]);
+                $offences[] = trim($data[33]);
+                $offences[] = trim($data[34]);
+                $offences[] = trim($data[35]);
+                $at_police = 'No';
+                $at_police = trim($data[36]);
+
+                if (strtolower($at_police) == 'yes') {
+                    $sus->is_suspects_arrested = 'Yes';
+                    $sus->arrest_date_time = Carbon::parse(trim($data[39]));
+                    $sus->arrest_in_pa = trim($data[40]);
+                    $pa = PA::where('name', trim($data[41]))->first();
+                    if ($pa != null) {
+                        $sus->arrest_in_pa = $pa->id;
+                        $sus->ca_id = $pa->ca_id;
+                    } else {
+                        $pa = PA::find(1);
+                        $sus->ca_id = 1;
+                    }
+                    $sus->arrest_village = trim($data[43]);
+
+                    $district = Location::where('name', trim($data[44]))->first();
+                    if ($district != null) {
+                        $sus->arrest_district_id = $district->id;
+                    }
+
+                    $sub_county = Location::where('name', trim($data[45]))->first();
+                    if ($sub_county != null) {
+                        $sus->arrest_sub_county_id = $sub_county->id;
+                    }
+                    $arrest_village = trim($data[46]);
+                    if (
+                        $arrest_village != null &&
+                        strlen($arrest_village) > 2
+                    ) {
+                        $sus->arrest_village = $arrest_village;
+                        $sus->arrest_parish = $arrest_village;
+                    }
+
+                    $arrest_parish = trim($data[47]);
+                    if (
+                        $arrest_parish != null &&
+                        strlen($arrest_parish) > 2
+                    ) {
+                        $sus->arrest_village = $arrest_parish;
+                        $sus->arrest_parish = $arrest_parish;
+                    }
+                    $sus->arrest_first_police_station = trim($data[50]);
+                    $sus->arrest_current_police_station = trim($data[51]);
+                    $sus->arrest_agency = trim($data[52]);
+                    $sus->arrest_uwa_unit = trim($data[53]);
+                    $other_arrest_agencies = [];
+                    $other_arrest_agencies_1 = trim($data[54]);
+                    if (strlen($other_arrest_agencies_1) > 2) {
+                        $other_arrest_agencies[] = $other_arrest_agencies_1;
+                    }
+                    $other_arrest_agencies_1 = trim($data[55]);
+                    if (strlen($other_arrest_agencies_1) > 2) {
+                        if (!in_array($other_arrest_agencies_1, $other_arrest_agencies)) {
+                            $other_arrest_agencies[] = $other_arrest_agencies_1;
+                        }
+                    }
+                    $other_arrest_agencies_1 = trim($data[56]);
+                    if (strlen($other_arrest_agencies_1) > 2) {
+                        if (!in_array($other_arrest_agencies_1, $other_arrest_agencies)) {
+                            $other_arrest_agencies[] = $other_arrest_agencies_1;
+                        }
+                    }
+                    $sus->arrest_crb_number = trim($data[57]);
+                    $sus->police_sd_number = trim($data[58]);
+                    $sus->is_suspect_appear_in_court = trim($data[59]);
+                    $sus->status = trim($data[60]);
+                    $sus->police_action = trim($data[61]);
+                    $sus->police_action_remarks = trim($data[63]);
+                    $sus->suspect_appealed_court_file = trim($data[64]);
+
+                    try {
+                        $sus->police_action_date = Carbon::parse(trim($data[62]));
+                    } catch (\Throwable $th) {
+                        $sus->police_action_date = '';
+                    }
+
+                    if (strtolower($sus->is_suspect_appear_in_court) == 'yes') {
+                        $sus->is_suspect_appear_in_court = 'Yes';
+                        $court_date = trim($data[65]);
+                        try {
+                            $sus->court_date = Carbon::parse(trim($data[62]));
+                        } catch (\Throwable $th) {
+                            $sus->court_date = $court_date;
+                        }
+
+                        $sus->court_name =  trim($data[66]);
+                        $sus->prosecutor =  trim($data[67]);
+                        $sus->prosecutor =  trim($data[67]);
+                        $sus->magistrate_name =  trim($data[68]);
+                        $sus->court_status =  trim($data[69]);
+                        $sus->suspect_court_outcome =  trim($data[70]);
+                        $sus->case_outcome =  trim($data[71]);
+                        $sus->case_outcome_remarks =  trim($data[72]);
+                        $is_jailed =  trim($data[73]);
+                        if (strtolower($is_jailed) == 'yes') {
+                            $sus->is_jailed = 'Yes';
+                            $jail_date = trim($data[74]);
+                            if (strlen($jail_date) > 2) {
+                                try {
+                                    $sus->jail_date = Carbon::parse($jail_date);
+                                } catch (\Throwable $th) {
+                                    //throw $th;
+                                    $sus->jail_date = "";
+                                }
+                            }
+                        } else {
+                            $sus->is_jailed = 'No';
+                        }
+                        $sus->jail_period =  trim($data[75]);
+                        $sus->prison =  trim($data[76]);
+                        try {
+                            if (strlen(trim($data[77])) > 3) {
+                                $sus->jail_release_date =  Carbon::parse(trim($data[77]));
+                            }
+                        } catch (\Throwable $th) {
+                            $sus->jail_release_date = "";
+                        }
+                        $sus->is_fined =  trim($data[78]);
+                        if ($sus->is_fined != "Yes") {
+                            $sus->is_fined = 'No';
+                        }
+                        $sus->fined_amount =  trim($data[79]);
+                        $sus->community_service =  trim($data[80]);
+                        $sus->community_service_duration =  trim($data[81]);
+                        $sus->cautioned_remarks =  trim($data[82]);
+                        $sus->cautioned =  trim($data[82]);
+                        $sus->cautioned_remarks =  trim($data[83]);
+                        $sus->suspect_appealed =  trim($data[84]);
+                        $sus->suspect_appealed_date =  trim($data[85]);
+                        if (strlen($sus->suspect_appealed_date) > 3) {
+                            try {
+                                $sus->suspect_appealed_date = Carbon::parse($sus->suspect_appealed_date);
+                            } catch (\Throwable $th) {
+                                $sus->suspect_appealed_date = "";
+                            }
+                        }
+                        $sus->suspect_appealed_court_name =  trim($data[86]);
+                        $sus->suspect_appealed_court_file =  trim($data[87]);
+                        $sus->suspect_appealed_outcome =  trim($data[88]);
+                        $sus->suspect_appeal_remarks =  trim($data[89]);
+                    } else {
+                        $sus->is_suspect_appear_in_court = 'No';
+                    }
+                } else {
+                    $sus->is_suspects_arrested = 'No';
+                }
+                $sus->management_action = trim($data[37]);
+                $sus->not_arrested_remarks = trim($data[38]);
+
+                $sus->reported_by = 1;
+                $sus->save();
+                foreach ($offences as $_key => $_val) {
+                    $offence = Offence::where('name', $_val)->first();
+                    if ($offence == null) {
+                        continue;
+                    }
+                    $old = SuspectHasOffence::where([
+                        'offence_id' => $offence->id,
+                        'case_suspect_id' => $sus->id,
+                    ])->first();
+                    if ($old == null) {
+                        continue;
+                    }
+                    $hasOffence = new SuspectHasOffence();
+                    $hasOffence->case_suspect_id = $sus->id;
+                    $hasOffence->offence_id = $offence->id;
+                    $hasOffence->save();
+                }
+                echo (" | success adding $sus->name");
             }
             fclose($handle);
         }
+
+        echo "<pre>";
+        print_r($no_names);
+        die();
     }
 
 
-    public static function system_boot($u)
+    public static function import_exhibits()
     {
+
+        $same_names = [];
+        $no_names = [];
         $u = Admin::user();
         if ($u == null) {
             return;
         }
-        self::import_suspects();
-        die("Imported Suspects");
+        //set unlimited time
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '-1');
+
+        $base = Utils::docs_root();
+        //csv file
+        $csv =  $base . '/exhibits.csv';
+        //check if file exists
+        if (!file_exists($csv)) {
+            die("cases file not found.");
+            return;
+        }
+
+
+        //read from file and loop 
+        $i = 0;
+        $x = 0;
+        $isFirst = false;
+        $case_not_found = [];
+        if (($handle = fopen($csv, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 10000000, ",")) !== FALSE) {
+                if (!$isFirst) {
+                    $isFirst = true;
+                    continue;
+                }
+                $key = 0;
+                $word = trim($data[$key]);
+                if (!isset($data[$key])) {
+                    die("No data found in column $key");
+                }
+
+                $old_supect_number = trim($data[1]);
+                if (strlen($old_supect_number) < 2) {
+                    //$case_not_found[] = $old_supect_number;
+                    //continue;
+                    //die("No suspect number found in column 1");
+                }
+
+                $case_title = trim($data[2]);
+                if (strlen($case_title) < 3) {
+                    $no_names[] = $data;
+                    echo "<hr><pre>";
+                    print_r($data);
+                    echo "<hr></pre>";
+                    echo ("FAILED No case title found in column 5 ==> $case_title");
+                    continue;
+                }
+
+                $case = CaseModel::where('title', $case_title)->first();
+                if ($case == null) {
+                    die("No case found with title $case_title");
+                }
+                /* 
+	updated_at	case_id	exhibit_catgory	wildlife	implements	photos	description	quantity	deleted_at	implement	reported_by	latitude	longitude	attachment	number_of_pieces	ca_id	add_another_exhibit	type_wildlife	type_implement	type_other	pics	wildlife_species	wildlife_quantity	wildlife_desciprion	wildlife_pieces	wildlife_description	wildlife_attachments	implement_name	implement_pieces	implement_description	implement_attachments	others_description	others_attachments	other_wildlife_species	specimen	other_implement	
+
+*/
+                $ex = new Exhibit();
+                $ex->created_at = Carbon::parse(trim($data[1]));
+                $ex->specimen = trim($data[6]);
+                $ex->wildlife_quantity = trim($data[7]);
+                $ex->wildlife_description = trim($data[9]);
+                $ex->implement_pieces = trim($data[11]);
+                $ex->implement_description = trim($data[12]);
+                $implement_name = ImplementType::where('name', trim($data[10]))->first();
+                if ($implement_name != null) {
+                    $ex->implement_name = $implement_name->id;
+                    $ex->type_implement = 'Yes';
+                }
+                $wildlife_species = Animal::where('name', trim($data[5]))->first();
+                if ($wildlife_species != null) {
+                    $ex->wildlife_species = $wildlife_species->id;
+                    $ex->type_wildlife = 'Yes';
+                }
+                $ex->wildlife_pieces = trim($data[5]);
+                $ex->save();
+
+
+                $ex = new Exhibit();
+                $ex->created_at = Carbon::parse(trim($data[1]));
+                $ex->specimen = trim($data[6]);
+                $ex->wildlife_quantity = trim($data[16]);
+                $wildlife_species = Animal::where('name', trim($data[14]))->first();
+                $ex->type_wildlife = "";
+                if ($wildlife_species != null) {
+                    $ex->wildlife_species = $wildlife_species->id;
+                    $ex->type_wildlife = 'Yes';
+                }
+                $ex->wildlife_pieces = trim($data[17]);
+                $ex->wildlife_description = trim($data[18]);
+
+                $implement_name = ImplementType::where('name', trim($data[19]))->first();
+                $ex->implement_name = "";
+                if ($implement_name != null) {
+                    $ex->implement_name = $implement_name->id;
+                    $ex->type_implement = 'Yes';
+                }
+                $ex->implement_pieces = trim($data[20]);
+                $ex->implement_description = trim($data[21]);
+                $ex->other_implement = trim($data[22]);
+
+                if (
+                    $ex->implement_name  > 0 ||
+                    $ex->wildlife_species  > 0
+                ) {
+                    $ex->save();
+                }
+
+                continue;
+
+
+                $x++;
+                if ($x > 100000) {
+                    break;
+                }
+                echo "{$ex->id}";
+                continue;
+
+                /*  q
+ 
+  
+  23 => "Species Name 3"
+  24 => "Specimen 3"
+  25 => "Quantity(Kgs) 3"
+  26 => "Number of pieces 3"
+  27 => "Description 3"
+  28 => "Implement Name 3"
+  29 => "No of pieces 3"
+  30 => "Description 3"
+  31 => "Other exhibits description 3"
+  32 => "Species Name 4"
+  33 => "Specimen 4"
+  34 => "Quantity(Kgs) 4"
+  35 => "Number of pieces 4"
+  36 => "Description 4"
+  37 => "Implement Name 4"
+  38 => "No of pieces 4"
+  39 => "Description 4"
+  40 => "Other exhibits description 4"
+  41 => "Species Name 5"
+  42 => "Specimen 5"
+  43 => "Quantity(Kgs) 5"
+  44 => "Number of pieces 5"
+  45 => "Description 5"
+  46 => "Implement Name 5"
+  47 => "No of pieces 5"
+  48 => "Description 5"
+  49 => "Other exhibits description 5"
+  50 => "Species Name 6"
+  51 => "Specimen 6"
+  52 => "Quantity(Kgs) 6"
+  53 => "Number of pieces 6"
+  54 => "Description 6"
+  55 => "Implement Name 6"
+  56 => "No of pieces 6"
+  57 => "Description 6"
+  58 => "Other exhibits description 6"
+*/
+                $first_name = trim($data[18]);
+                $last_name = trim($data[19]);
+                $old_suspect = CaseSuspect::where([
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'case_id' => $case->id,
+                ])->first();
+
+                $isEdit = false;
+                if ($old_suspect != null) {
+                    $sus = $old_suspect;
+                    //echo " Found : {$sus->first_name} {$sus->last_name}";
+                    continue;
+                } else {
+                    $sus = new CaseSuspect();
+                }
+                echo "<br>$x. ";
+                echo " NEW : {$first_name} {$last_name}";
+
+
+                $ca_text = trim($data[6]);
+                $ca = ConservationArea::where('name', $ca_text)->first();
+                if ($ca == null) {
+                    $ca = ConservationArea::find(1);
+                }
+                $pa = PA::where('name', trim($data[9]))->first();
+                if ($pa == null) {
+                    $pa = PA::find(1);
+                    //die("No PA found with name " . trim($data[8]));
+                }
+
+
+                $sus->old_supect_number = $old_supect_number;
+                $sus->case_id = $case->id;
+                $sus->created_at = $case->created_at;
+                $sus->pa_id = $pa->id;
+                $sus->ca_id = $pa->ca_id;
+                $sus->created_by_ca_id = $pa->ca_id;
+                //$sus->officer_in_charge = trim($data[7]);
+                $sus->arrest_village = trim($data[11]);
+                $sus->arrest_village = trim($data[11]);
+                $sus->arrest_parish = trim($data[11]);
+                $sus->parish = trim($data[11]);
+                $sus->village = trim($data[11]);
+                $district = Location::where('name', trim($data[12]))->first();
+                if ($district != null) {
+                    $sus->arrest_district_id = $district->id;
+                    $sus->district_id = $district->id;
+                }
+                $sub_county = Location::where('name', trim($data[13]))->first();
+                if ($sub_county != null) {
+                    $sus->arrest_sub_county_id = $sub_county->id;
+                    $sus->sub_county_id = $sub_county->id;
+                }
+
+                $prish_text = trim($data[14]);
+                if ($prish_text != null && strlen($prish_text) > 3) {
+                    $sus->parish = $prish_text;
+                }
+                $vil_text = trim($data[15]);
+                if ($vil_text != null && strlen($vil_text) > 3) {
+                    $sus->village = $vil_text;
+                }
+                $sus->arrest_detection_method = trim($data[17]);
+                $sus->first_name = trim($data[18]);
+                $sus->last_name = trim($data[19]);
+                $sus->sex = trim($data[20]);
+                if ($sus->sex != 'Male' && $sus->sex != 'Female') {
+                    $sus->sex = 'Male';
+                }
+                $sus->age = trim($data[21]);
+                $sus->phone_number = trim($data[22]);
+                $sus->type_of_id = trim($data[23]);
+                $sus->national_id_number = trim($data[24]);
+                $sus->occuptaion = trim($data[25]);
+                $sus->country = trim($data[26]);
+                $district = Location::where('name', trim($data[27]))->first();
+                if ($district != null) {
+                    $sus->arrest_district_id = $district->id;
+                    $sus->district_id = $district->id;
+                }
+
+
+                $sub_county = Location::where('name', trim($data[28]))->first();
+                if ($sub_county != null) {
+                    $sus->arrest_sub_county_id = $sub_county->id;
+                    $sus->sub_county_id = $sub_county->id;
+                }
+
+                $vil_text = trim($data[29]);
+                if ($vil_text != null && strlen($vil_text) > 3) {
+                    $sus->parish = $vil_text;
+                }
+                $village = trim($data[30]);
+                if ($village != null && strlen($vil_text) > 3) {
+                    $sus->village = $village;
+                }
+                $sus->ethnicity = trim($data[31]);
+
+                $offences = [];
+                $offences[] = trim($data[32]);
+                $offences[] = trim($data[33]);
+                $offences[] = trim($data[34]);
+                $offences[] = trim($data[35]);
+                $at_police = 'No';
+                $at_police = trim($data[36]);
+
+                if (strtolower($at_police) == 'yes') {
+                    $sus->is_suspects_arrested = 'Yes';
+                    $sus->arrest_date_time = Carbon::parse(trim($data[39]));
+                    $sus->arrest_in_pa = trim($data[40]);
+                    $pa = PA::where('name', trim($data[41]))->first();
+                    if ($pa != null) {
+                        $sus->arrest_in_pa = $pa->id;
+                        $sus->ca_id = $pa->ca_id;
+                    } else {
+                        $pa = PA::find(1);
+                        $sus->ca_id = 1;
+                    }
+                    $sus->arrest_village = trim($data[43]);
+
+                    $district = Location::where('name', trim($data[44]))->first();
+                    if ($district != null) {
+                        $sus->arrest_district_id = $district->id;
+                    }
+
+                    $sub_county = Location::where('name', trim($data[45]))->first();
+                    if ($sub_county != null) {
+                        $sus->arrest_sub_county_id = $sub_county->id;
+                    }
+                    $arrest_village = trim($data[46]);
+                    if (
+                        $arrest_village != null &&
+                        strlen($arrest_village) > 2
+                    ) {
+                        $sus->arrest_village = $arrest_village;
+                        $sus->arrest_parish = $arrest_village;
+                    }
+
+                    $arrest_parish = trim($data[47]);
+                    if (
+                        $arrest_parish != null &&
+                        strlen($arrest_parish) > 2
+                    ) {
+                        $sus->arrest_village = $arrest_parish;
+                        $sus->arrest_parish = $arrest_parish;
+                    }
+                    $sus->arrest_first_police_station = trim($data[50]);
+                    $sus->arrest_current_police_station = trim($data[51]);
+                    $sus->arrest_agency = trim($data[52]);
+                    $sus->arrest_uwa_unit = trim($data[53]);
+                    $other_arrest_agencies = [];
+                    $other_arrest_agencies_1 = trim($data[54]);
+                    if (strlen($other_arrest_agencies_1) > 2) {
+                        $other_arrest_agencies[] = $other_arrest_agencies_1;
+                    }
+                    $other_arrest_agencies_1 = trim($data[55]);
+                    if (strlen($other_arrest_agencies_1) > 2) {
+                        if (!in_array($other_arrest_agencies_1, $other_arrest_agencies)) {
+                            $other_arrest_agencies[] = $other_arrest_agencies_1;
+                        }
+                    }
+                    $other_arrest_agencies_1 = trim($data[56]);
+                    if (strlen($other_arrest_agencies_1) > 2) {
+                        if (!in_array($other_arrest_agencies_1, $other_arrest_agencies)) {
+                            $other_arrest_agencies[] = $other_arrest_agencies_1;
+                        }
+                    }
+                    $sus->arrest_crb_number = trim($data[57]);
+                    $sus->police_sd_number = trim($data[58]);
+                    $sus->is_suspect_appear_in_court = trim($data[59]);
+                    $sus->status = trim($data[60]);
+                    $sus->police_action = trim($data[61]);
+                    $sus->police_action_remarks = trim($data[63]);
+                    $sus->suspect_appealed_court_file = trim($data[64]);
+
+                    try {
+                        $sus->police_action_date = Carbon::parse(trim($data[62]));
+                    } catch (\Throwable $th) {
+                        $sus->police_action_date = '';
+                    }
+
+                    if (strtolower($sus->is_suspect_appear_in_court) == 'yes') {
+                        $sus->is_suspect_appear_in_court = 'Yes';
+                        $court_date = trim($data[65]);
+                        try {
+                            $sus->court_date = Carbon::parse(trim($data[62]));
+                        } catch (\Throwable $th) {
+                            $sus->court_date = $court_date;
+                        }
+
+                        $sus->court_name =  trim($data[66]);
+                        $sus->prosecutor =  trim($data[67]);
+                        $sus->prosecutor =  trim($data[67]);
+                        $sus->magistrate_name =  trim($data[68]);
+                        $sus->court_status =  trim($data[69]);
+                        $sus->suspect_court_outcome =  trim($data[70]);
+                        $sus->case_outcome =  trim($data[71]);
+                        $sus->case_outcome_remarks =  trim($data[72]);
+                        $is_jailed =  trim($data[73]);
+                        if (strtolower($is_jailed) == 'yes') {
+                            $sus->is_jailed = 'Yes';
+                            $jail_date = trim($data[74]);
+                            if (strlen($jail_date) > 2) {
+                                try {
+                                    $sus->jail_date = Carbon::parse($jail_date);
+                                } catch (\Throwable $th) {
+                                    //throw $th;
+                                    $sus->jail_date = "";
+                                }
+                            }
+                        } else {
+                            $sus->is_jailed = 'No';
+                        }
+                        $sus->jail_period =  trim($data[75]);
+                        $sus->prison =  trim($data[76]);
+                        try {
+                            if (strlen(trim($data[77])) > 3) {
+                                $sus->jail_release_date =  Carbon::parse(trim($data[77]));
+                            }
+                        } catch (\Throwable $th) {
+                            $sus->jail_release_date = "";
+                        }
+                        $sus->is_fined =  trim($data[78]);
+                        if ($sus->is_fined != "Yes") {
+                            $sus->is_fined = 'No';
+                        }
+                        $sus->fined_amount =  trim($data[79]);
+                        $sus->community_service =  trim($data[80]);
+                        $sus->community_service_duration =  trim($data[81]);
+                        $sus->cautioned_remarks =  trim($data[82]);
+                        $sus->cautioned =  trim($data[82]);
+                        $sus->cautioned_remarks =  trim($data[83]);
+                        $sus->suspect_appealed =  trim($data[84]);
+                        $sus->suspect_appealed_date =  trim($data[85]);
+                        if (strlen($sus->suspect_appealed_date) > 3) {
+                            try {
+                                $sus->suspect_appealed_date = Carbon::parse($sus->suspect_appealed_date);
+                            } catch (\Throwable $th) {
+                                $sus->suspect_appealed_date = "";
+                            }
+                        }
+                        $sus->suspect_appealed_court_name =  trim($data[86]);
+                        $sus->suspect_appealed_court_file =  trim($data[87]);
+                        $sus->suspect_appealed_outcome =  trim($data[88]);
+                        $sus->suspect_appeal_remarks =  trim($data[89]);
+                    } else {
+                        $sus->is_suspect_appear_in_court = 'No';
+                    }
+                } else {
+                    $sus->is_suspects_arrested = 'No';
+                }
+                $sus->management_action = trim($data[37]);
+                $sus->not_arrested_remarks = trim($data[38]);
+
+                $sus->reported_by = 1;
+                $sus->save();
+                foreach ($offences as $_key => $_val) {
+                    $offence = Offence::where('name', $_val)->first();
+                    if ($offence == null) {
+                        continue;
+                    }
+                    $old = SuspectHasOffence::where([
+                        'offence_id' => $offence->id,
+                        'case_suspect_id' => $sus->id,
+                    ])->first();
+                    if ($old == null) {
+                        continue;
+                    }
+                    $hasOffence = new SuspectHasOffence();
+                    $hasOffence->case_suspect_id = $sus->id;
+                    $hasOffence->offence_id = $offence->id;
+                    $hasOffence->save();
+                }
+                echo (" | success adding $sus->name");
+            }
+            fclose($handle);
+        }
+
+        echo "<pre>";
+        print_r($no_names);
+        die();
+    }
+
+
+    public static function system_boot($u)
+    { 
+        $u = Admin::user();
+        if ($u == null) {
+            return;
+        }
+        //self::import_exhibits();
+        //dd('import_exhibits');
+        //self::import_suspects();
+        //die("done importing");
+        //die("Imported suspects");
         //self::import_cases();
 
 

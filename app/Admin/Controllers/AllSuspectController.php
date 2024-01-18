@@ -69,7 +69,7 @@ class AllSuspectController extends AdminController
             $f->like('uwa_suspect_number', 'Filter by UWA Suspect number');
 
             $f->equal('country', 'Filter country of origin')->select(
-                Utils::COUNTRIES()
+                Utils::COUNTRIES_2()
             );
 
 

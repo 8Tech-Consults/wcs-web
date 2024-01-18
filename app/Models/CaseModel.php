@@ -100,7 +100,7 @@ class CaseModel extends Model
                 $m->is_offence_committed_in_pa = 'Yes';
                 if ($m->ca_id == null || (int)($m->ca_id) < 2) {
                     $m->ca_id = $pa->ca_id;
-                } 
+                }
                 $m->district_id = 0; //Default district is 0
             } else {
                 $m->is_offence_committed_in_pa = 'No';
@@ -234,6 +234,7 @@ class CaseModel extends Model
     }
     function ca()
     {
+        return $this->belongsTo(ConservationArea::class,'ca_id');
         return $this->belongsToThrough(ConservationArea::class, PA::class, null, '', [
             ConservationArea::class => 'ca_id'
         ]);

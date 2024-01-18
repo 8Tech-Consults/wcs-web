@@ -8,6 +8,7 @@ use App\Models\Animal;
 use App\Models\CaseModel;
 use App\Models\Exhibit;
 use App\Models\ImplementType;
+use App\Models\Specimen;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -61,29 +62,7 @@ class ExhibitController extends AdminController
                 ->select(Animal::all()->pluck('name', 'id'));
 
             $f->equal('specimen', "Filter by specimen")
-                ->select([
-                    'Skins' => 'Skins',
-                    'Meat' => 'Meat',
-                    'Live animal' => 'Live animal',
-                    'Eggs' => 'Eggs',
-                    'Molars' => 'Molars',
-                    'Jaws' => 'Jaws',
-                    'Spikes /Ruills' => 'Spikes /Ruills',
-                    'Hair' => 'Hair',
-                    'Bone' => 'Bone',
-                    'Bangle' => 'Bangle',
-                    'Chopsticks' => 'Chopsticks',
-                    'Rosary' => 'Rosary',
-                    'Necklace' => 'Necklace',
-                    'Belt' => 'Belt',
-                    'Handbag' => 'Handbag',
-                    'Keyholder' => 'Keyholder',
-                    'Sculpture' => 'Sculpture',
-                    'Beads' => 'Beads',
-                    'Powder' => 'Powder',
-                    'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
-                    'Other' => 'Other',
-                ]);
+                ->select(Specimen::pluck('name', 'name')); 
 
             $f->equal('implement_name', "Filter by Implement type")
                 ->select(ImplementType::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id'));
@@ -213,31 +192,7 @@ class ExhibitController extends AdminController
                     ->rules('required');
 
 
-                $form->select('specimen', 'Specimen')->options(
-                    array(
-                        'Skins' => 'Skins',
-                        'Meat' => 'Meat',
-                        'Live animal' => 'Live animal',
-                        'Eggs' => 'Eggs',
-                        'Molars' => 'Molars',
-                        'Jaws' => 'Jaws',
-                        'Spikes /Ruills' => 'Spikes /Ruills',
-                        'Hair' => 'Hair',
-                        'Bone' => 'Bone',
-                        'Bangle' => 'Bangle',
-                        'Chopsticks' => 'Chopsticks',
-                        'Rosary' => 'Rosary',
-                        'Necklace' => 'Necklace',
-                        'Belt' => 'Belt',
-                        'Handbag' => 'Handbag',
-                        'Keyholder' => 'Keyholder',
-                        'Sculpture' => 'Sculpture',
-                        'Beads' => 'Beads',
-                        'Powder' => 'Powder',
-                        'Powder (Crushed ivory)' => 'Powder (Crushed ivory)',
-                        'Other' => 'Other',
-                    )
-                )->rules('required');
+                $form->select('specimen', 'Specimen')->options(Specimen::pluck('name', 'name'))->rules('required');
 
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->decimal('wildlife_pieces', __('Number of pieces'));

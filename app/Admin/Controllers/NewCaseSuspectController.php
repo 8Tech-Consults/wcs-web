@@ -266,7 +266,7 @@ class NewCaseSuspectController extends AdminController
                 $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
             }
         } else {
-            $form->html('<p style="padding: 0;margin: 0;"><a href="/new-case-suspects?cancel_add_suspect=' . $pendingCase->id . '" class="text-danger"><b>Cancel add suspect process</b></a></p>');
+            $form->html('<p style="padding: 0;margin: 0;"><a href="'.admin_url('/new-case-suspects').'?cancel_add_suspect=' . $pendingCase->id . '" class="text-danger"><b>Cancel add suspect process</b></a></p>');
             $form->display('ADDING SUSPECT TO CASE')->value($pendingCase->case_number)->default($pendingCase->case_number);
         }
 

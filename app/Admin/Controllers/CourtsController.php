@@ -159,7 +159,7 @@ class CourtsController extends AdminController
                 Offence::pluck('name', 'name')
             );
 
-            $f->between('court_date', 'Filter by arrest date')->date();
+            $f->between('court_date', 'Filter by court date')->date();
             $f->like('court_name', 'Filter by court name');
             $f->like('court_file_number', 'Filter by court file number');
             $f->like('prosecutor', 'Filter by prosecutor');
@@ -217,8 +217,11 @@ class CourtsController extends AdminController
         $grid->column('court_file_number')->sortable();
         $grid->column('court_date', 'Court date')
             ->display(function ($d) {
+                if($d == null){
+                    return '-';
+                }
                 return Utils::my_date($d);
-            });
+            })->sortable();
         $grid->column('court_name')->display(function ($d) {
             if ($this->court == null) {
                 return '-';
@@ -286,6 +289,7 @@ class CourtsController extends AdminController
             ], 'danger')
             ->sortable();
         $grid->column('fined_amount')->display(function ($x) {
+            $x = (int)($x);
             if ($x == null || strlen($x) < 1) {
                 return "-";
             }
@@ -355,7 +359,10 @@ class CourtsController extends AdminController
             $actions->disableEdit();
             $actions->disableDelete();
             $actions->add(new ViewSuspect);
-            if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
+           // $actions->add(new CourtCaseUpdate);
+            $actions->add(new EditCourtCase);
+
+           /*  if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
 
                 if ($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated') {
                     if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('director')) {
@@ -376,7 +383,7 @@ class CourtsController extends AdminController
                         $actions->add(new EditCourtCase);
                     }
                 }
-            }
+            } */
         });
 
 

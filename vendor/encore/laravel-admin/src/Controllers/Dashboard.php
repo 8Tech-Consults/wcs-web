@@ -143,14 +143,10 @@ class Dashboard
 
             $is_convicted = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([
-                    'is_convicted' => 'Yes'
-                ])
-                ->orWhere([
-                    'is_convicted' => 1
-                ])
-                ->count();
-            error_log("Convicted:   " . $is_convicted);
-
+                    'case_outcome' => 'Convicted'
+                ]) 
+                ->count(); 
+ 
             $data['is_convicted'][] = $is_convicted;
             $data['created_at'][] = $created_at;
             $data['is_suspects_arrested'][] = $is_suspects_arrested;

@@ -214,23 +214,16 @@ class Utils  extends Model
 
                 $case_title = trim($data[5]);
                 if (strlen($case_title) < 3) {
-                    $no_names[] = $data;
-                    echo "<hr><pre>";
-                    print_r($data);
-                    echo "<hr></pre>";
-                    echo ("FAILED No case title found in column 5 ==> $case_title");
                     continue;
+                    echo ("FAILED No case title found in column 51 ==> $case_title");
                 }
 
                 $case = CaseModel::where('title', $case_title)->first();
                 if ($case == null) {
+                    continue;
                     die("No case found with title $case_title");
                 }
 
-                $x++;
-                if ($x > 100000) {
-                    break;
-                }
 
                 $first_name = trim($data[18]);
                 $last_name = trim($data[19]);
@@ -239,6 +232,170 @@ class Utils  extends Model
                     'last_name' => $last_name,
                     'case_id' => $case->id,
                 ])->first();
+
+                if ($old_suspect == null) {
+                    continue;
+                }
+
+                if (strtolower($old_suspect->is_suspect_appear_in_court) != 'yes') {
+                    $old_suspect->court_date = null;
+                    $old_suspect->save();
+                    continue;
+                }
+                $name = trim($data['66']);
+
+                $old_suspect->court_name = 1;
+                if (strlen($name) < 2) {
+                } else {
+                    $court = Court::where([
+                        'name' => $name,
+                    ])->first();
+                    if ($court == null) {
+                        $court = new Court();
+                        $court->name = $name;
+                        $court->save();
+                    }
+                    $old_suspect->court_name = $court->id;
+                }
+
+                $old_suspect->save();
+                continue;
+
+                dd($court);
+                dd($name);
+                //court_name
+
+
+                /* 
+array:91 [▼
+  0 => "﻿Year"
+  1 => "UWA Number"
+  2 => "Case number"
+  3 => "Suspect number"
+  4 => "Date"
+  5 => "Case title"
+  6 => "C.A of case"
+  7 => "Complainant"
+  8 => "In P.A"
+  9 => "P.A of case"
+  10 => "C.A of case"
+  11 => "Location"
+  12 => "District"
+  13 => "Sub-county"
+  14 => "Parish"
+  15 => "Village"
+  16 => "GPS"
+  17 => "Detection method"
+  18 => "Suspect First Name "
+  19 => "Suspect Last Name"
+  20 => "Sex"
+  21 => "Age (years)"
+  22 => "Phone number"
+  23 => "ID Type"
+  24 => "ID Number"
+  25 => "Occupation"
+  26 => "Nationality"
+  27 => "District"
+  28 => "Sub County"
+  29 => "Parish"
+  30 => "Village"
+  31 => "Ethnicity"
+  32 => "Offence 1"
+  33 => "Offence 2"
+  34 => "Offence 3"
+  35 => "Offence 4"
+  36 => "At Police"
+  37 => "Managment action"
+  38 => "Managment remarks"
+  39 => "Arrest date"
+  40 => "Arrest in P.A"
+  41 => "P.A of Arrest"
+  42 => "C.A of Arrest"
+  43 => "Arrest Location"
+  44 => "District"
+  45 => "Sub-county"
+  46 => "Arrest parish"
+  47 => "Arrest village"
+  48 => "Arrest GPS latitude"
+  49 => "Arrest GPS longitude"
+  50 => "First police station"
+  51 => "Current police station"
+  52 => "Lead Arrest agency"
+  53 => "Arrest uwa unit"
+  54 => "Other Arrest Agencies 1"
+  55 => "Other Arrest Agencies 2"
+  56 => "Other Arrest Agencies 3"
+  57 => "Arrest crb number"
+  58 => "Police sd number"
+  59 => "Appeared Court"
+  60 => "Case status"
+  61 => "Police action"
+  62 => "Police action date"
+  63 => "Police remarks"
+  64 => "Court file number"
+  65 => "Court date"
+  66 => "Court name"
+  67 => "Lead prosecutor"
+  68 => "Magistrate name"
+  69 => "Court case status"
+  70 => "Accused court status"
+  71 => "Specific court case status"
+  72 => "Remarks"
+  73 => "Jailed"
+  74 => "Jail date"
+  75 => "Jail period"
+  76 => "Prison"
+  77 => "Date release"
+  78 => "Suspect fined"
+  79 => "Fined amount"
+  80 => "Community service"
+  81 => "Duration (in hours)"
+  82 => "Cautioned"
+  83 => "Cautioned remarks"
+  84 => "Suspect appealed"
+  85 => "Appeal date"
+  86 => "Appellate court name"
+  87 => "Appeal court file number"
+  88 => "Appeal outcome"
+  89 => "Appeal remarks"
+  90 => ""
+]
+                */
+
+
+                $now = Carbon::parse('2024-01-10');
+                $then = Carbon::parse($old_suspect->court_date);
+                if (!$now->isBefore($then)) {
+                    continue;
+                }
+
+
+                $court_date = trim($data[65]);
+
+                $court_date_1 = null;
+                if (strlen($court_date) > 4) {
+                    try {
+                        $court_date_1 = Carbon::parse(trim($data[65]));
+                    } catch (\Throwable $th) {
+                        $court_date_1 = null;
+                    }
+                } else {
+                    echo "<br> no date ";
+                    continue;
+                }
+                // dd($court_date_1);
+                // dd($old_suspect->court_date);
+                $x++;
+                if ($x > 1000000) {
+                    break;
+                }
+                $old_suspect->court_date = $court_date_1;
+                $old_suspect->save();
+                echo "<br>$x. ";
+                echo " NEW : {$old_suspect->first_name} {$old_suspect->last_name} . $old_suspect->court_date";
+
+                continue;
+
 
                 $isEdit = false;
                 if ($old_suspect != null) {
@@ -249,7 +406,7 @@ class Utils  extends Model
                     $sus = new CaseSuspect();
                 }
                 echo "<br>$x. ";
-                echo " NEW : {$first_name} {$last_name}";
+                echo " NEW : {$old_suspect->first_name} {$old_suspect->last_name}";
 
 
                 $ca_text = trim($data[6]);
@@ -538,7 +695,7 @@ class Utils  extends Model
             die("cases file not found.");
             return;
         }
- 
+
 
         //read from file and loop 
         $i = 0;
@@ -566,12 +723,12 @@ class Utils  extends Model
 
                 $case_title = trim($data[2]);
                 if (strlen($case_title) < 3) {
+                    continue;
                     $no_names[] = $data;
                     echo "<hr><pre>";
                     print_r($data);
                     echo "<hr></pre>";
                     echo ("FAILED No case title found in column 5 ==> $case_title");
-                    continue;
                 }
 
                 $case = CaseModel::where('title', $case_title)->first();
@@ -973,7 +1130,7 @@ class Utils  extends Model
 
 
     public static function system_boot($u)
-    { 
+    {
         $u = Admin::user();
         if ($u == null) {
             return;
@@ -1799,6 +1956,257 @@ class Utils  extends Model
             "Solomon Islands",
 
             "South Africa",
+            "S. Georgia and S. Sandwich Isls.",
+            "Spain",
+            "Sri Lanka",
+            "St. Helena",
+            "St. Pierre and Miquelon",
+            "Suriname",
+            "Svalbard and Jan Mayen Islands",
+            "Swaziland",
+            "Sweden",
+            "Switzerland",
+            "Syria",
+            "Taiwan",
+            "Tajikistan",
+            "Thailand",
+            "Togo",
+            "Tokelau",
+            "Tonga",
+            "Trinidad and Tobago",
+            "Tunisia",
+            "Turkey",
+            "Turkmenistan",
+            "Turks and Caicos Islands",
+            "Tuvalu",
+            "Ukraine",
+            "United Arab Emirates",
+            "United Kingdom (Britain / UK)",
+            "United States of America (USA)",
+            "US Minor Outlying Islands",
+            "Uruguay",
+            "Uzbekistan",
+            "Vanuatu",
+            "Vatican City State (Holy See)",
+            "Venezuela",
+            "Viet Nam",
+            "Virgin Islands (British)",
+            "Virgin Islands (US)",
+            "Wallis and Futuna Islands",
+            "Western Sahara",
+            "Yemen",
+            "Yugoslavia",
+            "Zaire",
+            "Zambia",
+            "Zimbabwe"
+        ] as $key => $v) {
+            $data[$v] = $v;
+        };
+        return $data;
+    }
+
+    public static function COUNTRIES_2()
+    {
+        $data = [];
+        foreach ([
+            'Uganda',
+            "Kenya",
+            "Tanzania",
+            "Rwanda",
+            "Congo",
+            "Somalia",
+            "Sudan",
+            "Afghanistan",
+            "Albania",
+            "Algeria",
+            "American Samoa",
+            "Andorra",
+            "Angola",
+            "Anguilla",
+            "Antarctica",
+            "Antigua and Barbuda",
+            "Argentina",
+            "Armenia",
+            "Aruba",
+            "Australia",
+            "Austria",
+            "Azerbaijan",
+            "Bahamas",
+            "Bahrain",
+            "Bangladesh",
+            "Barbados",
+            "Belarus",
+            "Belgium",
+            "Belize",
+            "Benin",
+            "Bermuda",
+            "Bhutan",
+            "Bolivia",
+            "Bosnia and Herzegovina",
+            "Botswana",
+            "Bouvet Island",
+            "Brazil",
+            "British Indian Ocean Territory",
+            "Brunei Darussalam",
+            "Bulgaria",
+            "Burkina Faso",
+            "Burundi",
+            "Cambodia",
+            "Cameroon",
+            "Canada",
+            "Cape Verde",
+            "Cayman Islands",
+            "Central African Republic",
+            "Chad",
+            "Chile",
+            "China",
+            "Christmas Island",
+            "Cocos (Keeling Islands)",
+            "Colombia",
+            "Comoros",
+            "Cook Islands",
+            "Costa Rica",
+            "Cote D'Ivoire (Ivory Coast)",
+            "Croatia (Hrvatska",
+            "Cuba",
+            "Cyprus",
+            "Czech Republic",
+            "Denmark",
+            "Djibouti",
+            "Dominica",
+            "Dominican Republic",
+            "East Timor",
+            "Ecuador",
+            "Egypt",
+            "El Salvador",
+            "Equatorial Guinea",
+            "Eritrea",
+            "Estonia",
+            "Ethiopia",
+            "Falkland Islands (Malvinas)",
+            "Faroe Islands",
+            "Fiji",
+            "Finland",
+            "France",
+            "France",
+            "Metropolitan",
+            "French Guiana",
+            "French Polynesia",
+            "French Southern Territories",
+            "Gabon",
+            "Gambia",
+            "Georgia",
+            "Germany",
+            "Ghana",
+            "Gibraltar",
+            "Greece",
+            "Greenland",
+            "Grenada",
+            "Guadeloupe",
+            "Guam",
+            "Guatemala",
+            "Guinea",
+            "Guinea-Bissau",
+            "Guyana",
+            "Haiti",
+            "Heard and McDonald Islands",
+            "Honduras",
+            "Hong Kong",
+            "Hungary",
+            "Iceland",
+            "India",
+            "Indonesia",
+            "Iran",
+            "Iraq",
+            "Ireland",
+            "Israel",
+            "Italy",
+            "Jamaica",
+            "Japan",
+            "Jordan",
+            "Kazakhstan", 
+            "Kiribati",
+            "Korea (North)",
+            "Korea (South)",
+            "Kuwait",
+            "Kyrgyzstan",
+            "Laos",
+            "Latvia",
+            "Lebanon",
+            "Lesotho",
+            "Liberia",
+            "Libya",
+            "Liechtenstein",
+            "Lithuania",
+            "Luxembourg",
+            "Macau",
+            "Macedonia",
+            "Madagascar",
+            "Malawi",
+            "Malaysia",
+            "Maldives",
+            "Mali",
+            "Malta",
+            "Marshall Islands",
+            "Martinique",
+            "Mauritania",
+            "Mauritius",
+            "Mayotte",
+            "Mexico",
+            "Micronesia",
+            "Moldova",
+            "Monaco",
+            "Mongolia",
+            "Montserrat",
+            "Morocco",
+            "Mozambique",
+            "Myanmar",
+            "Namibia",
+            "Nauru",
+            "Nepal",
+            "Netherlands",
+            "Netherlands Antilles",
+            "New Caledonia",
+            "New Zealand",
+            "Nicaragua",
+            "Niger",
+            "Nigeria",
+            "Niue",
+            "Norfolk Island",
+            "Northern Mariana Islands",
+            "Norway",
+            "Oman",
+            "Pakistan",
+            "Palau",
+            "Panama",
+            "Papua New Guinea",
+            "Paraguay",
+            "Peru",
+            "Philippines",
+            "Pitcairn",
+            "Poland",
+            "Portugal",
+            "Puerto Rico",
+            "Qatar",
+            "Reunion",
+            "Romania",
+            "Russian Federation",
+            "Saint Kitts and Nevis",
+            "Saint Lucia",
+            "Saint Vincent and The Grenadines",
+            "Samoa",
+            "San Marino",
+            "Sao Tome and Principe",
+            "Saudi Arabia",
+            "Senegal",
+            "Seychelles",
+            "Sierra Leone",
+            "Singapore",
+            "Slovak Republic",
+            "Slovenia",
+            "Solomon Islands",
+            "South Africa",
+            "South Sudan",
             "S. Georgia and S. Sandwich Isls.",
             "Spain",
             "Sri Lanka",

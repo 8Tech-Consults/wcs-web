@@ -173,23 +173,27 @@ class CaseModelController extends AdminController
             //         $actions->add(new CaseModelActionEditCase);
             //     }
             // }
+            $actions->add(new CaseModelActionAddSuspect);
+            // $actions->add(new CaseModelActionEditCase);
+            $actions->add(new CaseModelActionAddExhibit);
+            $actions->add(new CaseModelAddComment);
             $user = Auth::user();
-            if($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')){
-                if(!$user->isRole('hq-manager') && !$user->isRole('director')){
-                    if($user->isRole('admin')){
+            if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
+                if (!$user->isRole('hq-manager') && !$user->isRole('director')) {
+                    if ($user->isRole('admin')) {
                         $actions->add(new CaseModelActionAddSuspect);
                         $actions->add(new CaseModelActionEditCase);
                         $actions->add(new CaseModelActionAddExhibit);
                         $actions->add(new CaseModelAddComment);
-                    }else {
-                        if($actions->row->reported_by == $user->id){
+                    } else {
+                        if ($actions->row->reported_by == $user->id) {
                             $actions->add(new CaseModelActionAddSuspect);
                             // $actions->add(new CaseModelActionEditCase);
                             $actions->add(new CaseModelActionAddExhibit);
                             $actions->add(new CaseModelAddComment);
                         }
                     }
-                }else { // HQ manager and director
+                } else { // HQ manager and director
                     $actions->add(new CaseModelAddComment);
                 }
             }

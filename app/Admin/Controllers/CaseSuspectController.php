@@ -183,7 +183,7 @@ class CaseSuspectController extends AdminController
 
             $f->like('arrest_crb_number', 'Filter CRB number');
             $f->equal('country', 'Filter country of origin')->select(
-                Utils::COUNTRIES()
+                Utils::COUNTRIES_2()
             );
 
 
@@ -674,7 +674,11 @@ class CaseSuspectController extends AdminController
             if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
 
 
-                if (
+                $actions->add(new AddArrest);
+                $actions->add(new AddCourte);
+                $actions->add(new EditSuspect);
+
+              /*   if (
                     !($actions->row->is_suspects_arrested == 'Yes' ||
                         $actions->row->is_suspects_arrested == '1')
                 ) {
@@ -713,7 +717,7 @@ class CaseSuspectController extends AdminController
                     } else {
                         $actions->add(new EditSuspect);
                     }
-                }
+                } */
             }
         });
 

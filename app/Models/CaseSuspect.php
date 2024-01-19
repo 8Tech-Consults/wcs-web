@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CaseSuspect extends Model
@@ -33,7 +34,10 @@ class CaseSuspect extends Model
 
             $by = User::find($m->reported_by);
             if ($by == null) {
-                throw new \Exception("Created by is not a user.");
+                $by = Auth::user();
+                if ($by == null) {
+                    throw new \Exception("Created by is not a user.");
+                }
             }
 
             if ($m->created_by_ca_id == null || $m->created_by_ca_id == 0 || strlen($m->created_by_ca_id) < 1) {

@@ -1954,8 +1954,8 @@ array:91 [▼
             "Slovak Republic",
             "Slovenia",
             "Solomon Islands",
-
             "South Africa",
+            "South Sudan",
             "S. Georgia and S. Sandwich Isls.",
             "Spain",
             "Sri Lanka",

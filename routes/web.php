@@ -251,7 +251,7 @@ MAGISTRATE*
 Route::get('/login', function () {
   die("login");
 })->name("login");
-        
+
 Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");
@@ -259,7 +259,7 @@ Route::get('/mobile', function () {
   return redirect(url('uwa-v13.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
-  return redirect(url('uwa-desktop-v3.zip'));
+  return redirect(url('uwa-v13.2.zip'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
   return redirect(url('uwa-fingerprint-v2.zip'));

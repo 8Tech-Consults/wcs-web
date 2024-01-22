@@ -242,6 +242,11 @@ class CaseModel extends Model
 
     function reportor()
     {
+        $rep = Administrator::find($this->reported_by);
+        if ($rep == null) {
+            $this->reported_by = 1;
+            $this->save();
+        }
         return $this->belongsTo(Administrator::class, 'reported_by');
     }
 

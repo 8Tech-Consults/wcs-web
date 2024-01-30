@@ -172,7 +172,7 @@ class Dashboard
             if (strlen($ca->name) > 15) {
                 $label .= "...";
             }
-
+            $cases_count = 0;
             if ($tot > 0) {
                 $cases_count  = CaseModel::where('ca_id', $ca->id)->count();
                 $per = (int) (($cases_count / $tot) * 100);

@@ -13,6 +13,12 @@ class CaseModel extends Model
     use \Znck\Eloquent\Traits\BelongsToThrough;
 
 
+    //created_by_ca
+    public function created_by_ca()
+    {
+        return $this->belongsTo(ConservationArea::class, 'created_by_ca_id');
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -93,7 +99,13 @@ class CaseModel extends Model
         });
         self::updating(function ($m) {
 
-            $pa = PA::find($m->pa_id);
+            $pa = null;
+            if ($m->is_offence_committed_in_pa == 'Yes') {
+                $pa = PA::find($m->pa_id);
+            } else {
+                $m->pa_id = 1;
+                $m->ca_id = 1;
+            }
             if (
                 $pa != null
             ) {
@@ -106,7 +118,11 @@ class CaseModel extends Model
                 $m->is_offence_committed_in_pa = 'No';
                 $m->pa_id = 1;
                 if ($m->ca_id == null || (int)($m->ca_id) < 2) {
-                    $m->ca_id = $pa->ca_id;
+                    if ($pa != null) {
+                        $m->ca_id = $pa->ca_id;
+                    }else{
+                        $m->ca_id = 1;
+                    }
                 }
             }
 
@@ -119,6 +135,17 @@ class CaseModel extends Model
                 if ($sub != null) {
                     $m->district_id = $sub->parent;
                 }
+            }
+
+            if($m->is_offence_committed_in_pa == 'Yes'){
+                $pa = PA::find($m->pa_id);
+                if($pa != null){
+                    $m->ca_id = $pa->ca_id;
+                }
+            }else{
+                $m->ca_id = 1;
+                $m->pa_id = 1;
+                $m->is_offence_committed_in_pa = 'No';
             }
             $m->case_number = Utils::getCaseNumber($m);
             return $m;
@@ -234,7 +261,7 @@ class CaseModel extends Model
     }
     function ca()
     {
-        return $this->belongsTo(ConservationArea::class,'ca_id');
+        return $this->belongsTo(ConservationArea::class, 'ca_id');
         return $this->belongsToThrough(ConservationArea::class, PA::class, null, '', [
             ConservationArea::class => 'ca_id'
         ]);

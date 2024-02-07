@@ -369,12 +369,114 @@ class ArrestsController extends AdminController
 
         $grid->actions(function ($actions) {
             $user = Admin::user();
+            $row = $actions->row;
 
             $actions->disableView();
             $actions->disableDelete();
             $actions->disableedit();
-
             $actions->add(new ViewSuspect);
+
+
+            $can_add_court = false;
+            $can_edit = false;
+
+            if ($user->isRole('ca-agent')) {
+                if (
+                    $row->reported_by == $user->id ||
+                    $row->pa_id == 1 ||
+                    $row->ca_id == 1
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_arrest = true;
+                    $can_add_court = true;
+                    $can_edit = true;
+                }
+            } elseif ($user->isRole('ca-team')) {
+                if (
+                    $row->reported_by == $user->id ||
+                    $row->created_by_ca_id == $user->ca_id ||
+                    $row->pa_id == 1 ||
+                    $row->ca_id == 1
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_arrest = true;
+                    $can_add_court = true;
+                    $can_edit = true;
+                }
+            } elseif ($user->isRole('ca-manager')) {
+                if (
+                    $row->reported_by == $user->id ||
+                    $row->created_by_ca_id == $user->ca_id ||
+                    $row->ca_id == $user->ca_id ||
+                    $row->pa_id == 1 ||
+                    $row->ca_id == 1
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_court_info = true;
+                    $can_add_arrest = true;
+                    $can_edit = true;
+                    $can_add_court = true;
+                }
+            } elseif ($user->isRole('hq-team-leaders')) {
+                if (
+                    $row->reported_by == $user->id
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_court = true;
+                }
+            } elseif ($user->isRole('hq-manager')) {
+                $can_add_comment = true;
+                $can_add_court_info = true;
+                $can_edit = true;
+            } elseif ($user->isRole('director')) {
+            } elseif ($user->isRole('secretary')) {
+            } elseif (
+                $user->isRole('hq-prosecutor')
+            ) {
+                $can_add_comment = true;
+                $can_add_court = true;
+                $can_edit = true;
+            } elseif ($user->isRole('prosecutor')) {
+                if (
+                    $row->created_by_ca_id == $user->ca_id
+                ) {
+                    $can_add_comment = true;
+                    $can_add_court = true;
+                    $can_edit = true;
+                }
+            } else if (
+                $user->isRole('admin') ||
+                $user->isRole('administrator')
+            ) {
+                $can_add_suspect = true;
+                $can_add_exhibit = true;
+                $can_add_comment = true;
+                $can_add_court_info = true;
+                $can_edit = true;
+                $can_add_arrest = true;
+                $can_add_court = true;
+                $can_edit = true;
+            }
+
+            if ($can_add_court) {
+                $actions->add(new AddCourte);
+            }
+
+            if ($can_edit) {
+                $actions->add(new EditArrest);
+            }
+            
+            return $actions;
+
+
 
             if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
 

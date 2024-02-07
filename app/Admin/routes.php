@@ -39,7 +39,7 @@ Route::group([
     $router->resource('add-exhibit', AddExhibitCaseModelController::class);
     $router->resource('new-confirm-case-models', NewConfirmCaseModelController::class);
     $router->resource('comments', CaseModelCommentsController::class);
-    $router->resource('gens', GenController::class);   
+    $router->resource('gens', GenController::class);
 
     $router->get('forms/settings', 'FormController@settings');
     $router->resource('suspect-court-statuses', SuspectCourtStatusController::class);
@@ -47,5 +47,4 @@ Route::group([
     $router->resource('arresting-agencies', ArrestingAgencyController::class);
 
     $router->resource('suspect-links', SuspectLinkController::class);
-
 });

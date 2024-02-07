@@ -678,7 +678,7 @@ class CaseSuspectController extends AdminController
                 $actions->add(new AddCourte);
                 $actions->add(new EditSuspect);
 
-              /*   if (
+              if (
                     !($actions->row->is_suspects_arrested == 'Yes' ||
                         $actions->row->is_suspects_arrested == '1')
                 ) {
@@ -717,7 +717,7 @@ class CaseSuspectController extends AdminController
                     } else {
                         $actions->add(new EditSuspect);
                     }
-                } */
+                }
             }
         });
 

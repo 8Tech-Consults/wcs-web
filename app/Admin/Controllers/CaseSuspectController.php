@@ -745,20 +745,17 @@ class CaseSuspectController extends AdminController
             }
 
 
+ 
+            $is_active  = true;
             $case = $row->case;
-            $can_edit = true;
             if (
                 !$user->isRole('admin')
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
-                    $can_edit = false;
-                }else {
-                    $can_edit = true;
+                    $is_active = false;
                 }
-            } else {
-                $can_edit = true;
-            }
-            if (!$can_edit) {
+            } 
+            if (!$is_active) {
                 return;
             }
 

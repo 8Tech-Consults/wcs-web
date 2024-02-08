@@ -230,21 +230,19 @@ class CaseModelController extends AdminController
                 $can_add_edit = true;
             }
 
-            $can_edit = true;
+            $is_active  = true;
+            $case = $row;
             if (
                 !$user->isRole('admin')
             ) {
-                if (strtolower($row->court_status) == 'concluded') {
-                    $can_edit = false;
-                } else {
-                    $can_edit = true;
+                if (strtolower($case->court_status) == 'concluded') {
+                    $is_active = false;
                 }
-            } else {
-                $can_edit = true;
-            }
-            if (!$can_edit) {
+            } 
+            if (!$is_active) {
                 return;
             }
+
 
             if ($can_add_suspect) {
                 $actions->add(new CaseModelActionAddSuspect);

@@ -462,24 +462,20 @@ class ArrestsController extends AdminController
                 $can_edit = true;
             }
 
+            $is_active  = true;
             $case = $row->case;
             if (
                 !$user->isRole('admin')
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
-                    $can_edit = false;
-                }else {
-                    $can_edit = true;
+                    $is_active = false;
                 }
-            }else{
-                $can_edit = true;
-            }
-
-
-
-            if (!$can_edit) {
+            } 
+            if (!$is_active) {
                 return;
             }
+
+            
 
             if ($can_add_court) {
                 $actions->add(new AddCourte);

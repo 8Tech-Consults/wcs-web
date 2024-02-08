@@ -468,10 +468,15 @@ class ArrestsController extends AdminController
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
                     $can_edit = false;
+                }else {
+                    $can_edit = true;
                 }
-            } else {
+            }else{
                 $can_edit = true;
             }
+
+
+
             if (!$can_edit) {
                 return;
             }

@@ -180,7 +180,7 @@ class CaseModelController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->ca_id == $user->ca_id 
+                    $row->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -191,7 +191,7 @@ class CaseModelController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->ca_id == $user->ca_id 
+                    $row->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -221,7 +221,7 @@ class CaseModelController extends AdminController
                     $can_add_comment = true;
                 }
             } else if (
-                $user->isRole('admin')  
+                $user->isRole('admin')
             ) {
                 $can_add_suspect = true;
                 $can_add_exhibit = true;
@@ -236,6 +236,8 @@ class CaseModelController extends AdminController
             ) {
                 if (strtolower($row->court_status) == 'concluded') {
                     $can_edit = false;
+                } else {
+                    $can_edit = true;
                 }
             } else {
                 $can_edit = true;

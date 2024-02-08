@@ -752,6 +752,8 @@ class CaseSuspectController extends AdminController
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
                     $can_edit = false;
+                }else {
+                    $can_edit = true;
                 }
             } else {
                 $can_edit = true;

@@ -744,6 +744,22 @@ class CaseSuspectController extends AdminController
                 $can_add_arrest = true;
             }
 
+
+            $case = $row->case;
+            $can_edit = true;
+            if (
+                !$user->isRole('admin')
+            ) {
+                if (strtolower($case->court_status) == 'concluded') {
+                    $can_edit = false;
+                }
+            } else {
+                $can_edit = true;
+            }
+            if (!$can_edit) {
+                return;
+            }
+
             if ($can_add_arrest) {
                 $actions->add(new AddArrest);
             }

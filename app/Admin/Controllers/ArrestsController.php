@@ -382,7 +382,7 @@ class ArrestsController extends AdminController
 
             if ($user->isRole('ca-agent')) {
                 if (
-                    $row->reported_by == $user->id 
+                    $row->reported_by == $user->id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -407,7 +407,7 @@ class ArrestsController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->ca_id == $user->ca_id 
+                    $row->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -460,6 +460,21 @@ class ArrestsController extends AdminController
                 $can_edit = true;
             }
 
+            $case = $row->case;
+            $can_edit = true;
+            if (
+                !$user->isRole('admin')
+            ) {
+                if (strtolower($case->court_status) == 'concluded') {
+                    $can_edit = false;
+                }
+            } else {
+                $can_edit = true;
+            }
+            if (!$can_edit) {
+                return;
+            }
+
             if ($can_add_court) {
                 $actions->add(new AddCourte);
             }
@@ -467,7 +482,7 @@ class ArrestsController extends AdminController
             if ($can_edit) {
                 $actions->add(new EditArrest);
             }
-            
+
             return $actions;
 
 

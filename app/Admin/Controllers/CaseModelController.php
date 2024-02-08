@@ -219,14 +219,27 @@ class CaseModelController extends AdminController
                     $can_add_comment = true;
                 }
             } else if (
-                $user->isRole('admin') ||
-                $user->isRole('administrator')
+                $user->isRole('admin')  
             ) {
                 $can_add_suspect = true;
                 $can_add_exhibit = true;
                 $can_add_comment = true;
                 $can_add_court_info = true;
                 $can_add_edit = true;
+            }
+
+            $can_edit = true;
+            if (
+                !$user->isRole('admin')
+            ) {
+                if (strtolower($row->court_status) == 'concluded') {
+                    $can_edit = false;
+                }
+            } else {
+                $can_edit = true;
+            }
+            if (!$can_edit) {
+                return;
             }
 
             if ($can_add_suspect) {
@@ -239,51 +252,6 @@ class CaseModelController extends AdminController
                 $actions->add(new CaseModelAddComment);
             }
 
-
-            /* 
-
-    "id" => 1
-    "created_at" => "2024-02-07 13:59:17"
-    "updated_at" => "2024-02-07 14:05:19"
-    "reported_by" => "1"
-    "latitude" => "Ex sint asperiores"
-    "longitude" => "Beatae facere vel co"
-    "district_id" => "0"
-    "sub_county_id" => "0"
-    "parish" => null
-    "village" => "Bwera"
-    "offence_category_id" => null
-    "offence_description" => "Uganda Vs Irure soluta velit"
-    "is_offence_committed_in_pa" => "Yes"
-    "pa_id" => "2"
-    "has_exhibits" => "0"
-    "status" => null
-    "title" => "Uganda Vs Irure soluta velit"
-    "location_picker" => null
-    "deleted_at" => null
-    "case_number" => "UWA/MFCA/2024/1"
-    "done_adding_suspects" => null
-    "ca_id" => "13"
-    "detection_method" => "Routine patrol by rangers"
-    "conservation_area_id" => null
-    "offense_category" => null
-    "case_submitted" => "1"
-    "case_step" => "3"
-    "add_more_suspects" => null
-    "case_date" => "2024-02-07"
-    "officer_in_charge" => "Sit qui ea nostrum a"
-    "court_file_status" => null
-    "prison" => null
-    "jail_release_date" => null
-    "suspect_appealed" => null
-    "suspect_appealed_date" => null
-    "suspect_appealed_court_name" => null
-    "suspect_appealed_court_file" => null
-    "user_adding_suspect_id" => null
-    "id_old" => null
-    "created_by_ca_id" => 1
-    
-           */
             return;
             dd($this->row);
             dd($user);
@@ -306,29 +274,6 @@ class CaseModelController extends AdminController
                     $actions->add(new CaseModelAddComment);
                 }
             }
-
-            // if (Auth::user()->isRole('hq-team-leaders')) {
-            //     $actions->add(new CaseModelActionEditCase);
-            //     $actions->add(new CaseModelActionAddSuspect);
-            //     $actions->add(new CaseModelActionAddExhibit);
-            //     $actions->add(new CaseModelAddComment);
-
-            // }else
-            // if (Auth::user()->isRole('ca-team') || Auth::user()->isRole('ca-agent')) {
-            //     if (Auth::user()->ca->id == $actions->row->ca_id) {
-            //         $actions->add(new CaseModelActionAddSuspect);
-            //         $actions->add(new CaseModelActionAddExhibit);
-            //         $actions->add(new CaseModelAddComment);
-            //     }
-            // } else {
-            //     $actions->add(new CaseModelActionAddSuspect);
-            //     $actions->add(new CaseModelActionAddExhibit);
-            //     $actions->add(new CaseModelAddComment);
-            //     // Disable edit for secretaries and prosecutors
-            //     if (!Auth::user()->isRole('secretary') && !Auth::user()->isRole('prosecutor')) {
-            //         $actions->add(new CaseModelActionEditCase);
-            //     }
-            // }
         });
 
 

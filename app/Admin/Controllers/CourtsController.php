@@ -217,7 +217,7 @@ class CourtsController extends AdminController
         $grid->column('court_file_number')->sortable();
         $grid->column('court_date', 'Court date')
             ->display(function ($d) {
-                if($d == null){
+                if ($d == null) {
                     return '-';
                 }
                 return Utils::my_date($d);
@@ -358,11 +358,100 @@ class CourtsController extends AdminController
             $actions->disableView();
             $actions->disableEdit();
             $actions->disableDelete();
+
+
+            $row = $actions->row;
+
+            $can_add_suspect = false;
+            $can_add_exhibit = false;
+            $can_add_comment = false;
+            $can_add_court_info = false;
+            $can_edit = false;
+            if ($user->isRole('ca-agent')) {
+                if (
+                    $row->reported_by == $user->id
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_court_info = true;
+                    $can_edit = true;
+                }
+            } elseif ($user->isRole('ca-team')) {
+                if (
+                    $row->reported_by == $user->id ||
+                    $row->created_by_ca_id == $user->ca_id
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_court_info = true;
+                    $can_edit = true;
+                }
+            } elseif ($user->isRole('ca-manager')) {
+                if (
+                    $row->reported_by == $user->id ||
+                    $row->created_by_ca_id == $user->ca_id
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                    $can_add_court_info = true;
+                    $can_edit = true;
+                }
+            } elseif ($user->isRole('hq-team-leaders')) {
+                if (
+                    $row->reported_by == $user->id
+                ) {
+                    $can_add_suspect = true;
+                    $can_add_exhibit = true;
+                    $can_add_comment = true;
+                }
+            } elseif ($user->isRole('hq-manager')) {
+                $can_add_comment = true;
+            } elseif ($user->isRole('director')) {
+            } elseif ($user->isRole('secretary')) {
+            } elseif (
+                $user->isRole('hq-prosecutor')
+            ) {
+                $can_add_comment = true;
+            } elseif ($user->isRole('prosecutor')) {
+                if (
+                    $row->created_by_ca_id == $user->ca_id
+                ) {
+                    $can_add_comment = true;
+                }
+            } else if (
+                $user->isRole('admin') ||
+                $user->isRole('administrator')
+            ) {
+                $can_add_suspect = true;
+                $can_add_exhibit = true;
+                $can_add_comment = true;
+                $can_add_court_info = true;
+                $can_add_edit = true;
+                $$can_edit = true;
+            } 
+            
+            if (
+                !$user->isRole('admin')
+            ) {
+                if (strtolower($row->court_status) == 'concluded') {
+                    $can_edit = false;
+                }
+            }else{
+                $can_edit = true;
+            }
+            
             $actions->add(new ViewSuspect);
-           // $actions->add(new CourtCaseUpdate);
+            if ($can_edit) {
+                $actions->add(new EditCourtCase);
+            }
+            return $actions;
+            // $actions->add(new CourtCaseUpdate);
             $actions->add(new EditCourtCase);
 
-           /*  if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
+            /*  if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
 
                 if ($actions->row->court_status == 'On-going prosecution' || $actions->row->court_status == 'Reinstated') {
                     if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('director')) {

@@ -169,9 +169,7 @@ class CaseModelController extends AdminController
             $can_add_edit = false;
             if ($user->isRole('ca-agent')) {
                 if (
-                    $row->reported_by == $user->id ||
-                    $row->pa_id == 1 ||
-                    $row->ca_id == 1
+                    $row->reported_by == $user->id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -181,9 +179,7 @@ class CaseModelController extends AdminController
             } elseif ($user->isRole('ca-team')) {
                 if (
                     $row->reported_by == $user->id ||
-                    $row->created_by_ca_id == $user->ca_id ||
-                    $row->pa_id == 1 ||
-                    $row->ca_id == 1
+                    $row->created_by_ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -193,10 +189,7 @@ class CaseModelController extends AdminController
             } elseif ($user->isRole('ca-manager')) {
                 if (
                     $row->reported_by == $user->id ||
-                    $row->created_by_ca_id == $user->ca_id ||
-                    $row->ca_id == $user->ca_id ||
-                    $row->pa_id == 1 ||
-                    $row->ca_id == 1
+                    $row->created_by_ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -244,7 +237,7 @@ class CaseModelController extends AdminController
             }
             if ($can_add_comment) {
                 $actions->add(new CaseModelAddComment);
-            } 
+            }
 
 
             /* 

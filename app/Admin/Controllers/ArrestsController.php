@@ -441,7 +441,8 @@ class ArrestsController extends AdminController
                 $can_edit = false;
             } elseif ($user->isRole('prosecutor')) {
                 if (
-                    $row->created_by_ca_id == $user->ca_id
+                    $row->case->created_by_ca_id == $user->ca_id ||
+                    $row->case->ca_id == $user->ca_id 
                 ) {
                     $can_add_comment = true;
                     $can_add_court = true;

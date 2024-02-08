@@ -419,9 +419,11 @@ class CourtsController extends AdminController
                 $can_add_comment = true;
             } elseif ($user->isRole('prosecutor')) {
                 if (
-                    $row->created_by_ca_id == $user->ca_id
+                    $row->created_by_ca_id == $user->ca_id ||
+                    $row->ca_id == $user->ca_id 
                 ) {
                     $can_add_comment = true;
+                    $can_edit = true;
                 }
             } else if (
                 $user->isRole('admin') ||

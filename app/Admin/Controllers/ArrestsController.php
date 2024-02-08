@@ -438,12 +438,14 @@ class ArrestsController extends AdminController
             ) {
                 $can_add_comment = true;
                 $can_add_court = true;
+                $can_edit = false;
             } elseif ($user->isRole('prosecutor')) {
                 if (
                     $row->created_by_ca_id == $user->ca_id
                 ) {
                     $can_add_comment = true;
-                    $can_add_court = true; 
+                    $can_add_court = true;
+                    $can_edit = false;
                 }
             } else if (
                 $user->isRole('admin') ||
@@ -460,7 +462,6 @@ class ArrestsController extends AdminController
             }
 
             $case = $row->case;
-            $can_edit = true;
             if (
                 !$user->isRole('admin')
             ) {

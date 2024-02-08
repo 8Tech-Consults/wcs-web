@@ -380,7 +380,8 @@ class CourtsController extends AdminController
             } elseif ($user->isRole('ca-team')) {
                 if (
                     $row->reported_by == $user->id ||
-                    $row->created_by_ca_id == $user->ca_id
+                    $row->created_by_ca_id == $user->ca_id ||
+                    $row->case->ca_id == $user->ca_id 
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -391,7 +392,8 @@ class CourtsController extends AdminController
             } elseif ($user->isRole('ca-manager')) {
                 if (
                     $row->reported_by == $user->id ||
-                    $row->created_by_ca_id == $user->ca_id
+                    $row->created_by_ca_id == $user->ca_id ||
+                    $row->case->ca_id == $user->ca_id 
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -442,7 +444,7 @@ class CourtsController extends AdminController
             }else{
                 $can_edit = true;
             }
-            
+
             $actions->add(new ViewSuspect);
             if ($can_edit) {
                 $actions->add(new EditCourtCase);

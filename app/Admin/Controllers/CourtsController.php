@@ -414,7 +414,9 @@ class CourtsController extends AdminController
             } elseif ($user->isRole('director')) {
             } elseif ($user->isRole('secretary')) {
             } elseif (
-                $user->isRole('hq-prosecutor')
+                $user->isRole('hq-prosecutor')  ||
+                $row->created_by_ca_id == $user->ca_id ||
+                $row->case->ca_id == $user->ca_id 
             ) {
                 $can_add_comment = true;
             } elseif ($user->isRole('prosecutor')) {

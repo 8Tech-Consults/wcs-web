@@ -437,7 +437,7 @@ class CourtsController extends AdminController
                 $can_add_comment = true;
                 $can_add_court_info = true;
                 $can_add_edit = true;
-                $$can_edit = true;
+                $can_edit = true;
             } 
             
             if (
@@ -452,11 +452,11 @@ class CourtsController extends AdminController
 
             $actions->add(new ViewSuspect);
             if ($can_edit) { 
+                $actions->add(new EditCourtCase);
                 $actions->add(new CourtCaseUpdate);
             }
             return $actions;
             // $actions->add(new CourtCaseUpdate);
-            $actions->add(new EditCourtCase);
 
             /*  if ($user->isRole('admin') || $user->isRole('hq-team-leaders') || $user->isRole('hq-manager') || $user->isRole('ca-team') || $user->isRole('ca-agent') || $user->isRole('director') || $user->isRole('ca-manager')) {
 

@@ -445,7 +445,7 @@ class CourtsController extends AdminController
             } 
             
             if (
-                !$user->isRole('admin')
+                true
             ) {
                 if (strtolower($row->court_status) == 'concluded') {
                     $can_edit = false;

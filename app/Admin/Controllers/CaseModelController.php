@@ -235,7 +235,7 @@ class CaseModelController extends AdminController
             $is_active  = true;
             $case = $row;
             if (
-                !$user->isRole('admin')
+                true
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
                     $is_active = false;

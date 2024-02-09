@@ -462,14 +462,16 @@ class CourtsController extends AdminController
             }
 
             $actions->add(new ViewSuspect);
-            if($can_modify){
-                $actions->add(new EditCourtCase);
-            }
-            
+
+                  
             if ($can_edit) { 
                 $actions->add(new CourtCaseUpdate);
             }
            
+            if($can_modify){
+                $actions->add(new EditCourtCase);
+            }
+      
             return $actions;
             // $actions->add(new CourtCaseUpdate);
 

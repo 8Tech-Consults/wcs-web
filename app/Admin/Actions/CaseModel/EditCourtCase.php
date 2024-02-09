@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EditCourtCase extends RowAction
 { 
-    public $name = 'Update Court Info';
+    public $name = 'Edit';
 
     public function handle(Model $model)
     {

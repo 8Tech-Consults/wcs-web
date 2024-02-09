@@ -402,7 +402,7 @@ class ArrestsController extends AdminController
                     $can_add_comment = true;
                     $can_add_arrest = true;
                     $can_add_court = true;
-                    $can_edit = true;
+                    $can_edit = false;
                 }
             } elseif ($user->isRole('ca-manager')) {
                 if (

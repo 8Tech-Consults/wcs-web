@@ -618,6 +618,7 @@ class CourtsController extends AdminController
                                     'Yes' => 'Yes',
                                     'No' => 'No',
                                 ])
+                                ->default('No')
                                 ->when('Yes', function ($form) {
                                     $form->date('suspect_appealed_date', 'Accused appeal Date');
                                     $form->text('suspect_appealed_court_name', 'Appellate court');

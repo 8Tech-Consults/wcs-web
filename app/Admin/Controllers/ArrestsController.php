@@ -431,7 +431,8 @@ class ArrestsController extends AdminController
             } elseif ($user->isRole('hq-manager')) {
                 $can_add_comment = true;
                 $can_add_court_info = true;
-                $can_edit = true;
+                $can_edit = false;
+                $can_add_court = true;
             } elseif ($user->isRole('director')) {
             } elseif ($user->isRole('secretary')) {
             } elseif (

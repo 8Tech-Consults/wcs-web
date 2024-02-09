@@ -367,6 +367,7 @@ class CourtsController extends AdminController
             $can_add_comment = false;
             $can_update_court_info = false;
             $can_edit = false;
+            $can_modify = false;
             if ($user->isRole('ca-agent')) {
                 if (
                     $row->reported_by == $user->id
@@ -400,6 +401,7 @@ class CourtsController extends AdminController
                     $can_add_comment = true;
                     $can_add_court_info = true;
                     $can_edit = true;
+                    $can_modify = true;
                 }
             } elseif ($user->isRole('hq-team-leaders')) {
                 if (
@@ -445,16 +447,22 @@ class CourtsController extends AdminController
             ) {
                 if (strtolower($row->court_status) == 'concluded') {
                     $can_edit = false;
+                    $can_modify = false;
                 }
             }else{
                 $can_edit = true;
+                $can_modify = true;
             }
 
             $actions->add(new ViewSuspect);
-            if ($can_edit) { 
+            if($can_modify){
                 $actions->add(new EditCourtCase);
+            }
+            
+            if ($can_edit) { 
                 $actions->add(new CourtCaseUpdate);
             }
+           
             return $actions;
             // $actions->add(new CourtCaseUpdate);
 

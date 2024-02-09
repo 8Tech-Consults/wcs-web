@@ -419,6 +419,7 @@ class CourtsController extends AdminController
                 $row->case->ca_id == $user->ca_id 
             ) {
                 $can_add_comment = true;
+                $can_edit = true;
             } elseif ($user->isRole('prosecutor')) {
                 if (
                     $row->created_by_ca_id == $user->ca_id ||

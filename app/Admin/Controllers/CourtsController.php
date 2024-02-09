@@ -365,7 +365,7 @@ class CourtsController extends AdminController
             $can_add_suspect = false;
             $can_add_exhibit = false;
             $can_add_comment = false;
-            $can_add_court_info = false;
+            $can_update_court_info = false;
             $can_edit = false;
             if ($user->isRole('ca-agent')) {
                 if (
@@ -448,8 +448,8 @@ class CourtsController extends AdminController
             }
 
             $actions->add(new ViewSuspect);
-            if ($can_edit) {
-                $actions->add(new EditCourtCase);
+            if ($can_edit) { 
+                $actions->add(new CourtCaseUpdate);
             }
             return $actions;
             // $actions->add(new CourtCaseUpdate);

@@ -395,7 +395,7 @@ class ArrestsController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->case->ca_id == $user->ca_id 
+                    $row->case->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -408,7 +408,7 @@ class ArrestsController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->case->ca_id == $user->ca_id 
+                    $row->case->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -442,7 +442,7 @@ class ArrestsController extends AdminController
             } elseif ($user->isRole('prosecutor')) {
                 if (
                     $row->case->created_by_ca_id == $user->ca_id ||
-                    $row->case->ca_id == $user->ca_id 
+                    $row->case->ca_id == $user->ca_id
                 ) {
                     $can_add_comment = true;
                     $can_add_court = true;
@@ -470,12 +470,18 @@ class ArrestsController extends AdminController
                 if (strtolower($case->court_status) == 'concluded') {
                     $is_active = false;
                 }
-            } 
+            }
             if (!$is_active) {
                 return;
             }
 
-            
+            if (!$user->isRole('admin')) {
+                if ($row->is_suspect_appear_in_court == 'Yes') {
+                    $can_add_court = false;
+                }
+            }
+
+
 
             if ($can_add_court) {
                 $actions->add(new AddCourte);

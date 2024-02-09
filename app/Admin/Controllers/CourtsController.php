@@ -442,6 +442,7 @@ class CourtsController extends AdminController
                 $can_add_court_info = true;
                 $can_add_edit = true;
                 $can_edit = true;
+                $can_modify = true;
             } 
             
             if (

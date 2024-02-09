@@ -467,7 +467,7 @@ class ArrestsController extends AdminController
             $is_active  = true;
             $case = $row->case;
             if (
-                !$user->isRole('admin')
+                true
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
                     $is_active = false;
@@ -477,7 +477,7 @@ class ArrestsController extends AdminController
                 return;
             }
 
-            if (!$user->isRole('admin')) {
+            if (true) {
                 if ($row->is_suspect_appear_in_court == 'Yes') {
                     $can_add_court = false;
                 }

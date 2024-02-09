@@ -410,6 +410,7 @@ class CourtsController extends AdminController
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
                     $can_add_comment = true;
+                    $can_modify = true; 
                 }
             } elseif ($user->isRole('hq-manager')) {
                 $can_add_comment = true;

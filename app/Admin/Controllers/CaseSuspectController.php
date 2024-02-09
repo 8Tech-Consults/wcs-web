@@ -675,6 +675,7 @@ class CaseSuspectController extends AdminController
             $can_add_arrest = false;
             $can_add_court_info = false;
             $can_edit = false;
+            $can_add_court = false;
 
 
             if ($user->isRole('ca-agent')) {
@@ -749,20 +750,25 @@ class CaseSuspectController extends AdminController
 
 
             $is_active  = true;
+            $can_add_court = false;
             $case = $row->case;
             if (
                 !$user->isRole('admin')
             ) {
                 if (strtolower($case->court_status) == 'concluded') {
                     $is_active = false;
+                    $can_add_court = true;
                 }
+            }
+            if ($user->isRole('director')) {
+                $can_add_court = false;
             }
             if (!$is_active) {
                 return;
             }
 
 
-            $can_add_court = false;
+
             if (!$user->isRole('admin')) {
                 if ($row->is_suspects_arrested == 'Yes') {
                     $can_add_arrest = false;

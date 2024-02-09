@@ -760,9 +760,11 @@ class CaseSuspectController extends AdminController
                     $can_add_court = true;
                 }
             }
+
             if ($user->isRole('director')) {
-                $can_add_court = false;
+                return;
             }
+
             if (!$is_active) {
                 return;
             }
@@ -785,6 +787,7 @@ class CaseSuspectController extends AdminController
             if ($can_add_arrest) {
                 $actions->add(new AddArrest);
             }
+
 
 
             if ($can_add_court) {

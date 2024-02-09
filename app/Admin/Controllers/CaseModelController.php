@@ -210,6 +210,7 @@ class CaseModelController extends AdminController
             } elseif ($user->isRole('hq-manager')) {
                 $can_add_comment = true;
             } elseif ($user->isRole('director')) {
+                $can_add_comment = true;
             } elseif ($user->isRole('secretary')) {
             } elseif (
                 $user->isRole('hq-prosecutor')

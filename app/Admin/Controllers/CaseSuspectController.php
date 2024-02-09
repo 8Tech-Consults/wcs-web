@@ -748,7 +748,6 @@ class CaseSuspectController extends AdminController
             }
 
 
-
             $is_active  = true;
             $can_add_court = false;
             $case = $row->case;

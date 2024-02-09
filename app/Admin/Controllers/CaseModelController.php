@@ -197,6 +197,7 @@ class CaseModelController extends AdminController
                     $can_add_exhibit = true;
                     $can_add_comment = true;
                     $can_add_court_info = true;
+                    $can_add_edit = true;
                 }
             } elseif ($user->isRole('hq-team-leaders')) {
                 if (
@@ -238,7 +239,7 @@ class CaseModelController extends AdminController
                 if (strtolower($case->court_status) == 'concluded') {
                     $is_active = false;
                 }
-            } 
+            }
             if (!$is_active) {
                 return;
             }
@@ -252,6 +253,10 @@ class CaseModelController extends AdminController
             }
             if ($can_add_comment) {
                 $actions->add(new CaseModelAddComment);
+            }
+
+            if ($can_add_edit) {
+                $actions->add(new CaseModelActionEditCase);
             }
 
             return;

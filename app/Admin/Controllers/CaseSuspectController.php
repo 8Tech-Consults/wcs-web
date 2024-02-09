@@ -716,6 +716,8 @@ class CaseSuspectController extends AdminController
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
                     $can_add_comment = true;
+                    $can_add_arrest = true;
+                    $can_add_court = true;
                 }
             } elseif ($user->isRole('hq-manager')) {
                 $can_add_comment = true;
@@ -782,7 +784,7 @@ class CaseSuspectController extends AdminController
             if ($can_add_court) {
                 $actions->add(new AddCourte);
             }
-            
+
             if ($can_edit) {
                 $actions->add(new EditSuspect);
             }

@@ -457,6 +457,10 @@ class CourtsController extends AdminController
                 $can_modify = true;
             }
 
+            if($user->isRole('admin') ){
+                $can_modify = true;
+            }
+
             $actions->add(new ViewSuspect);
             if($can_modify){
                 $actions->add(new EditCourtCase);

@@ -679,7 +679,7 @@ class CaseSuspectController extends AdminController
 
             if ($user->isRole('ca-agent')) {
                 if (
-                    $row->reported_by == $user->id 
+                    $row->reported_by == $user->id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -689,7 +689,7 @@ class CaseSuspectController extends AdminController
             } elseif ($user->isRole('ca-team')) {
                 if (
                     $row->reported_by == $user->id ||
-                    $row->created_by_ca_id == $user->ca_id  
+                    $row->created_by_ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -700,7 +700,7 @@ class CaseSuspectController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->ca_id == $user->ca_id  
+                    $row->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -745,7 +745,7 @@ class CaseSuspectController extends AdminController
             }
 
 
- 
+
             $is_active  = true;
             $case = $row->case;
             if (
@@ -754,9 +754,16 @@ class CaseSuspectController extends AdminController
                 if (strtolower($case->court_status) == 'concluded') {
                     $is_active = false;
                 }
-            } 
+            }
             if (!$is_active) {
                 return;
+            }
+
+
+            if (!$user->isRole('admin')) {
+                if ($row->is_suspects_arrested != 'Yes') {
+                    $can_add_arrest = false;
+                }
             }
 
             if ($can_add_arrest) {

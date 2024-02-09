@@ -414,7 +414,7 @@ class CourtsController extends AdminController
                 }
             } elseif ($user->isRole('hq-manager')) {
                 $can_add_comment = true;
-                $can_modify = true;  
+                $can_edit = true;  
             } elseif ($user->isRole('director')) {
             } elseif ($user->isRole('secretary')) {
             } elseif (

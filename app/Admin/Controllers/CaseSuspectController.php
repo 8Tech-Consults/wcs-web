@@ -241,6 +241,10 @@ class CaseSuspectController extends AdminController
             }, 'Filter by Offence')->select(
                 Offence::pluck('name', 'name')
             );
+
+
+            $f->equal('created_by_ca_id', "Filter by CA of Entry")
+                ->select(ConservationArea::all()->pluck('name', 'id'));
         });
 
 
@@ -411,7 +415,8 @@ class CaseSuspectController extends AdminController
             return $x;
         })->hide()->sortable();
 
-        $grid->column('offences_text', 'Offences');
+        $grid->column('offences_text', 'Offences')
+            ->limit(75, '....');
 
         $grid->column('is_suspects_arrested', 'At Police')
             ->dot([
@@ -638,8 +643,6 @@ class CaseSuspectController extends AdminController
             ->sortable();
 
 
-
-
         $grid->column('reported_by', __('Reported by'))
             ->display(function () {
 
@@ -647,7 +650,14 @@ class CaseSuspectController extends AdminController
             })->hide()
             ->sortable();
 
-
+        $grid->column('created_by_ca_id', __('CA of Entry'))
+            ->display(function () {
+                if ($this->case->created_by_ca == null) {
+                    return  "-";
+                }
+                return $this->case->created_by_ca->name;
+            })
+            ->sortable();
         /*     $grid->column('action', __('Actions'))->display(function () {
 
             $view_link = '<a class="" href="' . url("case-suspects/{$this->id}") . '">

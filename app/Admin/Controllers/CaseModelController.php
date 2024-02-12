@@ -108,6 +108,7 @@ class CaseModelController extends AdminController
 
             $f->equal('ca_id', "Filter by CA")
                 ->select(ConservationArea::all()->pluck('name', 'id'));
+
             $ajax_url = url(
                 '/api/ajax?'
                     . "&search_by_1=name"
@@ -138,18 +139,13 @@ class CaseModelController extends AdminController
                 }
             })
                 ->ajax($ajax_url);
+
+
+            $f->equal('created_by_ca_id', "Filter by CA of Entry")
+                ->select(ConservationArea::all()->pluck('name', 'id'));
         });
 
 
-        //created_by_ca_id
-        $grid->column('created_by_ca_id', __('CA of Entry'))
-            ->display(function () {
-                if ($this->created_by_ca == null) {
-                    return  "-";
-                }
-                return $this->created_by_ca->name;
-            })
-            ->sortable();
 
 
         $grid->disableBatchActions();
@@ -289,7 +285,7 @@ class CaseModelController extends AdminController
         $grid->quickSearch('title')->placeholder("Search by case title...");
 
 
-        $grid->column('id', __('ID'))->sortable();
+        $grid->column('id', __('ID'))->sortable()->hide();
         $grid->column('created_at', __('Created'))
             ->display(function ($x) {
                 return Utils::my_date_time($x);
@@ -369,6 +365,16 @@ class CaseModelController extends AdminController
 
             return $view_link . $suspetcs_link . $edit_link . $add_link;
         }); */
+
+        //created_by_ca_id
+        $grid->column('created_by_ca_id', __('CA of Entry'))
+            ->display(function () {
+                if ($this->created_by_ca == null) {
+                    return  "-";
+                }
+                return $this->created_by_ca->name;
+            })
+            ->sortable();
         return $grid;
     }
 

@@ -120,7 +120,7 @@ class CaseModel extends Model
                 if ($m->ca_id == null || (int)($m->ca_id) < 2) {
                     if ($pa != null) {
                         $m->ca_id = $pa->ca_id;
-                    }else{
+                    } else {
                         $m->ca_id = 1;
                     }
                 }
@@ -137,12 +137,12 @@ class CaseModel extends Model
                 }
             }
 
-            if($m->is_offence_committed_in_pa == 'Yes'){
+            if ($m->is_offence_committed_in_pa == 'Yes') {
                 $pa = PA::find($m->pa_id);
-                if($pa != null){
+                if ($pa != null) {
                     $m->ca_id = $pa->ca_id;
                 }
-            }else{
+            } else {
                 $m->ca_id = 1;
                 $m->pa_id = 1;
                 $m->is_offence_committed_in_pa = 'No';
@@ -455,6 +455,17 @@ class CaseModel extends Model
         }
 
         return "";
+    }
+
+    public function getAllOffences()
+    {
+        $offences = [];
+        foreach ($this->suspects as $key => $sus) {
+            foreach ($sus->offences as $off) {
+                $offences[] = $off;
+            }
+        }
+        return $offences;
     }
 
     protected $appends = ['ca_text', 'pa_text', 'district_text', 'photo', 'suspects_count', 'exhibit_count'];

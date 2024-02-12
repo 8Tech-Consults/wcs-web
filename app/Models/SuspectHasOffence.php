@@ -24,7 +24,7 @@ class SuspectHasOffence extends Model
                 'offence_id' => $m->offence_id,
                 'case_suspect_id' => $m->case_suspect_id,
             ])->first();
-            if ($old == null) {
+            if ($old != null) {
                 return false;
             }
         });

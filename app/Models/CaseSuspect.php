@@ -230,14 +230,27 @@ class CaseSuspect extends Model
     function copyOffencesInfo($org)
     {
 
+        $offences = $org->offences;
 
-        foreach ($org->offences as $key => $of) {
+        if ($offences->count() < 1) {
+            if ($org->case != null) {
+                $offences = $org->case->getAllOffences();
+            }
+        }
+
+        foreach ($offences as $key => $of) {
+            $old = SuspectHasOffence::where([
+                'case_suspect_id' => $this->id,
+                'offence_id' => $of->id,
+            ])->first();
+            if ($old != null) {
+                continue;
+            }
             $newOff = new SuspectHasOffence();
             $newOff->case_suspect_id = $this->id;
             $newOff->offence_id = $of->id;
             $newOff->vadict = null;
             $newOff->save();
-            //dd($of);
         }
         $this->use_offence_suspect_coped = 'Yes';
         $this->use_offence = 'Yes';

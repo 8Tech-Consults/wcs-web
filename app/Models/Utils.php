@@ -236,7 +236,46 @@ class Utils  extends Model
                 if ($old_suspect == null) {
                     continue;
                 }
+                $off = [];
+                $off[] = $data[32];
+                $off[] = $data[33];
+                $off[] = $data[34];
+                $off[] = $data[35];
+                foreach ($off as $key => $of) {
+                    if ($of == null) {
+                        continue;
+                    }
+                    if (strlen($of) < 3) {
+                        continue;
+                    }
+                    $offence = Offence::where([
+                        'name' => trim($of)
+                    ])->first();
+                    if ($offence == null) {
+                        echo "<code>$of<code><br>";
+                        continue;
+                    }
 
+                    $has = SuspectHasOffence::where([
+                        'case_suspect_id' => $old_suspect->id,
+                        'offence_id' => $offence->id,
+                    ])->first();
+                    if ($has != null) {
+                        continue;
+                    }
+                    $newOff = new SuspectHasOffence();
+                    $newOff->case_suspect_id = $old_suspect->id;
+                    $newOff->offence_id = $offence->id;
+                    $newOff->vadict = null;
+                    $newOff->save();
+                    echo $newOff->id . " success <br>";
+                }
+                continue;
+
+                dd('');
+                dd($off);
+
+                dd($old_suspect);
                 if (strtolower($old_suspect->is_suspect_appear_in_court) != 'yes') {
                     $old_suspect->court_date = null;
                     $old_suspect->save();
@@ -1145,13 +1184,17 @@ array:91 [▼
             '!=',
             'Yes'
         )->get();
+        /*     $sus = CaseSuspect::find(4831);
+        Utils::copyPendingArrestInfo($sus);
+        Utils::copyPendingCourtInfo($sus);
+        Utils::copyOffencesCourtInfo($sus); */
 
         foreach ($suspects as $sus) {
             if ($sus->case == null) {
                 continue;
             }
             if ($sus->case->case_submitted != 'Yes') {
-                continue;
+                //continue;
             }
             Utils::copyPendingArrestInfo($sus);
             Utils::copyPendingCourtInfo($sus);
@@ -1248,8 +1291,9 @@ array:91 [▼
     {
 
         $originalSuspect = CaseSuspect::find($sus->use_offence_suspect_id);
+        $sus->use_offence_suspect_coped = 'Yes';
+        $sus->save();
         if ($originalSuspect == null) {
-            $sus->use_offence_suspect_coped = 'Yes';
             $sus->use_offence = 'No';
             $sus->save();
             return;
@@ -1274,6 +1318,7 @@ array:91 [▼
 
     public static function copyPendingArrestInfo($sus)
     {
+
         $originalSuspect = CaseSuspect::find($sus->use_same_arrest_information_id);
         if ($originalSuspect == null) {
             $sus->use_same_arrest_information_coped = 'Yes';

@@ -1135,6 +1135,32 @@ array:91 [▼
         if ($u == null) {
             return;
         }
+
+        //set unlimited time
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '-1');
+
+        $suspects = CaseSuspect::where(
+            'data_copied',
+            '!=',
+            'Yes'
+        )->get();
+
+        foreach ($suspects as $sus) {
+            if ($sus->case == null) {
+                continue;
+            }
+            if ($sus->case->case_submitted != 'Yes') {
+                continue;
+            }
+            Utils::copyPendingArrestInfo($sus);
+            Utils::copyPendingCourtInfo($sus);
+            Utils::copyOffencesCourtInfo($sus);
+            $sus->data_copied = 'Yes';
+            $sus->save();
+        }
+
+
         //self::import_exhibits();
         //dd('import_exhibits');
         //self::import_suspects();
@@ -1143,10 +1169,6 @@ array:91 [▼
         //self::import_cases();
 
 
-        //set unlimited time
-        ini_set('max_execution_time', 0);
-        ini_set('memory_limit', '-1');
-
         $sus = CaseSuspect::where('suspect_number', 'like', '%//%')->get();
         foreach ($sus as $key => $sus) {
             $sus->suspect_number = str_replace('//', '/', $sus->suspect_number);
@@ -1154,9 +1176,6 @@ array:91 [▼
         }
 
 
-        Utils::copyPendingArrestInfo();
-        Utils::copyPendingCourtInfo();
-        Utils::copyOffencesCourtInfo();
 
         $cases = CaseSuspect::where([
             'reported_by' => null
@@ -1225,53 +1244,44 @@ array:91 [▼
         }
     }
 
-    public static function copyOffencesCourtInfo()
+    public static function copyOffencesCourtInfo($sus)
     {
 
-        $suspects = CaseSuspect::where('use_offence_suspect_coped', null)->get();
-
-        foreach ($suspects as $key => $sus) {
-            $originalSuspect = CaseSuspect::find($sus->use_offence_suspect_id);
-            if ($originalSuspect == null) {
-                $sus->use_offence_suspect_coped = 'Yes';
-                $sus->use_offence = 'No';
-                $sus->save();
-                continue;
-            }
-            $sus->copyOffencesInfo($originalSuspect);
+        $originalSuspect = CaseSuspect::find($sus->use_offence_suspect_id);
+        if ($originalSuspect == null) {
+            $sus->use_offence_suspect_coped = 'Yes';
+            $sus->use_offence = 'No';
+            $sus->save();
+            return;
         }
+        $sus->copyOffencesInfo($originalSuspect);
     }
 
 
-    public static function copyPendingCourtInfo()
+    public static function copyPendingCourtInfo($sus)
     {
         $suspects = CaseSuspect::where('use_same_court_information_coped', null)->get();
-        foreach ($suspects as $key => $sus) {
-            $originalSuspect = CaseSuspect::find($sus->use_same_court_information_id);
-            if ($originalSuspect == null) {
-                $sus->use_same_court_information_coped = 'Yes';
-                $sus->use_same_court_information = 'No';
-                $sus->save();
-                continue;
-            }
-            $sus->copyCourtInfo($originalSuspect);
+
+        $originalSuspect = CaseSuspect::find($sus->use_same_court_information_id);
+        if ($originalSuspect == null) {
+            $sus->use_same_court_information_coped = 'Yes';
+            $sus->use_same_court_information = 'No';
+            $sus->save();
+            return;
         }
+        $sus->copyCourtInfo($originalSuspect);
     }
 
-    public static function copyPendingArrestInfo()
+    public static function copyPendingArrestInfo($sus)
     {
-        $suspects = CaseSuspect::where('use_same_arrest_information_coped', null)->get();
-        foreach ($suspects as $key => $sus) {
-
-            $originalSuspect = CaseSuspect::find($sus->use_same_arrest_information_id);
-            if ($originalSuspect == null) {
-                $sus->use_same_arrest_information_coped = 'Yes';
-                $sus->use_same_arrest_information = 'No';
-                $sus->save();
-                continue;
-            }
-            $sus->copyArrestInfo($originalSuspect);
+        $originalSuspect = CaseSuspect::find($sus->use_same_arrest_information_id);
+        if ($originalSuspect == null) {
+            $sus->use_same_arrest_information_coped = 'Yes';
+            $sus->use_same_arrest_information = 'No';
+            $sus->save();
+            return;
         }
+        $sus->copyArrestInfo($originalSuspect);
     }
 
     public static function hasPendingCase($u)
@@ -2124,7 +2134,7 @@ array:91 [▼
             "Jamaica",
             "Japan",
             "Jordan",
-            "Kazakhstan", 
+            "Kazakhstan",
             "Kiribati",
             "Korea (North)",
             "Korea (South)",

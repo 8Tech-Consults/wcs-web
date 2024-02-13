@@ -1,5 +1,5 @@
 <?php
-
+ 
 
 use Encore\Admin\Facades\Admin;
 use App\Admin\Extensions\Nav\Shortcut;

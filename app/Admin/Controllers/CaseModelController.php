@@ -195,7 +195,10 @@ class CaseModelController extends AdminController
                     $can_add_court_info = true;
                     $can_add_edit = true;
                 }
-            } elseif ($user->isRole('hq-team-leaders')) {
+            } elseif (
+                $user->isRole('hq-team-leaders') ||
+                $row->created_by_ca_id == 1
+            ) {
                 if (
                     $row->reported_by == $user->id
                 ) {

@@ -777,18 +777,19 @@ class CaseSuspectController extends AdminController
 
 
 
-            if (true) {
-                if ($row->is_suspects_arrested == 'Yes') {
-                    $can_add_arrest = false;
-                    $can_add_court = true;
-                }
+
+            if ($row->is_suspects_arrested == 'Yes') {
+                $can_add_arrest = false;
+                $can_add_court = true;
+            } else {
+                $can_add_court = false;
             }
 
-            if (true) {
-                if ($row->is_suspect_appear_in_court == 'Yes') {
-                    $can_add_court = false;
-                }
+
+            if ($row->is_suspect_appear_in_court == 'Yes') {
+                $can_add_court = false;
             }
+
 
             if ($can_add_arrest) {
                 $actions->add(new AddArrest);

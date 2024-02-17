@@ -722,7 +722,8 @@ class CaseSuspectController extends AdminController
                 }
             } elseif ($user->isRole('hq-team-leaders')) {
                 if (
-                    $row->reported_by == $user->id
+                    $row->reported_by == $user->id ||
+                    $row->created_by_ca_id == 1
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;

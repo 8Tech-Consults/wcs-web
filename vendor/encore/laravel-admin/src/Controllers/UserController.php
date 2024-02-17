@@ -82,9 +82,9 @@ Edit Edit
         $grid->column('phone_number_1', 'Phone number');
 
         $grid->ca()->name("C.A")->sortable();
-   
+
         $grid->pa()->name('Duty station')->sortable();
-        
+
         $grid->column('phone_number_2', 'Phone number 2')->hide();
         $grid->column('date_of_birth', 'D.O.B')->display(function ($f) {
             return Utils::my_date($f);
@@ -188,9 +188,9 @@ Edit Edit
         $form->select('pa_id', __('Duty station'))
             ->rules('required')
             ->help('PA where  user is assigned')
-            ->options(PA::pluck('name', 'id')); 
+            ->options(PA::pluck('name', 'id'));
 
- 
+
 
         $form->text('address', 'UWA staff number');
         $form->divider();
@@ -210,31 +210,32 @@ Edit Edit
             });
 
         $form->ignore(['password_confirmation']);
-
+        $u = Admin::user();
         $roles = [];
         $isCaMan = $u->isRole('ca-manager');
         $isAdmin = $u->isRole('admin');
         $isHqMan = $u->isRole('hq-manager');
-        $u = Admin::user(); 
+        $u = Admin::user();
         foreach ($roleModel::all() as $key => $value) {
-            if($isAdmin){
+            if ($isAdmin) {
                 $roles[$value->id] = $value->name;
                 continue;
             }
-            if($isHqMan){ 
-                if(in_array($value->slug, ['hq-manager', 'hq-team-leaders', 'hq-prosecutor'])){
+            if ($isHqMan) {
+                if (in_array($value->slug, ['hq-manager', 'hq-team-leaders', 'hq-prosecutor'])) {
                     $roles[$value->id] = $value->name;
                     continue;
                 }
             }
-            if($isCaMan){
-                if(in_array($value->slug, ['ca-manager', 'ca-team', 'ca-agent', 'ca-prosecutor'])){
+            if ($isCaMan) {
+                if (in_array($value->slug, ['ca-manager', 'ca-team', 'ca-agent', 'ca-prosecutor'])) {
                     $roles[$value->id] = $value->name;
                     continue;
                 }
-            } 
+            }
         }
-/*  
+        $form->multipleSelect('roles', trans('admin.roles'))->options($roles);
+        /*  
 super-Administrator
 admin
 ca-agent
@@ -258,7 +259,7 @@ HQ Manager
 ->HQ Prosecutor
 ->HQ Manager
 */
-        $form->multipleSelect('roles', trans('admin.roles'))->options(->pluck('name', 'id'));
+
         //$form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
 
         $form->display('created_at', trans('admin.created_at'));

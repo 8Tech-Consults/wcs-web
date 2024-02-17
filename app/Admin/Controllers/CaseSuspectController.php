@@ -745,11 +745,18 @@ class CaseSuspectController extends AdminController
                 $user->isRole('hq-prosecutor')
             ) {
                 $can_add_comment = true;
+                if (
+                    $row->created_by_ca_id == $user->ca_id
+                ) {
+                    $can_add_comment = true;
+                    $can_add_court = true;
+                } 
             } elseif ($user->isRole('prosecutor')) {
                 if (
                     $row->created_by_ca_id == $user->ca_id
                 ) {
                     $can_add_comment = true;
+                    $can_add_court = true;
                 }
             } else if (
                 $user->isRole('admin') ||

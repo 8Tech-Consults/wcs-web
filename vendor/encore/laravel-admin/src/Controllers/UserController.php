@@ -228,7 +228,7 @@ Edit Edit
                 }
             }
             if ($isCaMan) {
-                if (in_array($value->slug, ['ca-manager', 'ca-team', 'ca-agent', 'ca-prosecutor'])) {
+                if (in_array($value->slug, ['ca-manager', 'ca-team', 'ca-agent', 'prosecutor'])) {
                     $roles[$value->id] = $value->name;
                     continue;
                 }

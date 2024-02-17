@@ -382,7 +382,7 @@ class CourtsController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->case->ca_id == $user->ca_id 
+                    $row->case->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -394,7 +394,7 @@ class CourtsController extends AdminController
                 if (
                     $row->reported_by == $user->id ||
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->case->ca_id == $user->ca_id 
+                    $row->case->ca_id == $user->ca_id
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
@@ -405,29 +405,30 @@ class CourtsController extends AdminController
                 }
             } elseif ($user->isRole('hq-team-leaders')) {
                 if (
-                    $row->reported_by == $user->id
+                    $row->reported_by == $user->id ||
+                    $row->created_by_ca_id == 1
                 ) {
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
                     $can_add_comment = true;
-                    $can_edit = true; 
+                    $can_edit = true;
                 }
             } elseif ($user->isRole('hq-manager')) {
                 $can_add_comment = true;
-                $can_edit = true;  
+                $can_edit = true;
             } elseif ($user->isRole('director')) {
             } elseif ($user->isRole('secretary')) {
             } elseif (
                 $user->isRole('hq-prosecutor')  ||
                 $row->created_by_ca_id == $user->ca_id ||
-                $row->case->ca_id == $user->ca_id 
+                $row->case->ca_id == $user->ca_id
             ) {
                 $can_add_comment = true;
                 $can_edit = true;
             } elseif ($user->isRole('prosecutor')) {
                 if (
                     $row->created_by_ca_id == $user->ca_id ||
-                    $row->ca_id == $user->ca_id 
+                    $row->ca_id == $user->ca_id
                 ) {
                     $can_add_comment = true;
                     $can_edit = true;
@@ -443,8 +444,8 @@ class CourtsController extends AdminController
                 $can_add_edit = true;
                 $can_edit = true;
                 $can_modify = true;
-            } 
-            
+            }
+
             if (
                 true
             ) {
@@ -452,26 +453,26 @@ class CourtsController extends AdminController
                     $can_edit = false;
                     $can_modify = false;
                 }
-            }else{
+            } else {
                 $can_edit = true;
                 $can_modify = true;
             }
 
-            if($user->isRole('admin') ){
+            if ($user->isRole('admin')) {
                 $can_modify = true;
             }
 
             $actions->add(new ViewSuspect);
 
-                  
-            if ($can_edit) { 
+
+            if ($can_edit) {
                 $actions->add(new CourtCaseUpdate);
             }
-           
-            if($can_modify){
+
+            if ($can_modify) {
                 $actions->add(new EditCourtCase);
             }
-      
+
             return $actions;
             // $actions->add(new CourtCaseUpdate);
 

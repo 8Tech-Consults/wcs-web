@@ -20,7 +20,7 @@ Encore\Admin\Form::forget(['map', 'editor']);
 $i = 1;
 $u = Auth::user();
 
-$cases = CaseModel::where('id','>=',2626)->get();
+/* $cases = CaseModel::where('id','>=',2626)->get();
 foreach ($cases as $key => $c) {
     Exhibit::where('case_id',$c->id)->delete();
     CaseSuspect::where('case_id',$c->id)->delete();
@@ -29,7 +29,7 @@ foreach ($cases as $key => $c) {
     echo "Deleted case ".$c->id."<br>";
 }
 
-die("STOP");
+die("STOP"); */
 
 
 Utils::system_boot($u); //DO NOT REMOVE THIS LINE

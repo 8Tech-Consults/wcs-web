@@ -698,7 +698,6 @@ class CaseSuspectController extends AdminController
                     $can_add_exhibit = true;
                     $can_add_comment = true;
                     $can_add_arrest = true;
-                    $can_add_court = true;
                 }
             } elseif ($user->isRole('ca-team')) {
                 if (
@@ -708,8 +707,7 @@ class CaseSuspectController extends AdminController
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
                     $can_add_comment = true;
-                    $can_add_arrest = true; 
-                    $can_add_court = true; 
+                    $can_add_arrest = true;
                 }
             } elseif ($user->isRole('ca-manager')) {
                 if (
@@ -723,7 +721,6 @@ class CaseSuspectController extends AdminController
                     $can_add_court_info = true;
                     $can_add_arrest = true;
                     $can_edit = true;
-                    $can_add_court = true;
                 }
             } elseif ($user->isRole('hq-team-leaders')) {
                 if (
@@ -745,18 +742,11 @@ class CaseSuspectController extends AdminController
                 $user->isRole('hq-prosecutor')
             ) {
                 $can_add_comment = true;
-                if (
-                    $row->created_by_ca_id == $user->ca_id
-                ) {
-                    $can_add_comment = true;
-                    $can_add_court = true;
-                } 
             } elseif ($user->isRole('prosecutor')) {
                 if (
                     $row->created_by_ca_id == $user->ca_id
                 ) {
                     $can_add_comment = true;
-                    $can_add_court = true;
                 }
             } else if (
                 $user->isRole('admin') ||
@@ -796,8 +786,8 @@ class CaseSuspectController extends AdminController
 
 
             if ($row->is_suspect_appear_in_court == 'Yes') {
-                $can_add_court = false;
             }
+            $can_add_court = false;
 
 
             if ($can_add_arrest) {
@@ -807,7 +797,7 @@ class CaseSuspectController extends AdminController
 
 
             if ($can_add_court) {
-                $actions->add(new AddCourte);
+                //$actions->add(new AddCourte);
             }
 
             if ($can_edit) {

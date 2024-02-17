@@ -698,6 +698,7 @@ class CaseSuspectController extends AdminController
                     $can_add_exhibit = true;
                     $can_add_comment = true;
                     $can_add_arrest = true;
+                    $can_add_court = true;
                 }
             } elseif ($user->isRole('ca-team')) {
                 if (
@@ -707,7 +708,8 @@ class CaseSuspectController extends AdminController
                     $can_add_suspect = true;
                     $can_add_exhibit = true;
                     $can_add_comment = true;
-                    $can_add_arrest = true;
+                    $can_add_arrest = true; 
+                    $can_add_court = true; 
                 }
             } elseif ($user->isRole('ca-manager')) {
                 if (
@@ -721,6 +723,7 @@ class CaseSuspectController extends AdminController
                     $can_add_court_info = true;
                     $can_add_arrest = true;
                     $can_edit = true;
+                    $can_add_court = true;
                 }
             } elseif ($user->isRole('hq-team-leaders')) {
                 if (

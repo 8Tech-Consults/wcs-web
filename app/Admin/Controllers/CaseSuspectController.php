@@ -124,6 +124,9 @@ class CaseSuspectController extends AdminController
             $export->column('national_id_number', function ($value, $original) {
                 return  $original;
             });
+            $export->column('offences_text', function ($value, $original) {
+                return  $original;
+            });
 
             // $export->only(['column3', 'column4' ...]);
 

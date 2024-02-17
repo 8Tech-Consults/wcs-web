@@ -686,6 +686,8 @@ class CaseSuspectController extends AdminController
             $can_add_court_info = false;
             $can_edit = false;
             $can_add_court = false;
+            $is_active  = true;
+            $can_add_court = false;
 
 
             if ($user->isRole('ca-agent')) {
@@ -759,18 +761,12 @@ class CaseSuspectController extends AdminController
             }
 
 
-            $is_active  = true;
-            $can_add_court = false;
-            $case = $row->case;
-            if (
-                true
-            ) {
-                if (strtolower($case->court_status) == 'concluded') {
-                    $is_active = false;
-                    $can_add_court = true;
-                }
-            }
 
+            $case = $row->case;
+            if (strtolower($case->court_status) == 'concluded') {
+                $is_active = false;
+                $can_add_court = false;
+            }
             if ($user->isRole('director')) {
                 return;
             }

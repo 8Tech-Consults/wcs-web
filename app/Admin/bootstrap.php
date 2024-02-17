@@ -20,6 +20,18 @@ Encore\Admin\Form::forget(['map', 'editor']);
 $i = 1;
 $u = Auth::user();
 
+$cases = CaseModel::where('id','>=',2626)->get();
+foreach ($cases as $key => $c) {
+    Exhibit::where('case_id',$c->id)->delete();
+    CaseSuspect::where('case_id',$c->id)->delete();
+    CaseModel::where('id',$c->id)->delete();
+    $c->delete();
+    echo "Deleted case ".$c->id."<br>";
+}
+
+die("STOP");
+
+
 Utils::system_boot($u); //DO NOT REMOVE THIS LINE
 
 Admin::css('/css/jquery-confirm.min.css');

@@ -9,6 +9,7 @@ use App\Models\Location;
 use App\Models\PA;
 use App\Models\Utils;
 use Dflydev\DotAccessData\Util;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -210,7 +211,54 @@ Edit Edit
 
         $form->ignore(['password_confirmation']);
 
-        $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
+        $roles = [];
+        $isCaMan = $u->isRole('ca-manager');
+        $isAdmin = $u->isRole('admin');
+        $isHqMan = $u->isRole('hq-manager');
+        $u = Admin::user(); 
+        foreach ($roleModel::all() as $key => $value) {
+            if($isAdmin){
+                $roles[$value->id] = $value->name;
+                continue;
+            }
+            if($isHqMan){ 
+                if(in_array($value->slug, ['hq-manager', 'hq-team-leaders', 'hq-prosecutor'])){
+                    $roles[$value->id] = $value->name;
+                    continue;
+                }
+            }
+            if($isCaMan){
+                if(in_array($value->slug, ['ca-manager', 'ca-team', 'ca-agent', 'ca-prosecutor'])){
+                    $roles[$value->id] = $value->name;
+                    continue;
+                }
+            } 
+        }
+/*  
+super-Administrator
+admin
+ca-agent
+ca-team
+ca-manager
+hq-team-leaders
+hq-manager
+director
+secretary
+prosecutor
+hq-prosecutor
+
+CA Manager
+->CA Agent
+->CA Team Leader
+->CA Prosecutor
+->CA Manager
+----------------
+HQ Manager 
+->HQ team leader
+->HQ Prosecutor
+->HQ Manager
+*/
+        $form->multipleSelect('roles', trans('admin.roles'))->options(->pluck('name', 'id'));
         //$form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
 
         $form->display('created_at', trans('admin.created_at'));

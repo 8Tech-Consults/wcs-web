@@ -733,6 +733,7 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Admin\\Actions\\CaseModel\\EditCourtCase' => __DIR__ . '/../..' . '/app/Admin/Actions/CaseModel/EditCourtCase.php',
         'App\\Admin\\Actions\\CaseModel\\EditExhibit' => __DIR__ . '/../..' . '/app/Admin/Actions/CaseModel/EditExhibit.php',
         'App\\Admin\\Actions\\CaseModel\\EditSuspect' => __DIR__ . '/../..' . '/app/Admin/Actions/CaseModel/EditSuspect.php',
+        'App\\Admin\\Actions\\CaseModel\\UpdateCourte' => __DIR__ . '/../..' . '/app/Admin/Actions/CaseModel/UpdateCourte.php',
         'App\\Admin\\Actions\\CaseModel\\ViewCase' => __DIR__ . '/../..' . '/app/Admin/Actions/CaseModel/ViewCase.php',
         'App\\Admin\\Actions\\CaseModel\\ViewSuspect' => __DIR__ . '/../..' . '/app/Admin/Actions/CaseModel/ViewSuspect.php',
         'App\\Admin\\Controllers\\AddExhibitCaseModelController' => __DIR__ . '/../..' . '/app/Admin/Controllers/AddExhibitCaseModelController.php',

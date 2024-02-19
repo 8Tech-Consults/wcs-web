@@ -17,6 +17,7 @@ return array(
     'App\\Admin\\Actions\\CaseModel\\EditCourtCase' => $baseDir . '/app/Admin/Actions/CaseModel/EditCourtCase.php',
     'App\\Admin\\Actions\\CaseModel\\EditExhibit' => $baseDir . '/app/Admin/Actions/CaseModel/EditExhibit.php',
     'App\\Admin\\Actions\\CaseModel\\EditSuspect' => $baseDir . '/app/Admin/Actions/CaseModel/EditSuspect.php',
+    'App\\Admin\\Actions\\CaseModel\\UpdateCourte' => $baseDir . '/app/Admin/Actions/CaseModel/UpdateCourte.php',
     'App\\Admin\\Actions\\CaseModel\\ViewCase' => $baseDir . '/app/Admin/Actions/CaseModel/ViewCase.php',
     'App\\Admin\\Actions\\CaseModel\\ViewSuspect' => $baseDir . '/app/Admin/Actions/CaseModel/ViewSuspect.php',
     'App\\Admin\\Controllers\\AddExhibitCaseModelController' => $baseDir . '/app/Admin/Controllers/AddExhibitCaseModelController.php',

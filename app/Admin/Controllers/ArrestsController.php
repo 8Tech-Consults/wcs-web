@@ -372,7 +372,9 @@ class ArrestsController extends AdminController
             $row = $actions->row;
 
             $actions->disableView();
-            $actions->disableDelete();
+            if(!$user->isRole('admin')){
+                $actions->disableDelete();
+            } 
             $actions->disableedit();
             $actions->add(new ViewSuspect);
 

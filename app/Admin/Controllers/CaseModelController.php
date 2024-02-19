@@ -154,9 +154,12 @@ class CaseModelController extends AdminController
         $grid->actions(function ($actions) {
 
             $actions->disableEdit();
-            $actions->disableDelete();
+
             $user = Admin::user();
             $row = $actions->row;
+            if(!$user->isRole('admin')){
+                $actions->disableDelete();
+            }
 
             $can_add_suspect = false;
             $can_add_exhibit = false;

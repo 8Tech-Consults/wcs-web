@@ -106,12 +106,15 @@ class ExhibitController extends AdminController
         $grid->column('implement_description', __('Implement description'));
         $grid->column('type_other', __('Has Others'));
         $grid->column('others_description', __('Description for others'));
+        $user = Auth::user();
+        if(!$user->isRole('admin')){
+            $actions->disableDelete();
+        }
 
         $grid->actions(function ($actions) {
             $user = Auth::user();
         
             $actions->disableEdit();
-            $actions->disableDelete();
 
             if ($user->isRole('admin') || $user->isRole('ca-manager')) {
                 if ($user->isRole('ca-manager')) {

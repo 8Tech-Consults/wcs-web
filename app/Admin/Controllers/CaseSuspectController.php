@@ -683,7 +683,9 @@ class CaseSuspectController extends AdminController
             $user = Admin::user();
             $row = $actions->row;
             $actions->disableEdit();
-            $actions->disableDelete();
+            if(!$user->isRole('admin')){
+                $actions->disableDelete();
+            }
 
             $can_add_arrest = false;
             $can_add_court_info = false;

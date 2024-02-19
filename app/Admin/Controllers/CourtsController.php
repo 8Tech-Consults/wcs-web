@@ -357,7 +357,9 @@ class CourtsController extends AdminController
             $user = Auth::user();
             $actions->disableView();
             $actions->disableEdit();
-            $actions->disableDelete();
+            if (!$user->isRole('admin')) {
+                $actions->disableDelete();
+            }
 
 
             $row = $actions->row;

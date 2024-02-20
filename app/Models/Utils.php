@@ -75,11 +75,21 @@ class Utils  extends Model
             $case_number = "/-";
         }
 
-        $date = Carbon::now();
-        try {
-            $date = Carbon::parse($case->created_at);
-        } catch (\Throwable $th) {
-            $date = Carbon::now();
+        $date = null;
+        if ($case->case_date != null) {
+            try {
+                $date = Carbon::parse($case->case_date);
+            } catch (\Throwable $th) {
+                $date = null;
+            }
+        }
+
+        if ($date == null) {
+            try {
+                $date = Carbon::parse($case->created_at);
+            } catch (\Throwable $th) {
+                $date = Carbon::now();
+            }
         }
 
         $case_number .= "/" . $date->format('Y');

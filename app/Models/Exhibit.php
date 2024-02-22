@@ -28,10 +28,10 @@ class Exhibit extends Model
 
         static::updating(function ($model) {
             $case = CaseModel::find($model->case_id);
-            if ($case == null) {
+           if ($case == null) {
                 throw new \Exception("Case not found");
             }
-            $model->created_by_ca_id = $case->created_by_ca_id;
+            $model->created_by_ca_id = $case->created_by_ca_id; 
             if ($case != null) {
                 $model->created_at = $case->case_date;
             }

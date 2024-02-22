@@ -61,17 +61,25 @@ class AddExhibitCaseModelController extends AdminController
     {
 
 
+        //fet id from segment 2
+        $id = (int)request()->segment(2);
+        $ex = Exhibit::find($id);
 
-        $arr = (explode('/', $_SERVER['REQUEST_URI']));
-        $pendingCase = null;
-        $ex = Exhibit::find($arr[2]);
-        if ($ex != null) {
-            $pendingCase = CaseModel::find(session('pending_case_id'));
+
+        if ($ex == null) {
+            $arr = (explode('/', $_SERVER['REQUEST_URI']));
+            $pendingCase = null;
+            $ex = Exhibit::find($arr[2]);
+            if ($ex != null) {
+                $pendingCase = CaseModel::find(session('pending_case_id'));
+            } else {
+                die("Exhibit not found.");
+            }
+            if ($pendingCase == null) {
+                die("Case not found.");
+            }
         } else {
-            die("Exhibit not found.");
-        }
-        if ($pendingCase == null) {
-            die("Case not found.");
+            $pendingCase = $ex;
         }
 
 
@@ -79,12 +87,12 @@ class AddExhibitCaseModelController extends AdminController
         $form->disableEditingCheck();
 
         $form->hidden('case_id')->default(0);
-        $form->display('ADDING EXHIBIT TO CASE')->default($pendingCase->case_number);
+        $form->display('ADDING EXHIBIT TO CASE')->default($pendingCase->case->case_number);
         $form->divider();
 
         $form->disableCreatingCheck();
         $form->disableReset();
-        $form->disableViewCheck(); 
+        $form->disableViewCheck();
 
         $form->radio('type_wildlife', __('Exibit type Wildlife?'))
             ->options([
@@ -153,13 +161,13 @@ class AddExhibitCaseModelController extends AdminController
             session()->forget('pending_case_id');
         });
 
-        $form->saved( function (Form $form) {
+        $form->saved(function (Form $form) {
             if ($form->type_other == 'No' && $form->type_implement == 'No' && $form->type_wildlife == 'No') {
                 Exhibit::find($form->model()->id)->delete(); //remove the unnecessary exhibit
             }
             return redirect(admin_url("cases"));
         });
-        
+
         return $form;
     }
 }

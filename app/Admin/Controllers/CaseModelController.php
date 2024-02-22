@@ -59,6 +59,7 @@ class CaseModelController extends AdminController
                 session(['pending_case_id' => $pendingCase->id]);
                 $x = new Exhibit();
                 $x->reported_by =  Auth::user()->id;
+                $x->case_id = $pendingCase->id;
                 $x->save();
                 Admin::script('window.location.replace("' . admin_url("add-exhibit/{$x->id}/edit") . '");');
                 return 'loading...';
@@ -157,7 +158,7 @@ class CaseModelController extends AdminController
 
             $user = Admin::user();
             $row = $actions->row;
-            if(!$user->isRole('admin')){
+            if (!$user->isRole('admin')) {
                 $actions->disableDelete();
             }
 

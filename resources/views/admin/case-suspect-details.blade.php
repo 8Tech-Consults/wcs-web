@@ -75,18 +75,19 @@ use App\Models\Utils;
                 's' => $s->parish . ', ' . $s->village,
             ])
 
-
-
-            @include('components.detail-item', [
-                't' => 'REPORTed on DATE',
-                's' => Utils::my_date($s->created_at),
-            ])
+            @include('components.detail-item', ['t' => 'OCCUPATION', 's' => $s->occuptaion])
             @include('components.detail-item', [
                 't' => 'UWA SUSPECT',
                 's' => $s->uwa_suspect_number,
             ])
 
-            @include('components.detail-item', ['t' => 'OCCUPATION', 's' => $s->occuptaion])
+            @include('components.detail-item', [
+                't' => 'DATE OF ENTRY',
+                's' => Utils::my_date($s->created_at),
+            ])
+
+
+
         </div>
         <div class="pt-3 pt-md-0 col-md-5">
             <div class=" border border-primary p-3">
@@ -195,16 +196,15 @@ use App\Models\Utils;
                     's' => $s->arrestCa->name,
                 ])
 
-                @if($s->arrest_in_pa == 'Yes' || $s->arrest_in_pa == '1')    
+                @if ($s->arrest_in_pa == 'Yes' || $s->arrest_in_pa == '1')
                     @include('components.detail-item', [
                         't' => 'Arrest Location',
                         's' => $s->arrest_village,
                     ])
                     @php
-                        $s->arrest_village ='- ';
+                        $s->arrest_village = '- ';
                     @endphp
-
-                @else 
+                @else
                     @include('components.detail-item', [
                         't' => 'Arrest Location',
                         's' => '-',
@@ -226,7 +226,7 @@ use App\Models\Utils;
 
             </div>
             <div class="col-md-6 border-left pl-2 pl-5">
-                    
+
                 @include('components.detail-item', [
                     't' => 'Arrest village',
                     's' => $s->arrest_village,
@@ -248,7 +248,7 @@ use App\Models\Utils;
                     't' => 'Lead Arrest agency',
                     's' => $s->arrest_agency,
                 ])
-                
+
                 @include('components.detail-item', [
                     't' => 'Other Arrest agencies',
                     's' => $other_arrest_agencies,
@@ -275,7 +275,7 @@ use App\Models\Utils;
             't' => 'Has suspect been handed over to police?',
             's' => $s->is_suspects_arrested,
         ])
-        @if($s->is_suspects_arrested == 'No')
+        @if ($s->is_suspects_arrested == 'No')
             @include('components.detail-item', [
                 't' => 'Action taken by management',
                 's' => $s->management_action,
@@ -333,22 +333,25 @@ use App\Models\Utils;
                     't' => 'Court case status',
                     's' => $s->court_status,
                 ])
-                @if($s->court_status != 'Concluded') 
+                @if ($s->court_status != 'Concluded')
                     @include('components.detail-item', [
                         't' => 'Accused court status',
                         's' => $s->suspect_court_outcome,
-                    ])                
+                    ])
                 @endif
-          
+
                 @include('components.detail-item', [
                     't' => 'Specific court case status',
                     's' => $s->case_outcome,
                 ])
-                
-                @includeWhen(in_array($s->case_outcome, ['Dismissed', 'Withdrawn by DPP', 'Acquittal']), 'components.detail-item', [
-                    't' => 'Specific court case status remarks',
-                    's' => $s->case_outcome_remarks,
-                ])
+
+                @includeWhen(in_array($s->case_outcome, ['Dismissed', 'Withdrawn by DPP', 'Acquittal']),
+                    'components.detail-item',
+                    [
+                        't' => 'Specific court case status remarks',
+                        's' => $s->case_outcome_remarks,
+                    ]
+                )
 
                 @include('components.detail-item', [
                     't' => 'Jailed',

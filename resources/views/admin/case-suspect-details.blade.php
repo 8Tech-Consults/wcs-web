@@ -124,7 +124,7 @@ use App\Models\Utils;
                         <p class="py-1 my-0 "><b class="text-uppercase">CASE Sub-county:</b>
                             {{ Utils::get('App\Models\Location', $s->case->sub_county_id)->name_text }} </p>
                     @endif
-                    <p class="py-1 my-0 "><b class="text-uppercase">Reporter:</b>
+                    <p class="py-1 my-0 "><b class="text-uppercase">Entered By:</b>
                         {{ $s->case->reportor->name }} </p>
 
 

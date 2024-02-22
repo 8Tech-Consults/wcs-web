@@ -235,7 +235,7 @@ class NewCaseModelController extends AdminController
         $form->textarea('offence_description', __('Case description'))
             ->help("Describe this case in details");
 
-        $form->date('case_date', 'Date when opened')
+        $form->date('case_date', 'Date when happened')
             ->rules('required|before_or_equal:today');
 
         $form->text('officer_in_charge', 'Complainant')->rules('required');

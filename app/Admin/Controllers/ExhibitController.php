@@ -62,7 +62,7 @@ class ExhibitController extends AdminController
                 ->select(Animal::all()->pluck('name', 'id'));
 
             $f->equal('specimen', "Filter by specimen")
-                ->select(Specimen::pluck('name', 'name')); 
+                ->select(Specimen::pluck('name', 'name'));
 
             $f->equal('implement_name', "Filter by Implement type")
                 ->select(ImplementType::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id'));
@@ -107,13 +107,13 @@ class ExhibitController extends AdminController
         $grid->column('type_other', __('Has Others'));
         $grid->column('others_description', __('Description for others'));
         $user = Auth::user();
-        if(!$user->isRole('admin')){
-            $actions->disableDelete();
-        }
 
         $grid->actions(function ($actions) {
             $user = Auth::user();
-        
+            if (!$user->isRole('admin')) {
+                $actions->disableDelete();
+            }
+
             $actions->disableEdit();
 
             if ($user->isRole('admin') || $user->isRole('ca-manager')) {
@@ -124,8 +124,7 @@ class ExhibitController extends AdminController
                 } else {
                     $actions->add(new EditExhibit);
                 }
-            }    
-
+            }
         });
 
 

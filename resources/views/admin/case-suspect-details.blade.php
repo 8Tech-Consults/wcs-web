@@ -94,7 +94,7 @@ use App\Models\Utils;
                 <hr class="border-primary mt-3">
                 <div style="font-family: monospace; font-size: 16px;">
                     <p class="py-1 my-0 "><b>CASE DATE:</b>
-                        {{ Utils::to_date_time($s->case->created_at) }}</p>
+                        {{ Utils::to_date_time($s->case->case_date) }}</p>
                     <p class="py-1 my-0 "><b>CASE TITLE:</b> <a href="{{ admin_url('cases/' . $s->case->id) }}"><span
                                 class="text-primary"
                                 title="View case details">{{ $s->case->title ?? $s->case->id }}</span></a>

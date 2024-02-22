@@ -347,7 +347,7 @@ class CaseModelController extends AdminController
             return '<a data-toggle="tooltip" data-placement="bottom"  title="View exhibits" class="text-primary h3" href="' . $link . '" >' . $this->exhibit_count . '</a>';
         });
 
-        $grid->column('reported_by', __('Reported by'))
+        $grid->column('reported_by', __('Entered By'))
             ->display(function () {
                 return $this->reportor->name;
             })

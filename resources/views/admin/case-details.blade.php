@@ -36,13 +36,15 @@ use App\Models\Utils;
             <h3 class="h3 p-0 m-0">{{ $c->title }}</h3>
             <hr class="my-1 my-md-4">
             @include('components.detail-item', ['t' => 'Case NUMBER', 's' => '#' . $c->case_number])
+
+            @include('components.detail-item', ['t' => 'Complainant', 's' => $c->officer_in_charge])
+
+            @include('components.detail-item', ['t' => 'Detection method', 's' => $c->detection_method])
             @include('components.detail-item', [
-                't' => 'Report date',
+                't' => 'Date of entry',
                 's' => Utils::my_date_time($c->created_at),
             ])
-            @include('components.detail-item', ['t' => 'Complainant', 's' => $c->officer_in_charge])
-            @include('components.detail-item', ['t' => 'Detection method', 's' => $c->detection_method])
-            @include('components.detail-item', ['t' => 'Reported by', 's' => $c->reportor->name])
+            @include('components.detail-item', ['t' => 'Entered by', 's' => $c->reportor->name])
 
         </div>
         <div class="pt-3 pt-md-0 col-md-4">

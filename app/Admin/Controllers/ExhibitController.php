@@ -6,6 +6,7 @@ use App\Admin\Actions\CaseModel\EditCourtCase;
 use App\Admin\Actions\CaseModel\EditExhibit;
 use App\Models\Animal;
 use App\Models\CaseModel;
+use App\Models\ConservationArea;
 use App\Models\Exhibit;
 use App\Models\ImplementType;
 use App\Models\Specimen;
@@ -66,6 +67,10 @@ class ExhibitController extends AdminController
 
             $f->equal('implement_name', "Filter by Implement type")
                 ->select(ImplementType::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id'));
+
+
+            $f->equal('created_by_ca_id', "Filter by CA of Entry")
+                ->select(ConservationArea::all()->pluck('name', 'id'));
         });
 
 
@@ -106,6 +111,8 @@ class ExhibitController extends AdminController
         $grid->column('implement_description', __('Implement description'));
         $grid->column('type_other', __('Has Others'));
         $grid->column('others_description', __('Description for others'));
+
+
         $user = Auth::user();
 
         $grid->actions(function ($actions) {
@@ -127,6 +134,14 @@ class ExhibitController extends AdminController
             }
         });
 
+        $grid->column('created_by_ca_id', __('CA of Entry'))
+            ->display(function () {
+                if ($this->case->created_by_ca == null) {
+                    return  "-";
+                }
+                return $this->case->created_by_ca->name;
+            })
+            ->sortable();
 
         return $grid;
     }

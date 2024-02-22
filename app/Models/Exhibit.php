@@ -16,14 +16,22 @@ class Exhibit extends Model
         //creating
         static::creating(function ($model) {
             $case = CaseModel::find($model->case_id);
+            if ($case == null) {
+                throw new \Exception("Case not found");
+            }
+            $model->created_by_ca_id = $case->created_by_ca_id;
             if ($case != null) {
                 $model->created_at = $case->case_date;
             }
-            return $model; 
+            return $model;
         });
 
         static::updating(function ($model) {
             $case = CaseModel::find($model->case_id);
+            if ($case == null) {
+                throw new \Exception("Case not found");
+            }
+            $model->created_by_ca_id = $case->created_by_ca_id;
             if ($case != null) {
                 $model->created_at = $case->case_date;
             }
@@ -41,6 +49,18 @@ class Exhibit extends Model
         }
         return $this->belongsTo(CaseModel::class, 'case_id');
     }
+
+    function case()
+    {
+        $case = CaseModel::find($this->case_id);
+        if ($case == null) {
+            $this->delete();
+            return null;
+        }
+        return $this->belongsTo(CaseModel::class, 'case_id');
+    }
+
+
 
     public function setPicsAttribute($pictures)
     {

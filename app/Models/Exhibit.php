@@ -3,12 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model; 
+use Illuminate\Database\Eloquent\Model;
 
 class Exhibit extends Model
 {
     use HasFactory;
 
+    //boot
+    protected static function boot()
+    {
+        parent::boot();
+        //creating
+        static::creating(function ($model) {
+            $case = CaseModel::find($model->case_id);
+            if ($case != null) {
+                $model->created_at = $case->case_date;
+            }
+            return $model; 
+        });
+
+        static::updating(function ($model) {
+            $case = CaseModel::find($model->case_id);
+            if ($case != null) {
+                $model->created_at = $case->case_date;
+            }
+            return $model;
+        });
+    }
 
     protected $fillable = ['case_id', 'exhibit_catgory', 'wildlife', 'implements', 'photos', 'description', 'quantity'];
     function case_model()
@@ -67,19 +88,19 @@ class Exhibit extends Model
     {
         if (is_array($this->wildlife_attachments)) {
             if (isset($this->wildlife_attachments[0])) {
-                return ($this->wildlife_attachments[rand(0,(count($this->wildlife_attachments)-1))]);
+                return ($this->wildlife_attachments[rand(0, (count($this->wildlife_attachments) - 1))]);
             }
         }
 
         if (is_array($this->others_attachments)) {
             if (!empty($this->others_attachments[0])) {
-                return ($this->others_attachments[rand(0,(count($this->others_attachments)-1))]);
+                return ($this->others_attachments[rand(0, (count($this->others_attachments) - 1))]);
             }
         }
 
         if (is_array($this->implement_attachments)) {
             if (isset($this->implement_attachments[0])) {
-                return ($this->implement_attachments[rand(0,(count($this->implement_attachments)-1))]);
+                return ($this->implement_attachments[rand(0, (count($this->implement_attachments) - 1))]);
             }
         }
     }

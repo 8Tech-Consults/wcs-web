@@ -30,11 +30,11 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
-        foreach (Exhibit::all() as $key => $ex) {
+/*         foreach (Exhibit::all() as $key => $ex) {
             $ex->created_by_ca_id = $ex->case_model->created_by_ca_id;
             $ex->save();
         }
-
+ */
 
         /*         $done = [];
         $sus = CaseSuspect::all();

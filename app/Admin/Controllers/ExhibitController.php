@@ -125,7 +125,7 @@ class ExhibitController extends AdminController
 
             if ($user->isRole('admin') || $user->isRole('ca-manager')) {
                 if ($user->isRole('ca-manager')) {
-                    if ($user->ca_id == $actions->row->ca_id) {
+                    if ($user->ca_id == $actions->row->created_by_ca_id) { 
                         $actions->add(new EditExhibit);
                     }
                 } else {

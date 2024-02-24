@@ -28,7 +28,7 @@ class FingerPrintController extends Controller
     public function link_suspects(Request $r)
     {
         $id_1 = $_GET['id1'];
-        $id_2 = $r->id2;
+        $id_2 = $_GET['id2'];
         $suspect_1 = CaseSuspect::find($id_1);
         $suspect_2 = CaseSuspect::find($id_2);
 

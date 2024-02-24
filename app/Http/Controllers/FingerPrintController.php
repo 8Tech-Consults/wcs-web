@@ -36,7 +36,7 @@ class FingerPrintController extends Controller
             die("Suspect 1 not found.");
         }
         if ($suspect_2 == null) {
-            die("Suspect 2 not found.");
+            die("Suspect 2 not found. => $id_2 <= ");
         }
 
         $instance_1 = SuspectLink::where(['suspect_id_1' => $id_1, 'suspect_id_2' => $id_2])->first();

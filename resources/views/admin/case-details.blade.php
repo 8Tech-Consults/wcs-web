@@ -34,6 +34,7 @@ use App\Models\Utils;
 
         <div class="col-9 col-md-8">
             <h3 class="h3 p-0 m-0">{{ $c->title }}</h3>
+            <p class="mt-3">{{ $c->offence_description }}</p>
             <hr class="my-1 my-md-4">
             @include('components.detail-item', ['t' => 'Case NUMBER', 's' => '#' . $c->case_number])
 

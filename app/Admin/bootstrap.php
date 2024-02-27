@@ -21,7 +21,7 @@ $i = 1;
 $u = Auth::user();
 
 //set unlimited time
-ini_set('max_execution_time', 0);
+/* ini_set('max_execution_time', 0);
 ini_set('memory_limit', '-1');
 
 foreach (CaseModel::all() as $key => $c) {
@@ -34,7 +34,7 @@ foreach (CaseModel::all() as $key => $c) {
         $m->save();
     }
 }
-
+ */
 
 /* $cases = CaseModel::where('id','>=',2626)->get();
 foreach ($cases as $key => $c) {

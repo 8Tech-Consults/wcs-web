@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CaseModelActionAddExhibit extends RowAction
 {
-    public $name = 'Add exhibit';
+    public $name = 'Add Exhibits or Files';
 
     public function handle(Model $model)
     {

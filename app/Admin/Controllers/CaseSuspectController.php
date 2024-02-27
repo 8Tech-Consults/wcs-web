@@ -286,7 +286,11 @@ class CaseSuspectController extends AdminController
 
         $grid->column('created_at', __('Date'))
             ->display(function ($x) {
-                return Utils::my_date_time($x);
+                $d = $this->case->case_date;
+                if ($this->case->case_date == null || strlen($this->case->case_date) < 3) {
+                    $d = $this->case->created_at;
+                }
+                return Utils::my_date_time($d);
             })
             ->sortable();
 
@@ -683,7 +687,7 @@ class CaseSuspectController extends AdminController
             $user = Admin::user();
             $row = $actions->row;
             $actions->disableEdit();
-            if(!$user->isRole('admin')){
+            if (!$user->isRole('admin')) {
                 $actions->disableDelete();
             }
 
@@ -784,7 +788,7 @@ class CaseSuspectController extends AdminController
 
 
             if ($row->is_suspects_arrested == 'Yes') {
-                $can_add_arrest = false; 
+                $can_add_arrest = false;
             } else {
                 $can_add_court = false;
             }

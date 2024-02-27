@@ -22,7 +22,8 @@ class LogController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new OperationLog());
-
+        $grid->disableBatchActions();
+        $grid->disableActions();
         $grid->model()->orderBy('id', 'DESC');
 
         $grid->column('id', 'ID')->sortable();
@@ -48,6 +49,7 @@ class LogController extends AdminController
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableEdit();
             $actions->disableView();
+            $actions->disableDelete();
         });
 
         $grid->disableCreateButton();

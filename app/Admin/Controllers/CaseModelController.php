@@ -80,7 +80,7 @@ class CaseModelController extends AdminController
 
 
         // $grid->model()->whereHas('suspects')->orderBy('updated_at', 'DESC'); //TODO("Slowing the query, find a better way")
-        $grid->model()->orderBy('updated_at', 'DESC');
+        $grid->model()->orderBy('created_at', 'DESC');
 
         $grid->export(function ($export) {
 

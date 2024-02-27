@@ -125,7 +125,7 @@ class ExhibitController extends AdminController
 
             if ($user->isRole('admin') || $user->isRole('ca-manager')) {
                 if ($user->isRole('ca-manager')) {
-                    if ($user->ca_id == $actions->row->created_by_ca_id) { 
+                    if ($user->ca_id == $actions->row->created_by_ca_id) {
                         $actions->add(new EditExhibit);
                     }
                 } else {
@@ -214,7 +214,11 @@ class ExhibitController extends AdminController
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->decimal('wildlife_pieces', __('Number of pieces'));
                 $form->text('wildlife_description', __('Description'));
-                $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
+                $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'))
+                    ->downloadable()
+                    ->removable();
+
+
                 $form->divider();
             });
         $form->radio('type_implement', __('Exibit type Implement?'))
@@ -239,7 +243,7 @@ class ExhibitController extends AdminController
                 $form->divider();
             });
 
-        $form->radio('type_other', __('Other exhibit types?'))
+        $form->radio('type_other', __('Other Exhibits or Files'))
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',

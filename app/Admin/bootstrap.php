@@ -29,12 +29,12 @@ foreach (CaseModel::all() as $key => $c) {
         $c->case_date = $c->created_at;
         $c->save();
     }
+    foreach ($c->suspects as $m) {
+        $m->case_date =  $c->case_date;
+        $m->save();
+    }
 }
 
-foreach (CaseSuspect::all() as $key => $v) {
-    $v->unique_id = rand(10, 100000);
-    $v->save();
-}
 
 /* $cases = CaseModel::where('id','>=',2626)->get();
 foreach ($cases as $key => $c) {

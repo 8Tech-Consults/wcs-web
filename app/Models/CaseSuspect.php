@@ -44,6 +44,7 @@ class CaseSuspect extends Model
                 $m->created_by_ca_id = $by->ca_id;
             }
 
+            $m->case_date =  $m->case->case_date;
             return $m;
         });
         self::created(function ($m) {
@@ -66,6 +67,7 @@ class CaseSuspect extends Model
             if ($m->case_submitted == 1 || $m->case_submitted == '1') {
                 $m->case_submitted = '1';
             }
+            $m->case_date =  $m->case->case_date;
             return $m;
         });
     }

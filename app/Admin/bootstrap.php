@@ -1,5 +1,5 @@
 <?php
- 
+
 
 use Encore\Admin\Facades\Admin;
 use App\Admin\Extensions\Nav\Shortcut;
@@ -19,6 +19,22 @@ Encore\Admin\Form::forget(['map', 'editor']);
 
 $i = 1;
 $u = Auth::user();
+
+//set unlimited time
+ini_set('max_execution_time', 0);
+ini_set('memory_limit', '-1');
+
+foreach (CaseModel::all() as $key => $c) {
+    if ($c->case_date == null  || strlen($c->case_date) < 3) {
+        $c->case_date = $c->created_at;
+        $c->save();
+    }
+}
+
+foreach (CaseSuspect::all() as $key => $v) {
+    $v->unique_id = rand(10, 100000);
+    $v->save();
+}
 
 /* $cases = CaseModel::where('id','>=',2626)->get();
 foreach ($cases as $key => $c) {

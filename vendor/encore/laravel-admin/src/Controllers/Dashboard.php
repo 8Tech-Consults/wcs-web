@@ -110,7 +110,7 @@ class Dashboard
             $max = new Carbon();
             $max->subMonths($i);
             $min->subMonths(($i + 1));
-            $created_at = CaseSuspect::whereBetween('created_at', [$min, $max])->count();
+            $created_at = CaseSuspect::whereBetween('case_date', [$min, $max])->count();
 
             $is_suspects_arrested = CaseSuspect::whereBetween('created_at', [$min, $max])
                 ->where([

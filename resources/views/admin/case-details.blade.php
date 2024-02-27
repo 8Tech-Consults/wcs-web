@@ -110,7 +110,7 @@ use App\Models\Utils;
 
 
     <hr class="my-5">
-    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits</b></h3>
+    <h3 class="h3 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits & Files</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table my-table">

@@ -466,7 +466,7 @@ use App\Models\Utils;
 
 
     <hr class="my-5">
-    <h3 class="text-uppercase h4 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Offence Exhibits</b></h3>
+    <h3 class="text-uppercase h4 p-0 m-0 mb-2 text-center  mt-3 mt-md-5"><b>Case Exhibits and FILES</b></h3>
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover my-table"">

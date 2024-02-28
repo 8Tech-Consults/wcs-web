@@ -146,20 +146,37 @@ class Utils  extends Model
                     $same_names[] = $title;
                     //continue;
                 } else {
-                    $case = new CaseModel();
+                    continue;
+                    //$case = new CaseModel();
                 }
-                $case->created_at = Carbon::parse($data[0]);
-                $case->reported_by = $u->id;
-                $case->title = $title;
+
                 $ca_text = trim($data[4]);
                 $ca = ConservationArea::where('name', $ca_text)->first();
+                if ($ca == null) {
+                    continue;
+                }
+
+                if ($ca->id < 2) {
+                    continue;
+                }
+
+                if($case->pa_id > 1){
+                    continue;
+                }
+
+                $case->ca_id = $ca->id;
+                $case->save();  
+                continue; 
+
                 if ($ca_text == 'NAPA') {
                     $ca = ConservationArea::find(1);
                 }
                 if ($ca == null) {
                     $ca = ConservationArea::find(1);
                 }
-
+                $case->created_at = Carbon::parse($data[0]);
+                $case->title = $title;
+                $case->reported_by = $u->id;
                 $case->ca_id = $ca->id;
                 $case->conservation_area_id = $ca->id;
                 //$case->case_number = Utils::getCaseNumber($case);
@@ -1220,6 +1237,7 @@ array:91 [▼
         //die("done importing");
         //die("Imported suspects");
         //self::import_cases();
+        //die("Imported cases");
 
 
         $sus = CaseSuspect::where('suspect_number', 'like', '%//%')->get();

@@ -19,7 +19,24 @@ Encore\Admin\Form::forget(['map', 'editor']);
 
 $i = 1;
 $u = Auth::user();
-
+/* $all = CaseModel::all();
+dd($all->count());
+foreach ($all as $key => $c) {
+    if ($c->pa_id == 1) {
+        continue;
+    }
+    dd($c);
+    break;
+    if ($c->case_date == null  || strlen($c->case_date) < 3) {
+        $c->case_date = $c->created_at;
+        $c->save();
+    }
+    foreach ($c->suspects as $m) {
+        $m->case_date =  $c->case_date;
+        $m->save();
+    }
+}
+die("STOP"); */
 //set unlimited time
 /* ini_set('max_execution_time', 0);
 ini_set('memory_limit', '-1');

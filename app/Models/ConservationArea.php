@@ -13,7 +13,7 @@ class ConservationArea extends Model
     {
         parent::boot();
         self::deleting(function ($m) {
-            if($m->id == 1){
+            if ($m->id == 1) {
                 die("Ooops! You cannot delete this item.");
             }
         });
@@ -28,4 +28,34 @@ class ConservationArea extends Model
     {
         return $this->hasManyThrough(CaseModel::class, PA::class, 'ca_id', 'pa_id');
     }
+
+    public function get_default_pa()
+    {
+        $pa = PA::where([
+            'name' => $this->name,
+            'ca_id' => $this->id,
+        ])->first();
+        if ($pa == null) {
+            $pa = new PA();
+            $pa->name = $this->name;
+            $pa->created_at = $this->created_at;
+            $pa->updated_at = $this->updated_at;
+            $pa->subcounty = $this->name;
+            $pa->details = $this->description;
+            $pa->ca_id = $this->id;
+            $pa->short_name = $this->name;
+            $pa->save();
+        }
+        $pa = PA::where([
+            'name' => $this->name,
+            'ca_id' => $this->id,
+        ])->first();
+        if ($pa == null) {
+            throw new \Exception("Failed to create a default PA for this $this->name");
+        }
+        return $pa;
+    }
+    /* 	
+
+    */
 }

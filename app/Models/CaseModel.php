@@ -65,7 +65,32 @@ class CaseModel extends Model
             $m->offence_description = $m->title;
             $m->case_step = 1;
 
+
+            $ca = null;
+            if (((int)$m->ca_id) > 1) {
+                $ca = ConservationArea::find($m->ca_id);
+                if ($ca != null) {
+                    if ($m->pa_id == 1 || $m->pa_id == null || (int)($m->pa_id) < 2 || $m->pa_id == 0 || $m->pa_id == "") {
+                        $pa = $ca->get_default_pa();
+                        if ($pa != null) {
+                            $m->pa_id = $pa->id;
+                            $m->is_offence_committed_in_pa == 'Yes';
+                        }
+                    }
+                }
+            }
+
             $pa = PA::find($m->pa_id);
+            if ($pa == null || $pa->id == 1) {
+                $m->pa_id = 1;
+                $m->ca_id = 1;
+                $m->is_offence_committed_in_pa == 'No';
+            } else {
+                $m->is_offence_committed_in_pa == 'Yes';
+                $m->pa_id = $pa->id;
+                $m->ca_id = $pa->ca_id;
+            }
+
             if (
                 $pa != null
             ) {
@@ -98,14 +123,32 @@ class CaseModel extends Model
             return $m;
         });
         self::updating(function ($m) {
+            $ca = null;
+            if (((int)$m->ca_id) > 1) {
+                $ca = ConservationArea::find($m->ca_id);
+                if ($ca != null) {
+                    if ($m->pa_id == 1 || $m->pa_id == null || (int)($m->pa_id) < 2 || $m->pa_id == 0 || $m->pa_id == "") {
+                        $pa = $ca->get_default_pa();
+                        if ($pa != null) {
+                            $m->pa_id = $pa->id;
+                            $m->is_offence_committed_in_pa == 'Yes';
+                        }
+                    }
+                }
+            }
 
-            $pa = null;
-            if ($m->is_offence_committed_in_pa == 'Yes') {
-                $pa = PA::find($m->pa_id);
-            } else {
+            $pa = PA::find($m->pa_id);
+            if ($pa == null || $pa->id == 1) {
                 $m->pa_id = 1;
                 $m->ca_id = 1;
+                $m->is_offence_committed_in_pa == 'No';
+            } else {
+                $m->is_offence_committed_in_pa == 'Yes';
+                $m->pa_id = $pa->id;
+                $m->ca_id = $pa->ca_id;
             }
+
+
             if (
                 $pa != null
             ) {

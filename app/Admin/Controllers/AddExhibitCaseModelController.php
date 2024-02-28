@@ -144,7 +144,7 @@ class AddExhibitCaseModelController extends AdminController
                 $form->divider();
             });
 
-        $form->radio('type_other', __('Other exhibit types?'))
+        $form->radio('type_other', __('Other exhibit types or Files?'))
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',

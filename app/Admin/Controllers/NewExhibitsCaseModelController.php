@@ -185,7 +185,7 @@ class NewExhibitsCaseModelController extends AdminController
             ->rules('required')
             ->default('No');
 
-        $form->radio('type_other', __('Other exhibit types?'))
+        $form->radio('type_other', __('Other exhibits and Files'))
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',

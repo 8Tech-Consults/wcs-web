@@ -14,5 +14,5 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>All rights reserved. <a href="javscript:;">© 2024 UWA</a></strong>
+    <strong>All rights reserved. <a href="uwawildlifecrime.net">© 2024 UWA</a></strong>
 </footer>

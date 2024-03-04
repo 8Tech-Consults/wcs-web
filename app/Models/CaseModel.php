@@ -62,7 +62,7 @@ class CaseModel extends Model
                     $m->district_id = $sub->parent;
                 }
             }
-            $m->offence_description = $m->title;
+            //$m->offence_description = $m->title;
             $m->case_step = 1;
 
 

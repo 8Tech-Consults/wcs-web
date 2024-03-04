@@ -61,10 +61,10 @@ class CaseModelCommentsController extends AdminController
         $grid->column('court_file_status', __('Court file status'));
         $grid->column('prison', __('Prison'));
         $grid->column('jail_release_date', __('Jail release date'));
-        $grid->column('suspect_appealed', __('Suspect appealed'));
-        $grid->column('suspect_appealed_date', __('Suspect appealed date'));
-        $grid->column('suspect_appealed_court_name', __('Suspect appealed court name'));
-        $grid->column('suspect_appealed_court_file', __('Suspect appealed court file'));
+        $grid->column('suspect_appealed', __('Accused appealed'));
+        $grid->column('suspect_appealed_date', __('Accused appealed date'));
+        $grid->column('suspect_appealed_court_name', __('Accused appealed court name'));
+        $grid->column('suspect_appealed_court_file', __('Accused appealed court file'));
         $grid->column('user_adding_suspect_id', __('User adding suspect id'));
 
         return $grid;
@@ -113,10 +113,10 @@ class CaseModelCommentsController extends AdminController
         $show->field('court_file_status', __('Court file status'));
         $show->field('prison', __('Prison'));
         $show->field('jail_release_date', __('Jail release date'));
-        $show->field('suspect_appealed', __('Suspect appealed'));
-        $show->field('suspect_appealed_date', __('Suspect appealed date'));
-        $show->field('suspect_appealed_court_name', __('Suspect appealed court name'));
-        $show->field('suspect_appealed_court_file', __('Suspect appealed court file'));
+        $show->field('suspect_appealed', __('Accused appealed'));
+        $show->field('suspect_appealed_date', __('Accused appealed date'));
+        $show->field('suspect_appealed_court_name', __('Accused appealed court name'));
+        $show->field('suspect_appealed_court_file', __('Accused appealed court file'));
         $show->field('user_adding_suspect_id', __('User adding suspect id'));
 
         return $show;

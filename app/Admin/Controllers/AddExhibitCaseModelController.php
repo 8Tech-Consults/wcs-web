@@ -60,34 +60,23 @@ class AddExhibitCaseModelController extends AdminController
     protected function form()
     {
 
-
-        //fet id from segment 2
-        $id = (int)request()->segment(2);
-        $ex = Exhibit::find($id);
-
-
-        if ($ex == null) {
-            $arr = (explode('/', $_SERVER['REQUEST_URI']));
-            $pendingCase = null;
-            $ex = Exhibit::find($arr[2]);
-            if ($ex != null) {
-                $pendingCase = CaseModel::find(session('pending_case_id'));
-            } else {
-                die("Exhibit not found.");
-            }
-            if ($pendingCase == null) {
-                die("Case not found.");
-            }
-        } else {
-            $pendingCase = $ex;
+        //get add_exhibit from session
+        $add_exhibit = session('add_exhibit');
+        $case = null;
+        if($add_exhibit!=null && ((int)($add_exhibit))>0){
+            $case = CaseModel::find($add_exhibit);
         }
-
+        if($case==null){
+            //redirect to back
+            return redirect(admin_url("cases")); 
+        }
+ 
 
         $form = new Form(new Exhibit());
         $form->disableEditingCheck();
 
-        $form->hidden('case_id')->default(0);
-        $form->display('ADDING EXHIBIT TO CASE')->default($pendingCase->case->case_number);
+        $form->hidden('case_id')->default($case->id);
+        $form->display('ADDING EXHIBIT TO CASE')->default($case->case_number);
         $form->divider();
 
         $form->disableCreatingCheck();
@@ -156,10 +145,10 @@ class AddExhibitCaseModelController extends AdminController
                 $form->divider();
             });
 
-        $form->saving(function (Form $form) {
+       /*  $form->saving(function (Form $form) {
             $form->case_id = session('pending_case_id');
             session()->forget('pending_case_id');
-        });
+        }); */
 
         $form->saved(function (Form $form) {
             if ($form->type_other == 'No' && $form->type_implement == 'No' && $form->type_wildlife == 'No') {

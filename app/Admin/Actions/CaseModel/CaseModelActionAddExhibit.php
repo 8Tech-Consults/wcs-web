@@ -11,6 +11,7 @@ class CaseModelActionAddExhibit extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect(admin_url("/cases?add_exhibit_to_case_id={$model->id}"));
+        session(['add_exhibit' => $model->id]);
+        return $this->response()->redirect(admin_url("/add-exhibit/create"));
     }
 }

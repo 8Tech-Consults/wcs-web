@@ -607,7 +607,7 @@ class CaseSuspectController extends AdminController
                 return Utils::my_date($d);
             });
 
-        $grid->column('is_fined', 'Suspect fined')
+        $grid->column('is_fined', 'Accused fined')
             ->using([
                 1 => 'Fined',
                 0 => 'Not fined',
@@ -620,7 +620,7 @@ class CaseSuspectController extends AdminController
 
         $grid->column('cautioned')->hide()->sortable();
         $grid->column('cautioned_remarks')->hide()->sortable();
-        $grid->column('suspect_appealed', 'Suspect appealed')
+        $grid->column('suspect_appealed', 'Accused appealed')
             ->using([
                 1 => 'Yes',
                 0 => 'No',
@@ -1243,7 +1243,7 @@ class CaseSuspectController extends AdminController
         //                                         $form->date('jail_release_date', 'Date released');
         //                                     });
 
-        //                                 $form->radio('is_fined', __('Was suspect fined?'))
+        //                                 $form->radio('is_fined', __('Was Accused fined?'))
         //                                     ->options([
         //                                         'Yes' => 'Yes',
         //                                         'No' => 'No',

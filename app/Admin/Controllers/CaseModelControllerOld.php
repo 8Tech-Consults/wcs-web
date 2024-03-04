@@ -513,7 +513,7 @@ class CaseModelController extends AdminController
                         'Dismissed' => 'Dismissed',
                         'Convicted' => 'Convicted',
                     ]);
-                    $form->radio('is_jailed', __('Was suspect jailed?'))
+                    $form->radio('is_jailed', __('Was the Accused jailed?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
@@ -521,7 +521,7 @@ class CaseModelController extends AdminController
                     $form->date('jail_date', 'Jail date');
                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
 
-                    $form->radio('is_fined', __('Was suspect fined?'))
+                    $form->radio('is_fined', __('Was the Accused fined?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
@@ -529,7 +529,7 @@ class CaseModelController extends AdminController
                             $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                         });
 
-                    $form->radio('community_service', __('Was suspect issued a community service?'))
+                    $form->radio('community_service', __('Was the Accused issued a community service?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',

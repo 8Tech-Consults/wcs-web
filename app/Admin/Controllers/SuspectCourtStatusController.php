@@ -28,7 +28,7 @@ class SuspectCourtStatusController extends AdminController
 
         $grid->disableBatchActions();
         $grid->disableFilter();
-        $grid->quickSearch('name')->placeholder('Search Suspect Court Status');
+        $grid->quickSearch('name')->placeholder('Search Accused Court Status');
 
         $grid->column('name', __('Name'));
 

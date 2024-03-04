@@ -566,7 +566,7 @@ class CaseSuspectController extends AdminController
         $grid->column('prosecutor', 'Lead prosecutor')->hide()->sortable();
         $grid->column('magistrate_name')->hide()->sortable();
         $grid->column('court_status', 'Court case status')->hide()->sortable();
-        $grid->column('suspect_court_outcome', 'Suspect court status')->hide()->sortable();
+        $grid->column('suspect_court_outcome', 'Accused court status')->hide()->sortable();
         $grid->column('case_outcome', 'Specific court case status')->hide()->sortable();
 
 

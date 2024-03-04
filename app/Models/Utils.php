@@ -160,13 +160,13 @@ class Utils  extends Model
                     continue;
                 }
 
-                if($case->pa_id > 1){
+                if ($case->pa_id > 1) {
                     continue;
                 }
 
                 $case->ca_id = $ca->id;
-                $case->save();  
-                continue; 
+                $case->save();
+                continue;
 
                 if ($ca_text == 'NAPA') {
                     $ca = ConservationArea::find(1);
@@ -1727,6 +1727,7 @@ array:91 [▼
         if ($t == null) {
             return $t;
         }
+        return $c->format('d M, Y');
         return $c->format('d M, Y - h:i a');
     }
 

@@ -14,5 +14,5 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>Powered by <a href="javscript:;">8Tech consults</a></strong>
+    <strong>All rights reserved. <a href="javscript:;">© 2024 UWA</a></strong>
 </footer>

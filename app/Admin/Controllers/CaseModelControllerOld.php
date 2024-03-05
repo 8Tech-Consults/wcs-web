@@ -334,7 +334,7 @@ class CaseModelController extends AdminController
                     $form->text('first_name')->rules('required');
                     $form->text('middle_name');
                     $form->text('last_name')->rules('required');
-                    $form->radio('sex')->options([
+                    $form->select('sex')->options([
                         'Male' => 'Male',
                         'Female' => 'Female',
                     ])->rules('required');

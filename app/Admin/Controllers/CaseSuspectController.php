@@ -1047,7 +1047,7 @@ class CaseSuspectController extends AdminController
         $form->text('occuptaion', 'Occupation');
 
 
-        $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+        $form->select('is_ugandan', __('Is the suspect a Ugandan'))
             ->options([
                 'Ugandan' => 'Yes',
                 'Not Ugandan' => 'No',

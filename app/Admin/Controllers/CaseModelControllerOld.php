@@ -345,7 +345,7 @@ class CaseModelController extends AdminController
 
 
 
-                    $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+                    $form->select('is_ugandan', __('Is the suspect a Ugandan'))
                         ->options([
                             'Ugandan' => 'Yes',
                             'Not Ugandan' => 'No',
@@ -525,7 +525,7 @@ class CaseModelController extends AdminController
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
-                        ])->when('Yes',function($form){
+                        ])->when('Yes', function ($form) {
                             $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                         });
 

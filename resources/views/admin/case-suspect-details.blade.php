@@ -365,7 +365,7 @@ use App\Models\Utils;
 
                 @include('components.detail-item', [
                     't' => 'Jail period',
-                    's' => $s->jail_period,
+                    's' => Utils::number_format($s->jail_period, 'Month'),
                 ])
                 @include('components.detail-item', [
                     't' => 'Prison',
@@ -390,7 +390,7 @@ use App\Models\Utils;
 
                 @include('components.detail-item', [
                     't' => 'Fined amount',
-                    's' => $s->fined_amount,
+                    's' => 'UGX ' . number_format($s->fine_amount),
                 ])
 
                 @include('components.detail-item', [

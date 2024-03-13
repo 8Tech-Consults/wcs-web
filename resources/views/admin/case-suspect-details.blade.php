@@ -390,7 +390,7 @@ use App\Models\Utils;
 
                 @include('components.detail-item', [
                     't' => 'Fined amount',
-                    's' => 'UGX ' . number_format($s->fined_amount),
+                    's' => 'UGX ' . number_format((int)($s->fined_amount)),
                 ])
 
                 @include('components.detail-item', [

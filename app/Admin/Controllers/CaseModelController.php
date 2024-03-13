@@ -295,7 +295,7 @@ class CaseModelController extends AdminController
         $grid->column('id', __('ID'))->sortable()->hide();
         $grid->column('created_at', __('Created'))
             ->display(function ($x) {
-                return Utils::my_date_time($x);
+                return Utils::my_date_time_2($x);
             })
             ->sortable();
 

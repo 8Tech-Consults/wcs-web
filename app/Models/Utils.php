@@ -1729,6 +1729,15 @@ array:91 [▼
         return $c->format('d M, Y');
         return $c->format('d M, Y - h:i a');
     }
+    public static function my_date_time_2($t)
+    {
+        $c = Carbon::parse($t);
+        $c->setTimezone(config('app.timezone'));
+        if ($t == null) {
+            return $t;
+        } 
+        return $c->format('d M, Y - h:i a');
+    }
 
     public static function tell_suspect_status($s)
     {

@@ -290,6 +290,7 @@ class CaseSuspectController extends AdminController
                 if ($this->case->case_date == null || strlen($this->case->case_date) < 3) {
                     $d = $this->case->created_at;
                 }
+                return Utils::my_date_time_2($x);
                 return Utils::my_date_time($d);
             })
             ->sortable();

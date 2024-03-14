@@ -283,13 +283,13 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
-        $grid->column('created_at', __('DATE OF ENTRY'))
+        $grid->column('entry_date', __('DATE OF ENTRY'))
             ->display(function ($x) {
-                $d = $this->case->case_date;
+                $d = $this->created_at;
+                return Utils::my_date_time_2($d);
                 if ($this->case->case_date == null || strlen($this->case->case_date) < 3) {
                     // $d = $this->case->created_at;
                 }
-                return Utils::my_date_time_2($d);
                 return Utils::my_date_time($d);
             })->hide();
 

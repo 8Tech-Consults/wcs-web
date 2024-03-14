@@ -283,7 +283,7 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
-        $grid->column('entry_date', __('DATE OF ENTRY'))
+        $grid->column('entry_date', __('Entry Date'))
             ->display(function ($x) {
                 $d = $this->created_at;
                 return Utils::my_date_time_2($d);

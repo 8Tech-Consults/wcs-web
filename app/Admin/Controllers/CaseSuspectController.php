@@ -283,14 +283,25 @@ class CaseSuspectController extends AdminController
             })
             ->sortable();
 
+        $grid->column('entry_date', __('Entry Date'))
+            ->display(function ($x) {
+                $d = $this->created_at;
+                return Utils::my_date_time_2($d);
+                if ($this->case->case_date == null || strlen($this->case->case_date) < 3) {
+                    // $d = $this->case->created_at;
+                }
+                return Utils::my_date_time($d);
+            })->hide();
 
-        $grid->column('created_at', __('Date'))
+
+        $grid->column('created_at', __('Case Date'))
             ->display(function ($x) {
                 $d = $this->case->case_date;
                 if ($this->case->case_date == null || strlen($this->case->case_date) < 3) {
                     $d = $this->case->created_at;
                 }
                 return Utils::my_date_time($d);
+                return Utils::my_date_time_2($d);
             })
             ->sortable();
 
@@ -1037,7 +1048,7 @@ class CaseSuspectController extends AdminController
         $form->text('first_name')->rules('required');
         $form->text('middle_name');
         $form->text('last_name')->rules('required');
-        $form->radio('sex')->options([
+        $form->select('sex')->options([
             'Male' => 'Male',
             'Female' => 'Female',
         ])->rules('required');
@@ -1047,7 +1058,7 @@ class CaseSuspectController extends AdminController
         $form->text('occuptaion', 'Occupation');
 
 
-        $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+        $form->select('is_ugandan', __('Is the suspect a Ugandan'))
             ->options([
                 'Ugandan' => 'Yes',
                 'Not Ugandan' => 'No',

@@ -334,7 +334,7 @@ class CaseModelController extends AdminController
                     $form->text('first_name')->rules('required');
                     $form->text('middle_name');
                     $form->text('last_name')->rules('required');
-                    $form->radio('sex')->options([
+                    $form->select('sex')->options([
                         'Male' => 'Male',
                         'Female' => 'Female',
                     ])->rules('required');
@@ -345,7 +345,7 @@ class CaseModelController extends AdminController
 
 
 
-                    $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+                    $form->select('is_ugandan', __('Is the suspect a Ugandan'))
                         ->options([
                             'Ugandan' => 'Yes',
                             'Not Ugandan' => 'No',
@@ -525,7 +525,7 @@ class CaseModelController extends AdminController
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
-                        ])->when('Yes',function($form){
+                        ])->when('Yes', function ($form) {
                             $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
                         });
 

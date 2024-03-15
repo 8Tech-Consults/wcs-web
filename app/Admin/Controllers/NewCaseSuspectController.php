@@ -266,7 +266,7 @@ class NewCaseSuspectController extends AdminController
                 $form->html('<a class="btn btn-danger" href="' . admin_url("new-exhibits-case-models/create") . '" >SKIP TO EXHIBITS</a>', 'SKIP');
             }
         } else {
-            $form->html('<p style="padding: 0;margin: 0;"><a href="'.admin_url('/new-case-suspects').'?cancel_add_suspect=' . $pendingCase->id . '" class="text-danger"><b>Cancel add suspect process</b></a></p>');
+            $form->html('<p style="padding: 0;margin: 0;"><a href="' . admin_url('/new-case-suspects') . '?cancel_add_suspect=' . $pendingCase->id . '" class="text-danger"><b>Cancel add suspect process</b></a></p>');
             $form->display('ADDING SUSPECT TO CASE')->value($pendingCase->case_number)->default($pendingCase->case_number);
         }
 
@@ -289,14 +289,14 @@ class NewCaseSuspectController extends AdminController
         $form->text('first_name')->rules('required');
         $form->text('middle_name');
         $form->text('last_name')->rules('required');
-        $form->radio('sex')->options([
+        $form->select('sex')->options([
             'Male' => 'Male',
             'Female' => 'Female',
         ])->rules('required');
         $form->text('age', 'Suspect\'s Age')->help("How old is the suspect?")->rules('nullable|int|min:1|max:200');
         $form->text('phone_number', 'Phone number');
 
-        $form->radio('type_of_id', 'Suspect Type of Identification Card')
+        $form->select('type_of_id', 'Suspect Type of Identification Card')
             ->options([
                 'National ID' => 'National ID',
                 'Passport ' => 'Passport',
@@ -308,7 +308,7 @@ class NewCaseSuspectController extends AdminController
         $form->text('national_id_number', 'Suspect Identification Number');
         $form->text('occuptaion', 'Occupation');
 
-        $form->radio('is_ugandan', __('Is the suspect a Ugandan'))
+        $form->select('is_ugandan', __('Is the suspect a Ugandan'))
             ->options([
                 'Ugandan' => 'Yes',
                 'Not Ugandan' => 'No',
@@ -334,7 +334,7 @@ class NewCaseSuspectController extends AdminController
                 $form->select('country')
                     ->help('Nationality of the suspect')
                     ->options(Utils::COUNTRIES())->rules('required');
-            })->rules('required');
+            })->required();
         $form->divider('Offences');
 
 
@@ -352,7 +352,7 @@ class NewCaseSuspectController extends AdminController
                 ->help("Select offences involded in this case")
                 ->rules('required');
         } else {
-            $form->radio('use_offence', "Do you want to use existing offence information for this suspect?")
+            $form->select('use_offence', "Do you want to use existing offence information for this suspect?")
                 ->options([
                     'No' => 'No',
                     'Yes' => 'Yes',
@@ -461,7 +461,7 @@ class NewCaseSuspectController extends AdminController
                             $form->text('arrest_first_police_station', 'Police station of Arrest');
                             $form->text('arrest_current_police_station', 'Current police station');
                             $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                                ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
+                                ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
                             )
                                 ->when('UWA', function ($form) {
                                     $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -471,7 +471,7 @@ class NewCaseSuspectController extends AdminController
                                     ]);
                                 });
                             $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                                ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
+                                ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
                             );
 
                             if ($csb == null) {
@@ -551,7 +551,7 @@ class NewCaseSuspectController extends AdminController
                     $form->text('arrest_first_police_station', 'Police station of Arrest');
                     $form->text('arrest_current_police_station', 'Current police station');
                     $form->select('arrest_agency', 'Lead Arresting agency')->options(
-                        ArrestingAgency::orderBy('name','Desc')->pluck('name', 'name')
+                        ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
                     )
                         ->when('UWA', function ($form) {
                             $form->select('arrest_uwa_unit', 'UWA Unit')->options([
@@ -561,7 +561,7 @@ class NewCaseSuspectController extends AdminController
                             ]);
                         });
                     $form->multipleSelect('other_arrest_agencies', 'Other arresting agencies')->options(
-                        ArrestingAgency::orderBy('name','Desc')->pluck('name','name')
+                        ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name')
                     );
 
 
@@ -670,11 +670,11 @@ class NewCaseSuspectController extends AdminController
 
 
                                     $form->date('court_date', 'Court Date of first appearance')
-                                            ->rules('required|after_or_equal:arrest_date_time');
-                                        // ->rules('re'
-                                        //     function (Form $form) {
-                                        //         return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
-                                        //     });
+                                        ->rules('required|after_or_equal:arrest_date_time');
+                                    // ->rules('re'
+                                    //     function (Form $form) {
+                                    //         return ['required', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                                    //     });
 
                                     $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
                                     $form->select('court_name', 'Select Court')->options($courts)
@@ -857,10 +857,10 @@ class NewCaseSuspectController extends AdminController
 
                             $form->date('court_date', 'Court Date of first appearance')
                                 ->rules('required|after_or_equal:arrest_date_time');
-                                // ->rules(
-                                //     function (Form $form) {
-                                //         return ['nullable', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
-                                //     });
+                            // ->rules(
+                            //     function (Form $form) {
+                            //         return ['nullable', new AfterDateInDatabase('case_suspects',$form->model()->id , 'arrest_date_time')];
+                            //     });
 
                             $courts =  Court::where([])->orderBy('id', 'desc')->get()->pluck('name', 'id');
 
@@ -1009,21 +1009,19 @@ class NewCaseSuspectController extends AdminController
                 return redirect(admin_url("cases"));
             }
         });
-        $form->saving( function ( Form $form) {
+        $form->saving(function (Form $form) {
             $errors = [];
-            if( $form->is_suspect_appear_in_court == 'Yes' && ($form->court_status == '' || $form->court_status == null)) {
+            if ($form->is_suspect_appear_in_court == 'Yes' && ($form->court_status == '' || $form->court_status == null)) {
                 $errors['court_status'] = ['Court case status is required'];
             }
 
-            if($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
+            if ($form->is_jailed == 'No' && $form->is_fined == 'No' && $form->community_service == 'No' && $form->cautioned == 'No') {
                 $errors['case_outcome'] = ['Atleast one of the following must be selected when convicted: Jailed, Fined, Community service, Cautioned'];
             }
 
-            if(count($errors) > 0) {
+            if (count($errors) > 0) {
                 throw \Illuminate\Validation\ValidationException::withMessages($errors);
             }
-
-
         });
 
         return $form;

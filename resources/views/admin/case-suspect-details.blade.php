@@ -58,22 +58,36 @@ use App\Models\Utils;
                 's' => $s->country,
             ])
 
-            @include('components.detail-item', [
-                't' => 'Ethnicity',
-                's' => $s->ethnicity,
-            ])
+            @if ($s->country == 'Uganda')
+                @include('components.detail-item', [
+                    't' => 'District',
+                    's' => $s->district->name,
+                ])
 
-            {{--   @include('components.detail-item', [
-                't' => 'District, Sub-county',
-                's' => $s->sub_county->name_text,
-            ]) --}}
+                @include('components.detail-item', [
+                    't' => 'Sub-county',
+                    's' => $s->sub_county->name_text,
+                ])
+
+                @include('components.detail-item', [
+                    't' => 'Parish',
+                    's' => $s->parish,
+                ])
+
+                @include('components.detail-item', [
+                    't' => 'Village',
+                    's' => $s->village,
+                ])
+                @include('components.detail-item', [
+                    't' => 'Ethnicity',
+                    's' => $s->ethnicity,
+                ])
+            @endif
 
 
 
-            @include('components.detail-item', [
-                't' => 'Parish,Village',
-                's' => $s->parish . ', ' . $s->village,
-            ])
+
+
 
             @include('components.detail-item', ['t' => 'OCCUPATION', 's' => $s->occuptaion])
             @include('components.detail-item', [
@@ -390,7 +404,7 @@ use App\Models\Utils;
 
                 @include('components.detail-item', [
                     't' => 'Fined amount',
-                    's' => 'UGX ' . number_format((int)($s->fined_amount)),
+                    's' => 'UGX ' . number_format((int) $s->fined_amount),
                 ])
 
                 @include('components.detail-item', [

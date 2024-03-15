@@ -1735,7 +1735,7 @@ array:91 [▼
         $c->setTimezone(config('app.timezone'));
         if ($t == null) {
             return $t;
-        } 
+        }
         return $c->format('d M, Y - h:i a');
     }
 

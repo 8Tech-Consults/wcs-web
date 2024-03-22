@@ -56,7 +56,14 @@ class Dashboard
             $min = new Carbon();
             $max = new Carbon();
             $max->subMonths($i);
-            $min->subMonths(($i + 1));
+            $min->subMonths(($i));
+
+            //get beginning and end of month
+            $min = $min->startOfMonth();
+            $max = $max->endOfMonth();
+            //formar Y-m-d
+            $min = $min->format('Y-m-d');
+            $max = $max->format('Y-m-d');
 
             // Check for specimen exhibits
             $ivory = Exhibit::whereBetween('created_at', [$min, $max])
@@ -110,14 +117,14 @@ class Dashboard
             $max = new Carbon();
             $max->subMonths($i);
             $min->subMonths(($i));
-            
+
             //get beginning and end of month
             $min = $min->startOfMonth();
             $max = $max->endOfMonth();
             //formar Y-m-d
             $min = $min->format('Y-m-d');
             $max = $max->format('Y-m-d');
-          
+
 
 
             $created_at = CaseSuspect::whereBetween('case_date', [$min, $max])->count();
@@ -154,9 +161,9 @@ class Dashboard
             $is_convicted = CaseSuspect::whereBetween('case_date', [$min, $max])
                 ->where([
                     'case_outcome' => 'Convicted'
-                ]) 
-                ->count(); 
- 
+                ])
+                ->count();
+
             $data['is_convicted'][] = $is_convicted;
             $data['created_at'][] = $created_at;
             $data['is_suspects_arrested'][] = $is_suspects_arrested;

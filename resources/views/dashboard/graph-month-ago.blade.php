@@ -82,7 +82,7 @@ use App\Models\Utils;
                         data: <?php echo json_encode($hippo_teeth); ?>
                     }, {
                         type: 'bar',
-                        label: 'Total Cases',
+                        label: 'Total Exhibits',
                         backgroundColor: window.chartColors.green,
                         data: <?php echo json_encode($data); ?>
                     }]

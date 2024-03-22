@@ -826,20 +826,20 @@ class ArrestsController extends AdminController
                                         ])
                                         ->rules('required')
                                         ->when(1, function ($form) {
-                                            $form->select('police_action', 'Case outcome at police level')->options([
+                                            $form->select('police_action', 'Case status at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
                                             ]);
                                         })
                                         ->when(2, function ($form) {
-                                            $form->select('police_action', 'Case outcome at police level')->options([
+                                            $form->select('police_action', 'Case status at police level')->options([
                                                 'Dismissed by state' => 'Dismissed by state',
                                                 'Withdrawn by complainant' => 'Withdrawn by complainant',
                                             ]);
                                             $form->date('police_action_date', 'Date');
                                             $form->textarea('police_action_remarks', 'Remarks');
                                         })->when(3, function ($form) {
-                                            $form->select('police_action', 'Case outcome at police level')->options([
+                                            $form->select('police_action', 'Case status at police level')->options([
                                                 'Police bond' => 'Police bond',
                                                 'Skipped bond' => 'Skipped bond',
                                             ]);

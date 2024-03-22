@@ -465,7 +465,7 @@ use App\Models\Utils;
 
         @if ($s->is_suspects_arrested == 1 || $s->is_suspects_arrested == 'Yes')
             @include('components.detail-item', [
-                't' => 'Case outcome at police level',
+                't' => 'Case status at police level',
                 's' => $s->police_action,
             ])
 

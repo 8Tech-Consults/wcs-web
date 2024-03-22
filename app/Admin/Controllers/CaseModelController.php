@@ -100,7 +100,8 @@ class CaseModelController extends AdminController
         $grid->filter(function ($f) {
 
             $f->disableIdFilter();
-            $f->between('created_at', 'Filter by date')->date();
+            $f->between('created_at', 'Filter by date of entry')->date();
+            $f->between('case_date', 'Filter by case date')->date();
             $f->equal('officer_in_charge', "Filter by complainant");
 
             $f->equal('reported_by', "Filter by reported by")

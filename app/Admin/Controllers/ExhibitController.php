@@ -40,7 +40,7 @@ class ExhibitController extends AdminController
         $grid->filter(function ($f) {
             // Remove the default id filter
             $f->disableIdFilter();
-            $f->between('created_at', 'Filter by date')->date();
+            $f->between('created_at', 'Filter by case date')->date();
             /*             $f->equal('reported_by', "Filter by complainant")
                 ->select(Administrator::all()->pluck('name', 'id')); */
 

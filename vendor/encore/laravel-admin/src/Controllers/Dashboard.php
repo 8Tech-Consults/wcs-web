@@ -109,11 +109,16 @@ class Dashboard
             $min = new Carbon();
             $max = new Carbon();
             $max->subMonths($i);
-            $min->subMonths(($i + 1));
+            $min->subMonths(($i));
             
             //get beginning and end of month
             $min = $min->startOfMonth();
             $max = $max->endOfMonth();
+            //formar Y-m-d
+            $min = $min->format('Y-m-d');
+            $max = $max->format('Y-m-d');
+          
+
 
             $created_at = CaseSuspect::whereBetween('case_date', [$min, $max])->count();
 

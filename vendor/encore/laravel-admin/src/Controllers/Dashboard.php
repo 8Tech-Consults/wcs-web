@@ -110,9 +110,14 @@ class Dashboard
             $max = new Carbon();
             $max->subMonths($i);
             $min->subMonths(($i + 1));
+            
+            //get beginning and end of month
+            $min = $min->startOfMonth();
+            $max = $max->endOfMonth();
+
             $created_at = CaseSuspect::whereBetween('case_date', [$min, $max])->count();
 
-            $is_suspects_arrested = CaseSuspect::whereBetween('created_at', [$min, $max])
+            $is_suspects_arrested = CaseSuspect::whereBetween('case_date', [$min, $max])
                 ->where([
                     'is_suspects_arrested' => 'Yes'
                 ])
@@ -120,7 +125,7 @@ class Dashboard
                     'is_suspects_arrested' => 1
                 ])
                 ->count();
-            $is_suspect_appear_in_court = CaseSuspect::whereBetween('created_at', [$min, $max])
+            $is_suspect_appear_in_court = CaseSuspect::whereBetween('case_date', [$min, $max])
                 ->where([
                     'is_suspect_appear_in_court' => 'Yes'
                 ])
@@ -128,20 +133,20 @@ class Dashboard
                     'is_suspect_appear_in_court' => 1
                 ])
                 ->count();
-            $is_jailed = CaseSuspect::whereBetween('created_at', [$min, $max])
+            $is_jailed = CaseSuspect::whereBetween('case_date', [$min, $max])
                 ->where([
                     'court_status' => 'Concluded'
                 ])
                 ->count();
 
-            $is_fined = CaseSuspect::whereBetween('created_at', [$min, $max])
+            $is_fined = CaseSuspect::whereBetween('case_date', [$min, $max])
                 ->where([
                     'is_fined' => 'Yes'
                 ])
                 ->count();
 
 
-            $is_convicted = CaseSuspect::whereBetween('created_at', [$min, $max])
+            $is_convicted = CaseSuspect::whereBetween('case_date', [$min, $max])
                 ->where([
                     'case_outcome' => 'Convicted'
                 ]) 

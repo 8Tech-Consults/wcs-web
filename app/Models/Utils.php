@@ -1201,6 +1201,25 @@ array:91 [▼
             return;
         }
 
+        $img = '/storage/no_image.png';
+        $img_temp = '/storage/no_image_temp.png';
+        $base_path = Utils::docs_root();
+        $default_img = $base_path . $img;
+        $default_img_temp = $base_path . $img_temp;
+        //check if file exists
+        if (!file_exists($default_img)) {
+            //check temp image exists
+            if (!file_exists($default_img_temp)) {
+                die("Temp image not found.");
+            }
+            //copy temp image to default image
+            copy($default_img_temp, $default_img);
+        }
+        //check again ig default image exists
+        if (!file_exists($default_img)) {
+            die("Default image not found.");
+        }
+
         //set unlimited time
         ini_set('max_execution_time', 0);
         ini_set('memory_limit', '-1');

@@ -687,7 +687,7 @@ class NewCaseSuspectController extends AdminController
                                     $form->text('magistrate_name', 'Magistrate Name');
 
 
-                                    $form->radio('court_status', __('Court case status'))
+                                    $form->select('court_status', __('Court case status'))
                                         ->options([
                                             'On-going prosecution' => 'On-going prosecution',
                                             'Reinstated' => 'Reinstated',
@@ -890,7 +890,7 @@ class NewCaseSuspectController extends AdminController
                             $form->text('magistrate_name', 'Magistrate Name');
 
 
-                            $form->radio('court_status', __('Court case status'))
+                            $form->select('court_status', __('Court case status'))
                                 ->options([
                                     'On-going prosecution' => 'On-going prosecution',
                                     'Reinstated' => 'Reinstated',

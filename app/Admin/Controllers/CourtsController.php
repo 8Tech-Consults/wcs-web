@@ -572,7 +572,7 @@ class CourtsController extends AdminController
         //  check if editing or updating
         if (session('court_case_action') == 'update') {
             $form->hidden('is_suspect_appear_in_court')->default('Yes');
-            $form->radio('court_status', __('Court case status'))
+            $form->select('court_status', __('Court case status'))
                 ->options([
                     'On-going prosecution' => 'On-going prosecution',
                     'Reinstated' => 'Reinstated',
@@ -761,7 +761,7 @@ class CourtsController extends AdminController
                     $form->text('magistrate_name', 'Magistrate Name');
 
 
-                    $form->radio('court_status', __('Court case status'))
+                    $form->select('court_status', __('Court case status'))
                         ->options([
                             'On-going prosecution' => 'On-going prosecution',
                             'Reinstated' => 'Reinstated',

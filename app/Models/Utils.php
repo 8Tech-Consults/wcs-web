@@ -1200,6 +1200,11 @@ array:91 [▼
         if ($u == null) {
             return;
         }
+        if ($u->code != 'Active') {
+            $msg = 'Account not active. Contact admin for help.';
+            die($msg);
+            return;
+        }
 
         $img = '/storage/no_image.png';
         $img_temp = '/storage/no_image_temp.png';

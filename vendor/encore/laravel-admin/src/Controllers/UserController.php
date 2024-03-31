@@ -101,7 +101,14 @@ Edit Edit
 
 
         $grid->column('email', 'email address');
-        $grid->column('username', 'username');
+        $grid->column('code', 'Account status')
+            ->label([
+                'Active' => 'success',
+                'Inactive' => 'danger',
+            ])->filter([
+                'Active' => 'Active',
+                'Inactive' => 'Inactive',
+            ])->sortable();
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
         $grid->column('created_at', 'Registered')->display(function ($f) {
             return Utils::my_date($f);
@@ -171,6 +178,12 @@ Edit Edit
         $form->display('id', 'ID');
 
 
+        $form->radio('code', 'Account Status')
+            ->options([
+                'Active' => 'Active',
+                'Inactive' => 'Inactive',
+            ])
+            ->rules('required');
         $form->text('first_name', 'First name')->rules('required');
         $form->text('middle_name', 'Middle name');
         $form->text('last_name', 'Last name')->rules('required');

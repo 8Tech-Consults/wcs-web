@@ -3,7 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\ImplementType;
-use App\Models\Court; 
+use App\Models\Court;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,8 +15,8 @@ class ImplementTypeController extends AdminController
      * Title for current resource.
      *
      * @var string
-     */ 
-    protected $title = 'Implement Types'; 
+     */
+    protected $title = 'Implement Types';
 
     /**
      * Make a grid builder. 
@@ -27,6 +27,7 @@ class ImplementTypeController extends AdminController
     {
 
         $grid = new Grid(new ImplementType());
+        $grid->quickSearch('name')->placeholder('Search Implement Type');
         $grid->disableBatchActions();
         $grid->disableFilter();
         $grid->disableExport();
@@ -70,7 +71,7 @@ class ImplementTypeController extends AdminController
     protected function form()
     {
         $form = new Form(new ImplementType());
- 
+
         $form->text('name', __('Name'))->required();
         $form->textarea('details', __('Details'));
 

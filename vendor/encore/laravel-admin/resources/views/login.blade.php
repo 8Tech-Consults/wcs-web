@@ -13,6 +13,22 @@ if (isset($_SESSION['reset_message'])) {
     }
 }
 
+$url = url()->current();
+$is_local = false;
+if (strpos($url, 'wcswildlifecrime')) {
+    $is_local = true;
+} else {
+    $is_local = false;
+}
+$is_local = true;
+
+$primt_color = '#438003';
+if ($is_local) {
+    $primt_color = '#106FB4';
+} else {
+    $primt_color = '#438003';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -211,13 +227,29 @@ if (isset($_SESSION['reset_message'])) {
             <div class="container d-flex flex-wrap justify-content-center justify-content-xl-start h-100 pt-0">
                 <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 350px;">
 
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="30%">
-                    </center>
+
+
+                    @if ($is_local)
+                        <center><img class="img-fluid text-center" src="{{ url('assets/logo-2.png') }}" width="30%">
+                        </center>
+                    @else
+                        <center><img class="img-fluid text-center" src="{{ url('assets/logo.png') }}" width="30%">
+                        </center>
+                    @endif
+
                     <hr class="my-4">
-                    <h2 class="h3 text-center">Wildlife Offenders Database</h2>
 
 
-                    <h1 class="text-center text-xl-start mt-3 text-primary h3">Login</h1>
+                    @if ($is_local)
+                        <h2 class="h3 text-center">Training Portal for Wildlife Offenders Database</h2>
+                    @else
+                        <h2 class="h3 text-center">Wildlife Offenders Database</h2>
+                    @endif
+
+
+
+                    <h1 class="text-center text-xl-start mt-3 text-primary h3"
+                        style="color: {{ $primt_color }}!important;">Login</h1>
 
                     <form class="needs-validation mb-2" action="{{ admin_url('auth/login') }}" method="post">
 
@@ -263,7 +295,8 @@ if (isset($_SESSION['reset_message'])) {
                             </div>
                         </div>
 
-                        <button type="submit" class="btn  btn-lg my-btn-primary  w-100">Sign in</button>
+                        <button type="submit" class="btn  btn-lg my-btn-primary  w-100"
+                            style="background-color: {{ $primt_color }};">Sign in</button>
                     </form>
                     <a href="{{ url('password-forget-email') }}" class="btn btn-link btn-lg w-100">Forgot your
                         password?</a>

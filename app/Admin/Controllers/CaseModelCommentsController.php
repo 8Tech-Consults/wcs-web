@@ -137,16 +137,20 @@ class CaseModelCommentsController extends AdminController
         $case = CaseModel::find($arr[2]);
         if ($case != null) {
         } else {
-            die("Exhibit not found.");
+            $case = CaseModel::find($arr[3]);
+            if ($case == null) {
+                die("Exhibit not found.");
+            }
         }
 
         $form->display('Case')->default($case->case_number);
 
-        $form->morphMany('comments', 'Click on new to add a case progress comment', function (Form\NestedForm $form) {
+        $form->hasMany('comments', 'Click on new to add a case progress comment', function (Form\NestedForm $form) {
             $u = Admin::user();
             $form->hidden('comment_by')->default($u->id);
             $form->text('body', __('Progress comment'))->rules('required');
-        });
+        })
+        ->disableDelete();
 
         $form->tools(function ($actions) {
             $actions->disableDelete();

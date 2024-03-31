@@ -1,5 +1,10 @@
 <?php
 $primt_color = '#438003';
+if ($is_local) {
+    $primt_color = '#106FB4';
+} else {
+    $primt_color = '#438003';
+}
 ?><style>
     .sidebar {
         background-color: #FFFFFF;

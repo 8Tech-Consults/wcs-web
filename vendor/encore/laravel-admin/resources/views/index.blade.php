@@ -1,3 +1,13 @@
+<?php
+$url = url()->current();
+$is_local = false;
+if (strpos($url, 'wcswildlifecrime')) {
+    $is_local = true;
+} else {
+    $is_local = false;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 
@@ -32,7 +42,9 @@
 
     {!! Admin::css() !!}
 
-    @include('widgets.css')
+    @include('widgets.css', [
+        'is_local' => $is_local,
+    ])
 
     <script src="{{ Admin::jQuery() }}"></script>
     {!! Admin::headerJs() !!}

@@ -19,8 +19,7 @@ if (strpos($url, 'wcswildlifecrime')) {
     $is_local = true;
 } else {
     $is_local = false;
-}
-$is_local = true;
+} 
 
 $primt_color = '#438003';
 if ($is_local) {

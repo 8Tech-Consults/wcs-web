@@ -68,7 +68,7 @@ use App\Models\Utils;
                     data: {
                         labels: <?php echo json_encode($labels); ?>,
                         datasets: [{
-                            label: 'CA',
+                            label: 'CASES',
                             data: <?php echo json_encode($count); ?>,
                             backgroundColor: [
                                 window.chartColors.red,

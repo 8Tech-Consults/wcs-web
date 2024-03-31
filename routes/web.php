@@ -256,10 +256,10 @@ Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");
 Route::get('/mobile', function () {
-  return redirect(url('uwa-v15.0.apk'));
+  return redirect(url('uwa-mobile-v19.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
-  return redirect(url('uwa-desktop-v9.zip'));
+  return redirect(url('uwa-desktop-v19.zip'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
   return redirect(url('uwa-fingerprint-v2.zip'));

@@ -63,9 +63,14 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
             if ($model->username == null) {
                 $model->username = $model->email;
             }
+
+            if ($model->username != $model->email) {
+                $model->username = $model->email;
+            }
+
             $model->name = "{$model->name} {$model->middle_name} {$model->last_name}";
 
-            
+
 
             if ($model->pa_id == null) {
                 $model->pa_id = 1;
@@ -76,7 +81,7 @@ class Administrator extends Model implements AuthenticatableContract, JWTSubject
                 $model->ca_id = $ca->ca_id;
             } else {
                 $model->ca_id = 1;
-            } 
+            }
 
             return $model;
         });

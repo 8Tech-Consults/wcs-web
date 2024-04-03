@@ -279,6 +279,7 @@ HQ Manager
         $form->display('updated_at', trans('admin.updated_at'));
 
         $form->saving(function (Form $form) {
+            $form->username = $form->email;
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = Hash::make($form->password);
             }

@@ -276,11 +276,13 @@ class CaseSuspect extends Model
         $this->jail_date = $org->jail_date;
         $this->court_file_status = $org->court_file_status;
         $this->court_status = $org->court_status;
+        $this->cautioned_remarks = $org->cautioned_remarks;
+        $this->cautioned = $org->cautioned;
         $this->suspect_court_outcome = $org->suspect_court_outcome;
         $this->use_same_court_information_id = $org->use_same_court_information_id;
         $this->use_same_court_information_coped = $org->use_same_court_information_coped;
         $this->use_same_court_information_coped = 'Yes';
-        $this->use_same_court_information = 'Yes';
+        $this->use_same_court_information = 'Yes'; 
         $this->save();
     }
 

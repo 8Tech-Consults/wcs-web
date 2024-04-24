@@ -45,17 +45,18 @@ use App\Models\Utils;
 
                     @foreach ($suspects as $suspect)
                         <tr>
-
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="symbol"
-                                        style="width: 55px; height: 60px;
+                                    <a href="{{ $suspect->photo_url }}" target="_blank" title="Click to view full photo">
+                                        <div class="symbol"
+                                            style="width: 55px; height: 60px;
                                     background-image: url({{ $suspect->photo_url }});
                                     background-position: center;
                                     background-size: cover;
                                     border-radius: 8px;
                                     ">
-                                    </div>
+                                        </div>
+                                    </a>
                                     <div class="d-flex justify-content-start flex-column pl-3">
                                         <a href="#" style="color: black; font-weight: 600;"
                                             class="text-dark fw-bolder text-hover-primary fs-6">{{ $suspect->name }}</a>

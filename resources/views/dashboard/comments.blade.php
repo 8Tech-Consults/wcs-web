@@ -26,7 +26,7 @@ use App\Models\Utils;
             <b>Case progress comments</b>
         </h3>
         <div>
-            <a href="{{ url('/cases') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+            <a href="{{ url('/case-comments') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
         </div>

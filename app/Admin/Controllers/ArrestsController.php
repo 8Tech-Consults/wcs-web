@@ -811,7 +811,7 @@ class ArrestsController extends AdminController
                             'No' => 'No',
                             'Yes' => 'Yes',
                         ])->when('No', function ($form) {
-                            $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                            $form->select('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                                 ->options([
                                     'Yes' => 'Yes',
                                     'No' => 'No',

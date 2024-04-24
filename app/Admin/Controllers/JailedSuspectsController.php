@@ -87,7 +87,7 @@ class JailedSuspectsController extends AdminController
                 $group->equal('equal to');
             });
 
-            $f->between('jail_date', 'Filter by jail date')->date();
+            $f->between('jail_date', 'Filter by Sentence date')->date();
             $f->like('court_name', 'Filter by court');
             $f->like('prosecutor', 'Filter by prosecutor');
             $f->like('magistrate_name', 'Filter by magistrate');
@@ -161,7 +161,7 @@ class JailedSuspectsController extends AdminController
                 1 => 'success',
             ], 'danger');
 
-        $grid->column('jail_date', __('Jail date'))
+        $grid->column('jail_date', __('Sentence date'))
             ->display(function ($x) {
                 return Utils::my_date($x);
             })

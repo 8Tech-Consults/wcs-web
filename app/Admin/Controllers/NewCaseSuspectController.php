@@ -120,7 +120,7 @@ class NewCaseSuspectController extends AdminController
         $grid->column('deleted_at', __('Deleted at'));
         $grid->column('photo', __('Photo'));
         $grid->column('court_date', __('Court date'));
-        $grid->column('jail_date', __('Jail date'));
+        $grid->column('jail_date', __('Sentence date'));
         $grid->column('use_same_arrest_information', __('Use same arrest information'));
         $grid->column('suspect_number', __('Suspect number'));
         $grid->column('arrest_in_pa', __('Arrest in pa'));
@@ -213,7 +213,7 @@ class NewCaseSuspectController extends AdminController
         $show->field('deleted_at', __('Deleted at'));
         $show->field('photo', __('Photo'));
         $show->field('court_date', __('Court date'));
-        $show->field('jail_date', __('Jail date'));
+        $show->field('jail_date', __('Sentence date'));
         $show->field('use_same_arrest_information', __('Use same arrest information'));
         $show->field('suspect_number', __('Suspect number'));
         $show->field('arrest_in_pa', __('Arrest in pa'));
@@ -604,7 +604,7 @@ class NewCaseSuspectController extends AdminController
                             'No' => 'No',
                             'Yes' => 'Yes',
                         ])->when('No', function ($form) {
-                            $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                            $form->select('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                                 ->options([
                                     'Yes' => 'Yes',
                                     'No' => 'No',
@@ -694,7 +694,7 @@ class NewCaseSuspectController extends AdminController
                                             'Concluded' => 'Concluded',
                                         ])->when('Concluded', function ($form) {
 
-                                            $form->radio('case_outcome', 'Specific court case status')->options([
+                                            $form->select('case_outcome', 'Specific court case status')->options([
                                                 'Dismissed' => 'Dismissed',
                                                 'Withdrawn by DPP' => 'Withdrawn by DPP',
                                                 'Acquittal' => 'Acquittal',
@@ -707,7 +707,7 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->date('jail_date', 'Jail date')->rules('after_or_equal:court_date');
+                                                            $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date');
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                             $form->text('prison', 'Prison name');
                                                             $form->date('jail_release_date', 'Release Date');
@@ -797,7 +797,7 @@ class NewCaseSuspectController extends AdminController
                         })
                         ->default('No');
                 } else {
-                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                    $form->select('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
@@ -897,7 +897,7 @@ class NewCaseSuspectController extends AdminController
                                     'Concluded' => 'Concluded',
                                 ])->when('Concluded', function ($form) {
 
-                                    $form->radio('case_outcome', 'Specific court case status')->options([
+                                    $form->select('case_outcome', 'Specific court case status')->options([
                                         'Dismissed' => 'Dismissed',
                                         'Withdrawn by DPP' => 'Withdrawn by DPP',
                                         'Acquittal' => 'Acquittal',
@@ -910,7 +910,7 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('jail_date', 'Jail date')->rules('after_or_equal:court_date');
+                                                    $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date');
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
                                                     $form->text('prison', 'Prison name');
                                                     $form->date('jail_release_date', 'Date released');

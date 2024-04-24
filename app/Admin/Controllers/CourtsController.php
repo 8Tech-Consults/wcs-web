@@ -159,6 +159,7 @@ class CourtsController extends AdminController
                 Offence::pluck('name', 'name')
             );
 
+            $f->between('case.case_date', 'Filter by case date')->date();
             $f->between('court_date', 'Filter by court date')->date();
             $f->like('court_name', 'Filter by court name');
             $f->like('court_file_number', 'Filter by court file number');
@@ -181,6 +182,7 @@ class CourtsController extends AdminController
                 'Yes' => 'Appealed',
                 'No' => 'Not Appealed'
             ]);
+            $f->like('prosecutor', 'Filter prosecutor');
         });
 
         $grid->quickSearch(function ($model, $query) {
@@ -256,7 +258,7 @@ class CourtsController extends AdminController
                 'No' => 'Not Jailed',
             ]);
 
-        $grid->column('jail_date', 'Jail date')
+        $grid->column('jail_date', 'Sentence date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
@@ -579,7 +581,7 @@ class CourtsController extends AdminController
                     'Concluded' => 'Concluded',
                 ])->when('Concluded', function ($form) {
 
-                    $form->radio('case_outcome', 'Specific court case status')->options([
+                    $form->select('case_outcome', 'Specific court case status')->options([
                         'Dismissed' => 'Dismissed',
                         'Withdrawn by DPP' => 'Withdrawn by DPP',
                         'Acquittal' => 'Acquittal',
@@ -592,7 +594,7 @@ class CourtsController extends AdminController
                                     "No" => 'No',
                                 ])
                                 ->when('Yes', function ($form) {
-                                    $form->date('jail_date', 'Jail date')->rules(
+                                    $form->date('jail_date', 'Sentence date')->rules(
                                         function (Form $form) {
                                             return [new AfterDateInDatabase('case_suspects', $form->model()->id, 'court_date')];
                                         }
@@ -670,7 +672,7 @@ class CourtsController extends AdminController
                 })
                 ->rules('required');
         } else {
-            $form->radio('is_suspect_appear_in_court', __('Has this Accused appeared in court?'))
+            $form->select('is_suspect_appear_in_court', __('Has this Accused appeared in court?'))
                 ->options([
                     'Yes' => 'Yes',
                     'No' => 'No',
@@ -768,7 +770,7 @@ class CourtsController extends AdminController
                             'Concluded' => 'Concluded',
                         ])->when('Concluded', function ($form) {
 
-                            $form->radio('case_outcome', 'Specific court case status')->options([
+                            $form->select('case_outcome', 'Specific court case status')->options([
                                 'Dismissed' => 'Dismissed',
                                 'Withdrawn by DPP' => 'Withdrawn by DPP',
                                 'Acquittal' => 'Acquittal',
@@ -781,8 +783,8 @@ class CourtsController extends AdminController
                                             "No" => 'No',
                                         ])
                                         ->when('Yes', function ($form) {
-                                            $form->date('jail_date', 'Jail date')->rules('after_or_equal:court_date');
-                                            $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                            $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date|required');
+                                            $form->decimal('jail_period', 'Jail period')->help("(In months)")->rules('required');
                                             $form->text('prison', 'Prison name');
                                             $form->date('jail_release_date', 'Date released');
                                         })

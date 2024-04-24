@@ -408,7 +408,7 @@ array:91 [▼
   71 => "Specific court case status"
   72 => "Remarks"
   73 => "Jailed"
-  74 => "Jail date"
+  74 => "Sentence date"
   75 => "Jail period"
   76 => "Prison"
   77 => "Date release"

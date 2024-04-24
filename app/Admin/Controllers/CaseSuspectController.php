@@ -233,7 +233,7 @@ class CaseSuspectController extends AdminController
             ]);
 
 
-            $f->equal('status', '“Filter by Case status')->select([
+            $f->equal('status', 'Filter by case status')->select([
                 'On-going investigation' => 'On-going investigation',
                 'Closed' => 'Closed',
                 'Re-opened' => 'Re-opened',
@@ -249,6 +249,15 @@ class CaseSuspectController extends AdminController
 
             $f->equal('created_by_ca_id', "Filter by CA of Entry")
                 ->select(ConservationArea::all()->pluck('name', 'id'));
+
+            //filter by arrest_uwa_unit as plain text
+            $f->equal('arrest_agency', 'Filter by Lead Arresting agency')->select(ArrestingAgency::orderBy('name', 'Desc')->pluck('name', 'name'));
+            $f->equal('arrest_uwa_unit', 'Filter by UWA Unit ')->select([
+                'Canine Unit' => 'The Canine Unit',
+                'WCU' => 'WCU',
+                'LEU' => 'LEU',
+            ]);
+            
         });
 
 
@@ -605,7 +614,7 @@ class CaseSuspectController extends AdminController
                 'No' => 'Not Jailed',
             ]);
 
-        $grid->column('jail_date', 'Jail date')
+        $grid->column('jail_date', 'Sentence date')
             ->hide()
             ->display(function ($d) {
                 return Utils::my_date($d);
@@ -1167,7 +1176,7 @@ class CaseSuspectController extends AdminController
         //         $form->text('police_sd_number', 'Police SD number');
 
 
-        //         $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+        //         $form->select('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
         //             ->options([
         //                 'Yes' => 'Yes',
         //                 'No' => 'No',
@@ -1238,7 +1247,7 @@ class CaseSuspectController extends AdminController
         //                         'Closed' => 'Closed',
         //                     ])->when('Closed', function ($form) {
 
-        //                         $form->radio('case_outcome', 'Specific court case status')->options([
+        //                         $form->select('case_outcome', 'Specific court case status')->options([
         //                             'Dismissed' => 'Dismissed',
         //                             'Convicted' => 'Convicted',
         //                         ])
@@ -1249,7 +1258,7 @@ class CaseSuspectController extends AdminController
         //                                         0 => 'No',
         //                                     ])
         //                                     ->when(1, function ($form) {
-        //                                         $form->date('jail_date', 'Jail date');
+        //                                         $form->date('jail_date', 'Sentence date');
         //                                         $form->decimal('jail_period', 'Jail period')->help("(In months)");
         //                                         $form->text('prison', 'Prison name');
         //                                         $form->date('jail_release_date', 'Date released');

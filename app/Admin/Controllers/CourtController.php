@@ -25,13 +25,14 @@ class CourtController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Court());
+        $grid->quickSearch('name')->placeholder('Search Court Name');
         $grid->disableBatchActions();
         $grid->disableFilter();
         $grid->disableExport();
         $grid->column('name', __('Name'))->sortable();
         $grid->column('details', __('Details'));
 
-        
+
         $grid->actions(function ($actions) {
             $actions->disableDelete();
         });
@@ -66,12 +67,12 @@ class CourtController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Court()); 
+        $form = new Form(new Court());
 
         $form->text('name', __('Name'))->required();
         $form->textarea('details', __('Details'));
 
-        
+
 
         return $form;
     }

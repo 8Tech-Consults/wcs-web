@@ -281,6 +281,7 @@ class CaseSuspect extends Model
         $this->suspect_court_outcome = $org->suspect_court_outcome;
         $this->use_same_court_information_id = $org->use_same_court_information_id;
         $this->use_same_court_information_coped = $org->use_same_court_information_coped;
+        $this->community_service_duration = $org->community_service_duration;
         $this->use_same_court_information_coped = 'Yes';
         $this->use_same_court_information = 'Yes'; 
         $this->save();
@@ -316,6 +317,7 @@ class CaseSuspect extends Model
         $this->police_action = $org->police_action;
         $this->police_action_date = $org->police_action_date;
         $this->police_action_remarks = $org->police_action_remarks;
+        $this->community_service_duration = $org->community_service_duration;
         $this->use_same_arrest_information_coped = 'Yes';
         $this->use_same_arrest_information = 'Yes';
         $this->save();

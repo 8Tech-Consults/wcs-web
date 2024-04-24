@@ -373,7 +373,7 @@ use App\Models\Utils;
                 ])
 
                 @include('components.detail-item', [
-                    't' => 'Jail date',
+                    't' => 'Sentence date',
                     's' => Utils::my_date($s->jail_date),
                 ])
 

@@ -29,12 +29,30 @@ class LocationController extends AdminController
         $grid->disableBatchActions();
         $grid->disableExport();
         $grid->disableFilter();
-        $grid->disableActions();
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+            $actions->disableDelete();
+        }); 
         $grid->quickSearch('name')->placeholder("Search by name...");
         $grid->column('id', __('ID'))->hide()->sortable();
         $grid->column('name', __('Name'))->display(function () {
             return $this->name_text;
         })->sortable();
+        //parent
+        $grid->column('parent_location', __('Parent'))->display(function () {
+            if($this->district == null || $this->parent == 0){
+                return 'N/A'; 
+            }
+            return $this->district->name ?? '';
+        }); 
+
+        //location type based on $this->parent
+        $grid->column('parent', __('Type'))->display(function () {
+            if($this->parent == 0 || $this->district == null){
+                return 'District';
+            }
+            return 'Sub-County';
+        })->sortable(); 
 
         return $grid;
     }

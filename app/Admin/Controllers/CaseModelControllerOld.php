@@ -453,13 +453,13 @@ class CaseModelController extends AdminController
                         'Skipped bond' => 'Skipped bond'
                     ])->rules('required');
 
-                    $form->radio('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
+                    $form->select('is_suspect_appear_in_court', __('Has this suspect appeared in court?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
                         ])
                         ->when(1, function ($form) {
-                            $form->date('created_at', 'Court date');
+                            $form->date('created_at', 'Court date')->rules('required');
                         })
                         ->rules('required');
 
@@ -475,7 +475,7 @@ class CaseModelController extends AdminController
 
 
                     $form->text('court_file_number', 'Court file number');
-                    $form->date('court_date', 'Court date');
+                    $form->date('court_date', 'Court date')->rules('required');
                     $form->text('court_name', 'Court Name');
 
                     /*  $form->select('prosecutor', 'Lead prosecutor')
@@ -517,7 +517,7 @@ class CaseModelController extends AdminController
                             'Yes' => 'Yes',
                             'No' => 'No',
                         ]);
-                    $form->date('jail_date', 'Jail date');
+                    $form->date('jail_date', 'Sentence date');
                     $form->decimal('jail_period', 'Jail period')->help("(In months)");
 
                     $form->radio('is_fined', __('Was the Accused fined?'))
@@ -534,7 +534,7 @@ class CaseModelController extends AdminController
                             'No' => 'No',
                         ])
                         ->when('Yes', function ($form) {
-                            $form->date('created_at', 'Court date');
+                            $form->date('created_at', 'Court date')->rules('required');
                         });
                 });
             });

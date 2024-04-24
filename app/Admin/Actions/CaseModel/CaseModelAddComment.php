@@ -11,6 +11,7 @@ class CaseModelAddComment extends RowAction
 
     public function handle(Model $model)
     {
-        return $this->response()->redirect(admin_url("/comments/{$model->id}/edit"));
+        session(['add_comment' => $model->id]);
+        return $this->response()->redirect(admin_url("/case-comments/create"));
     }
 }

@@ -9,6 +9,7 @@ use App\Admin\Actions\CaseModel\ViewSuspect;
 use App\Models\ArrestingAgency;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Location;
 use App\Models\Offence;
 use App\Models\PA;
@@ -173,6 +174,13 @@ class ArrestsController extends AdminController
             })
                 ->ajax($ajax_url);
 
+            $f->equal('ca_id', 'Filter C.A of arrest')->select(
+                ConservationArea::all()->pluck('name', 'id')
+            );
+            $f->equal('pa_id', 'Filter P.A of arrest')->select(
+                PA::all()->pluck('name_text', 'id')
+            );
+
             $f->between('arrest_date_time', 'Filter by arrest date')->date();
 
 
@@ -183,6 +191,19 @@ class ArrestsController extends AdminController
                 }
             })
                 ->ajax($district_ajax_url);
+
+            $f->equal('created_by_ca_id', "Filter by CA of Entry")
+                ->select(ConservationArea::all()->pluck('name', 'id'));
+            //arrest_agency
+            $f->like('arrest_agency', 'Filter by Arresting agency')->select(
+                ArrestingAgency::all()->pluck('name', 'name')
+            );
+            //arrest_uwa_unit
+            $f->like('arrest_uwa_unit', 'Filter by UWA unit')->select([
+                'Canine Unit' => 'The Canine Unit',
+                'WCU' => 'WCU',
+                'LEU' => 'LEU',
+            ]);
 
             $f->like('arrest_current_police_station', 'Filter by current police station');
         });
@@ -372,9 +393,9 @@ class ArrestsController extends AdminController
             $row = $actions->row;
 
             $actions->disableView();
-            if(!$user->isRole('admin')){
+            if (!$user->isRole('admin')) {
                 $actions->disableDelete();
-            } 
+            }
             $actions->disableedit();
             $actions->add(new ViewSuspect);
 
@@ -645,7 +666,8 @@ class ArrestsController extends AdminController
                                         ->options(PA::where('id', '!=', 1)->get()
 
                                             ->pluck('name_text', 'id'));
-                                    $form->text('arrest_village', 'Enter arrest location');
+                                    $form->text('arrest_village', 'Enter arrest location')
+                                        ->rules('required');
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -682,20 +704,36 @@ class ArrestsController extends AdminController
                             if ($csb == null) {
                                 $form->text('arrest_crb_number', 'Police CRB number');
                             } else {
-                                $form->text('arrest_crb_number', 'Police CRB number')
-                                    ->rules('required')
-                                    ->default($csb)
-                                    ->value($csb)
-                                    ->readonly();
+
+                                $user = Admin::user();
+                                if ($user->isRole('admin')) {
+                                    $form->text('arrest_crb_number', 'Police CRB number')
+                                        ->rules('required')
+                                        ->default($csb)
+                                        ->value($csb);
+                                } else {
+                                    $form->text('arrest_crb_number', 'Police CRB number')
+                                        ->rules('required')
+                                        ->default($csb)
+                                        ->value($csb)
+                                        ->readonly();
+                                }
                             }
 
                             if ($sd == null) {
                                 $form->text('police_sd_number', 'Police SD number');
                             } else {
-                                $form->text('police_sd_number', 'Police SD number')
-                                    ->default($sd)
-                                    ->value($sd)
-                                    ->readonly();
+                                $user = Admin::user();
+                                if ($user->isRole('admin')) {
+                                    $form->text('police_sd_number', 'Police SD number')
+                                        ->default($sd)
+                                        ->value($sd);
+                                } else {
+                                    $form->text('police_sd_number', 'Police SD number')
+                                        ->default($sd)
+                                        ->value($sd)
+                                        ->readonly();
+                                }
                             }
                         })
                         ->when('Yes', function ($form) {
@@ -737,7 +775,8 @@ class ArrestsController extends AdminController
                                 ->options(PA::where('id', '!=', 1)->get()
 
                                     ->pluck('name_text', 'id'));
-                            $form->text('arrest_village', 'Enter arrest location');
+                            $form->text('arrest_village', 'Enter arrest location')
+                                ->rules('required');
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -787,19 +826,41 @@ class ArrestsController extends AdminController
                     if ($csb == null) {
                         $form->text('arrest_crb_number', 'Police CRB number');
                     } else {
-                        $form->text('arrest_crb_number', 'Police CRB number')
-                            ->rules('required')
-                            ->default($csb)
-                            ->value($csb)
-                            ->readonly();
+                        $user = Admin::user();
+                        if ($user->isRole('admin')) {
+                            $form->text('arrest_crb_number', 'Police CRB number')
+                                ->rules('required')
+                                ->default($csb)
+                                ->value($csb);
+                        } else {
+                            if ($user->isRole('admin')) {
+                                $form->text('arrest_crb_number', 'Police CRB number')
+                                    ->rules('required')
+                                    ->default($csb)
+                                    ->value($csb);
+                            } else {
+                                $form->text('arrest_crb_number', 'Police CRB number')
+                                    ->rules('required')
+                                    ->default($csb)
+                                    ->value($csb)
+                                    ->readonly();
+                            }
+                        }
                     }
                     if ($sd == null) {
                         $form->text('police_sd_number', 'Police SD number');
                     } else {
-                        $form->text('police_sd_number', 'Police SD number')
-                            ->default($sd)
-                            ->value($sd)
-                            ->readonly();
+                        $user = Admin::user();
+                        if ($user->isRole('admin')) {
+                            $form->text('police_sd_number', 'Police SD number')
+                                ->default($sd)
+                                ->value($sd);
+                        } else {
+                            $form->text('police_sd_number', 'Police SD number')
+                                ->default($sd)
+                                ->value($sd)
+                                ->readonly();
+                        }
                     }
                 }
                 /* 

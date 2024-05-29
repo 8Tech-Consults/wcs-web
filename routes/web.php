@@ -7,8 +7,10 @@ use App\Models\Book;
 use App\Models\BooksCategory;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Course;
 use App\Models\Gen;
+use App\Models\PA;
 use App\Models\StudentHasClass;
 use App\Models\Subject;
 use Carbon\Carbon;
@@ -20,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+
 
 Route::match(['get', 'post'], '/print', [PrintController2::class, 'index']);
 Route::get('/password-forget-email', [MainController::class, 'password_forget_email'])->name("password-forget-email");

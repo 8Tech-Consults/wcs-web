@@ -700,6 +700,7 @@ class NewCaseSuspectController extends AdminController
                                                 'Acquittal' => 'Acquittal',
                                                 'Convicted' => 'Convicted',
                                             ])
+                                                ->rules('required')
                                                 ->when('Convicted', function ($form) {
                                                     $form->radio('is_jailed', __('Was accused jailed?'))
                                                         ->options([
@@ -708,7 +709,8 @@ class NewCaseSuspectController extends AdminController
                                                         ])
                                                         ->when('Yes', function ($form) {
                                                             $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date');
-                                                            $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                                            $form->decimal('jail_period', 'Jail period')->help("(In months)")
+                                                                ->rules('required');
                                                             $form->text('prison', 'Prison name');
                                                             $form->date('jail_release_date', 'Release Date');
                                                         })
@@ -720,7 +722,8 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                                                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)")
+                                                                ->rules('required');
                                                         })
                                                         ->default('No');
 
@@ -733,7 +736,7 @@ class NewCaseSuspectController extends AdminController
                                                             $form->decimal(
                                                                 'community_service_duration',
                                                                 'Community service duration (in Hours)'
-                                                            );
+                                                            )->rules('required');
                                                         })
                                                         ->default('No');
 
@@ -744,7 +747,8 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                            $form->text('cautioned_remarks', 'Enter caution remarks')
+                                                                ->rules('required');
                                                         })
                                                         ->default('No');
 
@@ -754,16 +758,19 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->date('suspect_appealed_date', 'Accused appeal Date');
-                                                            $form->text('suspect_appealed_court_name', 'Appellate court');
-                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                                            $form->date('suspect_appealed_date', 'Accused appeal Date')
+                                                                ->rules('required');
+                                                            $form->text('suspect_appealed_court_name', 'Appellate court')
+                                                                ->rules('required');
+                                                            $form->text('suspect_appealed_court_file', 'Appeal court file number')
+                                                                ->rules('required');
                                                             $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
                                                                 ->options([
                                                                     'Upheld' => 'Upheld',
                                                                     'Quashed and acquitted' => 'Quashed and acquitted',
                                                                     'Quashed and retrial ordered' => 'Quashed and retrial ordered',
                                                                     'On-going' => 'On-going',
-                                                                ]);
+                                                                ])->rules('required'); 
                                                             $form->textarea('suspect_appeal_remarks', 'Remarks');
                                                         });
                                                 })
@@ -903,6 +910,7 @@ class NewCaseSuspectController extends AdminController
                                         'Acquittal' => 'Acquittal',
                                         'Convicted' => 'Convicted',
                                     ])
+                                        ->rules('required')
                                         ->when('Convicted', function ($form) {
                                             $form->radio('is_jailed', __('Was accused jailed?'))
                                                 ->options([
@@ -911,7 +919,8 @@ class NewCaseSuspectController extends AdminController
                                                 ])
                                                 ->when('Yes', function ($form) {
                                                     $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date');
-                                                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                                    $form->decimal('jail_period', 'Jail period')->help("(In months)")
+                                                        ->rules('required');
                                                     $form->text('prison', 'Prison name');
                                                     $form->date('jail_release_date', 'Date released');
                                                 })
@@ -923,7 +932,8 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                                                    $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)")
+                                                        ->rules('required');
                                                 })
                                                 ->default('No');
 
@@ -936,7 +946,7 @@ class NewCaseSuspectController extends AdminController
                                                     $form->decimal(
                                                         'community_service_duration',
                                                         'Community service duration (in Hours)'
-                                                    );
+                                                    )->rules('required');
                                                 })
                                                 ->default('No');
 

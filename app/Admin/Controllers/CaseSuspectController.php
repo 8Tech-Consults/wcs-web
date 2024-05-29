@@ -257,7 +257,16 @@ class CaseSuspectController extends AdminController
                 'WCU' => 'WCU',
                 'LEU' => 'LEU',
             ]);
-            
+            $f->equal('police_action', 'Filter by Status at Police level')->select([
+                'Police bond' => 'Police bond',
+                'Skipped bond' => 'Skipped bond',
+                'Under police custody' => 'Under police custody',
+                'Escaped from colice custody' => 'Escaped from police custody',
+            ]);
+
+            //police_action
+
+
         });
 
 

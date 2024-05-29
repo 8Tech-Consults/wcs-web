@@ -34,7 +34,7 @@ return [
     'filter'                => 'Filter',
     'search'                => 'Search',
     'close'                 => 'Close',
-    'show'                  => 'Show',
+    'show'                  => 'View',
     'entries'               => 'entries',
     'captcha'               => 'Captcha',
     'action'                => 'Action',

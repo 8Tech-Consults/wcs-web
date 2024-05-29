@@ -49,5 +49,17 @@ class PA extends Model
     }
 
 
+    //static function get dropdown list
+    public static function dropdown()
+    {
+        $list = [];
+        $items = self::all();
+        foreach ($items as $item) {
+            $list[$item->id] = $item->name_text;
+        }
+        return $list;
+    } 
+
+
     protected $appends = ['name_text'];
 }

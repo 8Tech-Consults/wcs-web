@@ -518,14 +518,16 @@ class CaseModelController extends AdminController
                             'No' => 'No',
                         ]);
                     $form->date('jail_date', 'Sentence date');
-                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                    $form->decimal('jail_period', 'Jail period')->help("(In months)")
+                        ->rules('required');
 
                     $form->radio('is_fined', __('Was the Accused fined?'))
                         ->options([
                             'Yes' => 'Yes',
                             'No' => 'No',
                         ])->when('Yes', function ($form) {
-                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)")
+                                ->rules('required'); 
                         });
 
                     $form->radio('community_service', __('Was the Accused issued a community service?'))

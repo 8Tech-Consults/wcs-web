@@ -183,6 +183,20 @@ class CourtsController extends AdminController
                 'No' => 'Not Appealed'
             ]);
             $f->like('prosecutor', 'Filter prosecutor');
+
+            //court_status
+            $f->equal('court_status', 'Filter by Court case status')->select([
+                'On-going prosecution' => 'On-going prosecution',
+                'Reinstated' => 'Reinstated',
+                'Concluded' => 'Concluded',
+            ]);
+            //case_outcome
+            $f->equal('case_outcome', 'Filter by Specific Court Case Status')->select([
+                'Dismissed' => 'Dismissed',
+                'Withdrawn by DPP' => 'Withdrawn by DPP',
+                'Acquittal' => 'Acquittal',
+                'Convicted' => 'Convicted',
+            ]);
         });
 
         $grid->quickSearch(function ($model, $query) {
@@ -587,6 +601,7 @@ class CourtsController extends AdminController
                         'Acquittal' => 'Acquittal',
                         'Convicted' => 'Convicted',
                     ])
+                        ->rules('required')
                         ->when('Convicted', function ($form) {
                             $form->radio('is_jailed', __('Was Accused jailed?'))
                                 ->options([
@@ -599,7 +614,8 @@ class CourtsController extends AdminController
                                             return [new AfterDateInDatabase('case_suspects', $form->model()->id, 'court_date')];
                                         }
                                     );
-                                    $form->decimal('jail_period', 'Jail period')->help("(In months)");
+                                    $form->decimal('jail_period', 'Jail period')->help("(In months)")
+                                        ->rules('required');
                                     $form->text('prison', 'Prison name');
                                     $form->date('jail_release_date', 'Date released');
                                 })
@@ -623,7 +639,8 @@ class CourtsController extends AdminController
                                     $form->decimal(
                                         'community_service_duration',
                                         'Community service duration (in Hours)'
-                                    );
+                                    )
+                                        ->rules('required');
                                 })
                                 ->default('No');
 
@@ -634,7 +651,8 @@ class CourtsController extends AdminController
                                     'No' => 'No',
                                 ])
                                 ->when('Yes', function ($form) {
-                                    $form->text('cautioned_remarks', 'Enter caution remarks');
+                                    $form->text('cautioned_remarks', 'Enter caution remarks')
+                                        ->rules('required');
                                 })
                                 ->default('No');
 
@@ -645,16 +663,17 @@ class CourtsController extends AdminController
                                 ])
                                 ->default('No')
                                 ->when('Yes', function ($form) {
-                                    $form->date('suspect_appealed_date', 'Accused appeal Date');
-                                    $form->text('suspect_appealed_court_name', 'Appellate court');
-                                    $form->text('suspect_appealed_court_file', 'Appeal court file number');
-                                    $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
+                                    $form->date('suspect_appealed_date', 'Accused appeal Date')
+                                        ->rules('required');
+                                    $form->text('suspect_appealed_court_name', 'Appellate court')->rules('required');
+                                    $form->text('suspect_appealed_court_file', 'Appeal court file number')->rules('required');
+                                    $form->select('suspect_appealed_outcome', __('Appeal outcome'))
                                         ->options([
                                             'Upheld' => 'Upheld',
                                             'Quashed and acquitted' => 'Quashed and acquitted',
                                             'Quashed and retrial ordered' => 'Quashed and retrial ordered',
                                             'On-going' => 'On-going',
-                                        ]);
+                                        ])->rules('required');
 
                                     $form->textarea('suspect_appeal_remarks', 'Remarks');
                                 });
@@ -725,11 +744,20 @@ class CourtsController extends AdminController
                     if ($courtFileNumber == null) {
                         $form->text('court_file_number', 'Court file number')->rules('required');
                     } else {
-                        $form->text('court_file_number', 'Court file number')
-                            ->default($courtFileNumber)
-                            ->value($courtFileNumber)
-                            ->readonly()
-                            ->rules('required');
+
+                        $user = Admin::user();
+                        if ($user->isRole('admin')) {
+                            $form->text('court_file_number', 'Court file number')
+                                ->default($courtFileNumber)
+                                ->value($courtFileNumber)
+                                ->rules('required');
+                        } else {
+                            $form->text('court_file_number', 'Court file number')
+                                ->default($courtFileNumber)
+                                ->value($courtFileNumber)
+                                ->readonly()
+                                ->rules('required');
+                        }
                     }
                     // dd($form->model()->getKey());
                     $form->date('court_date', 'Court Date of first appearance')->rules(
@@ -795,7 +823,8 @@ class CourtsController extends AdminController
                                             'No' => 'No',
                                         ])
                                         ->when('Yes', function ($form) {
-                                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                                            $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)")
+                                                ->rules('required');
                                         })
                                         ->default('No');
 
@@ -808,7 +837,8 @@ class CourtsController extends AdminController
                                             $form->decimal(
                                                 'community_service_duration',
                                                 'Community service duration (in Hours)'
-                                            );
+                                            )
+                                                ->rules('required');
                                         })
                                         ->default('No');
 
@@ -818,7 +848,8 @@ class CourtsController extends AdminController
                                             'No' => 'No',
                                         ])
                                         ->when('Yes', function ($form) {
-                                            $form->text('cautioned_remarks', 'Enter caution remarks');
+                                            $form->text('cautioned_remarks', 'Enter caution remarks')
+                                                ->rules('required');
                                         })
                                         ->default('No');
 
@@ -828,18 +859,21 @@ class CourtsController extends AdminController
                                             'No' => 'No',
                                         ])
                                         ->when('Yes', function ($form) {
-                                            $form->date('suspect_appealed_date', 'Accused appeal Date');
-                                            $form->text('suspect_appealed_court_name', 'Appellate court');
-                                            $form->text('suspect_appealed_court_file', 'Appeal court file number');
-                                            $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
+                                            $form->date('suspect_appealed_date', 'Accused appeal Date')
+                                                ->rules('required');
+                                            $form->text('suspect_appealed_court_name', 'Appellate court')
+                                                ->rules('required');
+                                            $form->text('suspect_appealed_court_file', 'Appeal court file number')
+                                                ->rules('required');
+                                            $form->select('suspect_appealed_outcome', __('Appeal outcome'))
                                                 ->options([
                                                     'Upheld' => 'Upheld',
                                                     'Quashed and acquitted' => 'Quashed and acquitted',
                                                     'Quashed and retrial ordered' => 'Quashed and retrial ordered',
                                                     'On-going' => 'On-going',
-                                                ]);
+                                                ])->rules('required');
 
-                                            $form->textarea('suspect_appeal_remarks', 'Remarks');
+                                            $form->textarea('suspect_appeal_remarks', 'Remarks')->rules('required');
                                         });
                                 })
                                 ->when('in', ['Dismissed', 'Withdrawn by DPP', 'Acquittal'], function ($form) {

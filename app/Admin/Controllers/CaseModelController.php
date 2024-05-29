@@ -111,6 +111,11 @@ class CaseModelController extends AdminController
             $f->equal('ca_id', "Filter by CA")
                 ->select(ConservationArea::all()->pluck('name', 'id'));
 
+            $f->equal('pa_id', "Filter by PA")
+                ->select(PA::dropdown());
+
+
+
             $ajax_url = url(
                 '/api/ajax?'
                     . "&search_by_1=name"
@@ -294,11 +299,18 @@ class CaseModelController extends AdminController
 
 
         $grid->column('id', __('ID'))->sortable()->hide();
-        $grid->column('created_at', __('Created'))
+        $grid->column('created_at', __('Date of entry'))
             ->display(function ($x) {
                 return Utils::my_date_time_2($x);
             })
             ->sortable();
+
+        $grid->column('case_date', __('Case date'))
+            ->display(function ($x) {
+                return Utils::my_date_time($x);
+            })
+            ->sortable();
+
 
         $grid->column('updated_at', __('Updated'))
             ->display(function ($x) {
@@ -320,6 +332,15 @@ class CaseModelController extends AdminController
                     return  "-";
                 }
                 return $this->ca->name;
+            })
+            ->sortable();
+
+        $grid->column('pa_id', __('PA'))
+            ->display(function () {
+                if ($this->pa == null) {
+                    return  "-";
+                }
+                return $this->pa->name;
             })
             ->sortable();
         $grid->column('district_id', __('District'))

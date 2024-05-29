@@ -29,7 +29,7 @@ class CaseCommentController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new CaseComment());
-        $grid->filter(function($f){
+        $grid->filter(function ($f) {
             $f->disableIdFilter();
             $f->between('created_at', 'Filter by date of entry')->date();
 
@@ -46,25 +46,25 @@ class CaseCommentController extends AdminController
                     return [$a->id => "#" . $a->id . " - " . $a->title];
                 }
             })
-                ->ajax($ajax_url); 
-
-        }); 
+                ->ajax($ajax_url);
+        });
         $grid->model()->orderBy('created_at', 'desc');
         $grid->disableCreateButton();
         $grid->disableExport();
         $grid->disableBatchActions();
-        $grid->quickSearch('body')->placeholder('Search comment'); 
-        $grid->column('created_at', __('Created at'))->display(function ($created_at) {
+        $grid->quickSearch('body')->placeholder('Search comment');
+        $grid->column('created_at', __('Date'))->display(function ($created_at) {
             return Utils::my_date_time($created_at);
-        });
+        })->sortable()
+            ->width(120);
 
         $grid->column('body', __('Body'))->sortable();
-        $grid->column('case_id', __('Case id'))->display(function ($case_id) {
+        $grid->column('case_id', __('Case'))->display(function ($case_id) {
             $case = CaseModel::find($case_id);
             if ($case != null) {
-                $url = admin_url('cases/' . $case->id );
+                $url = admin_url('cases/' . $case->id);
                 $txt = $case->case_number . ' - ' . $case->title;
-                return "<a href='$url'>$txt</a>"; 
+                return "<a target='_blank' href='$url'>$txt</a>";
             } else {
                 return 'Case not found';
             }
@@ -78,7 +78,11 @@ class CaseCommentController extends AdminController
             }
         })->sortable();
 
-        $grid->disableActions(); 
+
+        $user = Admin::user();
+        if (!$user->isRole('admin')) {
+            $grid->disableActions();
+        }
         return $grid;
     }
 
@@ -116,7 +120,13 @@ class CaseCommentController extends AdminController
         $case = CaseModel::find($add_comment);
         if ($case != null) {
         } else {
-            die("Exhibit not found.");
+            //get segment id
+            $add_comment = request()->segment(2);
+            $case = CaseModel::find($add_comment);
+        }
+        if ($case == null) {
+            //redirect to back
+            throw new \Exception("Case not found");
         }
         $comments_html = '<ul>';
         foreach ($case->comments as $comment) {
@@ -133,7 +143,7 @@ class CaseCommentController extends AdminController
         }
         $form->html($comments_html, 'Previous comments');
         $form->divider();
-        $form->disableCreatingCheck(); 
+        $form->disableCreatingCheck();
 
         $form->hidden('case_id', __('Case id'))->default($add_comment);
         $u = Admin::user();

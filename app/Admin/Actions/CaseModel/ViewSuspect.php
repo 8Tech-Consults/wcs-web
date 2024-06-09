@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewSuspect  extends RowAction
 {
-    public $name = 'Show';
+    public $name = 'View';
 
     public function handle(Model $model)
     {

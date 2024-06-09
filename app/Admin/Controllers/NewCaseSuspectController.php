@@ -967,7 +967,7 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('suspect_appealed_date', 'Accused appeal Date');
+                                                    $form->date('suspect_appealed_date', 'Accused appeal Date')->rules('required'); 
                                                     $form->text('suspect_appealed_court_name', 'Appellate court');
                                                     $form->text('suspect_appealed_court_file', 'Appeal court file number');
                                                     $form->radio('suspect_appealed_outcome', __('Appeal outcome'))

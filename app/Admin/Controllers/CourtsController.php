@@ -167,14 +167,7 @@ class CourtsController extends AdminController
             $f->like('magistrate_name', 'Filter by magistrate');
 
 
-            $f->equal('case_outcome', 'Filter by Specific Court Case Status')->select([
-                'Dismissed' => 'Dismissed',
-                'Withdrawn by DPP' => 'Withdrawn by DPP',
-                'Acquittal' => 'Acquittal',
-                'Convicted' => 'Convicted',
-            ]);
-
-            $f->equal('suspect_court_outcome', 'Filter by Court case status')->select(
+            $f->equal('suspect_court_outcome', 'Filter by Accused Court case status')->select(
                 SuspectCourtStatus::pluck('name', 'name')
             );
 
@@ -626,7 +619,8 @@ class CourtsController extends AdminController
                                     'No' => 'No',
                                 ])
                                 ->when('Yes', function ($form) {
-                                    $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
+                                    $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)")
+                                        ->rules('required'); 
                                 })
                                 ->default('No');
 
@@ -804,6 +798,7 @@ class CourtsController extends AdminController
                                 'Acquittal' => 'Acquittal',
                                 'Convicted' => 'Convicted',
                             ])
+                            ->rules('required')
                                 ->when('Convicted', function ($form) {
                                     $form->radio('is_jailed', __('Was Accused jailed?'))
                                         ->options([

@@ -272,14 +272,14 @@ class CaseModelController extends AdminController
                         ->rules('required')
                         ->options(Location::get_sub_counties_array());
 
-                    $form->text('parish', __('Parish'));
-                    $form->text('village', __('Village'));
+                    $form->text('parish', __('Parish'))->rules('required');
+                    $form->text('village', __('Village'))->rules('required'); 
                     $form->hidden('offence_category_id', __('Village'))->default(1)->value(1);
                 })->when('Yes', function (Form $form) {
                     $form->select('pa_id', __('Select PA'))
                         ->rules('required')
                         ->options(PA::all()->pluck('name_text', 'id'));
-                    $form->text('village', 'Enter location');
+                    $form->text('village', 'Enter location')->rules('required'); 
                 });
 
 

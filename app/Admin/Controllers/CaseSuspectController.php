@@ -1255,10 +1255,7 @@ class CaseSuspectController extends AdminController
         //                         'Reinstated' => 'Reinstated',
         //                         'Closed' => 'Closed',
         //                     ])->when('Closed', function ($form) {
-
-        //                         $form->select('case_outcome', 'Specific court case status')->options([
-        //                             'Dismissed' => 'Dismissed',
-        //                             'Convicted' => 'Convicted',
+ 
         //                         ])
         //                             ->when('Convicted', function ($form) {
         //                                 $form->radio('is_jailed', __('Was suspect jailed?'))
@@ -1272,15 +1269,7 @@ class CaseSuspectController extends AdminController
         //                                         $form->text('prison', 'Prison name');
         //                                         $form->date('jail_release_date', 'Date released');
         //                                     });
-
-        //                                 $form->radio('is_fined', __('Was Accused fined?'))
-        //                                     ->options([
-        //                                         'Yes' => 'Yes',
-        //                                         'No' => 'No',
-        //                                     ])
-        //                                     ->when('Yes', function ($form) {
-        //                                         $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)");
-        //                                     });
+ 
 
         //                                 $form->radio('community_service', __('Was suspect issued a community service?'))
         //                                     ->options([

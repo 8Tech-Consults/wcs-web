@@ -107,7 +107,7 @@ class AddExhibitCaseModelController extends AdminController
 
                 $form->decimal('wildlife_quantity', __('Quantity (in KGs)'));
                 $form->decimal('wildlife_pieces', __('Number of pieces'));
-                $form->text('wildlife_description', __('Description'));
+                $form->text('wildlife_description', __('Description'))->rules('required');
                 $form->multipleFile('wildlife_attachments', __('Wildlife exhibit(s) attachments files or photos'));
                 $form->divider();
             });

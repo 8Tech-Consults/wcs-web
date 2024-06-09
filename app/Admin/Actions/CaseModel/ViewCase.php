@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewCase  extends RowAction
 {
-    public $name = 'Show Case';
+    public $name = 'View Case';
 
     public function handle(Model $model)
     {

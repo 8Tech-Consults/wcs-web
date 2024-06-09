@@ -824,7 +824,7 @@ class NewCaseSuspectController extends AdminController
                                         'Skipped bond' => 'Skipped bond',
                                         'Under police custody' => 'Under police custody',
                                         'Escaped from colice custody' => 'Escaped from police custody',
-                                    ]);
+                                    ])->rules('required');
                                 })
                                 ->when('Closed', function ($form) {
                                     $form->select('police_action', 'Case status at police level')->options([
@@ -839,7 +839,7 @@ class NewCaseSuspectController extends AdminController
                                         'Skipped bond' => 'Skipped bond',
                                         'Under police custody' => 'Under police custody',
                                         'Escaped from colice custody' => 'Escaped from police custody',
-                                    ]);
+                                    ])->rules('required'); 
                                     $form->date('police_action_date', 'Date')->rules('required');
                                     $form->textarea('police_action_remarks', 'Remarks');
                                 });

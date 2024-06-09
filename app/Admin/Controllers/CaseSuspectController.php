@@ -1006,8 +1006,11 @@ class CaseSuspectController extends AdminController
 
 
 
-        $form->divider('Case');
-
+        /*   $form->divider('Case');
+        //make last date to be today
+        $today = date('Y-m-d');
+        $form->date('create', 'Entry date')->default(date('Y-m-d'))
+            ->rules('required|date|before_or_equal:' . $today);  */
 
 
         $ajax_url = url(
@@ -1197,28 +1200,7 @@ class CaseSuspectController extends AdminController
         //                         'Closed' => 'Closed',
         //                         'Re-opened' => 'Re-opened',
         //                     ])
-        //                     ->when('On-going investigation', function ($form) {
-        //                         $form->select('police_action', 'Case status at police level')->options([
-        //                             'Police bond' => 'Police bond',
-        //                             'Skipped bond' => 'Skipped bond',
-        //                             'Under police custody' => 'Under police custody',
-        //                             'Escaped from colice custody' => 'Escaped from police custody',
-        //                         ]);
-        //                     })
-        //                     ->when('Closed', function ($form) {
-        //                         $form->select('police_action', 'Case status at police level')->options([
-        //                             'Dismissed by state' => 'Dismissed by state',
-        //                             'Withdrawn by complainant' => 'Withdrawn by complainant',
-        //                         ]);
-        //                         $form->date('police_action_date', 'Date');
-        //                         $form->textarea('police_action_remarks', 'Remarks');
-        //                     })->when('Re-opened', function ($form) {
-        //                         $form->select('police_action', 'Case status at police level')->options([
-        //                             'Police bond' => 'Police bond',
-        //                             'Skipped bond' => 'Skipped bond',
-        //                             'Under police custody' => 'Under police custody',
-        //                             'Escaped from colice custody' => 'Escaped from police custody',
-        //                         ]);
+        //                      
         //                         $form->date('police_action_date', 'Date');
         //                         $form->textarea('police_action_remarks', 'Remarks');
         //                     })
@@ -1255,7 +1237,7 @@ class CaseSuspectController extends AdminController
         //                         'Reinstated' => 'Reinstated',
         //                         'Closed' => 'Closed',
         //                     ])->when('Closed', function ($form) {
- 
+
         //                         ])
         //                             ->when('Convicted', function ($form) {
         //                                 $form->radio('is_jailed', __('Was suspect jailed?'))
@@ -1269,7 +1251,7 @@ class CaseSuspectController extends AdminController
         //                                         $form->text('prison', 'Prison name');
         //                                         $form->date('jail_release_date', 'Date released');
         //                                     });
- 
+
 
         //                                 $form->radio('community_service', __('Was suspect issued a community service?'))
         //                                     ->options([

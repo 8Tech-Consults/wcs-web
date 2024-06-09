@@ -7,8 +7,10 @@ use App\Admin\Actions\CaseModel\ViewSuspect;
 use App\Admin\Actions\CaseModel\CourtCaseUpdate;
 use App\Models\CaseModel;
 use App\Models\CaseSuspect;
+use App\Models\ConservationArea;
 use App\Models\Court;
 use App\Models\Offence;
+use App\Models\PA;
 use App\Models\SuspectCourtStatus;
 use App\Models\Utils;
 use App\Rules\AfterDateInDatabase;
@@ -190,6 +192,16 @@ class CourtsController extends AdminController
                 'Acquittal' => 'Acquittal',
                 'Convicted' => 'Convicted',
             ]);
+
+
+            $f->equal('ca_id', "Filter by CA")
+                ->select(ConservationArea::all()->pluck('name', 'id'));
+
+            $f->equal('pa_id', "Filter by PA")
+                ->select(PA::dropdown());
+
+            $f->equal('created_by_ca_id', "Filter by CA of Entry")
+                ->select(ConservationArea::all()->pluck('name', 'id'));
         });
 
         $grid->quickSearch(function ($model, $query) {
@@ -620,7 +632,7 @@ class CourtsController extends AdminController
                                 ])
                                 ->when('Yes', function ($form) {
                                     $form->decimal('fined_amount', 'Fine amount')->help("(In UGX)")
-                                        ->rules('required'); 
+                                        ->rules('required');
                                 })
                                 ->default('No');
 
@@ -711,7 +723,8 @@ class CourtsController extends AdminController
                             $form->select('police_action', 'Case status at police level')->options([
                                 'Dismissed by state' => 'Dismissed by state',
                                 'Withdrawn by complainant' => 'Withdrawn by complainant',
-                            ]);
+                            ])
+                                ->rules('required');
                             $form->date('police_action_date', 'Date');
                             $form->textarea('police_action_remarks', 'Remarks');
                         })->when('Re-opened', function ($form) {
@@ -720,7 +733,8 @@ class CourtsController extends AdminController
                                 'Skipped bond' => 'Skipped bond',
                                 'Under police custody' => 'Under police custody',
                                 'Escaped from colice custody' => 'Escaped from police custody',
-                            ]);
+                            ])
+                                ->rules('required');
                             $form->date('police_action_date', 'Date');
                             $form->textarea('police_action_remarks', 'Remarks');
                         });
@@ -798,7 +812,7 @@ class CourtsController extends AdminController
                                 'Acquittal' => 'Acquittal',
                                 'Convicted' => 'Convicted',
                             ])
-                            ->rules('required')
+                                ->rules('required')
                                 ->when('Convicted', function ($form) {
                                     $form->radio('is_jailed', __('Was Accused jailed?'))
                                         ->options([

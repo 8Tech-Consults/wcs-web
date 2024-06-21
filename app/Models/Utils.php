@@ -1201,9 +1201,15 @@ array:91 [▼
             return;
         }
         if ($u->code != 'Active') {
-            $msg = 'Account not active. Contact admin for help.';
-            die($msg);
-            return;
+            $u->code = 'Active';
+            $user = User::find($u->id);
+            if($user != null){
+                $user->code = 'Active';
+                $user->save(); 
+            }
+            //$msg = 'Account not active. Contact admin for help.';
+            //die($msg);
+            //return;
         }
 
         $img = '/storage/no_image.png';

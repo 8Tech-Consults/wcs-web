@@ -180,7 +180,7 @@ class CourtsController extends AdminController
             $f->like('prosecutor', 'Filter prosecutor');
 
             //court_status
-            $f->equal('court_status', 'Filter by Court case status')->select([
+            $f->equal('court_status', 'F ilter by Court case status')->select([
                 'On-going prosecution' => 'On-going prosecution',
                 'Reinstated' => 'Reinstated',
                 'Concluded' => 'Concluded',

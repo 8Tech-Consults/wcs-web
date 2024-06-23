@@ -409,7 +409,7 @@ class CaseModelController extends AdminController
 
                     $form->select('pa_id', __('Select PA'))
                         ->options(PA::all()->pluck('name_text', 'id'));
-                    $form->text('arrest_village', 'Enter arrest location');
+                    $form->text('arrest_village', 'Enter arrest location')->rules('required');
 
 
                     $subs = Location::get_sub_counties_array();
@@ -517,7 +517,8 @@ class CaseModelController extends AdminController
                             'Yes' => 'Yes',
                             'No' => 'No',
                         ]);
-                    $form->date('jail_date', 'Sentence date');
+                    $form->date('jail_date', 'Sentence date')
+                        ->rules('required');
                     $form->decimal('jail_period', 'Jail period')->help("(In months)")
                         ->rules('required');
 

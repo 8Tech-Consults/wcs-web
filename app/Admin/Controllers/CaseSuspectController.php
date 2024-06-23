@@ -262,7 +262,7 @@ class CaseSuspectController extends AdminController
                 'Skipped bond' => 'Skipped bond',
                 'Under police custody' => 'Under police custody',
                 'Escaped from colice custody' => 'Escaped from police custody',
-            ]);
+            ]); 
 
             //police_action
 

@@ -206,6 +206,13 @@ class ArrestsController extends AdminController
             ]);
 
             $f->like('arrest_current_police_station', 'Filter by current police station');
+
+            $f->equal('police_action', 'Filter by Status at Police level')->select([
+                'Police bond' => 'Police bond',
+                'Skipped bond' => 'Skipped bond',
+                'Under police custody' => 'Under police custody',
+                'Escaped from colice custody' => 'Escaped from police custody',
+            ]);
         });
 
 
@@ -676,8 +683,8 @@ class ArrestsController extends AdminController
                                         ->options(Location::get_sub_counties_array());
 
 
-                                    $form->text('arrest_parish', 'Parish of Arrest');
-                                    $form->text('arrest_village', 'Arrest village');
+                                    $form->text('arrest_parish', 'Parish of Arrest')->rules('required');
+                                    $form->text('arrest_village', 'Arrest village')->rules('required');
                                 })
                                 ->rules('required');
 
@@ -780,7 +787,7 @@ class ArrestsController extends AdminController
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
-                                ->rules('int|required')
+                                ->rules('required')
                                 ->help('Where this suspect was arrested')
                                 ->options(Location::get_sub_counties_array());
 

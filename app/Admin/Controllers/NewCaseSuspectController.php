@@ -440,7 +440,7 @@ class NewCaseSuspectController extends AdminController
                                         ->rules('required')
                                         ->options(PA::where('id', '!=', 1)->get()
                                             ->pluck('name_text', 'id'));
-                                    $form->text('arrest_village', 'Enter arrest location');
+                                    $form->text('arrest_village', 'Enter arrest location')->rules('required');
                                 })
                                 ->when('No', function ($form) {
                                     $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -530,7 +530,7 @@ class NewCaseSuspectController extends AdminController
                             $form->select('pa_id', __('Select PA'))
                                 ->rules('required')
                                 ->options(PA::where('id', '!=', 1)->get()->pluck('name_text', 'id'));
-                            $form->text('arrest_village', 'Enter arrest location');
+                            $form->text('arrest_village', 'Enter arrest location')->rules('required');
                         })
                         ->when('No', function ($form) {
                             $form->select('arrest_sub_county_id', __('Sub county of Arrest'))
@@ -708,11 +708,12 @@ class NewCaseSuspectController extends AdminController
                                                             'No' => 'No',
                                                         ])
                                                         ->when('Yes', function ($form) {
-                                                            $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date');
+                                                            $form->date('jail_date', 'Sentence date')
+                                                                ->rules('required|after_or_equal:court_date');
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)")
                                                                 ->rules('required');
-                                                            $form->text('prison', 'Prison name');
-                                                            $form->date('jail_release_date', 'Release Date');
+                                                            $form->text('prison', 'Prison name')->rules('required');
+                                                            $form->date('jail_release_date', 'Release Date')->rules('required');
                                                         })
                                                         ->default('No');
 
@@ -770,7 +771,7 @@ class NewCaseSuspectController extends AdminController
                                                                     'Quashed and acquitted' => 'Quashed and acquitted',
                                                                     'Quashed and retrial ordered' => 'Quashed and retrial ordered',
                                                                     'On-going' => 'On-going',
-                                                                ])->rules('required'); 
+                                                                ])->rules('required');
                                                             $form->textarea('suspect_appeal_remarks', 'Remarks');
                                                         });
                                                 })
@@ -839,7 +840,7 @@ class NewCaseSuspectController extends AdminController
                                         'Skipped bond' => 'Skipped bond',
                                         'Under police custody' => 'Under police custody',
                                         'Escaped from colice custody' => 'Escaped from police custody',
-                                    ])->rules('required'); 
+                                    ])->rules('required');
                                     $form->date('police_action_date', 'Date')->rules('required');
                                     $form->textarea('police_action_remarks', 'Remarks');
                                 });
@@ -918,11 +919,11 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('jail_date', 'Sentence date')->rules('after_or_equal:court_date');
+                                                    $form->date('jail_date', 'Sentence date')->rules('required|after_or_equal:court_date');
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)")
                                                         ->rules('required');
-                                                    $form->text('prison', 'Prison name');
-                                                    $form->date('jail_release_date', 'Date released');
+                                                    $form->text('prison', 'Prison name')->rules('required');
+                                                    $form->date('jail_release_date', 'Date released')->rules('required');
                                                 })
                                                 ->default('No');
 
@@ -957,7 +958,8 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->text('cautioned_remarks', 'Enter caution remarks');
+                                                    $form->text('cautioned_remarks', 'Enter caution remarks')
+                                                        ->rules('required');
                                                 })
                                                 ->default('No');
 
@@ -967,18 +969,18 @@ class NewCaseSuspectController extends AdminController
                                                     'No' => 'No',
                                                 ])
                                                 ->when('Yes', function ($form) {
-                                                    $form->date('suspect_appealed_date', 'Accused appeal Date')->rules('required'); 
-                                                    $form->text('suspect_appealed_court_name', 'Appellate court');
-                                                    $form->text('suspect_appealed_court_file', 'Appeal court file number');
+                                                    $form->date('suspect_appealed_date', 'Accused appeal Date')->rules('required');
+                                                    $form->text('suspect_appealed_court_name', 'Appellate court')->rules('required');
+                                                    $form->text('suspect_appealed_court_file', 'Appeal court file number')->rules('required');
                                                     $form->radio('suspect_appealed_outcome', __('Appeal outcome'))
                                                         ->options([
                                                             'Upheld' => 'Upheld',
                                                             'Quashed and acquitted' => 'Quashed and acquitted',
                                                             'Quashed and retrial ordered' => 'Quashed and retrial ordered',
                                                             'On-going' => 'On-going',
-                                                        ]);
+                                                        ])->rules('required');
 
-                                                    $form->textarea('suspect_appeal_remarks', 'Remarks');
+                                                    $form->textarea('suspect_appeal_remarks', 'Remarks')->rules('required');
                                                 });
                                         })
                                         ->when('in', ['Dismissed', 'Withdrawn by DPP', 'Acquittal'], function ($form) {

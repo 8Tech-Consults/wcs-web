@@ -192,7 +192,7 @@ class NewExhibitsCaseModelController extends AdminController
             ])
             ->when('Yes', function ($form) {
                 $form->divider('Other Exibit(s) Information')->rules('required');
-                $form->text('others_description', __('Description for others'));
+                $form->text('others_description', __('Description for others'))->rules('required');
                 $form->multipleFile('others_attachments', __('Attachments'));
                 $form->divider();
             })

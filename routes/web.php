@@ -259,7 +259,7 @@ Route::get('/gen', function () {
   die(Gen::find($_GET['id'])->do_get());
 })->name("gen");
 Route::get('/mobile', function () {
-  return redirect(url('uwa-mobile-v19.apk'));
+  return redirect(url('uwa-v20.0.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
   return redirect(url('uwa-desktop-v19.zip'));

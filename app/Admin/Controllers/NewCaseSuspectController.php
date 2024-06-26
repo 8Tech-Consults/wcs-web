@@ -658,9 +658,8 @@ class NewCaseSuspectController extends AdminController
                                         $courtFileNumber = $pendingCase->getCourtFileNumber();
                                     }
 
-                                    if ($courtFileNumber == null) {
-                                        $form->text('court_file_number', 'Court file number')
-                                            ->rules("required");
+                                    if ($courtFileNumber == null || strlen($courtFileNumber) < 3) {
+                                        $form->text('court_file_number', 'Court file number');
                                     } else {
                                         $form->text('court_file_number', 'Court file number')
                                             ->default($courtFileNumber)
@@ -712,8 +711,8 @@ class NewCaseSuspectController extends AdminController
                                                                 ->rules('required|after_or_equal:court_date');
                                                             $form->decimal('jail_period', 'Jail period')->help("(In months)")
                                                                 ->rules('required');
-                                                            $form->text('prison', 'Prison name')->rules('required');
-                                                            $form->date('jail_release_date', 'Release Date')->rules('required');
+                                                            $form->text('prison', 'Prison name');
+                                                            $form->date('jail_release_date', 'Release Date');
                                                         })
                                                         ->default('No');
 
@@ -922,8 +921,8 @@ class NewCaseSuspectController extends AdminController
                                                     $form->date('jail_date', 'Sentence date')->rules('required|after_or_equal:court_date');
                                                     $form->decimal('jail_period', 'Jail period')->help("(In months)")
                                                         ->rules('required');
-                                                    $form->text('prison', 'Prison name')->rules('required');
-                                                    $form->date('jail_release_date', 'Date released')->rules('required');
+                                                    $form->text('prison', 'Prison name');
+                                                    $form->date('jail_release_date', 'Date released');
                                                 })
                                                 ->default('No');
 

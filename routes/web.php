@@ -262,7 +262,7 @@ Route::get('/mobile', function () {
   return redirect(url('uwa-v20.0.apk'));
 })->name("mobile");
 Route::get('/desktop', function () {
-  return redirect(url('uwa-desktop-v19.zip'));
+  return redirect(url('uwa-desktop-v20.zip'));
 })->name("desktop");
 Route::get('/fingerprint', function () {
   return redirect(url('uwa-fingerprint-v2.zip'));

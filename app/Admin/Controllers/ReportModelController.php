@@ -9,6 +9,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\PA;
 
 class ReportModelController extends AdminController
 {
@@ -147,7 +148,7 @@ class ReportModelController extends AdminController
             })
             ->when('pa', function (Form $form) {
                 $form->select('pa_id', __('Protected Area'))
-                    ->options(\App\Models\Pa::all()->pluck('name', 'id'))
+                    ->options(PA::all()->pluck('name', 'id'))
                     ->rules('required');
             });
 

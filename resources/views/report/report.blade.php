@@ -12,7 +12,6 @@ use App\Models\SuspectModel;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><?= $report->title ?></title>
     @include('report.css')
     <style>
@@ -115,7 +114,7 @@ use App\Models\SuspectModel;
                         margin-top: 15px;
                         height: 380px;
                         background-color: rgb(12, 131, 12);
-                        background-image: url('<?= url('') ?>/assets/bg/<?= rand(1, 16) ?>-min.jpg');
+                        background-image: url('<?= public_path('') ?>/assets/bg/<?= rand(1, 16) ?>-min.jpg');
                         background-size: cover;
                         background-repeat: no-repeat;
                         background-position: center;

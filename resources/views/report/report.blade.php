@@ -178,7 +178,7 @@ margin-top: 0px;
  ">
     <p class="text-center p-0 m-0 text-uppercase text-muted ">Powored By</p>
     <center>
-        <img src="http://localhost:8888/wcs-web/assets/logos.png" style="width: 250px; " alt="">
+        <img src="<?= public_path('') ?>/assets/logos.png" style="width: 250px; " alt="">
     </center>
 
 

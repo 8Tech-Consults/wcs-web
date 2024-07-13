@@ -48,6 +48,7 @@ return array(
     'App\\Admin\\Controllers\\NewExhibitsCaseModelController' => $baseDir . '/app/Admin/Controllers/NewExhibitsCaseModelController.php',
     'App\\Admin\\Controllers\\OffenceController' => $baseDir . '/app/Admin/Controllers/OffenceController.php',
     'App\\Admin\\Controllers\\PaController' => $baseDir . '/app/Admin/Controllers/PaController.php',
+    'App\\Admin\\Controllers\\ReportModelController' => $baseDir . '/app/Admin/Controllers/ReportModelController.php',
     'App\\Admin\\Controllers\\SecretariesController' => $baseDir . '/app/Admin/Controllers/SecretariesController.php',
     'App\\Admin\\Controllers\\SpecimenController' => $baseDir . '/app/Admin/Controllers/SpecimenController.php',
     'App\\Admin\\Controllers\\SuspectCourtStatusController' => $baseDir . '/app/Admin/Controllers/SuspectCourtStatusController.php',

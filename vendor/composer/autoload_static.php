@@ -764,6 +764,7 @@ class ComposerStaticInit639dbf05c48ac73280c80f3691363d96
         'App\\Admin\\Controllers\\NewExhibitsCaseModelController' => __DIR__ . '/../..' . '/app/Admin/Controllers/NewExhibitsCaseModelController.php',
         'App\\Admin\\Controllers\\OffenceController' => __DIR__ . '/../..' . '/app/Admin/Controllers/OffenceController.php',
         'App\\Admin\\Controllers\\PaController' => __DIR__ . '/../..' . '/app/Admin/Controllers/PaController.php',
+        'App\\Admin\\Controllers\\ReportModelController' => __DIR__ . '/../..' . '/app/Admin/Controllers/ReportModelController.php',
         'App\\Admin\\Controllers\\SecretariesController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SecretariesController.php',
         'App\\Admin\\Controllers\\SpecimenController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SpecimenController.php',
         'App\\Admin\\Controllers\\SuspectCourtStatusController' => __DIR__ . '/../..' . '/app/Admin/Controllers/SuspectCourtStatusController.php',

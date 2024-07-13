@@ -177,7 +177,7 @@ class ReportModel extends Model
             $title = $ca->name . ' - ' . 'Conservation Area Data Analysis Report for the period of ' . $start_date->format('d M, Y') . ' - ' . $end_date->format('d M, Y') . ' as on ' . date('d M, Y');
             $type = 'Conservation Area';
         } else if ($m->type == 'pa') {
-            $pa = Pa::find($m->pa_id);
+            $pa = PA::find($m->pa_id);
             if ($pa == null) {
                 throw new \Exception("Invalid Protected Area");
             }
@@ -228,7 +228,7 @@ class ReportModel extends Model
         $query = DB::select($sql);
         $data = [];
         foreach ($query as $key => $value) {
-            $pa = Pa::find($value->pa_id);
+            $pa = PA::find($value->pa_id);
             if ($pa != null) {
                 $data[] = [
                     'name' => $pa->name,

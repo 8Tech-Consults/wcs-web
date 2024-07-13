@@ -11,6 +11,7 @@ use App\Models\ConservationArea;
 use App\Models\Course;
 use App\Models\Gen;
 use App\Models\PA;
+use App\Models\ReportModel;
 use App\Models\StudentHasClass;
 use App\Models\Subject;
 use Carbon\Carbon;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 use Mockery\Matcher\Subset;
 use Faker\Factory as Faker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -30,6 +32,61 @@ Route::post('/password-forget-email', [MainController::class, 'password_forget_e
 Route::get('/password-forget-code', [MainController::class, 'password_forget_code'])->name("password-forget-code");
 Route::get('/2fauth', [MainController::class, 'two_f_auth'])->name("two_f_auth");
 Route::POST("do-change-password", [MainController::class, "doChangePassword"]);
+Route::get('/report-print', function (Request $request) {
+  die("report-print");
+});
+Route::get('/report-generate', function (Request $request) {
+  $report = ReportModel::find($request->id);
+  if ($report == null) {
+    die("Report not found");
+  }
+
+
+  $report->is_generated = "No";
+  $pdf_file_1 = $report->pdf_file;
+  ReportModel::doGenerate($report);
+  $report = ReportModel::find($request->id);
+  $pdf_file_2 = $report->pdf_file;
+
+  $report->top_conservation_areas = $report->get_top_conservation_areas();
+  $report->top_protected_areas = $report->get_top_protected_areas();
+  $report->top_exhibits = $report->get_top_exhibits();
+
+
+  $v = view('report.report', [
+    'report' => $report
+  ]);
+
+  $pdf = App::make('dompdf.wrapper');
+  $pdf->loadHTML($v)->render();
+  $pdf->render();
+  //file path
+  $path_1 = public_path('storage/files/' . $pdf_file_1);
+  //check if file exists
+  if (file_exists($path_1)) {
+    //delete file
+    unlink($path_1);
+  }
+  //file path
+  $pdf_file_2 = $report->pdf_file;
+  $path_2 = public_path('storage/files/' . $pdf_file_2);
+
+  $output = $pdf->output();
+  $store_file_path = $path_2;
+  try {
+    file_put_contents($store_file_path, $output);
+  } catch (\Exception $e) {
+    die($e->getMessage());
+  }
+  
+
+  $url = url('storage/files/' . $pdf_file_2);
+  //redirect to the file
+  return redirect($url);
+
+  return 'success ' . $pdf_file_2;
+});
+
 Route::get('/logout', function () {
   return redirect(admin_url('auth/logout?log_me_out=1'));
   header('Location: ' . admin_url('auth/logout'));

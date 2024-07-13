@@ -48,4 +48,6 @@ Route::group([
     $router->resource('arresting-agencies', ArrestingAgencyController::class);
 
     $router->resource('suspect-links', SuspectLinkController::class);
+    $router->resource('reports', ReportModelController::class);
+
 });

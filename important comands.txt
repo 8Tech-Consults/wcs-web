@@ -20,7 +20,7 @@ php artisan make:migration add_old_id_to_case_suspects --table=case_suspects
 
 
 
-php artisan make:model CaseComment -m
+php artisan make:model ReportModel -m
 php artisan make:model Gen
 php artisan make:model ImplementType
 php artisan make:model TempData
@@ -31,7 +31,7 @@ php artisan make:model CaseCuspectsComment
 php artisan make:model CaseSuspect
 php artisan make:model Exhibit
 php artisan make:model CaseModel
-php artisan make:model CaseComment
+php artisan make:model ReportModel
 php artisan make:model District
 php artisan make:model PA
 php artisan make:model Offence
@@ -52,4 +52,4 @@ php artisan admin:make NewCaseModelController --model=App\Models\CaseModel
 php artisan admin:make NewCaseSuspectController --model=App\Models\CaseSuspect
 php artisan admin:make NewExhibitsCaseModelController --model=App\Models\CaseModel
 php artisan admin:make GenController --model=App\Models\Gen
-php artisan admin:make CaseCommentController --model=App\\Models\\CaseComment
+php artisan admin:make ReportModelController --model=App\\Models\\ReportModel

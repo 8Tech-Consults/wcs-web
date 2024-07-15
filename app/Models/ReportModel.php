@@ -1128,6 +1128,7 @@ case_date
             $conds = [];
         }
 
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         return Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('wildlife_species', 2)
@@ -1148,7 +1149,7 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('specimen', 'Ivory')
@@ -1357,6 +1358,7 @@ case_date
             $conds = [];
         }
 
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('specimen', 'Live animal')
@@ -1387,7 +1389,7 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('specimen', 'Pangolin Scales')
@@ -1434,7 +1436,7 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('specimen', 'Hippo Teeth')
@@ -1481,7 +1483,7 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('specimen', 'Meat')
@@ -1735,7 +1737,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 5)
@@ -1785,7 +1787,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 4)
@@ -1835,7 +1837,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 23)
@@ -1886,7 +1888,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 6)
@@ -1936,7 +1938,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 2)
@@ -1986,7 +1988,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 11)
@@ -2036,7 +2038,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 17)
@@ -2086,7 +2088,7 @@ Implements id and names list, id saved in implement_name in exhibits
         } else if ($this->type == 'all') {
             $conds = [];
         }
-
+        if (isset($conds['pa_id'])) unset($conds['pa_id']);
         $exhibits = Exhibit::where($conds)
             ->whereBetween('created_at', [$this->start_date, $this->end_date])
             ->where('implement_name', 3)

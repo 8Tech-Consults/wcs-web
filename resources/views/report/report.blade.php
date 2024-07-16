@@ -178,7 +178,7 @@ margin-top: 0px;
  ">
     <p class="text-center p-0 m-0 text-uppercase text-muted ">POWERED BY</p>
     <center>
-        <img src="<?= public_path('') ?>/assets/uwa-logo-2.jpg" style="width: 250px; " alt="">
+        <img src="<?= public_path('') ?>/assets/uwa-logo-2.jpg" style="height: 250px; " alt="">
     </center>
 
 

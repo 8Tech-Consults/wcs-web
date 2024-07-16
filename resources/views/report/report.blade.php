@@ -75,7 +75,7 @@ use App\Models\SuspectModel;
         </div>
     </div>
 
-    <table style="margin-top: 50px;">
+    <table style="margin-top: 40px;">
         <tr>
             <td style="width: 52px"></td>
             <td>
@@ -103,7 +103,8 @@ use App\Models\SuspectModel;
                 line-height: 18px;
                 text-align: justify;
                 ">
-                    The OWODAT (Wildlife Offenders Database) report provides a comprehensive analysis of wildlife-related
+                    The OWODAT (Wildlife Offenders Database) report provides a comprehensive analysis of
+                    wildlife-related
                     offenses in the country, focusing on cases registered across various conservation and protected
                     areas. This report aggregates data on wildlife crimes, including the number of cases, suspects, and
                     specific wildlife species affected.</p>
@@ -112,7 +113,7 @@ use App\Models\SuspectModel;
                     style="
                          widows: 100%;
                         margin-top: 15px;
-                        height: 380px;
+                        height: 350px;
                         background-color: rgb(12, 131, 12);
                         background-image: url('<?= public_path('') ?>/assets/bg/<?= rand(1, 16) ?>-min.jpg');
                         background-size: cover;
@@ -178,7 +179,7 @@ margin-top: 0px;
  ">
     <p class="text-center p-0 m-0 text-uppercase text-muted ">POWERED BY</p>
     <center>
-        <img src="<?= public_path('') ?>/assets/uwa-logo-2.jpg" style="height: 250px; " alt="">
+        <img src="<?= public_path('') ?>/assets/uwa-logo-2.jpg" style="height: 80px!important; " alt="">
     </center>
 
 
@@ -199,22 +200,26 @@ margin-top: 0px;
             <li>
                 <span class="muted">3.0</span>
                 &nbsp;&nbsp;
-                <span class="">POLICE ARREST INFORMATION</span>
+                {{-- POLICE ARREST INFORMATION to sentance case --}}
+                <span class="">Police Arrest Information</span>
             </li>
             <li>
                 <span class="muted">4.0</span>
                 &nbsp;&nbsp;
-                <span class="">COURT REPORT</span>
+                {{-- COURT REPORT --}}
+                <span class="">Court Report</span>
             </li>
             <li>
                 <span class="muted">5.0</span>
                 &nbsp;&nbsp;
-                <span class="">WILDLIFE SPECIES AFFECTED</span>
+                {{-- WILDLIFE SPECIES AFFECTED --}}
+                <span class="">Wildlife Species Affected</span>
             </li>
             <li>
                 <span class="muted">6.0</span>
                 &nbsp;&nbsp;
-                <span class="">HUNTING IMPLEMENTS</span>
+                {{-- HUNTING IMPLEMENTS --}}
+                <span class="">Hunting Implements</span>
             </li>
         </ul>
     </article>

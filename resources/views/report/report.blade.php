@@ -103,7 +103,7 @@ use App\Models\SuspectModel;
                 line-height: 18px;
                 text-align: justify;
                 ">
-                    The OWODAT (Offender Wildlife Database) report provides a comprehensive analysis of wildlife-related
+                    The OWODAT (Wildlife Offenders Database) report provides a comprehensive analysis of wildlife-related
                     offenses in the country, focusing on cases registered across various conservation and protected
                     areas. This report aggregates data on wildlife crimes, including the number of cases, suspects, and
                     specific wildlife species affected.</p>
@@ -176,9 +176,9 @@ margin-top: 0px;
  height: 2px;
  margin-bottom: 5px;
  ">
-    <p class="text-center p-0 m-0 text-uppercase text-muted ">Powored By</p>
+    <p class="text-center p-0 m-0 text-uppercase text-muted ">POWERED BY</p>
     <center>
-        <img src="<?= public_path('') ?>/assets/logos.png" style="width: 250px; " alt="">
+        <img src="<?= public_path('') ?>/assets/uwa-logo-2.jpg" style="width: 250px; " alt="">
     </center>
 
 

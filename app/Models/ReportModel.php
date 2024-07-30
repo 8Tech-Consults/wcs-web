@@ -974,11 +974,11 @@ case_date
             $conds = [];
         }
 
-
-        //group by case id
-        $sql = "SELECT COUNT(DISTINCT case_id) as total FROM case_suspects WHERE  case_outcome = 'Dismissed' AND case_id IN (SELECT id FROM case_models WHERE 1 $where AND case_date BETWEEN '$this->start_date' AND '$this->end_date')";
-        $query = DB::select($sql);
-        return $query[0]->total;
+        $top = CaseSuspect::where($conds)
+            ->whereBetween('case_date', [$this->start_date, $this->end_date])
+            ->where('case_outcome', 'Dismissed')
+            ->count();
+        return $top; 
     }
 
     /* Number of accused persons convicted= XX (Using the field “Specific court Case Status” under court information, count the individual accused persons with “Convicted” as a response to this field) */

@@ -949,8 +949,8 @@ case_date
             $conds = [];
         }
 
-        /* $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'Yes'; */
+        $conds['is_suspects_arrested'] = 'Yes';
+        $conds['is_suspect_appear_in_court'] = 'Yes'; /* */
         $conds['court_status'] = 'Concluded';
         //group by case id
         $tot = CaseSuspect::where($conds)

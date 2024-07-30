@@ -131,9 +131,8 @@ class CourtsController extends AdminController
 
         $grid->model()
             ->where([
-                'is_suspect_appear_in_court' => 1
-            ])->orwhere([
-                'is_suspect_appear_in_court' => 'Yes'
+                'is_suspect_appear_in_court' => 'Yes',
+                'is_suspects_arrested' => 'Yes'
             ])->orderBy('updated_at', 'Desc');
 
         $grid->filter(function ($f) {

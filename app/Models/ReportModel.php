@@ -581,9 +581,8 @@ case_date
             $conds = [];
         }
 
-        $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'Yes';
-        $conds['is_fined'] = 'Yes';
+        $conds['is_suspects_arrested'] = 'No';
+        $conds['management_action'] = 'Fined';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->count();
@@ -1028,6 +1027,8 @@ case_date
             ->count();
     }
 
+
+
     /* Number of convicts fined= XX (Using the field “Was accused fined” under court information, count individual accused persons with a YES to this question) */
     public function get_fined_convicts()
     {
@@ -1044,9 +1045,11 @@ case_date
         }
 
 
+        $conds['is_suspects_arrested'] = 'Yes';
+        $conds['is_fined'] = 'Yes';
+
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('is_fined', 'Yes')
             ->count();
     }
 

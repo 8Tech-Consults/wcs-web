@@ -856,7 +856,7 @@ case_date
         $conds['is_suspect_appear_in_court'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('court_status', 'On-going prosecution')
+            ->where('suspect_court_outcome', 'Court bail')
             ->count();
     }
 

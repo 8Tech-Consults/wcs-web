@@ -907,7 +907,7 @@ case_date
         */
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('suspect_court_outcome', 'Jumped bail and warrant of arrest')
+            ->where('suspect_court_outcome', 'Remand')
             ->count();
     }
 

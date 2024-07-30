@@ -548,6 +548,12 @@ margin-top: 0px;
                 </td>
                 <td style="width: 30%">
                     @include('report.widget-data-item', [
+                        'title' => 'Number of accused persons on remand',
+                        'number' => $report->get_remand_suspects(),
+                    ])
+                </td>
+                <td style="width: 30%">
+                    @include('report.widget-data-item', [
                         'title' => 'Number of accused persons who jumped court bail',
                         'number' => $report->get_jumped_bail_suspects(),
                     ])

@@ -443,12 +443,12 @@ margin-top: 0px;
                         'number' => $report->get_fined_suspects(),
                     ])
                 </td>
-                <td style="width: 30%">
+{{--                 <td style="width: 30%">
                     @include('report.widget-data-item', [
-                        'title' => 'Number of suspects below 18 years',
+                        'title' => 'Number of suspects cautioned and released by UWA management',
                         'number' => $report->get_cautioned_suspects(),
                     ])
-                </td>
+                </td> --}}
                 <td style="width: 30%">
                     @include('report.widget-data-item', [
                         'title' => 'Number of suspects cautioned and released by UWA management',

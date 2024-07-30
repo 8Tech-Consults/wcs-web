@@ -261,7 +261,7 @@ margin-top: 0px;
                 <table style="width: 100%;">
                     <tr>
                         <td style="width: 30%; vertical-align:top" class="">
-                            <h2 class="fs-20 text-uppercase">TOP 10 C.As </h2>
+                            <h2 class="fs-20">TOP CAs </h2>
                             <hr
                                 style="
                                     background-color: black;
@@ -294,7 +294,7 @@ margin-top: 0px;
                             @endif
                         </td>
                         <td style="width: 30%; vertical-align:top">
-                            <h2 class="fs-20 text-uppercase">TOP 10 P.As</h2>
+                            <h2 class="fs-20 ">TOP P.As</h2>
                             <hr
                                 style="
                                     background-color: black;
@@ -327,7 +327,7 @@ margin-top: 0px;
                             @endif
                         </td>
                         <td style="width: 30%; vertical-align:top">
-                            <h2 class="fs-20 text-uppercase">Top 10 Species</h2>
+                            <h2 class="fs-20 text-uppercase">Top Species</h2>
                             <hr
                                 style="
                                     background-color: black;

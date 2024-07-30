@@ -905,6 +905,8 @@ case_date
     "Court bail and ongoing inquiries" => "Court bail and ongoing inquiries"
     "Jumped bail and warrant of arrest" => "Jumped bail and warrant of arrest"
         */
+        $conds['is_suspects_arrested'] = 'Yes';
+        $conds['is_suspect_appear_in_court'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->where('suspect_court_outcome', 'Remand')

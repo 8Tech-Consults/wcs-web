@@ -978,7 +978,7 @@ case_date
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->where('case_outcome', 'Dismissed')
             ->count();
-        return $top; 
+        return $top;
     }
 
     /* Number of accused persons convicted= XX (Using the field “Specific court Case Status” under court information, count the individual accused persons with “Convicted” as a response to this field) */
@@ -997,6 +997,7 @@ case_date
         }
 
 
+        $conds['is_suspects_arrested'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->where('case_outcome', 'Convicted')

@@ -679,11 +679,9 @@ case_date
             $conds = [];
         }
         $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'No';
+        $conds['police_action'] = 'Under police custody';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->orwhere('court_status', 'Re-opened')
-            ->orwhere('court_status', 'Ongoing investigation')
             ->count();
     }
     /* Number of suspects released on police bond= XX (Using the field “Case status at police level” under arrest information, count the individual suspects on police bond. This field pops up when a No response is given to the field “Has this suspect appeared in court” and either the response “Ongoing investigation” or “Re-opened” are given to field “Case status”) */
@@ -1046,8 +1044,8 @@ case_date
 
 
         $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_fined'] = 'Yes'; 
-        $conds['is_suspect_appear_in_court'] = 'Yes'; 
+        $conds['is_fined'] = 'Yes';
+        $conds['is_suspect_appear_in_court'] = 'Yes';
 
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
@@ -1070,7 +1068,7 @@ case_date
         }
 
         $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'Yes'; 
+        $conds['is_suspect_appear_in_court'] = 'Yes';
 
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
@@ -1094,7 +1092,7 @@ case_date
         }
 
         $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'Yes';  
+        $conds['is_suspect_appear_in_court'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->where('cautioned', 'Yes')
@@ -1117,7 +1115,7 @@ case_date
         }
 
         $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'Yes'; 
+        $conds['is_suspect_appear_in_court'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->where('case_outcome', 'Acquittal')

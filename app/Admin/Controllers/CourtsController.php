@@ -192,6 +192,12 @@ class CourtsController extends AdminController
                 'Acquittal' => 'Acquittal',
                 'Convicted' => 'Convicted',
             ]);
+            $f->equal('is_jailed', 'Was suspect jailed?')->select([
+                'Yes' => 'Yes',
+                'No' => 'No',
+                '1' => '(Yes)',
+                '0' => '(No)',
+            ]);
 
 
             $f->equal('ca_id', "Filter by CA")

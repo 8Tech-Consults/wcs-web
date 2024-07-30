@@ -877,8 +877,7 @@ case_date
         $conds['is_suspects_arrested'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('court_status', 'On-going prosecution')
-            ->orwhere('court_status', 'Reinstated')
+            ->where('suspect_court_outcome', 'Jumped bail and warrant of arrest') 
             ->count();
     }
 

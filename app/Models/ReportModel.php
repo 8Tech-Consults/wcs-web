@@ -997,7 +997,7 @@ case_date
         }
 
 
-        $conds['is_suspects_arrested'] = 'Yes';
+        $conds['is_suspect_appear_in_court'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->where('case_outcome', 'Convicted')

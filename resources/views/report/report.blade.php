@@ -554,12 +554,6 @@ margin-top: 0px;
                 </td>
                 <td style="width: 30%">
                     @include('report.widget-data-item', [
-                        'title' => 'Number of cases undergoing prosecution',
-                        'number' => $report->get_ongoing_prosecution_cases(),
-                    ])
-                </td>
-                <td style="width: 30%">
-                    @include('report.widget-data-item', [
                         'title' => 'Number of concluded cases',
                         'number' => $report->get_concluded_cases(),
                     ])

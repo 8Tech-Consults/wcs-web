@@ -877,7 +877,7 @@ case_date
         $conds['is_suspects_arrested'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('suspect_court_outcome', 'Jumped bail and warrant of arrest') 
+            ->where('suspect_court_outcome', 'Jumped bail and warrant of arrest')
             ->count();
     }
 
@@ -949,13 +949,14 @@ case_date
             $conds = [];
         }
 
-        $conds['is_suspects_arrested'] = 'Yes';
-        $conds['is_suspect_appear_in_court'] = 'Yes';
+        /* $conds['is_suspects_arrested'] = 'Yes';
+        $conds['is_suspect_appear_in_court'] = 'Yes'; */
         $conds['court_status'] = 'Concluded';
         //group by case id
-        $sql = "SELECT COUNT(DISTINCT case_id) as total FROM case_suspects WHERE is_suspects_arrested = 'Yes' AND is_suspect_appear_in_court = 'Yes' AND court_status = 'Concluded' AND case_id IN (SELECT id FROM case_models WHERE 1 $where AND case_date BETWEEN '$this->start_date' AND '$this->end_date')";
-        $query = DB::select($sql);
-        return $query[0]->total;
+        $tot = CaseSuspect::where($conds)
+            ->whereBetween('case_date', [$this->start_date, $this->end_date])
+            ->count();
+        return $tot;
     }
 
     /* Number of dismissed cases= XX ((Using the field “Specific court Case Status” under court information, count the Cases with “Dismissed” as a response to this field) */

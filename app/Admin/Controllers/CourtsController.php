@@ -192,7 +192,7 @@ class CourtsController extends AdminController
                 'Acquittal' => 'Acquittal',
                 'Convicted' => 'Convicted',
             ]);
-    
+
 
             $f->equal('ca_id', "Filter by CA")
                 ->select(ConservationArea::all()->pluck('name', 'id'));
@@ -298,9 +298,7 @@ class CourtsController extends AdminController
 
         $grid->column('is_fined', 'Is Fined')
             ->using([
-                '1' => 'Yes',
                 'Yes' => 'Yes',
-                '0' => 'No',
                 'No' => 'No',
             ], 'No')->label([
                 1 => 'success',
@@ -308,7 +306,10 @@ class CourtsController extends AdminController
                 0 => 'danger',
                 'No' => 'danger',
             ], 'danger')
-            ->sortable();
+            ->filter([
+                'Yes' => 'Fined',
+                'No' => 'Not Fined',
+            ])->sortable();
         $grid->column('fined_amount')->display(function ($x) {
             $x = (int)($x);
             if ($x == null || strlen($x) < 1) {

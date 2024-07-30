@@ -639,10 +639,14 @@ class CaseSuspectController extends AdminController
 
         $grid->column('is_fined', 'Accused fined')
             ->using([
-                1 => 'Fined',
-                0 => 'Not fined',
+                'Yes' => 'Fined',
+                'No' => 'Not fined',
             ])
             ->hide()
+            ->filter([
+                'Yes' => 'Fined',
+                'No' => 'Not fined',
+            ])
             ->sortable();
         $grid->column('fined_amount')->hide()->sortable();
         $grid->column('community_service')->hide()->sortable();

@@ -581,8 +581,9 @@ case_date
             $conds = [];
         }
 
-        $conds['is_suspects_arrested'] = 'No';
-        $conds['management_action'] = 'Fined';
+        $conds['is_suspects_arrested'] = 'Yes';
+        $conds['is_suspect_appear_in_court'] = 'Yes';
+        $conds['is_fined'] = 'Yes';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->count();

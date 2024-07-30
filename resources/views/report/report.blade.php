@@ -294,7 +294,7 @@ margin-top: 0px;
                             @endif
                         </td>
                         <td style="width: 30%; vertical-align:top">
-                            <h2 class="fs-20 ">TOP P.As</h2>
+                            <h2 class="fs-20 ">TOP PAs</h2>
                             <hr
                                 style="
                                     background-color: black;

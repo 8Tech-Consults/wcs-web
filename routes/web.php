@@ -29,9 +29,9 @@ use Illuminate\Support\Facades\Redirect;
 
 Route::get('/process', function () {
   //change Exhibit set wildlife_species = 2 wherewildlife_species = 33
-  Exhibit::where('wildlife_species', 33)->update(['wildlife_species' => 2]);
-  //DELETE Animal 33
-  DB::table('animals')->where('id', 33)->delete(); 
+  //update cases_suspects set is_suspects_arrested where null
+  $res = CaseSuspect::whereNull('is_suspects_arrested')->update(['is_suspects_arrested' => 'No']);
+  die("done " . $res);
 });
 Route::match(['get', 'post'], '/print', [PrintController2::class, 'index']);
 Route::get('/password-forget-email', [MainController::class, 'password_forget_email'])->name("password-forget-email");

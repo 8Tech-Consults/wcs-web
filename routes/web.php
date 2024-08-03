@@ -9,6 +9,7 @@ use App\Models\CaseModel;
 use App\Models\CaseSuspect;
 use App\Models\ConservationArea;
 use App\Models\Course;
+use App\Models\Exhibit;
 use App\Models\Gen;
 use App\Models\PA;
 use App\Models\ReportModel;
@@ -26,6 +27,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 
+Route::get('/process', function () {
+  //change Exhibit set wildlife_species = 2 wherewildlife_species = 33
+  Exhibit::where('wildlife_species', 33)->update(['wildlife_species' => 2]);
+  //DELETE Animal 33
+  DB::table('animals')->where('id', 33)->delete(); 
+});
 Route::match(['get', 'post'], '/print', [PrintController2::class, 'index']);
 Route::get('/password-forget-email', [MainController::class, 'password_forget_email'])->name("password-forget-email");
 Route::post('/password-forget-email', [MainController::class, 'password_forget_email_post']);
@@ -78,7 +85,7 @@ Route::get('/report-generate', function (Request $request) {
   } catch (\Exception $e) {
     die($e->getMessage());
   }
-  
+
 
   $url = url('storage/files/' . $pdf_file_2);
   //redirect to the file

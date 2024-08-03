@@ -540,8 +540,8 @@ case_date
             $conds = [];
         }
         $ages = [];
-        for ($i = 0; $i < 18; $i++) {
-            $ages[] = $i;
+        for ($i = 1; $i < 18; $i++) {
+            $ages[] = $i . "";
         }
 
         return CaseSuspect::where($conds)

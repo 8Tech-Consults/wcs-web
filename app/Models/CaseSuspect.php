@@ -30,6 +30,10 @@ class CaseSuspect extends Model
                     $m->case->save();
                 }
             }
+            if ($m->is_suspects_arrested == null || $m->is_suspects_arrested == "") {
+                $m->is_suspects_arrested = 'No';
+            }
+
             $m = CaseSuspect::my_update($m);
 
             $by = User::find($m->reported_by);
@@ -62,6 +66,10 @@ class CaseSuspect extends Model
             }
         });
         self::updating(function ($m) {
+
+            if ($m->is_suspects_arrested == null || $m->is_suspects_arrested == "") {
+                $m->is_suspects_arrested = 'No';
+            }
 
             $m = CaseSuspect::my_update($m, true);
             if ($m->case_submitted == 1 || $m->case_submitted == '1') {
@@ -283,7 +291,7 @@ class CaseSuspect extends Model
         $this->use_same_court_information_coped = $org->use_same_court_information_coped;
         $this->community_service_duration = $org->community_service_duration;
         $this->use_same_court_information_coped = 'Yes';
-        $this->use_same_court_information = 'Yes'; 
+        $this->use_same_court_information = 'Yes';
         $this->save();
     }
 

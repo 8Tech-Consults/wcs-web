@@ -577,13 +577,13 @@ case_date
     public function get_uwa_cases()
     {
         $conds = [];
-        /* if ($this->type == 'pa') {
+        if ($this->type == 'pa') {
             $conds = ['pa_id' => $this->pa_id];
         } else if ($this->type == 'ca') {
             $conds = ['ca_id' => $this->ca_id];
         } else if ($this->type == 'all') {
             $conds = [];
-        } */
+        }
 
         $conds['is_suspects_arrested'] = 'No';
         $suspects = CaseSuspect::where($conds)

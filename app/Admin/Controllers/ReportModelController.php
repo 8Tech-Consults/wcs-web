@@ -29,8 +29,7 @@ class ReportModelController extends AdminController
     {
         $grid = new Grid(new ReportModel());
         $grid->quickSearch('title')->placeholder('Search by title');
-        $grid->model()->orderBy('id', 'desc'); 
-        $grid->disableBatchActions();
+        $grid->column('id', __('S/n'))->width(50)->sortable();
         $grid->column('created_at', __('Date Created'))
             ->display(function ($created_at) {
                 return Utils::my_date_time_2($created_at);

@@ -562,10 +562,15 @@ case_date
             $conds = [];
         }
 
+        $ages = [];
+        for ($i = 61; $i < 100; $i++) {
+            $ages[] = $i . "";
+        }
+
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('age', '>', 60)
-            ->count();
+            ->whereIn('age', $ages)
+            ->count(); 
     }
 
     /* Number of cases handled at UWA management level only= XX (Using the field “Has the suspect been handled over to Police” under Suspects Bio data, count only cases with a No response to this question)  */

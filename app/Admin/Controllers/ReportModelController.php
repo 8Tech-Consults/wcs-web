@@ -28,6 +28,7 @@ class ReportModelController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new ReportModel());
+        $grid->model()->orderBy('id', 'desc'); 
         $grid->quickSearch('title')->placeholder('Search by title');
         $grid->column('id', __('S/n'))->width(50)->sortable();
         $grid->column('created_at', __('Date Created'))

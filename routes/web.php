@@ -31,7 +31,7 @@ Route::get('/process', function () {
   //change Exhibit set wildlife_species = 2 wherewildlife_species = 33
   //update cases_suspects set is_suspects_arrested where null
   $res = CaseSuspect::where([
-    'is_suspects_arrested' => 'Escaped from colice custody'
+    'police_action' => 'Escaped from colice custody'
   ])
     ->update(['police_action' => 'Escaped from police custody']);
   // => 

@@ -539,10 +539,14 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
+        $ages = [];
+        for ($i = 0; $i < 18; $i++) {
+            $ages[] = $i;
+        }
 
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
-            ->where('age', '<', 18)
+            ->whereIn('age', $ages)
             ->count();
     }
 

@@ -449,10 +449,10 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
+        $ids_of_caseses_in_pa = CaseModel::where('is_offence_committed_in_pa', 'Yes')->pluck('id');
 
-        $conds['is_suspects_arrested'] = 'Yes';
         return CaseSuspect::where($conds)
-            ->where('pa_id', '>', 1)
+            ->whereIn('case_id', $ids_of_caseses_in_pa)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->count();
     }
@@ -486,10 +486,10 @@ case_date
         } else if ($this->type == 'all') {
             $conds = [];
         }
+        $ids_of_caseses_in_pa = CaseModel::where('is_offence_committed_in_pa', 'Yes')->pluck('id');
 
-        //$conds['is_suspects_arrested'] = 'Yes';
         return CaseSuspect::where($conds)
-            ->where('pa_id', 1)
+            ->whereNotIn('case_id', $ids_of_caseses_in_pa)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->count();
     }

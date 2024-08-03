@@ -224,12 +224,25 @@ class ReportModel extends Model
 
     public function get_top_protected_areas()
     {
-        $sql = "SELECT pa_id, COUNT(*) as total FROM case_models GROUP BY pa_id ORDER BY total DESC LIMIT 10";
+        $sql = "SELECT pa_id, COUNT(*) as total FROM case_models GROUP BY pa_id ORDER BY total DESC LIMIT 100";
         $query = DB::select($sql);
         $data = [];
+        $ca_names = [];
+        foreach (ConservationArea::all() as $key => $value) {
+            $ca_names[] = $value->name;
+        }
+        $xx = 0;
         foreach ($query as $key => $value) {
             $pa = PA::find($value->pa_id);
             if ($pa != null) {
+                //check if pa name is in ca names and continue
+                if (in_array($pa->name, $ca_names)) {
+                    continue;
+                }
+                $xx++;
+                if ($xx > 10) {
+                    break;
+                }
                 $data[] = [
                     'name' => $pa->name,
                     'total' => $value->total

@@ -623,7 +623,7 @@ case_date
             $conds = [];
         }
 
-        $conds['is_suspects_arrested'] = 'No';
+        //$conds['is_suspects_arrested'] = 'No';
         $conds['management_action'] = 'Cautioned and Released';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])

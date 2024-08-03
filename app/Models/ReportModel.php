@@ -589,7 +589,7 @@ case_date
         $suspects = CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->pluck('case_id');
-        return CaseModel::whereIn('id', $suspects)->count(); 
+        return CaseModel::whereIn('id', $suspects)->count();
     }
 
     /* Number of suspects fined by UWA management= XX (Using the field “Action taken by management” under suspect bio data that pops up once a “No” response is given to the field “Has the suspect been handled over to police”, count only the suspects Fined) */

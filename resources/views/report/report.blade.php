@@ -446,7 +446,7 @@ margin-top: 0px;
                 <td style="width: 30%">
                     @include('report.widget-data-item', [
                         'title' => 'Number of suspects cautioned and released by UWA management',
-                        'number' => $report->get_at_large_suspects(),
+                        'number' => $report->get_cautioned_suspects(),
                     ])
                 </td>
 

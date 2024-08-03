@@ -30,7 +30,11 @@ use Illuminate\Support\Facades\Redirect;
 Route::get('/process', function () {
   //change Exhibit set wildlife_species = 2 wherewildlife_species = 33
   //update cases_suspects set is_suspects_arrested where null
-  $res = CaseSuspect::whereNull('is_suspects_arrested')->update(['is_suspects_arrested' => 'No']);
+  $res = CaseSuspect::where([
+    'is_suspects_arrested' => 'Escaped from colice custody'
+  ])
+    ->update(['police_action' => 'Escaped from police custody']);
+  // => 
   die("done " . $res);
 });
 Route::match(['get', 'post'], '/print', [PrintController2::class, 'index']);

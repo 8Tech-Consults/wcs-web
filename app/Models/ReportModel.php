@@ -764,7 +764,7 @@ case_date
             $conds = [];
         }
         $conds['is_suspects_arrested'] = 'Yes';
-        $conds['police_action'] = 'Escaped from colice custody';
+        $conds['police_action'] = 'Escaped from police custody';
         return CaseSuspect::where($conds)
             ->whereBetween('case_date', [$this->start_date, $this->end_date])
             ->count();

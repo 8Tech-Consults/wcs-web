@@ -49,9 +49,8 @@ Route::get('/process', function () {
 
       echo '<hr>';
       echo ($animal->id . "<>" . $animal2->id . " " . $animal2->name . "<br>");
-      $sql = 'update exhibits set wildlife_species = \'' . $animal->id . '\' where wildlife_species = ' . $animal2->id;
-      echo ($sql . "<br>");
-      DB::update($sql);
+
+
       $exhibits = Exhibit::where('wildlife_species', $animal2->id)->get();
       foreach ($exhibits as $exhibit) {
         $exhibit->wildlife_species = $animal->id."";
@@ -64,10 +63,10 @@ Route::get('/process', function () {
       echo "Exhibits updated: " . count($exhibits) . "<br>";
       echo '<hr>';
       //delete duplicate animal
-      $sql = 'delete from animals where id = ' . $animal2->id."";
-      echo ($sql . "<br>");
-      DB::delete($sql);
-      $animal2->delete();
+      //$sql = 'delete from animals where id = ' . $animal2->id."";
+      //echo ($sql . "<br>");
+      ///DB::delete($sql);
+      //$animal2->delete();
 
 
 

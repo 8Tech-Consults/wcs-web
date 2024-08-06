@@ -98,7 +98,7 @@ class ExhibitController extends AdminController
         $grid->column('type_wildlife', __('Has Wildlife'));
         $grid->column('wildlife_species', __('Wildlife Species'))->display(function () {
             return $this->get_species();
-        });
+        })->sortable(); 
         $grid->column('specimen', __('Specimen'));
         $grid->column('wildlife_quantity', __('Wildlife Quantity (in KGs)'));
         $grid->column('wildlife_pieces', __('Wildlife Number of pieces'));

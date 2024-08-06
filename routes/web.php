@@ -3,6 +3,7 @@
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PrintController2;
 use App\Models\AcademicClass;
+use App\Models\Animal;
 use App\Models\Book;
 use App\Models\BooksCategory;
 use App\Models\CaseModel;
@@ -28,6 +29,54 @@ use Illuminate\Support\Facades\Redirect;
 
 
 Route::get('/process', function () {
+  $animals = Animal::where([])->orderBy('id', 'asc')->get();
+  $done_names = [];
+  foreach ($animals as $key => $animal) {
+    $otherAnimals = Animal::where('name', $animal->name)
+      ->where('id', '!=', $animal->id)
+      ->get();
+    if (in_array($animal->name, $done_names)) {
+      continue;
+    }
+    $done_names[] = $animal->name;
+    if (count($otherAnimals) < 1) {
+      continue;
+    }
+    foreach ($otherAnimals as $animal2) {
+      if ($animal2->id == $animal->id) {
+        continue;
+      }
+
+      echo '<hr>';
+      echo ($animal->id . "<>" . $animal2->id . " " . $animal2->name . "<br>");
+      $sql = 'update exhibits set wildlife_species = ' . $animal->id . ' where wildlife_species = ' . $animal2->id;
+      echo ($sql . "<br>");
+      DB::update($sql);
+      $exhibits = Exhibit::where('wildlife_species', $animal2->id)->get();
+      foreach ($exhibits as $exhibit) {
+        $exhibit->wildlife_species = $animal->id;
+        $exhibit->save();
+      }
+      $exhibits = Exhibit::where('wildlife_species', $animal2->id)->get();
+      if (count($exhibits) > 0) {
+        die("Error");
+      }
+      echo "Exhibits updated: " . count($exhibits) . "<br>";
+      echo '<hr>';
+      //delete duplicate animal
+      $sql = 'delete from animals where id = ' . $animal2->id;
+      echo ($sql . "<br>");
+      DB::delete($sql);
+      $animal2->delete();
+
+
+
+      # code...
+    }
+  }
+
+
+  die("done");
   //change Exhibit set wildlife_species = 2 wherewildlife_species = 33
   //update cases_suspects set is_suspects_arrested where null
   $res = CaseSuspect::where([

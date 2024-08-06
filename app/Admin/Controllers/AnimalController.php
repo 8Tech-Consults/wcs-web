@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Animal;
 use App\Models\Court;
+use App\Models\Exhibit;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -33,7 +34,12 @@ class AnimalController extends AdminController
         $grid->disableExport();
         $grid->column('id', __('S/n'))->width(50)->sortable();
         $grid->column('name', __('Name'))->sortable();
-        $grid->column('details', __('Details'));
+        //count wildlife_species
+        $grid->column('exhibits', __('Exhibits'))->display(function ($details) {
+            $count = Exhibit::where('wildlife_species', $this->id)->count();
+            return "<span class='label label-success'>{$count}</span>"; 
+        });
+        $grid->column('details', __('Details'))->hide(); 
 
 
         $grid->actions(function ($actions) {

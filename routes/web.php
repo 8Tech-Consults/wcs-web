@@ -66,7 +66,7 @@ Route::get('/process', function () {
       //$sql = 'delete from animals where id = ' . $animal2->id."";
       //echo ($sql . "<br>");
       ///DB::delete($sql);
-      //$animal2->delete();
+      $animal2->delete(); 
 
 
 

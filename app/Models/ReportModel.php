@@ -1625,7 +1625,7 @@ case_date
             $conds = [];
         }
         //count group by case id where species is pangolin
-        $sql = "SELECT COUNT(DISTINCT case_id) as total FROM exhibits WHERE wildlife_species = 42 AND case_id IN (SELECT id FROM case_models WHERE 1 $where AND case_date BETWEEN '$this->start_date' AND '$this->end_date')";
+        $sql = "SELECT COUNT(DISTINCT case_id) as total FROM exhibits WHERE wildlife_species = 11 AND case_id IN (SELECT id FROM case_models WHERE 1 $where AND case_date BETWEEN '$this->start_date' AND '$this->end_date')";
         $query = DB::select($sql);
         return $query[0]->total;
     }
@@ -1645,7 +1645,7 @@ case_date
             $conds = [];
         }
         //count group by case id where species is pangolin
-        $sql = "SELECT COUNT(DISTINCT case_id) as total FROM exhibits WHERE wildlife_species = 41 AND case_id IN (SELECT id FROM case_models WHERE 1 $where AND case_date BETWEEN '$this->start_date' AND '$this->end_date')";
+        $sql = "SELECT COUNT(DISTINCT case_id) as total FROM exhibits WHERE wildlife_species = 10 AND case_id IN (SELECT id FROM case_models WHERE 1 $where AND case_date BETWEEN '$this->start_date' AND '$this->end_date')";
         $query = DB::select($sql);
         return $query[0]->total;
     }

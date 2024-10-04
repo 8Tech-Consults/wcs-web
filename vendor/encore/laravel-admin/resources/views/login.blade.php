@@ -19,7 +19,7 @@ if (strpos($url, 'wcswildlifecrime')) {
     $is_local = true;
 } else {
     $is_local = false;
-} 
+}
 
 $primt_color = '#438003';
 if ($is_local) {
@@ -303,8 +303,16 @@ if ($is_local) {
 
 
                     <p class="text-center mt-1 mb-0"><b>Partners</b></p>
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="75%">
-                    </center>
+                    @if (!$is_local)
+                        <center><img class="img-fluid text-center" src="{{ url('assets/logos-1.jpg') }}"
+                                width="75%">
+                        </center>
+                    @else
+                        <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}"
+                                width="75%">
+                        </center>
+                    @endif
+
 
                 </div>
 
